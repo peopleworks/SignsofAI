@@ -4,32 +4,35 @@ using SignsOfAI.Perplexity.Api.Model;
 
 namespace SignsOfAI.Perplexity.Api.Scoring;
 
-/// <summary>Turns a raw perplexity into a calibrated, language-aware AI-likelihood verdict.</summary>
+/// <summary>
+/// Turns a raw perplexity into a calibrated, language-aware <b>predictability</b> reading. Low perplexity
+/// ⇒ predictable/generic phrasing (common in AI text, but also in formulaic/memorized human text) ⇒ high
+/// predictability. Deliberately NOT an AI-vs-human verdict — perplexity doesn't separate those reliably.
+/// </summary>
 public sealed class PerplexityScorer(PerplexityOptions options)
 {
     private readonly PerplexityOptions _options = options;
 
     public PerplexityResponse Score(PerplexityRaw raw, string lang, string modelId)
     {
-        var baseline = Resolve(lang, out var resolvedLang);
+        var cal = Resolve(lang, out var resolvedLang);
         var logPpl = Math.Log(Math.Max(raw.Perplexity, 1.0001));
 
-        // Distance in spreads BELOW the boundary. Below ⇒ machine-leaning ⇒ positive z ⇒ higher likelihood.
-        var z = (baseline.BoundaryLogPpl - logPpl) / Math.Max(baseline.Spread, 1e-3);
-        var likelihood = 1.0 / (1.0 + Math.Exp(-baseline.Steepness * z));
+        // Below the language center ⇒ more predictable ⇒ higher meter.
+        var z = (cal.Center - logPpl) / Math.Max(cal.Spread, 1e-3);
+        var predictability = 1.0 / (1.0 + Math.Exp(-cal.Steepness * z));
 
-        var verdict = likelihood >= _options.AiThreshold ? "likely-ai"
-                    : likelihood <= _options.HumanThreshold ? "likely-human"
-                    : "uncertain";
+        var band = predictability >= _options.PredictableAbove ? "very-predictable"
+                 : predictability <= _options.VariedBelow ? "varied"
+                 : "typical";
 
         return new PerplexityResponse
         {
             Ppl = Math.Round(raw.Perplexity, 2),
             AvgLogProb = Math.Round(raw.MeanLogProb, 4),
             TokenCount = raw.ScoredTokens,
-            ZScore = Math.Round(z, 3),
-            AiLikelihood = Math.Round(likelihood, 4),
-            Verdict = verdict,
+            Predictability = Math.Round(predictability, 4),
+            Band = band,
             Model = modelId,
             Lang = resolvedLang,
             ElapsedMs = raw.ElapsedMs,
@@ -46,6 +49,6 @@ public sealed class PerplexityScorer(PerplexityOptions options)
         if (_options.Baselines.TryGetValue("en", out var en)) { resolvedLang = "en"; return en; }
 
         resolvedLang = key;
-        return new LangBaseline { BoundaryLogPpl = 4.1 };
+        return new LangBaseline { Center = 4.0 };
     }
 }

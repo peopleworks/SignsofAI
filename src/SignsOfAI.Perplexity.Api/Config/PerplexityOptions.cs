@@ -1,16 +1,21 @@
 namespace SignsOfAI.Perplexity.Api.Config;
 
-/// <summary>Per-language calibration of the perplexity → AI-likelihood mapping (measured on the chosen model).</summary>
+/// <summary>
+/// Per-language calibration of the perplexity → <b>predictability</b> meter. Perplexity measures how
+/// predictable/generic the phrasing is (NOT AI-vs-human: on a labeled corpus the two overlap badly —
+/// memorized human text like Wikipedia scores <i>lower</i>/more-predictable than fresh AI text). So we
+/// surface predictability honestly, centered per language (Spanish runs higher-perplexity than English).
+/// </summary>
 public sealed class LangBaseline
 {
-    /// <summary>Decision boundary in natural-log perplexity: below ⇒ machine-leaning, above ⇒ human-leaning.</summary>
-    public double BoundaryLogPpl { get; init; }
+    /// <summary>Natural-log perplexity that maps to 50% predictability (the per-language corpus center).</summary>
+    public double Center { get; init; }
 
-    /// <summary>Spread (≈ half the human↔AI gap) — the z-score denominator.</summary>
-    public double Spread { get; init; } = 0.5;
+    /// <summary>Spread (≈ 1 std of log-perplexity in this language) — the logistic denominator.</summary>
+    public double Spread { get; init; } = 0.8;
 
-    /// <summary>Logistic steepness mapping z-score → AI likelihood.</summary>
-    public double Steepness { get; init; } = 1.4;
+    /// <summary>Logistic steepness mapping (center − logPpl)/spread → predictability.</summary>
+    public double Steepness { get; init; } = 1.3;
 }
 
 /// <summary>
@@ -45,21 +50,34 @@ public sealed class PerplexityOptions
     /// <summary>Intra-op thread count for the ONNX session (0 ⇒ ORT default).</summary>
     public int IntraOpThreads { get; init; } = 4;
 
-    // ── Scoring ───────────────────────────────────────────────────────────────
+    /// <summary>
+    /// Free the model from RAM after this many seconds with no requests; the next request lazily
+    /// reloads it from disk (~1-2s). ≤ 0 keeps it resident once loaded. Keeps the server light when idle.
+    /// </summary>
+    public int IdleUnloadSeconds { get; init; } = 300;
+
+    /// <summary>Load the model into RAM at startup. Default false ⇒ lazy-load on first request (idle = ~0 model RAM).</summary>
+    public bool PreloadModel { get; init; }
+
+    // ── Predictability meter ────────────────────────────────────────────────────
     public Dictionary<string, LangBaseline> Baselines { get; init; } = new(StringComparer.OrdinalIgnoreCase);
-    public double AiThreshold { get; init; } = 0.66;
-    public double HumanThreshold { get; init; } = 0.34;
+
+    /// <summary>Predictability at/above which we call the phrasing "very-predictable" (generic).</summary>
+    public double PredictableAbove { get; init; } = 0.60;
+
+    /// <summary>Predictability at/below which we call the phrasing "varied" (surprising).</summary>
+    public double VariedBelow { get; init; } = 0.40;
 
     /// <summary>
-    /// Defaults calibrated locally on <c>model_int8.onnx</c> (2026-07-06): human EN log-ppl ≈ 4.6,
-    /// AI EN ≈ 3.7 (boundary ≈ 4.1); human ES ≈ 4.5, AI ES ≈ 3.8. Refined with more samples over time.
+    /// Defaults calibrated on the instruct model over a 170-text EN/ES corpus (2026-07-07). Centers are
+    /// the per-language corpus means of log-perplexity (EN ≈ 3.95, ES ≈ 4.18); ES runs higher.
     /// </summary>
     public static PerplexityOptions Defaults() => new()
     {
         Baselines =
         {
-            ["en"] = new LangBaseline { BoundaryLogPpl = 4.10, Spread = 0.50, Steepness = 1.4 },
-            ["es"] = new LangBaseline { BoundaryLogPpl = 4.10, Spread = 0.42, Steepness = 1.4 },
+            ["en"] = new LangBaseline { Center = 4.35, Spread = 0.75, Steepness = 1.3 },
+            ["es"] = new LangBaseline { Center = 4.55, Spread = 0.75, Steepness = 1.3 },
         },
     };
 }

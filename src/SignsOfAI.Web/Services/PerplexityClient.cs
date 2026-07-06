@@ -12,9 +12,10 @@ public sealed record PerplexityResult
     public double Ppl { get; init; }
     public double AvgLogProb { get; init; }
     public int TokenCount { get; init; }
-    public double ZScore { get; init; }
-    public double AiLikelihood { get; init; }
-    public string Verdict { get; init; } = "uncertain";
+    /// <summary>How predictable/generic the phrasing is, 0..1 (1 = very predictable, common in AI writing).</summary>
+    public double Predictability { get; init; }
+    /// <summary>"very-predictable" | "typical" | "varied".</summary>
+    public string Band { get; init; } = "typical";
     public string Model { get; init; } = "";
     public string Lang { get; init; } = "";
     public long ElapsedMs { get; init; }

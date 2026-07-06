@@ -16,7 +16,7 @@ builder.Services.AddSingleton<PerplexityScorer>();
 // Heavyweight singleton: model loaded once, reused (Run is thread-safe). Warmed up off the boot thread.
 builder.Services.AddSingleton<OnnxPerplexityEngine>();
 builder.Services.AddSingleton<IPerplexityEngine>(sp => sp.GetRequiredService<OnnxPerplexityEngine>());
-builder.Services.AddHostedService<ModelWarmupService>();
+builder.Services.AddHostedService<ModelLifecycleService>();
 
 // Source-generated JSON so we stay trim/AOT-friendly.
 builder.Services.Configure<JsonOptions>(o =>
@@ -37,6 +37,7 @@ app.MapGet("/", (IPerplexityEngine engine, PerplexityOptions opts) => Results.Ok
 {
     Model = engine.ModelId,
     ModelReady = engine.IsReady,
+    ModelLoaded = engine.IsLoaded,
     Languages = [.. opts.Baselines.Keys],
 }));
 

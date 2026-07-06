@@ -2,7 +2,7 @@
   "name": "signsofai-perplexity",
   "tier": "demo",
   "runtime": "net10",
-  "node": "pwn_SignsOfAI.Perplexity.Api",
+  "node": "PeopleWorks_Server",
   "project": "SignsOfAI.Perplexity.Api.csproj",
   "healthPath": "/"
 }

@@ -17,8 +17,11 @@ public interface IPerplexityEngine
     /// <summary>Short model identifier surfaced to clients (e.g. "qwen2.5-0.5b").</summary>
     string ModelId { get; }
 
-    /// <summary>True once the model + tokenizer are loaded and ready to serve.</summary>
+    /// <summary>True once the model file is present and the engine can serve (it may lazy-load on demand).</summary>
     bool IsReady { get; }
+
+    /// <summary>True when the model is currently resident in RAM (false while idle-unloaded).</summary>
+    bool IsLoaded { get; }
 
     /// <summary>Runs one forward pass and returns the perplexity of <paramref name="text"/>.</summary>
     Task<PerplexityRaw> ScoreAsync(string text, CancellationToken ct = default);

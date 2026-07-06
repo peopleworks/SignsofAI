@@ -12,10 +12,15 @@ public sealed record PerplexityRequest
     public string Lang { get; init; } = "auto";
 }
 
-/// <summary>Response body for POST /api/perplexity.</summary>
+/// <summary>
+/// Response body for POST /api/perplexity. This reports how <b>predictable</b> the phrasing is — NOT an
+/// AI-vs-human verdict (perplexity can't separate them reliably: memorized human text scores predictable
+/// too, and stylized AI scores varied). Predictable phrasing is common in AI writing, so it's a useful
+/// signal, but it is not proof.
+/// </summary>
 public sealed record PerplexityResponse
 {
-    /// <summary>Perplexity = exp(mean per-token negative log-likelihood). Lower ⇒ more machine-like.</summary>
+    /// <summary>Perplexity = exp(mean per-token negative log-likelihood). Lower ⇒ more predictable/generic.</summary>
     public double Ppl { get; init; }
 
     /// <summary>Mean per-token log-probability (natural log). Higher (closer to 0) ⇒ more predictable.</summary>
@@ -24,22 +29,16 @@ public sealed record PerplexityResponse
     /// <summary>Number of tokens actually scored (the model saw one more; the first isn't predicted).</summary>
     public int TokenCount { get; init; }
 
-    /// <summary>
-    /// Standardized distance below the human baseline for this language:
-    /// (humanLogPpl − logPpl) / spread. Positive ⇒ less surprising than typical human prose ⇒ AI-leaning.
-    /// </summary>
-    public double ZScore { get; init; }
+    /// <summary>How predictable/generic the phrasing is, 0..1 (1 = very predictable, common in AI writing).</summary>
+    public double Predictability { get; init; }
 
-    /// <summary>Mapped probability the text is AI-generated, 0..1 (logistic over ZScore).</summary>
-    public double AiLikelihood { get; init; }
+    /// <summary>"very-predictable" | "typical" | "varied".</summary>
+    public string Band { get; init; } = "typical";
 
-    /// <summary>"likely-ai" | "uncertain" | "likely-human".</summary>
-    public string Verdict { get; init; } = "uncertain";
-
-    /// <summary>Identifier of the model that produced the score (e.g. "qwen2.5-0.5b").</summary>
+    /// <summary>Identifier of the model that produced the score (e.g. "qwen2.5-0.5b-instruct-int8").</summary>
     public string Model { get; init; } = "";
 
-    /// <summary>The language baseline actually used ("en"/"es").</summary>
+    /// <summary>The language calibration actually used ("en"/"es").</summary>
     public string Lang { get; init; } = "en";
 
     /// <summary>Milliseconds spent inside the model forward pass (diagnostics).</summary>
@@ -51,7 +50,10 @@ public sealed record ServiceInfo
 {
     public string Service { get; init; } = "SignsOfAI.Perplexity.Api";
     public string Model { get; init; } = "";
+    /// <summary>The service can serve requests (model file present; may lazy-load on demand).</summary>
     public bool ModelReady { get; init; }
+    /// <summary>The model is currently resident in RAM (false while idle-unloaded).</summary>
+    public bool ModelLoaded { get; init; }
     public string[] Languages { get; init; } = [];
 }
 

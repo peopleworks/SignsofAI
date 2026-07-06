@@ -4,12 +4,13 @@
 
 <div class="ppl card">
     <div class="ppl-head">
-        <h3>Perplexity <span class="badge-beta">beta</span></h3>
+        <h3>Predictability <span class="badge-beta">beta</span></h3>
         <button class="ppl-gear" title="Configure server" @onclick="() => _showSettings = !_showSettings">⚙</button>
     </div>
     <p class="hint">
-        A language model's <em>surprise</em> at your text. AI writing is unusually predictable (low perplexity);
-        human writing is more surprising. This is the signal used by research-grade detectors.
+        How <em>predictable</em> a language model finds your phrasing (its perplexity). Predictable, generic
+        wording is common in AI writing — but formulaic human text scores predictable too, and stylized AI can
+        score varied. A useful signal, <strong>not</strong> proof of AI.
     </p>
 
     @if (_showSettings || !_settings.IsConfigured)
@@ -49,16 +50,16 @@
     @if (_result is not null)
     {
         var r = _result;
-        var pct = (int)Math.Round(r.AiLikelihood * 100);
+        var pct = (int)Math.Round(r.Predictability * 100);
         <div class="ppl-result">
-            <div class="ppl-verdict @VerdictClass(r.Verdict)">
-                <span class="ppl-verdict-label">@VerdictLabel(r.Verdict)</span>
-                <span class="ppl-verdict-pct">@pct<small>% AI-like</small></span>
+            <div class="ppl-verdict @BandClass(r.Band)">
+                <span class="ppl-verdict-label">@BandLabel(r.Band)</span>
+                <span class="ppl-verdict-pct">@pct<small>% predictable</small></span>
             </div>
-            <div class="ppl-meter" title="Left = human-like · right = AI-like">
-                <div class="ppl-meter-fill @VerdictClass(r.Verdict)" style="width:@(pct)%"></div>
-                <div class="ppl-meter-mid"></div>
+            <div class="ppl-meter" title="Left = varied / surprising · right = predictable / generic">
+                <div class="ppl-meter-fill @BandClass(r.Band)" style="width:@(pct)%"></div>
             </div>
+            <p class="ppl-note">@BandNote(r.Band)</p>
             <div class="ppl-nums">
                 <div class="ppl-num"><span>Perplexity</span><strong>@r.Ppl.ToString("0.0")</strong></div>
                 <div class="ppl-num"><span>Tokens</span><strong>@r.TokenCount</strong></div>
@@ -115,18 +116,25 @@
         finally { _loading = false; }
     }
 
-    private static string VerdictClass(string v) => v switch
+    private static string BandClass(string b) => b switch
     {
-        "likely-ai" => "v-ai",
-        "likely-human" => "v-human",
-        _ => "v-mid",
+        "very-predictable" => "b-pred",  // amber — generic phrasing (common in AI)
+        "varied" => "b-var",             // green — surprising phrasing
+        _ => "b-typ",                    // neutral
     };
 
-    private static string VerdictLabel(string v) => v switch
+    private static string BandLabel(string b) => b switch
     {
-        "likely-ai" => "Likely AI",
-        "likely-human" => "Likely human",
-        _ => "Uncertain",
+        "very-predictable" => "Very predictable",
+        "varied" => "Varied phrasing",
+        _ => "Typical",
+    };
+
+    private static string BandNote(string b) => b switch
+    {
+        "very-predictable" => "Generic, easy-to-predict wording. Common in AI writing — though formulaic human text reads this way too.",
+        "varied" => "Surprising, less predictable wording — more typical of personal human writing (but stylized AI can score here).",
+        _ => "A mix of predictable and surprising wording.",
     };
 
     private static string DisplayHost(string url)
