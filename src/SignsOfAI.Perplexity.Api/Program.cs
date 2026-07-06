@@ -44,6 +44,16 @@ app.MapGet("/", (IPerplexityEngine engine, PerplexityOptions opts) => Results.Ok
 app.MapGet("/healthz", (IPerplexityEngine engine) =>
     engine.IsReady ? Results.Ok("ready") : Results.StatusCode(503));
 
+// Cheap pre-warm: clients call this when the user is about to measure so the model is already
+// in RAM (hides the ~1.5s cold reload after an idle-unload). Returns fast if already loaded.
+app.MapGet("/api/warmup", async (IPerplexityEngine engine, CancellationToken ct) =>
+{
+    if (!engine.IsReady) return Results.Json(new { modelLoaded = false, ready = false });
+    var sw = System.Diagnostics.Stopwatch.StartNew();
+    await engine.WarmupAsync(ct);
+    return Results.Json(new { modelLoaded = engine.IsLoaded, ready = true, elapsedMs = sw.ElapsedMilliseconds });
+});
+
 app.MapPost("/api/perplexity", async (
     PerplexityRequest req, IPerplexityEngine engine, PerplexityScorer scorer, CancellationToken ct) =>
 {

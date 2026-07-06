@@ -25,4 +25,8 @@ public interface IPerplexityEngine
 
     /// <summary>Runs one forward pass and returns the perplexity of <paramref name="text"/>.</summary>
     Task<PerplexityRaw> ScoreAsync(string text, CancellationToken ct = default);
+
+    /// <summary>Ensures the model is loaded into RAM (and resets the idle clock) without scoring —
+    /// so a subsequent request is warm. Cheap if already loaded.</summary>
+    Task WarmupAsync(CancellationToken ct = default);
 }

@@ -86,6 +86,8 @@
     {
         _settings = await Perplexity.LoadSettingsAsync(Storage);
         _endpointEdit = _settings.Endpoint;
+        // Pre-warm the server while the user reads their results, so "Measure" is warm.
+        if (_settings.IsConfigured) _ = Perplexity.WarmupAsync(_settings.Endpoint);
     }
 
     private async Task SaveEndpoint()

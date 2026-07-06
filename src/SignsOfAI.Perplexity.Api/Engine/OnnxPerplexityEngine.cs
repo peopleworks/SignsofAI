@@ -72,6 +72,14 @@ public sealed class OnnxPerplexityEngine : IPerplexityEngine, IDisposable
         finally { Release(); }
     }
 
+    /// <summary>Loads the model (if needed) and refreshes the idle clock, without running inference.</summary>
+    public async Task WarmupAsync(CancellationToken ct = default)
+    {
+        if (!_filesReady) return;
+        _ = await AcquireAsync(ct);
+        Release();
+    }
+
     // ── Load / unload lifecycle ──────────────────────────────────────────────
     private async Task<(InferenceSession, Tokenizer)> AcquireAsync(CancellationToken ct)
     {

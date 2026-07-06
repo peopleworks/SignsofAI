@@ -60,6 +60,13 @@ public sealed class PerplexityClient(HttpClient http)
     public async Task SaveSettingsAsync(BrowserStorage storage, PerplexitySettings settings) =>
         await storage.SetAsync(StorageKey, JsonSerializer.Serialize(settings, PerplexityJsonContext.Default.PerplexitySettings));
 
+    /// <summary>Fire-and-forget pre-warm so the server model is loaded before the user clicks Measure.</summary>
+    public async Task WarmupAsync(string endpoint, CancellationToken ct = default)
+    {
+        try { using var _ = await http.GetAsync(endpoint.TrimEnd('/') + "/api/warmup", ct); }
+        catch { /* best-effort; a cold measure just costs ~1.5s */ }
+    }
+
     /// <summary>Measures perplexity for <paramref name="text"/>. Throws with a friendly message on failure.</summary>
     public async Task<PerplexityResult> MeasureAsync(string endpoint, string text, string lang, CancellationToken ct = default)
     {
