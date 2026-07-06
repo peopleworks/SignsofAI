@@ -136,6 +136,8 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 
 /* ---- summary / score ---- */
 .summary { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+/* Register --pct as a number so the conic-gradient fill can animate smoothly as the live score changes. */
+@property --pct { syntax: "<number>"; inherits: false; initial-value: 0; }
 .score-ring {
     --pct: 0;
     --ring: var(--warn);
@@ -143,6 +145,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     width: 116px; height: 116px; border-radius: 50%;
     background: conic-gradient(var(--ring) calc(var(--pct) * 1%), var(--surface-2) 0);
     display: grid; place-items: center;
+    transition: --pct .55s cubic-bezier(.22,.61,.36,1), background .55s ease;
 }
 .score-ring.good { --ring: var(--good); }
 .score-ring.notice { --ring: var(--notice); }
@@ -325,6 +328,30 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .sign-msg { margin: .2rem 0 0; font-size: .9rem; }
 .sign-fix { margin: 0; font-size: .88rem; }
 .sign-evidence { margin: .2rem 0 0; font-size: .76rem; color: var(--text-muted); font-style: italic; }
+
+/* ---- live analysis ---- */
+.live-pill {
+    display: inline-flex; align-items: center; gap: .35rem; font-size: .74rem; font-weight: 700;
+    color: var(--good); background: color-mix(in srgb, var(--good) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--good) 30%, transparent);
+    padding: .2rem .6rem; border-radius: 999px; text-transform: uppercase; letter-spacing: .03em;
+}
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); animation: livepulse 1.6s ease-in-out infinite; }
+@keyframes livepulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.6); } }
+
+.idle-hint { text-align: center; color: var(--text-muted); font-size: .95rem; margin: 2rem 0 3rem; }
+
+.results { animation: fadeup .4s ease both; }
+@keyframes fadeup { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.stat-val { transition: color .3s ease; }
+.score-num { transition: color .3s ease; }
+
+/* ---- sentence-rhythm chart ---- */
+.rhythm h3 { margin: 0 0 .3rem; font-size: 1.1rem; }
+.rhythm-svg { width: 100%; height: 84px; display: block; margin-top: .5rem; overflow: visible; }
+.rhythm-mean { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 4 4; opacity: .5; vector-effect: non-scaling-stroke; }
+.rhythm-caption { margin: .55rem 0 0; font-size: .85rem; color: var(--text-muted); }
+.rhythm-empty { color: var(--text-muted); font-size: .9rem; margin: .3rem 0 0; }
 
 /* ---- footer ---- */
 .app-footer { text-align: center; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: .78rem; color: var(--text-muted); }

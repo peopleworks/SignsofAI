@@ -5,27 +5,41 @@ using SignsOfAI.Core.Model;
 
 namespace SignsOfAI.Web.Services;
 
-public enum AiProvider { Anthropic, AzureOpenAI }
+public enum AiProvider { Anthropic, OpenAI, AzureOpenAI, DeepSeek, Ollama }
 
 /// <summary>User-configured provider settings, persisted in the browser's localStorage.</summary>
 public sealed class HumanizeSettings
 {
     [JsonPropertyName("provider")] public AiProvider Provider { get; set; } = AiProvider.Anthropic;
     [JsonPropertyName("apiKey")] public string ApiKey { get; set; } = string.Empty;
+    [JsonPropertyName("model")] public string Model { get; set; } = string.Empty;      // OpenAI / DeepSeek / Ollama
     [JsonPropertyName("azureEndpoint")] public string AzureEndpoint { get; set; } = string.Empty;
     [JsonPropertyName("azureDeployment")] public string AzureDeployment { get; set; } = string.Empty;
     [JsonPropertyName("azureApiVersion")] public string AzureApiVersion { get; set; } = "2024-10-21";
+    [JsonPropertyName("ollamaBaseUrl")] public string OllamaBaseUrl { get; set; } = "http://localhost:11434";
+
+    /// <summary>True when the active provider has everything it needs to make a call.</summary>
+    public bool IsConfigured() => Provider switch
+    {
+        AiProvider.Anthropic => !string.IsNullOrWhiteSpace(ApiKey),
+        AiProvider.OpenAI => !string.IsNullOrWhiteSpace(ApiKey) && !string.IsNullOrWhiteSpace(Model),
+        AiProvider.DeepSeek => !string.IsNullOrWhiteSpace(ApiKey) && !string.IsNullOrWhiteSpace(Model),
+        AiProvider.AzureOpenAI => !string.IsNullOrWhiteSpace(ApiKey)
+            && !string.IsNullOrWhiteSpace(AzureEndpoint) && !string.IsNullOrWhiteSpace(AzureDeployment),
+        AiProvider.Ollama => !string.IsNullOrWhiteSpace(OllamaBaseUrl) && !string.IsNullOrWhiteSpace(Model),
+        _ => false,
+    };
 }
 
 public sealed record HumanizeResult(bool Success, string Text, string? Error);
 
 /// <summary>
 /// Optional "Humanize" feature. Rewrites text to remove AI tells, calling an LLM directly from the
-/// browser (BYOK — the key never leaves the device, there is no backend). Two providers:
-///  • Anthropic (claude-opus-4-8) — works from the browser out of the box via the direct-access header.
-///  • Azure OpenAI — for the Microsoft/.NET crowd on their own Azure AI resource. Requires that the
-///    resource allow the site's origin via CORS (or sit behind APIM/a Function), since Azure OpenAI
-///    does not expose a browser-access header like Anthropic's.
+/// browser (BYOK — the key never leaves the device, there is no backend). Providers:
+///  • Anthropic (claude-opus-4-8) — works from the browser via the direct-access header.
+///  • OpenAI / DeepSeek — OpenAI-style chat completions; the provider must allow browser CORS.
+///  • Azure OpenAI — your own Azure AI resource; requires CORS allowed on the resource.
+///  • Ollama — a local model on your machine; works best when SignsOfAI itself runs locally.
 /// </summary>
 public sealed class HumanizerService(HttpClient http)
 {
@@ -34,21 +48,31 @@ public sealed class HumanizerService(HttpClient http)
     private const int MaxTokens = 8000;
 
     public Task<HumanizeResult> HumanizeAsync(
-        string text, string language, IReadOnlyList<Finding> findings, HumanizeSettings settings,
+        string text, string language, IReadOnlyList<Finding> findings, HumanizeSettings s,
         CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(text))
             return Task.FromResult(new HumanizeResult(false, string.Empty, "Nothing to humanize."));
 
-        return settings.Provider switch
+        var system = BuildSystemPrompt(language);
+        var user = BuildUserPrompt(text, findings);
+
+        return s.Provider switch
         {
-            AiProvider.AzureOpenAI => AzureAsync(text, language, findings, settings, ct),
-            _ => AnthropicAsync(text, language, findings, settings, ct),
+            AiProvider.Anthropic => AnthropicAsync(system, user, s, ct),
+            AiProvider.AzureOpenAI => AzureAsync(system, user, s, ct),
+            AiProvider.OpenAI => OpenAiStyleAsync(
+                "https://api.openai.com/v1/chat/completions", s.ApiKey, s.Model, system, user, "OpenAI", ct),
+            AiProvider.DeepSeek => OpenAiStyleAsync(
+                "https://api.deepseek.com/v1/chat/completions", s.ApiKey, s.Model, system, user, "DeepSeek", ct),
+            AiProvider.Ollama => OpenAiStyleAsync(
+                $"{s.OllamaBaseUrl.TrimEnd('/')}/v1/chat/completions", null, s.Model, system, user, "Ollama", ct),
+            _ => Task.FromResult(new HumanizeResult(false, string.Empty, "Unknown provider.")),
         };
     }
 
     private async Task<HumanizeResult> AnthropicAsync(
-        string text, string language, IReadOnlyList<Finding> findings, HumanizeSettings s, CancellationToken ct)
+        string system, string user, HumanizeSettings s, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(s.ApiKey))
             return new HumanizeResult(false, string.Empty, "Add your Anthropic API key first.");
@@ -57,8 +81,8 @@ public sealed class HumanizerService(HttpClient http)
         {
             Model = AnthropicModel,
             MaxTokens = MaxTokens,
-            System = BuildSystemPrompt(language),
-            Messages = [new ChatMessage { Role = "user", Content = BuildUserPrompt(text, findings) }],
+            System = system,
+            Messages = [new ChatMessage { Role = "user", Content = user }],
         };
 
         using var msg = new HttpRequestMessage(HttpMethod.Post, AnthropicEndpoint)
@@ -76,35 +100,29 @@ public sealed class HumanizerService(HttpClient http)
             var parsed = JsonSerializer.Deserialize(body, LlmJsonContext.Default.AnthropicResponse);
 
             if (!response.IsSuccessStatusCode || parsed?.Error is not null)
-                return new HumanizeResult(false, string.Empty,
-                    parsed?.Error?.Message ?? $"HTTP {(int)response.StatusCode}");
+                return Fail(parsed?.Error?.Message ?? $"HTTP {(int)response.StatusCode}");
 
             var outText = parsed?.Content?.FirstOrDefault(b => b.Type == "text")?.Text?.Trim();
-            return string.IsNullOrEmpty(outText)
-                ? new HumanizeResult(false, string.Empty, "Claude returned an empty response.")
-                : new HumanizeResult(true, outText, null);
+            return string.IsNullOrEmpty(outText) ? Fail("Claude returned an empty response.") : Ok(outText);
         }
-        catch (Exception ex) { return new HumanizeResult(false, string.Empty, ex.Message); }
+        catch (Exception ex) { return Fail(ex.Message); }
     }
 
     private async Task<HumanizeResult> AzureAsync(
-        string text, string language, IReadOnlyList<Finding> findings, HumanizeSettings s, CancellationToken ct)
+        string system, string user, HumanizeSettings s, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(s.ApiKey) || string.IsNullOrWhiteSpace(s.AzureEndpoint) ||
-            string.IsNullOrWhiteSpace(s.AzureDeployment))
-            return new HumanizeResult(false, string.Empty,
-                "Azure needs an endpoint, a deployment name, and an API key.");
-
         var endpoint = s.AzureEndpoint.TrimEnd('/');
         var url = $"{endpoint}/openai/deployments/{s.AzureDeployment}/chat/completions?api-version={s.AzureApiVersion}";
 
+        // Azure puts the model in the URL (deployment), so leave Model null.
         var request = new ChatRequest
         {
+            Model = null,
             MaxTokens = MaxTokens,
             Messages =
             [
-                new ChatMessage { Role = "system", Content = BuildSystemPrompt(language) },
-                new ChatMessage { Role = "user", Content = BuildUserPrompt(text, findings) },
+                new ChatMessage { Role = "system", Content = system },
+                new ChatMessage { Role = "user", Content = user },
             ],
         };
 
@@ -114,6 +132,41 @@ public sealed class HumanizerService(HttpClient http)
         };
         msg.Headers.Add("api-key", s.ApiKey);
 
+        return await SendChatAsync(msg, "Azure OpenAI",
+            "if this is a network/CORS error, allow this site's origin on your Azure OpenAI resource.", ct);
+    }
+
+    private async Task<HumanizeResult> OpenAiStyleAsync(
+        string url, string? apiKey, string model, string system, string user, string label, CancellationToken ct)
+    {
+        var request = new ChatRequest
+        {
+            Model = model,
+            MaxTokens = MaxTokens,
+            Messages =
+            [
+                new ChatMessage { Role = "system", Content = system },
+                new ChatMessage { Role = "user", Content = user },
+            ],
+        };
+
+        using var msg = new HttpRequestMessage(HttpMethod.Post, url)
+        {
+            Content = JsonContent.Create(request, LlmJsonContext.Default.ChatRequest),
+        };
+        if (!string.IsNullOrWhiteSpace(apiKey))
+            msg.Headers.Add("Authorization", $"Bearer {apiKey}");
+
+        var corsHint = label == "Ollama"
+            ? "run Ollama with OLLAMA_ORIGINS allowing this site, and note that a hosted HTTPS page may be blocked from calling http://localhost — this works best when you run SignsOfAI locally."
+            : $"{label} may not allow direct browser calls; a CORS/network error means you'd need a small proxy.";
+
+        return await SendChatAsync(msg, label, corsHint, ct);
+    }
+
+    private async Task<HumanizeResult> SendChatAsync(
+        HttpRequestMessage msg, string label, string corsHint, CancellationToken ct)
+    {
         try
         {
             using var response = await http.SendAsync(msg, ct);
@@ -121,21 +174,19 @@ public sealed class HumanizerService(HttpClient http)
             var parsed = JsonSerializer.Deserialize(body, LlmJsonContext.Default.ChatResponse);
 
             if (!response.IsSuccessStatusCode || parsed?.Error is not null)
-                return new HumanizeResult(false, string.Empty,
-                    parsed?.Error?.Message ?? $"HTTP {(int)response.StatusCode}");
+                return Fail(parsed?.Error?.Message ?? $"HTTP {(int)response.StatusCode}");
 
             var outText = parsed?.Choices?.FirstOrDefault()?.Message?.Content?.Trim();
-            return string.IsNullOrEmpty(outText)
-                ? new HumanizeResult(false, string.Empty, "Azure OpenAI returned an empty response.")
-                : new HumanizeResult(true, outText, null);
+            return string.IsNullOrEmpty(outText) ? Fail($"{label} returned an empty response.") : Ok(outText);
         }
         catch (Exception ex)
         {
-            // A bare network failure from the browser is almost always CORS on the Azure resource.
-            return new HumanizeResult(false, string.Empty,
-                $"{ex.Message} — if this is a network/CORS error, allow this site's origin on your Azure OpenAI resource.");
+            return Fail($"{ex.Message} — {corsHint}");
         }
     }
+
+    private static HumanizeResult Ok(string text) => new(true, text, null);
+    private static HumanizeResult Fail(string error) => new(false, string.Empty, error);
 
     private static string BuildSystemPrompt(string language)
     {
@@ -200,6 +251,10 @@ internal sealed class AnthropicContentBlock
 
 internal sealed class ChatRequest
 {
+    [JsonPropertyName("model")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Model { get; init; }
+
     [JsonPropertyName("messages")] public required ChatMessage[] Messages { get; init; }
     [JsonPropertyName("max_tokens")] public required int MaxTokens { get; init; }
 }

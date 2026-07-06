@@ -29,14 +29,23 @@ an original derivation of AI-writing markers for Spanish.
 
 ## Features
 
-- **Analyze** — paste **or upload a document** (`.txt` / `.md`), get a 0–100 score with a per-category
-  breakdown, statistics (burstiness, lexical diversity), highlighted tells, and a recommendation for
-  every finding.
+- **Live analysis** — paste, upload a document (`.docx` / `.txt` / `.md`), or **just start typing**:
+  the 0–100 score, highlights, statistics, and recommendations update **as you write** (debounced),
+  with a smoothly animated score ring.
+- **Sentence-rhythm visualization** — a per-sentence bar chart that makes *burstiness* visible: flat,
+  grey, uniform bars = machine cadence; tall/short, green, varied bars = human variance. A teachable
+  view no other AI detector shows.
+- **Per-finding recommendations** — every flagged tell carries a concrete fix, plus the research
+  evidence behind it. Highlights are colour-coded by category.
 - **Humanize (optional, BYOK)** — connect an AI provider and rewrite the flagged text in one click.
-  Two providers, chosen in ⚙ AI provider:
+  Five providers, chosen in ⚙ AI provider:
   - **Anthropic** (`claude-opus-4-8`) — works directly from the browser out of the box.
-  - **Azure OpenAI** — for your own **Azure AI** resource (endpoint + deployment + key). Azure OpenAI
-    must allow the site's origin via CORS, or sit behind API Management / a Function, for browser calls.
+  - **OpenAI** / **DeepSeek** — OpenAI-style chat completions (bring your model + key).
+  - **Azure OpenAI** — your own **Azure AI** resource (endpoint + deployment + key).
+  - **Ollama (local)** — run a model **on your own machine**, no cloud and no key. Works best when you
+    run SignsOfAI locally; start Ollama with `OLLAMA_ORIGINS=*`. (From the hosted HTTPS site, browsers
+    may block calls to `http://localhost`; cloud providers need to allow the site's origin via CORS.)
+
   Credentials are stored only in your browser and sent **directly** to the provider — never to us
   (there is no backend).
 - **Catalog** — a searchable library of every AI-writing sign the analyzer knows, in both languages,

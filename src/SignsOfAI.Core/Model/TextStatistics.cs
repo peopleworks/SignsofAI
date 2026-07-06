@@ -22,4 +22,7 @@ public sealed record TextStatistics
 
     /// <summary>Type/token ratio — lexical diversity (unique words / total words).</summary>
     public double LexicalDiversity { get; init; }
+
+    /// <summary>Word count of each sentence, in order — powers the "sentence rhythm" visualization.</summary>
+    public IReadOnlyList<int> SentenceLengths { get; init; } = [];
 }

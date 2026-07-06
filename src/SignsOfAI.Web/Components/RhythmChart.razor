@@ -1,0 +1,101 @@
+@using SignsOfAI.Core.Model
+
+@if (_bars.Length >= 2)
+{
+    <svg class="rhythm-svg" viewBox="0 0 @W 80" preserveAspectRatio="none" role="img"
+         aria-label="Sentence rhythm — bar height is each sentence's length">
+        <line class="rhythm-mean" x1="0" y1="@_meanY.ToString(Inv)" x2="@W" y2="@_meanY.ToString(Inv)" />
+        @for (int i = 0; i < _bars.Length; i++)
+        {
+            var b = _bars[i];
+            <rect x="@b.X.ToString(Inv)" y="@b.Y.ToString(Inv)" width="@_barW.ToString(Inv)"
+                  height="@b.H.ToString(Inv)" rx="1.5" fill="@b.Color" />
+        }
+    </svg>
+    <p class="rhythm-caption">@_caption</p>
+}
+else
+{
+    <p class="rhythm-empty">Add a few more sentences to reveal the rhythm.</p>
+}
+
+@code {
+    [Parameter, EditorRequired] public TextStatistics Stats { get; set; } = default!;
+
+    private const int W = 600;
+    private const int H = 80;
+    private const int Pad = 12;
+    private static readonly System.Globalization.CultureInfo Inv = System.Globalization.CultureInfo.InvariantCulture;
+
+    // Uniform (near the mean) → muted slate; varied (far from the mean) → healthy green.
+    private static readonly int[] Uniform = [148, 163, 184]; // slate-400
+    private static readonly int[] Varied = [22, 163, 74];    // green-600
+
+    private record struct Bar(double X, double Y, double H, string Color);
+
+    private Bar[] _bars = [];
+    private double _barW;
+    private double _meanY;
+    private string _caption = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        var values = Downsample(Stats.SentenceLengths, 60);
+        if (values.Length < 2) { _bars = []; return; }
+
+        double max = values.Max();
+        double mean = values.Average();
+        if (max <= 0) { _bars = []; return; }
+
+        double slot = (double)W / values.Length;
+        _barW = slot * 0.72;
+        double usableH = H - Pad;
+        _meanY = H - mean / max * usableH;
+
+        _bars = new Bar[values.Length];
+        for (int i = 0; i < values.Length; i++)
+        {
+            double v = values[i];
+            double h = Math.Max(2, v / max * usableH);
+            double x = i * slot + slot * 0.14;
+            double deviation = Math.Abs(v - mean) / Math.Max(mean, 1);
+            double t = Math.Clamp(deviation * 2.2, 0, 1);
+            _bars[i] = new Bar(x, H - h, h, Lerp(Uniform, Varied, t));
+        }
+
+        _caption = Stats.SentenceCount < 4
+            ? "Short sample — the rhythm reading firms up with more sentences."
+            : Stats.Burstiness switch
+            {
+                < 0.25 => "Very uniform bars — a machine-like, metronomic cadence.",
+                < 0.45 => "Somewhat uniform — the rhythm barely varies.",
+                < 0.60 => "Fairly varied — getting closer to human cadence.",
+                _ => "Nicely varied, jagged rhythm — reads human.",
+            };
+    }
+
+    // Bucket-average into at most `maxBars` values so long documents stay legible.
+    private static double[] Downsample(IReadOnlyList<int> src, int maxBars)
+    {
+        if (src.Count == 0) return [];
+        if (src.Count <= maxBars) return src.Select(x => (double)x).ToArray();
+
+        int bucket = (int)Math.Ceiling((double)src.Count / maxBars);
+        var outp = new List<double>();
+        for (int i = 0; i < src.Count; i += bucket)
+        {
+            double sum = 0; int n = 0;
+            for (int j = i; j < i + bucket && j < src.Count; j++) { sum += src[j]; n++; }
+            outp.Add(sum / n);
+        }
+        return outp.ToArray();
+    }
+
+    private static string Lerp(int[] a, int[] b, double t)
+    {
+        int r = (int)Math.Round(a[0] + (b[0] - a[0]) * t);
+        int g = (int)Math.Round(a[1] + (b[1] - a[1]) * t);
+        int bl = (int)Math.Round(a[2] + (b[2] - a[2]) * t);
+        return $"#{r:x2}{g:x2}{bl:x2}";
+    }
+}

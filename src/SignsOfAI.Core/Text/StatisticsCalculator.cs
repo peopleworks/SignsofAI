@@ -29,6 +29,7 @@ public static class StatisticsCalculator
             SentenceLengthStdDev = Math.Round(stdDev, 2),
             Burstiness = Math.Round(burstiness, 3),
             LexicalDiversity = wordCount > 0 ? Math.Round((double)uniqueWords / wordCount, 3) : 0,
+            SentenceLengths = doc.Sentences.Select(s => s.WordCount).ToArray(),
         };
     }
 

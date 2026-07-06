@@ -4,6 +4,7 @@
 @using SignsOfAI.Core
 @using SignsOfAI.Core.Documents
 @using SignsOfAI.Core.Model
+@using SignsOfAI.Web.Components
 @using SignsOfAI.Web.Services
 @inject AiWritingAnalyzer Analyzer
 @inject HumanizerService Humanizer
@@ -14,8 +15,8 @@
 
 <header class="hero">
     <p class="tagline">
-        Paste or upload your text. We flag the tells of AI writing — overused words, rhetorical
-        crutches, robotic sentence rhythm — and tell you <strong>how to fix each one</strong>.
+        Paste, upload, or just start typing. We flag the tells of AI writing — overused words,
+        rhetorical crutches, robotic rhythm — <strong>live, as you write</strong>, and show you how to fix each one.
     </p>
     <p class="privacy">🔒 Analysis runs entirely in your browser. Your text never leaves your device.</p>
 </header>
@@ -24,7 +25,7 @@
     <div class="toolbar">
         <label class="field">
             Language
-            <select @bind="_language">
+            <select @bind="_language" @bind:after="OnControlChanged">
                 <option value="auto">Auto-detect</option>
                 <option value="en">English</option>
                 <option value="es">Español</option>
@@ -40,18 +41,18 @@
             <button class="link" @onclick="@(() => LoadSample(SampleEs))">IA (ES)</button>
             <button class="link" @onclick="@(() => LoadSample(SampleHuman))">Human</button>
         </div>
+        <span class="live-pill" title="Analysis updates automatically as you type"><span class="live-dot"></span> Live</span>
         <div class="counter">@WordCount words</div>
     </div>
 
     @if (_fileNote is not null) { <p class="file-note">@_fileNote</p> }
 
-    <textarea @bind="_text" @bind:event="oninput"
-              placeholder="Paste the text you want to check here, or upload a document above…"
+    <textarea @bind="_text" @bind:event="oninput" @bind:after="OnTextChanged"
+              placeholder="Start typing here, paste your text, or upload a document above…"
               spellcheck="false"></textarea>
     <p class="hint doc-hint">Full documents welcome — including Word (<code>.docx</code>). For PDF, copy-paste the text.</p>
 
     <div class="actions">
-        <button class="primary" @onclick="Analyze" disabled="@string.IsNullOrWhiteSpace(_text)">Analyze</button>
         <button class="ghost" @onclick="Clear" disabled="@string.IsNullOrEmpty(_text)">Clear</button>
         <button class="ghost settings-toggle" @onclick="@(() => _showSettings = !_showSettings)">⚙ AI provider</button>
     </div>
@@ -67,28 +68,64 @@
                 Provider
                 <select @bind="_settings.Provider">
                     <option value="@AiProvider.Anthropic">Anthropic (Claude)</option>
+                    <option value="@AiProvider.OpenAI">OpenAI</option>
                     <option value="@AiProvider.AzureOpenAI">Azure OpenAI</option>
+                    <option value="@AiProvider.DeepSeek">DeepSeek</option>
+                    <option value="@AiProvider.Ollama">Ollama (local)</option>
                 </select>
             </label>
 
-            @if (_settings.Provider == AiProvider.Anthropic)
+            @switch (_settings.Provider)
             {
-                <div class="key-row">
-                    <input type="password" placeholder="sk-ant-…" @bind="_settings.ApiKey" @bind:event="oninput" />
-                </div>
-                <p class="hint sub">Works directly from the browser. Get a key at
-                    <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
-            }
-            else
-            {
-                <div class="azure-grid">
-                    <input placeholder="Endpoint — https://your-resource.openai.azure.com" @bind="_settings.AzureEndpoint" @bind:event="oninput" />
-                    <input placeholder="Deployment name — e.g. gpt-4o" @bind="_settings.AzureDeployment" @bind:event="oninput" />
-                    <input placeholder="API version" @bind="_settings.AzureApiVersion" @bind:event="oninput" />
-                    <input type="password" placeholder="API key" @bind="_settings.ApiKey" @bind:event="oninput" />
-                </div>
-                <p class="hint sub">For your own <strong>Azure AI</strong> resource. Azure OpenAI must allow this
-                    site's origin (CORS) — or sit behind API Management / a Function — for browser calls to work.</p>
+                case AiProvider.Anthropic:
+                    <div class="key-row">
+                        <input type="password" placeholder="sk-ant-…" @bind="_settings.ApiKey" @bind:event="oninput" />
+                    </div>
+                    <p class="hint sub">Uses <code>claude-opus-4-8</code>. Works directly from the browser. Key from
+                        <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
+                    break;
+
+                case AiProvider.OpenAI:
+                    <div class="azure-grid">
+                        <input placeholder="Model — e.g. gpt-4o" @bind="_settings.Model" @bind:event="oninput" />
+                        <input type="password" placeholder="API key — sk-…" @bind="_settings.ApiKey" @bind:event="oninput" />
+                    </div>
+                    <p class="hint sub">Key from
+                        <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a>.
+                        Called directly from the browser (OpenAI allows this).</p>
+                    break;
+
+                case AiProvider.AzureOpenAI:
+                    <div class="azure-grid">
+                        <input placeholder="Endpoint — https://your-resource.openai.azure.com" @bind="_settings.AzureEndpoint" @bind:event="oninput" />
+                        <input placeholder="Deployment name — e.g. gpt-4o" @bind="_settings.AzureDeployment" @bind:event="oninput" />
+                        <input placeholder="API version" @bind="_settings.AzureApiVersion" @bind:event="oninput" />
+                        <input type="password" placeholder="API key" @bind="_settings.ApiKey" @bind:event="oninput" />
+                    </div>
+                    <p class="hint sub">For your own <strong>Azure AI</strong> resource. Azure OpenAI must allow this
+                        site's origin (CORS) — or sit behind API Management / a Function — for browser calls.</p>
+                    break;
+
+                case AiProvider.DeepSeek:
+                    <div class="azure-grid">
+                        <input placeholder="Model — e.g. deepseek-chat" @bind="_settings.Model" @bind:event="oninput" />
+                        <input type="password" placeholder="API key — sk-…" @bind="_settings.ApiKey" @bind:event="oninput" />
+                    </div>
+                    <p class="hint sub">Key from
+                        <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">platform.deepseek.com</a>.
+                        OpenAI-compatible API.</p>
+                    break;
+
+                case AiProvider.Ollama:
+                    <div class="azure-grid">
+                        <input placeholder="Base URL — http://localhost:11434" @bind="_settings.OllamaBaseUrl" @bind:event="oninput" />
+                        <input placeholder="Model — e.g. llama3.1" @bind="_settings.Model" @bind:event="oninput" />
+                    </div>
+                    <p class="hint sub">🖥️ Run a model <strong>on your own machine</strong> — no cloud, no key. Works best
+                        when you run SignsOfAI locally. Start Ollama with browser access allowed, e.g.
+                        <code>OLLAMA_ORIGINS=* ollama serve</code>. From this hosted HTTPS site the browser may block
+                        calls to <code>http://localhost</code>.</p>
+                    break;
             }
 
             <div class="key-row">
@@ -141,6 +178,12 @@
                 </span>
             </div>
             <div class="stat"><span class="stat-label">Lexical diversity</span><span class="stat-val">@r.Statistics.LexicalDiversity.ToString("0.00")</span></div>
+        </div>
+
+        <div class="rhythm card">
+            <h3>Sentence rhythm</h3>
+            <p class="hint">Each bar is one sentence; height is its length. Flat &amp; grey = machine cadence · tall/short &amp; green = human variance.</p>
+            <RhythmChart Stats="r.Statistics" />
         </div>
 
         @if (_humanizeError is not null)
@@ -209,9 +252,13 @@
         </div>
     </section>
 }
+else
+{
+    <p class="idle-hint">Start typing, paste, or upload a document — your AI-writing score appears here instantly.</p>
+}
 
 @code {
-    private const string SettingsStorageKey = "signsofai.humanize.v2";
+    private const string SettingsStorageKey = "signsofai.humanize.v3";
     private const long MaxFileBytes = 5 * 1024 * 1024;
 
     private string _text = string.Empty;
@@ -219,6 +266,8 @@
     private AnalysisResult? _result;
     private string _analyzedText = string.Empty;
     private string? _fileNote;
+
+    private CancellationTokenSource? _debounceCts;
 
     private bool _showSettings;
     private HumanizeSettings _settings = new();
@@ -246,6 +295,41 @@
         }
     }
 
+    // Debounced live analysis as the user types.
+    private async Task OnTextChanged()
+    {
+        _fileNote = null;
+        _debounceCts?.Cancel();
+        var cts = _debounceCts = new CancellationTokenSource();
+        try { await Task.Delay(350, cts.Token); }
+        catch (TaskCanceledException) { return; }
+        if (cts.IsCancellationRequested) return;
+
+        RunAnalysis();
+        StateHasChanged();
+    }
+
+    private void OnControlChanged()
+    {
+        if (!string.IsNullOrWhiteSpace(_text)) RunAnalysis();
+    }
+
+    private void RunAnalysis()
+    {
+        if (string.IsNullOrWhiteSpace(_text))
+        {
+            _result = null;
+            _analyzedText = string.Empty;
+            _humanized = null;
+            _humanizeError = null;
+            return;
+        }
+        _analyzedText = _text;
+        _result = Analyzer.Analyze(_text, _language);
+        _humanized = null;
+        _humanizeError = null;
+    }
+
     private async Task OnFileSelected(InputFileChangeEventArgs e)
     {
         var file = e.File;
@@ -267,8 +351,8 @@
                 using var reader = new StreamReader(file.OpenReadStream(MaxFileBytes));
                 _text = await reader.ReadToEndAsync();
             }
+            RunAnalysis();
             _fileNote = $"Loaded “{file.Name}” ({file.Size / 1024} KB).";
-            Analyze();
         }
         catch (Exception ex)
         {
@@ -276,22 +360,10 @@
         }
     }
 
-    private void Analyze()
-    {
-        if (string.IsNullOrWhiteSpace(_text)) return;
-        _analyzedText = _text;
-        _result = Analyzer.Analyze(_text, _language);
-        _humanized = null;
-        _humanizeError = null;
-    }
-
     private void Clear()
     {
         _text = string.Empty;
-        _result = null;
-        _analyzedText = string.Empty;
-        _humanized = null;
-        _humanizeError = null;
+        RunAnalysis();
         _fileNote = null;
     }
 
@@ -299,7 +371,7 @@
     {
         _text = sample;
         _fileNote = null;
-        Analyze();
+        RunAnalysis();
     }
 
     private async Task SaveSettings()
@@ -319,14 +391,7 @@
     private async Task Humanize()
     {
         if (_result is null) return;
-
-        bool configured = _settings.Provider == AiProvider.Anthropic
-            ? !string.IsNullOrWhiteSpace(_settings.ApiKey)
-            : !string.IsNullOrWhiteSpace(_settings.ApiKey)
-              && !string.IsNullOrWhiteSpace(_settings.AzureEndpoint)
-              && !string.IsNullOrWhiteSpace(_settings.AzureDeployment);
-
-        if (!configured)
+        if (!_settings.IsConfigured())
         {
             _showSettings = true;
             _humanizeError = "Configure an AI provider (⚙ AI provider) to enable Humanize.";
@@ -355,7 +420,7 @@
         if (_humanized is null) return;
         _text = _humanized;
         _fileNote = null;
-        Analyze();
+        RunAnalysis();
     }
 
     private static string ScoreClass(double score) => score switch
