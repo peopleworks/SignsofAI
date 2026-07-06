@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Signs of AI Writing">
   <defs>
     <linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="3" y1="3" x2="29" y2="29">
-      <stop offset="0" stop-color="#6366f1"/>
-      <stop offset="1" stop-color="#8b5cf6"/>
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#2563eb"/>
     </linearGradient>
   </defs>
   <rect width="32" height="32" rx="7" fill="url(#bg)"/>
