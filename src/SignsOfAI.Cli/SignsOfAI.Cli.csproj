@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>SignsOfAI.Cli</RootNamespace>
+    <AssemblyName>signsofai</AssemblyName>
+
+    <!-- Ship as a global/local dotnet tool: `dotnet tool install -g SignsOfAI.Cli` → `signsofai` -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>signsofai</ToolCommandName>
+    <PackageId>SignsOfAI.Cli</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Pedro Hernández (PeopleWorks)</Authors>
+    <Company>PeopleWorks</Company>
+    <Description>CLI to detect the signs of AI writing (English &amp; Spanish) and recommend fixes — lint your prose in CI.</Description>
+    <PackageTags>ai;writing;linter;dotnet-tool;nlp;detector</PackageTags>
+    <PackageProjectUrl>https://github.com/peopleworks/SignsofAI</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/peopleworks/SignsofAI</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SignsOfAI.Core\SignsOfAI.Core.csproj" />
+  </ItemGroup>
+
+</Project>

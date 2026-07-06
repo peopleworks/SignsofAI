@@ -7,7 +7,23 @@
     <LangVersion>latest</LangVersion>
     <!-- Rule-packs are read via reflection; keep them addressable under a trimmed WASM build. -->
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+
+    <!-- Publishable as a library so others can embed the engine. -->
+    <PackageId>SignsOfAI.Core</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Pedro Hernández (PeopleWorks)</Authors>
+    <Company>PeopleWorks</Company>
+    <Description>The engine behind Signs of AI Writing: detects the stylometric tells of AI-generated text (English &amp; Spanish) — overused vocabulary, rhetorical crutches, syntactic tells and burstiness — and returns an actionable fix for each finding. No external dependencies.</Description>
+    <PackageTags>ai;writing;detector;stylometry;nlp;linter</PackageTags>
+    <PackageProjectUrl>https://github.com/peopleworks/SignsofAI</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/peopleworks/SignsofAI</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <!-- WithCulture=false is essential: filenames like rules.en.json / rules.es.json would

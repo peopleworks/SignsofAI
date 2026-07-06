@@ -9,6 +9,12 @@ obj/
 publish/
 [Pp]ublish/
 
+# NuGet pack output / local tool install
+nupkg/
+out/
+_tooltest/
+*.nupkg
+
 # IDE / OS
 .vs/
 .idea/

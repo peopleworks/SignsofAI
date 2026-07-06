@@ -1,0 +1,28 @@
+# Publish SignsOfAI.Core (library) and SignsOfAI.Cli (dotnet tool) to NuGet.org.
+# Add your NuGet API key as the NUGET_API_KEY repo secret, bump the <Version> in the
+# csproj files, then create a GitHub Release — this packs and pushes both packages.
+name: Publish NuGet
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Pack
+        run: |
+          dotnet pack src/SignsOfAI.Core -c Release -o out
+          dotnet pack src/SignsOfAI.Cli -c Release -o out
+
+      - name: Push to NuGet
+        run: dotnet nuget push "out/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate

@@ -82,6 +82,32 @@ dotnet run --project src/SignsOfAI.Web
 dotnet test
 ```
 
+## Command line & CI (`dotnet tool`)
+
+The engine ships as a global tool so you can lint prose in scripts and CI pipelines:
+
+```bash
+dotnet tool install --global SignsOfAI.Cli
+
+signsofai check README.md                 # pretty report
+signsofai check article.docx --lang en    # Word documents too
+signsofai check post.md --json            # machine-readable
+signsofai check post.md --max-score 40    # exit 1 if it reads too much like AI → fails CI
+```
+
+The analysis engine is also published as a library — embed it in your own .NET app:
+
+```bash
+dotnet add package SignsOfAI.Core
+```
+
+```csharp
+var result = new SignsOfAI.Core.AiWritingAnalyzer().Analyze(text, "auto");
+Console.WriteLine($"{result.OverallScore}/100 — {result.Verdict}");
+foreach (var f in result.Findings)
+    Console.WriteLine($"{f.MatchedText}: {f.Suggestion}");
+```
+
 ## Extending the rules
 
 Add entries to `src/SignsOfAI.Core/Rules/Packs/rules.<lang>.json`:

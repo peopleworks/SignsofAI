@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/SignsOfAI.Cli/SignsOfAI.Cli.csproj" />
     <Project Path="src/SignsOfAI.Core/SignsOfAI.Core.csproj" />
     <Project Path="src/SignsOfAI.Web/SignsOfAI.Web.csproj" />
   </Folder>
