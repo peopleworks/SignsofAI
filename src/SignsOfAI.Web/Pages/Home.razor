@@ -2,6 +2,7 @@
 @using System.Text.Json
 @using Microsoft.AspNetCore.Components.Forms
 @using SignsOfAI.Core
+@using SignsOfAI.Core.Documents
 @using SignsOfAI.Core.Model
 @using SignsOfAI.Web.Services
 @inject AiWritingAnalyzer Analyzer
@@ -29,9 +30,9 @@
                 <option value="es">Español</option>
             </select>
         </label>
-        <label class="upload-btn" title="Upload a .txt or .md document">
+        <label class="upload-btn" title="Upload a .docx, .txt or .md document">
             📄 Upload document
-            <InputFile OnChange="OnFileSelected" accept=".txt,.md,.markdown,.text,.csv,.log" />
+            <InputFile OnChange="OnFileSelected" accept=".docx,.txt,.md,.markdown,.text,.csv,.log" />
         </label>
         <div class="samples">
             <span>Try a sample:</span>
@@ -45,9 +46,9 @@
     @if (_fileNote is not null) { <p class="file-note">@_fileNote</p> }
 
     <textarea @bind="_text" @bind:event="oninput"
-              placeholder="Paste the text you want to check here, or upload a .txt / .md document above…"
+              placeholder="Paste the text you want to check here, or upload a document above…"
               spellcheck="false"></textarea>
-    <p class="hint doc-hint">Full documents welcome. For Word/PDF, copy-paste the text or save as .txt.</p>
+    <p class="hint doc-hint">Full documents welcome — including Word (<code>.docx</code>). For PDF, copy-paste the text.</p>
 
     <div class="actions">
         <button class="primary" @onclick="Analyze" disabled="@string.IsNullOrWhiteSpace(_text)">Analyze</button>
@@ -256,8 +257,16 @@
         }
         try
         {
-            using var reader = new StreamReader(file.OpenReadStream(MaxFileBytes));
-            _text = await reader.ReadToEndAsync();
+            if (file.Name.EndsWith(".docx", StringComparison.OrdinalIgnoreCase))
+            {
+                await using var docStream = file.OpenReadStream(MaxFileBytes);
+                _text = await DocxTextExtractor.ExtractTextAsync(docStream);
+            }
+            else
+            {
+                using var reader = new StreamReader(file.OpenReadStream(MaxFileBytes));
+                _text = await reader.ReadToEndAsync();
+            }
             _fileNote = $"Loaded “{file.Name}” ({file.Size / 1024} KB).";
             Analyze();
         }
