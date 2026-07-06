@@ -4,5 +4,5 @@
   "runtime": "net10",
   "node": "pwn_SignsOfAI.Perplexity.Api",
   "project": "SignsOfAI.Perplexity.Api.csproj",
-  "healthPath": "/healthz"
+  "healthPath": "/"
 }
