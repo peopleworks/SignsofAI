@@ -10,6 +10,9 @@ public sealed record PerplexityRequest
 
     /// <summary>"en", "es", or "auto" (default). Selects the calibration baseline.</summary>
     public string Lang { get; init; } = "auto";
+
+    /// <summary>Which model to score with (id from GET /). Null/blank/unknown ⇒ the default model.</summary>
+    public string? Model { get; init; }
 }
 
 /// <summary>
@@ -45,16 +48,26 @@ public sealed record PerplexityResponse
     public long ElapsedMs { get; init; }
 }
 
+/// <summary>One selectable model, surfaced to clients for the model picker.</summary>
+public sealed record ModelInfo
+{
+    public string Id { get; init; } = "";
+    public string Label { get; init; } = "";
+    public string Note { get; init; } = "";
+    public bool IsDefault { get; init; }
+    /// <summary>Currently resident in RAM (false while idle-unloaded or not yet used).</summary>
+    public bool Loaded { get; init; }
+}
+
 /// <summary>Health/metadata payload for GET /.</summary>
 public sealed record ServiceInfo
 {
     public string Service { get; init; } = "SignsOfAI.Perplexity.Api";
-    public string Model { get; init; } = "";
-    /// <summary>The service can serve requests (model file present; may lazy-load on demand).</summary>
+    /// <summary>The default model can serve (its file is present).</summary>
     public bool ModelReady { get; init; }
-    /// <summary>The model is currently resident in RAM (false while idle-unloaded).</summary>
-    public bool ModelLoaded { get; init; }
     public string[] Languages { get; init; } = [];
+    /// <summary>All selectable models.</summary>
+    public ModelInfo[] Models { get; init; } = [];
 }
 
 [JsonSourceGenerationOptions(
@@ -63,4 +76,5 @@ public sealed record ServiceInfo
 [JsonSerializable(typeof(PerplexityRequest))]
 [JsonSerializable(typeof(PerplexityResponse))]
 [JsonSerializable(typeof(ServiceInfo))]
+[JsonSerializable(typeof(ModelInfo))]
 public partial class ApiJsonContext : JsonSerializerContext;

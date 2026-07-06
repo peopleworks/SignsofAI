@@ -36,9 +36,21 @@
 
     @if (_settings.IsConfigured)
     {
+        @if (_models.Length > 1)
+        {
+            <div class="ppl-models" role="group" aria-label="Model">
+                @foreach (var m in _models)
+                {
+                    <button class="ppl-model-btn @(m.Id == _selectedModel ? "sel" : "")"
+                            title="@m.Note" @onclick="() => SelectModel(m.Id)">
+                        @m.Label<span>@m.Note</span>
+                    </button>
+                }
+            </div>
+        }
         <button class="primary ppl-run" @onclick="Measure"
                 disabled="@(_loading || string.IsNullOrWhiteSpace(Text))">
-            @(_loading ? "Measuring…" : "Measure perplexity")
+            @(_loading ? "Measuring…" : "Measure predictability")
         </button>
     }
 
@@ -81,13 +93,29 @@
     private string? _error;
     private PerplexityResult? _result;
     private CancellationTokenSource? _cts;
+    private PerplexityModelInfo[] _models = [];
+    private string? _selectedModel;
 
     protected override async Task OnInitializedAsync()
     {
         _settings = await Perplexity.LoadSettingsAsync(Storage);
         _endpointEdit = _settings.Endpoint;
-        // Pre-warm the server while the user reads their results, so "Measure" is warm.
-        if (_settings.IsConfigured) _ = Perplexity.WarmupAsync(_settings.Endpoint);
+        if (_settings.IsConfigured)
+        {
+            // Pre-warm the default model while the user reads their results, so "Measure" is warm.
+            _ = Perplexity.WarmupAsync(_settings.Endpoint);
+            _models = await Perplexity.GetModelsAsync(_settings.Endpoint);
+            _selectedModel = (_models.FirstOrDefault(m => m.IsDefault) ?? _models.FirstOrDefault())?.Id;
+        }
+    }
+
+    private void SelectModel(string id)
+    {
+        if (id == _selectedModel) return;
+        _selectedModel = id;
+        _result = null; _error = null;
+        // Warm the newly-picked model (esp. the heavier Phi) while the user reads / clicks.
+        _ = Perplexity.WarmupAsync(_settings.Endpoint, id);
     }
 
     private async Task SaveEndpoint()
@@ -96,6 +124,8 @@
         await Perplexity.SaveSettingsAsync(Storage, _settings);
         _showSettings = false;
         _error = null;
+        _models = await Perplexity.GetModelsAsync(_settings.Endpoint);
+        _selectedModel = (_models.FirstOrDefault(m => m.IsDefault) ?? _models.FirstOrDefault())?.Id;
     }
 
     private async Task Measure()
@@ -106,7 +136,7 @@
         _loading = true; _error = null;
         try
         {
-            _result = await Perplexity.MeasureAsync(_settings.Endpoint, Text, Language, _cts.Token);
+            _result = await Perplexity.MeasureAsync(_settings.Endpoint, Text, Language, _selectedModel, _cts.Token);
         }
         catch (OperationCanceledException) { /* superseded */ }
         catch (Exception ex)

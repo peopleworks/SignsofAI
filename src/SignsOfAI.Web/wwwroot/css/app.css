@@ -443,6 +443,15 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .ppl-settings-actions { display: flex; align-items: center; gap: .6rem; margin-top: .5rem; }
 .ppl-ok { font-size: .76rem; color: var(--good); }
 .ppl-privacy { font-size: .74rem; color: var(--text-muted); margin: .55rem 0 0; line-height: 1.4; }
+.ppl-models { display: flex; gap: .4rem; margin-bottom: .5rem; }
+.ppl-model-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: .1rem;
+    padding: .4rem .5rem; border: 1px solid var(--border); border-radius: 9px;
+    background: var(--surface); color: var(--text); cursor: pointer; font-size: .82rem; font-weight: 600;
+}
+.ppl-model-btn span { font-size: .64rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: .03em; }
+.ppl-model-btn:hover { border-color: var(--brand); }
+.ppl-model-btn.sel { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, var(--surface)); color: var(--brand); }
 .ppl-run { width: 100%; margin-bottom: .3rem; }
 .ppl-error { color: var(--danger); font-size: .82rem; margin-top: .5rem; }
 

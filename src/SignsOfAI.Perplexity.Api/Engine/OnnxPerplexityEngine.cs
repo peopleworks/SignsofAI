@@ -6,21 +6,16 @@ using Tokenizers.DotNet;
 namespace SignsOfAI.Perplexity.Api.Engine;
 
 /// <summary>
-/// Computes causal-LM perplexity with a Qwen2.5-0.5B ONNX model via ONNX Runtime (CPU) and the
-/// Hugging Face tokenizer. To keep the server light when idle, the model is <b>lazily loaded</b> on
-/// the first request and <b>unloaded from RAM after an idle period</b> (see <see cref="TryUnloadIfIdle"/>),
-/// reloading from disk (~1-2s) on the next request. Loads/unloads are serialized by a gate; inference
-/// runs outside the gate and an active-request counter prevents unloading mid-inference.
-/// <see cref="InferenceSession.Run(RunOptions, IReadOnlyDictionary{string, OrtValue}, IReadOnlyCollection{string})"/>
-/// is thread-safe, and each call builds its own inputs, so concurrent scoring is safe.
+/// One selectable model. Computes causal-LM perplexity via ONNX Runtime (CPU) + the HF tokenizer for its
+/// <see cref="ModelProfile"/>. To keep the server light, the model is <b>lazily loaded</b> on first use and
+/// <b>unloaded from RAM after an idle period</b>, reloading from disk on demand. Loads/unloads are serialized
+/// by a gate; inference runs outside the gate and an active-request counter prevents unloading mid-inference.
 /// </summary>
-public sealed class OnnxPerplexityEngine : IPerplexityEngine, IDisposable
+public sealed class OnnxModelEngine(ModelProfile profile, IHostEnvironment env, ILogger log) : IDisposable
 {
-    private readonly PerplexityOptions _o;
-    private readonly ILogger<OnnxPerplexityEngine> _log;
-    private readonly string _dir, _modelPath, _tokPath;
-
+    private readonly string _dir = Path.IsPathRooted(profile.ModelDir) ? profile.ModelDir : Path.Combine(env.ContentRootPath, profile.ModelDir);
     private readonly SemaphoreSlim _gate = new(1, 1);
+    private readonly SemaphoreSlim _fileGate = new(1, 1);
     private InferenceSession? _session;
     private Tokenizer? _tokenizer;
     private int _active;
@@ -28,61 +23,55 @@ public sealed class OnnxPerplexityEngine : IPerplexityEngine, IDisposable
     private volatile bool _filesReady;
     private volatile bool _loaded;
 
-    public OnnxPerplexityEngine(PerplexityOptions options, IHostEnvironment env, ILogger<OnnxPerplexityEngine> log)
-    {
-        _o = options; _log = log;
-        _dir = Path.IsPathRooted(_o.ModelDir) ? _o.ModelDir : Path.Combine(env.ContentRootPath, _o.ModelDir);
-        _modelPath = Path.Combine(_dir, _o.ModelFile);
-        _tokPath = Path.Combine(_dir, _o.TokenizerFile);
-    }
-
-    public string ModelId => _o.ModelId;
-    public bool IsReady => _filesReady;
+    public ModelProfile Profile => profile;
+    public string ModelId => profile.Id;
     public bool IsLoaded => _loaded;
+    public bool FilesReady => _filesReady;
 
-    /// <summary>Ensures the model + tokenizer FILES exist (downloading once if needed), without loading
-    /// them into RAM. Call at startup. If <see cref="PerplexityOptions.PreloadModel"/> is set, also warms.</summary>
+    /// <summary>Downloads the model + tokenizer + any external-data files (once), without loading into RAM.</summary>
     public async Task EnsureFilesAsync(CancellationToken ct = default)
     {
-        Directory.CreateDirectory(_dir);
-        await EnsureFileAsync(_modelPath, _o.ModelUrl, ct);
-        await EnsureFileAsync(_tokPath, _o.TokenizerUrl, ct);
-
-        _filesReady = File.Exists(_modelPath) && File.Exists(_tokPath);
-        if (!_filesReady)
+        if (_filesReady) return;
+        await _fileGate.WaitAsync(ct);
+        try
         {
-            _log.LogError("Perplexity model/tokenizer missing at {Dir} and no download URL configured; engine not ready.", _dir);
-            return;
-        }
-        _log.LogInformation("Perplexity engine ready (files present): {Model}. Idle-unload={Idle}s, preload={Preload}.",
-            _o.ModelFile, _o.IdleUnloadSeconds, _o.PreloadModel);
+            if (_filesReady) return;
+            Directory.CreateDirectory(_dir);
+            var modelPath = Path.Combine(_dir, profile.ModelFile);
+            var tokPath = Path.Combine(_dir, profile.TokenizerFile);
+            await EnsureFileAsync(modelPath, profile.ModelUrl, ct);
+            await EnsureFileAsync(tokPath, profile.TokenizerUrl, ct);
+            foreach (var url in profile.AuxFileUrls)
+                await EnsureFileAsync(Path.Combine(_dir, Path.GetFileName(new Uri(url).AbsolutePath)), url, ct);
 
-        if (_o.PreloadModel) { var _ = await AcquireAsync(ct); Release(); }
+            _filesReady = File.Exists(modelPath) && File.Exists(tokPath);
+            if (!_filesReady)
+                log.LogError("[{Model}] model/tokenizer missing at {Dir} and no download URL configured.", profile.Id, _dir);
+            else
+                log.LogInformation("[{Model}] files ready.", profile.Id);
+        }
+        finally { _fileGate.Release(); }
     }
 
     public async Task<PerplexityRaw> ScoreAsync(string text, CancellationToken ct = default)
     {
-        if (!_filesReady) throw new InvalidOperationException("Perplexity engine is not ready.");
-
         var (session, tokenizer) = await AcquireAsync(ct);
-        try
-        {
-            return await Task.Run(() => Forward(session, tokenizer, text, ct), ct);
-        }
+        try { return await Task.Run(() => Forward(session, tokenizer, text, ct), ct); }
         finally { Release(); }
     }
 
     /// <summary>Loads the model (if needed) and refreshes the idle clock, without running inference.</summary>
     public async Task WarmupAsync(CancellationToken ct = default)
     {
-        if (!_filesReady) return;
         _ = await AcquireAsync(ct);
         Release();
     }
 
-    // ── Load / unload lifecycle ──────────────────────────────────────────────
     private async Task<(InferenceSession, Tokenizer)> AcquireAsync(CancellationToken ct)
     {
+        if (!_filesReady) await EnsureFilesAsync(ct);
+        if (!_filesReady) throw new InvalidOperationException($"Model '{profile.Id}' is not available.");
+
         await _gate.WaitAsync(ct);
         try
         {
@@ -103,23 +92,21 @@ public sealed class OnnxPerplexityEngine : IPerplexityEngine, IDisposable
     private void LoadLocked()
     {
         var so = new Microsoft.ML.OnnxRuntime.SessionOptions();
-        if (_o.IntraOpThreads > 0) so.IntraOpNumThreads = _o.IntraOpThreads;
+        if (profile.IntraOpThreads > 0) so.IntraOpNumThreads = profile.IntraOpThreads;
         var sw = Stopwatch.StartNew();
-        _tokenizer = new Tokenizer(_tokPath);
-        _session = new InferenceSession(_modelPath, so);
+        _tokenizer = new Tokenizer(Path.Combine(_dir, profile.TokenizerFile));
+        _session = new InferenceSession(Path.Combine(_dir, profile.ModelFile), so);
         _loaded = true;
-        _log.LogInformation("Perplexity model loaded into RAM in {Ms} ms.", sw.ElapsedMilliseconds);
+        log.LogInformation("[{Model}] loaded into RAM in {Ms} ms.", profile.Id, sw.ElapsedMilliseconds);
     }
 
-    /// <summary>If the model is loaded, no request is in flight, and it's been idle longer than
-    /// <paramref name="idle"/>, dispose it to free RAM. Non-blocking; returns whether it unloaded.</summary>
+    /// <summary>Frees this model from RAM if it's loaded, idle, and no request is in flight.</summary>
     public bool TryUnloadIfIdle(TimeSpan idle)
     {
         if (!_gate.Wait(0)) return false;
         try
         {
-            if (_session is null || _active != 0 || DateTime.UtcNow - _lastUsedUtc <= idle)
-                return false;
+            if (_session is null || _active != 0 || DateTime.UtcNow - _lastUsedUtc <= idle) return false;
             _session.Dispose(); _session = null;
             _tokenizer?.Dispose(); _tokenizer = null;
             _loaded = false;
@@ -129,29 +116,32 @@ public sealed class OnnxPerplexityEngine : IPerplexityEngine, IDisposable
         finally { _gate.Release(); }
     }
 
-    // ── Inference ─────────────────────────────────────────────────────────────
     private PerplexityRaw Forward(InferenceSession session, Tokenizer tokenizer, string text, CancellationToken ct)
     {
         var ids = Array.ConvertAll(tokenizer.Encode(text), x => (long)x);
-        if (ids.Length > _o.MaxTokens) ids = ids[.._o.MaxTokens]; // right-truncate for bounded latency
+        if (ids.Length > profile.MaxTokens) ids = ids[..profile.MaxTokens];
         if (ids.Length < 2) return new PerplexityRaw(1.0, 0.0, 0, 0);
 
-        int n = ids.Length, vocab = _o.Vocab;
-        var toDispose = new List<OrtValue>(2 * _o.NumLayers + 3);
+        int n = ids.Length, vocab = profile.Vocab;
+        var toDispose = new List<OrtValue>(2 * profile.NumLayers + 3);
         OrtValue Mk<T>(T[] data, long[] shape) where T : unmanaged
         { var v = OrtValue.CreateTensorValueFromMemory(data, shape); toDispose.Add(v); return v; }
 
         var sw = Stopwatch.StartNew();
         try
         {
-            var inputs = new Dictionary<string, OrtValue>(2 * _o.NumLayers + 3) { ["input_ids"] = Mk(ids, [1, n]) };
+            var inputs = new Dictionary<string, OrtValue>(2 * profile.NumLayers + 3) { ["input_ids"] = Mk(ids, [1, n]) };
             var attn = new long[n]; Array.Fill(attn, 1L);
             inputs["attention_mask"] = Mk(attn, [1, n]);
-            var pos = new long[n]; for (int i = 0; i < n; i++) pos[i] = i;
-            inputs["position_ids"] = Mk(pos, [1, n]);
+            // Some exports (Qwen) take position_ids; others (Phi-4) don't — add it only if the graph wants it.
+            if (session.InputMetadata.ContainsKey("position_ids"))
+            {
+                var pos = new long[n]; for (int i = 0; i < n; i++) pos[i] = i;
+                inputs["position_ids"] = Mk(pos, [1, n]);
+            }
 
-            long[] kvShape = [1, _o.NumKvHeads, 0, _o.HeadDim];
-            for (int i = 0; i < _o.NumLayers; i++)
+            long[] kvShape = [1, profile.NumKvHeads, 0, profile.HeadDim];
+            for (int i = 0; i < profile.NumLayers; i++)
             {
                 inputs[$"past_key_values.{i}.key"] = Mk(Array.Empty<float>(), kvShape);
                 inputs[$"past_key_values.{i}.value"] = Mk(Array.Empty<float>(), kvShape);
@@ -159,7 +149,7 @@ public sealed class OnnxPerplexityEngine : IPerplexityEngine, IDisposable
 
             using var ro = new RunOptions();
             using var results = session.Run(ro, inputs, ["logits"]);
-            var logits = results[0].GetTensorDataAsSpan<float>(); // [1, n, vocab] row-major
+            var logits = results[0].GetTensorDataAsSpan<float>();
 
             double sumNll = 0; int scored = 0;
             for (int t = 0; t < n - 1; t++)
@@ -184,44 +174,61 @@ public sealed class OnnxPerplexityEngine : IPerplexityEngine, IDisposable
     private async Task EnsureFileAsync(string path, string? url, CancellationToken ct)
     {
         if (File.Exists(path) || string.IsNullOrWhiteSpace(url)) return;
-        _log.LogInformation("Downloading {Url} → {Path} …", url, path);
-        using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(20) };
+        log.LogInformation("[{Model}] downloading {Url} …", profile.Id, url);
+        using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(30) };
         using var resp = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct);
         resp.EnsureSuccessStatusCode();
         var tmp = path + ".part";
-        await using (var fs = File.Create(tmp))
-            await resp.Content.CopyToAsync(fs, ct);
+        await using (var fs = File.Create(tmp)) await resp.Content.CopyToAsync(fs, ct);
         File.Move(tmp, path, overwrite: true);
-        _log.LogInformation("Downloaded {Path} ({Bytes:N0} bytes).", path, new FileInfo(path).Length);
+        log.LogInformation("[{Model}] downloaded {Path} ({Bytes:N0} bytes).", profile.Id, Path.GetFileName(path), new FileInfo(path).Length);
     }
 
-    public void Dispose()
-    {
-        _session?.Dispose();
-        _tokenizer?.Dispose();
-        _gate.Dispose();
-    }
+    public void Dispose() { _session?.Dispose(); _tokenizer?.Dispose(); _gate.Dispose(); _fileGate.Dispose(); }
 }
 
-/// <summary>At startup: ensures the model file is on disk (download once). Then, if idle-unloading is
-/// enabled, periodically frees the model from RAM after it goes idle.</summary>
-public sealed class ModelLifecycleService(OnnxPerplexityEngine engine, PerplexityOptions options, ILogger<ModelLifecycleService> log)
+/// <summary>Holds one <see cref="OnnxModelEngine"/> per configured model and resolves a request to one.</summary>
+public sealed class PerplexityRegistry
+{
+    private readonly Dictionary<string, OnnxModelEngine> _byId = new(StringComparer.OrdinalIgnoreCase);
+    public OnnxModelEngine Default { get; }
+    public IReadOnlyCollection<OnnxModelEngine> Engines => _byId.Values;
+
+    public PerplexityRegistry(PerplexityOptions options, IHostEnvironment env, ILoggerFactory lf)
+    {
+        foreach (var p in options.Models)
+            _byId[p.Id] = new OnnxModelEngine(p, env, lf.CreateLogger($"Perplexity.{p.Id}"));
+        var defId = options.DefaultModel ?? options.Models.FirstOrDefault()?.Id;
+        Default = (defId is not null && _byId.TryGetValue(defId, out var d)) ? d : _byId.Values.First();
+    }
+
+    /// <summary>Resolves the requested model id, falling back to the default when null/blank/unknown.</summary>
+    public OnnxModelEngine Resolve(string? modelId) =>
+        !string.IsNullOrWhiteSpace(modelId) && _byId.TryGetValue(modelId, out var e) ? e : Default;
+}
+
+/// <summary>At startup: ensures the DEFAULT model's file is on disk (others download lazily on first use).
+/// Then, if idle-unloading is enabled, periodically frees idle models from RAM.</summary>
+public sealed class ModelLifecycleService(PerplexityRegistry registry, PerplexityOptions options, ILogger<ModelLifecycleService> log)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken ct)
     {
-        try { await engine.EnsureFilesAsync(ct); }
-        catch (Exception ex) when (ex is not OperationCanceledException) { log.LogError(ex, "Perplexity engine failed to initialize."); }
+        try { await registry.Default.EnsureFilesAsync(ct); }
+        catch (Exception ex) when (ex is not OperationCanceledException) { log.LogError(ex, "Default model failed to initialize."); }
 
-        if (options.IdleUnloadSeconds <= 0) return; // keep resident once loaded
+        if (options.PreloadModel)
+            try { await registry.Default.WarmupAsync(ct); } catch { /* best effort */ }
 
+        if (options.IdleUnloadSeconds <= 0) return;
         var idle = TimeSpan.FromSeconds(options.IdleUnloadSeconds);
         var interval = TimeSpan.FromSeconds(Math.Clamp(options.IdleUnloadSeconds / 4.0, 15, 120));
         while (!ct.IsCancellationRequested)
         {
             try { await Task.Delay(interval, ct); } catch (OperationCanceledException) { break; }
-            if (engine.TryUnloadIfIdle(idle))
-                log.LogInformation("Perplexity model unloaded after {Idle}s idle — RAM freed.", options.IdleUnloadSeconds);
+            foreach (var e in registry.Engines)
+                if (e.TryUnloadIfIdle(idle))
+                    log.LogInformation("[{Model}] unloaded after {Idle}s idle — RAM freed.", e.ModelId, options.IdleUnloadSeconds);
         }
     }
 }

@@ -5,7 +5,23 @@ using System.Text.Json.Serialization;
 namespace SignsOfAI.Web.Services;
 
 /// <summary>Request/response DTOs for the SignsOfAI perplexity server (see SignsOfAI.Perplexity.Api).</summary>
-public sealed record PerplexityRequest(string Text, string Lang);
+public sealed record PerplexityRequest(string Text, string Lang, string? Model = null);
+
+/// <summary>A selectable model exposed by GET /.</summary>
+public sealed record PerplexityModelInfo
+{
+    public string Id { get; init; } = "";
+    public string Label { get; init; } = "";
+    public string Note { get; init; } = "";
+    public bool IsDefault { get; init; }
+    public bool Loaded { get; init; }
+}
+
+public sealed record PerplexityServiceInfo
+{
+    public bool ModelReady { get; init; }
+    public PerplexityModelInfo[] Models { get; init; } = [];
+}
 
 public sealed record PerplexityResult
 {
@@ -39,6 +55,7 @@ public sealed record PerplexitySettings
 [JsonSerializable(typeof(PerplexityRequest))]
 [JsonSerializable(typeof(PerplexityResult))]
 [JsonSerializable(typeof(PerplexitySettings))]
+[JsonSerializable(typeof(PerplexityServiceInfo))]
 public partial class PerplexityJsonContext : JsonSerializerContext;
 
 /// <summary>
@@ -60,18 +77,30 @@ public sealed class PerplexityClient(HttpClient http)
     public async Task SaveSettingsAsync(BrowserStorage storage, PerplexitySettings settings) =>
         await storage.SetAsync(StorageKey, JsonSerializer.Serialize(settings, PerplexityJsonContext.Default.PerplexitySettings));
 
-    /// <summary>Fire-and-forget pre-warm so the server model is loaded before the user clicks Measure.</summary>
-    public async Task WarmupAsync(string endpoint, CancellationToken ct = default)
+    /// <summary>Fetches the models the server offers (for the picker). Empty on failure.</summary>
+    public async Task<PerplexityModelInfo[]> GetModelsAsync(string endpoint, CancellationToken ct = default)
     {
-        try { using var _ = await http.GetAsync(endpoint.TrimEnd('/') + "/api/warmup", ct); }
-        catch { /* best-effort; a cold measure just costs ~1.5s */ }
+        try
+        {
+            var info = await http.GetFromJsonAsync(endpoint.TrimEnd('/') + "/", PerplexityJsonContext.Default.PerplexityServiceInfo, ct);
+            return info?.Models ?? [];
+        }
+        catch { return []; }
+    }
+
+    /// <summary>Fire-and-forget pre-warm so the server model is loaded before the user clicks Measure.</summary>
+    public async Task WarmupAsync(string endpoint, string? model = null, CancellationToken ct = default)
+    {
+        var q = string.IsNullOrWhiteSpace(model) ? "" : "?model=" + Uri.EscapeDataString(model);
+        try { using var _ = await http.GetAsync(endpoint.TrimEnd('/') + "/api/warmup" + q, ct); }
+        catch { /* best-effort; a cold measure just costs the reload */ }
     }
 
     /// <summary>Measures perplexity for <paramref name="text"/>. Throws with a friendly message on failure.</summary>
-    public async Task<PerplexityResult> MeasureAsync(string endpoint, string text, string lang, CancellationToken ct = default)
+    public async Task<PerplexityResult> MeasureAsync(string endpoint, string text, string lang, string? model = null, CancellationToken ct = default)
     {
         var url = endpoint.TrimEnd('/') + "/api/perplexity";
-        var req = new PerplexityRequest(text, string.IsNullOrWhiteSpace(lang) ? "auto" : lang);
+        var req = new PerplexityRequest(text, string.IsNullOrWhiteSpace(lang) ? "auto" : lang, model);
 
         using var resp = await http.PostAsJsonAsync(url, req, PerplexityJsonContext.Default.PerplexityRequest, ct);
         if (resp.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
