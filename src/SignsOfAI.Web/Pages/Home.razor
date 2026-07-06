@@ -4,11 +4,13 @@
 @using SignsOfAI.Core
 @using SignsOfAI.Core.Documents
 @using SignsOfAI.Core.Model
+@using SignsOfAI.Core.Rules
 @using SignsOfAI.Web.Components
 @using SignsOfAI.Web.Services
 @inject AiWritingAnalyzer Analyzer
 @inject HumanizerService Humanizer
 @inject BrowserStorage Storage
+@inject CatalogStore Catalogs
 @inject IJSRuntime JS
 
 <PageTitle>Signs of AI Writing — detect & de-AI-ify your text</PageTitle>
@@ -54,8 +56,61 @@
 
     <div class="actions">
         <button class="ghost" @onclick="Clear" disabled="@string.IsNullOrEmpty(_text)">Clear</button>
+        <button class="ghost" @onclick="@(() => _showCatalogs = !_showCatalogs)">
+            📚 Catalogs@(Catalogs.Catalogs.Count > 0 ? $" ({Catalogs.Catalogs.Count})" : "")
+        </button>
         <button class="ghost settings-toggle" @onclick="@(() => _showSettings = !_showSettings)">⚙ AI provider</button>
     </div>
+
+    @if (_showCatalogs)
+    {
+        <div class="settings">
+            <p class="hint">
+                <strong>Bring your own catalog.</strong> Add your team's banned words or a full custom rule-pack.
+                Catalogs are stored only in your browser and merge on top of the built-in packs — live.
+            </p>
+
+            <div class="catalog-list">
+                <div class="catalog-row builtin"><span>✓ English (built-in)</span></div>
+                <div class="catalog-row builtin"><span>✓ Español (built-in)</span></div>
+                @foreach (var c in Catalogs.Catalogs)
+                {
+                    <div class="catalog-row">
+                        <label class="cat-toggle">
+                            <input type="checkbox" checked="@c.Enabled" @onchange="@(() => ToggleCatalog(c))" />
+                            <span>@c.Name</span>
+                        </label>
+                        <span class="cat-meta">@c.RuleCount rule@(c.RuleCount == 1 ? "" : "s") · @(c.Language == "*" ? "any" : c.Language)</span>
+                        <button class="link danger" @onclick="@(() => RemoveCatalog(c))">remove</button>
+                    </div>
+                }
+            </div>
+
+            <div class="catalog-add">
+                <div class="add-tabs">
+                    <button class="filter @(_catMode == "words" ? "on" : "")" @onclick="@(() => _catMode = "words")">Quick: banned words</button>
+                    <button class="filter @(_catMode == "json" ? "on" : "")" @onclick="@(() => _catMode = "json")">Advanced: import JSON</button>
+                </div>
+
+                @if (_catMode == "words")
+                {
+                    <input placeholder="Catalog name — e.g. Company style guide" @bind="_newCatName" @bind:event="oninput" />
+                    <textarea class="cat-words" placeholder="Words or phrases to flag, separated by commas or new lines…&#10;synergy, circle back, low-hanging fruit" @bind="_newCatWords" @bind:event="oninput"></textarea>
+                    <button class="primary" @onclick="AddBannedWords" disabled="@string.IsNullOrWhiteSpace(_newCatWords)">Add catalog</button>
+                }
+                else
+                {
+                    <input placeholder="Catalog name" @bind="_newCatName" @bind:event="oninput" />
+                    <textarea class="cat-words mono" placeholder='{ "language": "*", "lexical": [ { "id": "x", "terms": ["foo"], "suggestion": "bar" } ], "patterns": [] }' @bind="_newCatJson" @bind:event="oninput"></textarea>
+                    @if (_catError is not null) { <p class="hint danger-text">@_catError</p> }
+                    <div class="key-row">
+                        <button class="primary" @onclick="AddJsonCatalog" disabled="@string.IsNullOrWhiteSpace(_newCatJson)">Import</button>
+                        <button class="ghost" @onclick="DownloadTemplate">Download English pack as a template</button>
+                    </div>
+                }
+            </div>
+        </div>
+    }
 
     @if (_showSettings)
     {
@@ -92,7 +147,7 @@
                     </div>
                     <p class="hint sub">Key from
                         <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a>.
-                        Called directly from the browser (OpenAI allows this).</p>
+                        Called directly from the browser.</p>
                     break;
 
                 case AiProvider.AzureOpenAI:
@@ -102,8 +157,7 @@
                         <input placeholder="API version" @bind="_settings.AzureApiVersion" @bind:event="oninput" />
                         <input type="password" placeholder="API key" @bind="_settings.ApiKey" @bind:event="oninput" />
                     </div>
-                    <p class="hint sub">For your own <strong>Azure AI</strong> resource. Azure OpenAI must allow this
-                        site's origin (CORS) — or sit behind API Management / a Function — for browser calls.</p>
+                    <p class="hint sub">For your own <strong>Azure AI</strong> resource. Must allow this site's origin (CORS).</p>
                     break;
 
                 case AiProvider.DeepSeek:
@@ -112,8 +166,7 @@
                         <input type="password" placeholder="API key — sk-…" @bind="_settings.ApiKey" @bind:event="oninput" />
                     </div>
                     <p class="hint sub">Key from
-                        <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">platform.deepseek.com</a>.
-                        OpenAI-compatible API.</p>
+                        <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">platform.deepseek.com</a>.</p>
                     break;
 
                 case AiProvider.Ollama:
@@ -121,10 +174,9 @@
                         <input placeholder="Base URL — http://localhost:11434" @bind="_settings.OllamaBaseUrl" @bind:event="oninput" />
                         <input placeholder="Model — e.g. llama3.1" @bind="_settings.Model" @bind:event="oninput" />
                     </div>
-                    <p class="hint sub">🖥️ Run a model <strong>on your own machine</strong> — no cloud, no key. Works best
-                        when you run SignsOfAI locally. Start Ollama with browser access allowed, e.g.
-                        <code>OLLAMA_ORIGINS=* ollama serve</code>. From this hosted HTTPS site the browser may block
-                        calls to <code>http://localhost</code>.</p>
+                    <p class="hint sub">🖥️ Run a model <strong>on your own machine</strong> — no cloud, no key. Best when you run
+                        SignsOfAI locally; start Ollama with <code>OLLAMA_ORIGINS=* ollama serve</code>. From this hosted
+                        HTTPS site the browser may block calls to <code>http://localhost</code>.</p>
                     break;
             }
 
@@ -161,11 +213,28 @@
                         </span>
                     }
                 </div>
-                <button class="primary humanize-btn" @onclick="Humanize" disabled="@_humanizing">
-                    @(_humanizing ? "Humanizing…" : "✨ Humanize with AI")
-                </button>
+                <div class="summary-actions">
+                    <button class="primary humanize-btn" @onclick="Humanize" disabled="@_humanizing">
+                        @(_humanizing ? "Humanizing…" : "✨ Humanize with AI")
+                    </button>
+                    <button class="ghost" @onclick="ShowCard">📸 Share card</button>
+                </div>
             </div>
         </div>
+
+        @if (_showCard)
+        {
+            <div class="card share-preview">
+                <div class="humanized-head">
+                    <h3>Shareable card</h3>
+                    <div>
+                        <button class="primary" @onclick="DownloadCard">⬇ Download PNG</button>
+                        <button class="ghost" @onclick="@(() => _showCard = false)">Close</button>
+                    </div>
+                </div>
+                <canvas @ref="_cardCanvas" class="share-canvas"></canvas>
+            </div>
+        }
 
         <div class="stats card">
             <div class="stat"><span class="stat-label">Words</span><span class="stat-val">@r.Statistics.WordCount</span></div>
@@ -196,11 +265,43 @@
                 <div class="humanized-head">
                     <h3>✨ Humanized</h3>
                     <div>
+                        @if (_humanizedResult is not null)
+                        {
+                            <span class="score-compare">
+                                <span class="sc-num @ScoreClass(r.OverallScore)">@Math.Round(r.OverallScore)</span>
+                                <span class="sc-arrow">→</span>
+                                <span class="sc-num @ScoreClass(_humanizedResult.OverallScore)">@Math.Round(_humanizedResult.OverallScore)</span>
+                                @{ var delta = r.OverallScore - _humanizedResult.OverallScore; }
+                                @if (delta > 0.5) { <span class="sc-delta">−@Math.Round(delta)</span> }
+                            </span>
+                        }
                         <button class="ghost" @onclick="CopyHumanized">Copy</button>
-                        <button class="ghost" @onclick="ReanalyzeHumanized">Re-analyze this</button>
+                        <button class="ghost" @onclick="ReanalyzeHumanized">Use as input</button>
                     </div>
                 </div>
-                <div class="text-view">@_humanized</div>
+                @if (_diff is not null)
+                {
+                    <div class="diff-grid">
+                        <div class="diff-col">
+                            <h4>Original</h4>
+                            <div class="text-view diff-view">
+                                @foreach (var seg in _diff.Where(s => s.Kind != DiffKind.Added))
+                                {
+                                    <span class="@(seg.Kind == DiffKind.Removed ? "d-del" : "")">@seg.Text </span>
+                                }
+                            </div>
+                        </div>
+                        <div class="diff-col">
+                            <h4>Humanized</h4>
+                            <div class="text-view diff-view">
+                                @foreach (var seg in _diff.Where(s => s.Kind != DiffKind.Removed))
+                                {
+                                    <span class="@(seg.Kind == DiffKind.Added ? "d-add" : "")">@seg.Text </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         }
 
@@ -275,7 +376,22 @@ else
 
     private bool _humanizing;
     private string? _humanized;
+    private AnalysisResult? _humanizedResult;
+    private IReadOnlyList<DiffSegment>? _diff;
     private string? _humanizeError;
+
+    // Custom catalogs UI
+    private bool _showCatalogs;
+    private string _catMode = "words";
+    private string _newCatName = string.Empty;
+    private string _newCatWords = string.Empty;
+    private string _newCatJson = string.Empty;
+    private string? _catError;
+
+    // Share card
+    private bool _showCard;
+    private bool _cardNeedsDraw;
+    private ElementReference _cardCanvas;
 
     private int WordCount =>
         string.IsNullOrWhiteSpace(_text) ? 0
@@ -283,6 +399,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await Catalogs.LoadAsync();
+
         var stored = await Storage.GetAsync(SettingsStorageKey);
         if (!string.IsNullOrEmpty(stored))
         {
@@ -295,7 +413,15 @@ else
         }
     }
 
-    // Debounced live analysis as the user types.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_cardNeedsDraw && _showCard && _result is not null)
+        {
+            _cardNeedsDraw = false;
+            await JS.InvokeVoidAsync("signsofai.drawCard", _cardCanvas, BuildCardJson(_result));
+        }
+    }
+
     private async Task OnTextChanged()
     {
         _fileNote = null;
@@ -320,13 +446,21 @@ else
         {
             _result = null;
             _analyzedText = string.Empty;
-            _humanized = null;
-            _humanizeError = null;
+            ResetHumanize();
+            _showCard = false;
             return;
         }
         _analyzedText = _text;
-        _result = Analyzer.Analyze(_text, _language);
+        _result = Analyzer.Analyze(_text, _language, Catalogs.EnabledPacks());
+        ResetHumanize();
+        _showCard = false;
+    }
+
+    private void ResetHumanize()
+    {
         _humanized = null;
+        _humanizedResult = null;
+        _diff = null;
         _humanizeError = null;
     }
 
@@ -388,6 +522,33 @@ else
         _settingsSaved = false;
     }
 
+    // ── custom catalogs ─────────────────────────────────────────────
+    private async Task AddBannedWords()
+    {
+        await Catalogs.AddBannedWordsAsync(_newCatName, _newCatWords, "*");
+        _newCatName = _newCatWords = string.Empty;
+        RunAnalysis(); // apply live
+    }
+
+    private async Task AddJsonCatalog()
+    {
+        _catError = null;
+        try
+        {
+            await Catalogs.AddJsonAsync(_newCatName, _newCatJson, "");
+            _newCatName = _newCatJson = string.Empty;
+            RunAnalysis();
+        }
+        catch (Exception ex) { _catError = "Invalid rule-pack JSON: " + ex.Message; }
+    }
+
+    private async Task ToggleCatalog(CustomCatalog c) { await Catalogs.ToggleAsync(c); RunAnalysis(); }
+    private async Task RemoveCatalog(CustomCatalog c) { await Catalogs.RemoveAsync(c); RunAnalysis(); }
+
+    private async Task DownloadTemplate() =>
+        await JS.InvokeVoidAsync("signsofai.downloadText", "signsofai-en-template.json", RulePackLoader.Load("en").ToJson());
+
+    // ── humanize ────────────────────────────────────────────────────
     private async Task Humanize()
     {
         if (_result is null) return;
@@ -399,13 +560,17 @@ else
         }
 
         _humanizing = true;
-        _humanizeError = null;
-        _humanized = null;
+        ResetHumanize();
         StateHasChanged();
 
         var result = await Humanizer.HumanizeAsync(_analyzedText, _result.Language, _result.Findings, _settings);
         _humanizing = false;
-        if (result.Success) _humanized = result.Text;
+        if (result.Success)
+        {
+            _humanized = result.Text;
+            _humanizedResult = Analyzer.Analyze(_humanized, _language, Catalogs.EnabledPacks());
+            _diff = WordDiff.Compute(_analyzedText, _humanized);
+        }
         else _humanizeError = result.Error;
     }
 
@@ -423,12 +588,48 @@ else
         RunAnalysis();
     }
 
+    // ── share card ──────────────────────────────────────────────────
+    private void ShowCard()
+    {
+        _showCard = true;
+        _cardNeedsDraw = true;
+    }
+
+    private async Task DownloadCard() =>
+        await JS.InvokeVoidAsync("signsofai.downloadCanvas", _cardCanvas, "signsofai-score.png");
+
+    private static string BuildCardJson(AnalysisResult r)
+    {
+        var data = new ShareCardData(
+            Score: r.OverallScore,
+            ScoreColor: ScoreHex(r.OverallScore),
+            Verdict: r.Verdict,
+            Signals: r.Findings.Count,
+            Language: r.Language == "es" ? "Español" : "English",
+            Categories: r.CategoryScores.Where(c => c.FindingCount > 0)
+                .Select(c => new CardCategory(Highlighter.CategoryLabel(c.Category), c.FindingCount, Highlighter.CategoryHex(c.Category)))
+                .ToArray(),
+            Words: r.Statistics.WordCount,
+            Sentences: r.Statistics.SentenceCount,
+            Burstiness: r.Statistics.Burstiness.ToString("0.00"),
+            Lengths: r.Statistics.SentenceLengths.ToArray());
+        return JsonSerializer.Serialize(data, ShareCardJsonContext.Default.ShareCardData);
+    }
+
     private static string ScoreClass(double score) => score switch
     {
         >= 70 => "danger",
         >= 45 => "warn",
         >= 20 => "notice",
         _ => "good",
+    };
+
+    private static string ScoreHex(double score) => score switch
+    {
+        >= 70 => "#dc2626",
+        >= 45 => "#ea580c",
+        >= 20 => "#ca8a04",
+        _ => "#16a34a",
     };
 
     private const string SampleEn =

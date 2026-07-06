@@ -48,6 +48,14 @@ an original derivation of AI-writing markers for Spanish.
 
   Credentials are stored only in your browser and sent **directly** to the provider — never to us
   (there is no backend).
+- **Custom catalogs (bring your own)** — extend the detector with your own rules: paste your team's
+  banned words for an instant catalog, or import a full rule-pack JSON. Catalogs are stored only in
+  your browser, merge on top of the built-in packs (overriding by rule id), and apply **live**. The
+  CLI takes them too: `signsofai check post.md --rules my-style.json`.
+- **Before/after diff** — after Humanize, see a word-level diff (removed in red, added in green) and
+  the AI score dropping from before → after.
+- **Shareable result card** — one click renders a clean PNG summary card (score, categories, sentence
+  rhythm, branding) you can post — privacy-preserving, it never includes your text.
 - **Catalog** — a searchable library of every AI-writing sign the analyzer knows, in both languages,
   with explanations and fixes. Ranked with an in-browser BM25 index. A study aid for students.
 

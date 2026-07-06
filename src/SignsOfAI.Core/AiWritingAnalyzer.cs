@@ -28,7 +28,12 @@ public sealed class AiWritingAnalyzer
 
     /// <param name="text">The text to analyze.</param>
     /// <param name="language">"en", "es", or null/"auto" to detect.</param>
-    public AnalysisResult Analyze(string text, string? language = null)
+    /// <param name="extraPacks">
+    /// Optional custom catalogs, merged on top of the built-in pack for the detected language.
+    /// A pack applies when its <c>Language</c> matches (or is "*"/"all"/empty); rules override
+    /// built-ins by id.
+    /// </param>
+    public AnalysisResult Analyze(string text, string? language = null, IReadOnlyList<RulePack>? extraPacks = null)
     {
         text ??= string.Empty;
 
@@ -38,7 +43,12 @@ public sealed class AiWritingAnalyzer
 
         var document = new TextDocument(text);
         var statistics = StatisticsCalculator.Compute(document);
-        var rulePack = RulePackLoader.Load(lang);
+
+        var builtIn = RulePackLoader.Load(lang);
+        var applicable = extraPacks?.Where(p => p.AppliesTo(lang)).ToList();
+        var rulePack = applicable is { Count: > 0 }
+            ? RulePack.Merge(lang, [builtIn, .. applicable])
+            : builtIn;
 
         var context = new AnalysisContext
         {

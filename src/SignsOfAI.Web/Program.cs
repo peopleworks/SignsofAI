@@ -20,5 +20,7 @@ builder.Services.AddScoped<BrowserStorage>();
 builder.Services.AddScoped(sp => new HumanizerService(new HttpClient()));
 // Prebuilt BM25 index over the rule catalog for the /catalog page.
 builder.Services.AddSingleton(sp => new CatalogSearch(RuleCatalog.All()));
+// User-defined catalogs (custom rule-packs) stored in the browser.
+builder.Services.AddScoped<CatalogStore>();
 
 await builder.Build().RunAsync();

@@ -353,6 +353,38 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .rhythm-caption { margin: .55rem 0 0; font-size: .85rem; color: var(--text-muted); }
 .rhythm-empty { color: var(--text-muted); font-size: .9rem; margin: .3rem 0 0; }
 
+/* ---- custom catalogs ---- */
+.catalog-list { display: flex; flex-direction: column; gap: .35rem; margin: .6rem 0; }
+.catalog-row { display: flex; align-items: center; gap: .6rem; font-size: .9rem; padding: .35rem .5rem; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); }
+.catalog-row.builtin { color: var(--good); background: transparent; border-style: dashed; }
+.cat-toggle { display: flex; align-items: center; gap: .45rem; cursor: pointer; }
+.cat-meta { margin-left: auto; font-size: .78rem; color: var(--text-muted); }
+.catalog-add { margin-top: .5rem; display: flex; flex-direction: column; gap: .5rem; }
+.add-tabs { display: flex; gap: .4rem; }
+.catalog-add input, .cat-words { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: .5rem .7rem; font-size: .9rem; width: 100%; }
+.cat-words { min-height: 90px; resize: vertical; font-family: inherit; }
+.cat-words.mono { font-family: ui-monospace, monospace; font-size: .82rem; }
+.link.danger { color: var(--danger); }
+.danger-text { color: var(--danger); }
+
+/* ---- humanize diff ---- */
+.summary-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.score-compare { display: inline-flex; align-items: center; gap: .4rem; font-weight: 700; margin-right: .5rem; }
+.sc-num { font-size: 1.25rem; }
+.sc-num.good { color: var(--good); } .sc-num.notice { color: var(--notice); }
+.sc-num.warn { color: var(--warn); } .sc-num.danger { color: var(--danger); }
+.sc-arrow { color: var(--text-muted); }
+.sc-delta { font-size: .8rem; font-weight: 700; color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); padding: .1rem .45rem; border-radius: 999px; }
+.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 760px) { .diff-grid { grid-template-columns: 1fr; } }
+.diff-col h4 { margin: 0 0 .4rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); }
+.diff-view { line-height: 1.7; }
+.d-del { background: color-mix(in srgb, var(--danger) 16%, transparent); text-decoration: line-through; color: var(--text-muted); border-radius: 3px; }
+.d-add { background: color-mix(in srgb, var(--good) 20%, transparent); box-shadow: inset 0 -2px 0 var(--good); border-radius: 3px; }
+
+/* ---- share card ---- */
+.share-canvas { width: 100%; max-width: 640px; height: auto; display: block; margin: .3rem auto 0; border: 1px solid var(--border); border-radius: 10px; }
+
 /* ---- footer ---- */
 .app-footer { text-align: center; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: .78rem; color: var(--text-muted); }
 .app-footer p { margin: .2rem 0; }

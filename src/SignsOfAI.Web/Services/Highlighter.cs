@@ -54,6 +54,16 @@ public static class Highlighter
         _ => "lex",
     };
 
+    /// <summary>Hex color per category — used where CSS vars aren't available (e.g. canvas).</summary>
+    public static string CategoryHex(SignCategory category) => category switch
+    {
+        SignCategory.Lexical => "#db2777",
+        SignCategory.Rhetorical => "#d97706",
+        SignCategory.Syntactic => "#0891b2",
+        SignCategory.Statistical => "#dc2626",
+        _ => "#db2777",
+    };
+
     public static string CategoryLabel(SignCategory category) => category switch
     {
         SignCategory.Lexical => "Lexical",

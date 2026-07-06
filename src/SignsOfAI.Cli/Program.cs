@@ -2,6 +2,7 @@ using System.Text.Json;
 using SignsOfAI.Core;
 using SignsOfAI.Core.Documents;
 using SignsOfAI.Core.Model;
+using SignsOfAI.Core.Rules;
 
 // ── signsofai: lint prose for the signs of AI writing ────────────────────────
 const string Version = "0.1.0";
@@ -29,6 +30,7 @@ if (argList[0] != "check")
 
 // ── parse `check <path> [options]` ───────────────────────────────────────────
 var positionals = new List<string>();
+var ruleFiles = new List<string>();
 string language = "auto";
 bool json = false, noColor = false;
 double? maxScore = null;
@@ -42,6 +44,7 @@ for (int i = 1; i < argList.Count; i++)
         case "--lang": language = Next(); break;
         case "--json": json = true; break;
         case "--no-color": noColor = true; break;
+        case "--rules": ruleFiles.Add(Next()); break;
         case "--max-score": maxScore = double.Parse(Next(), System.Globalization.CultureInfo.InvariantCulture); break;
         case "--top": top = int.Parse(Next()); break;
         default:
@@ -78,7 +81,16 @@ catch (Exception ex)
     return 2;
 }
 
-var result = new AiWritingAnalyzer().Analyze(text, language);
+// Load any custom catalogs (--rules file.json, repeatable).
+var extraPacks = new List<RulePack>();
+foreach (var rf in ruleFiles)
+{
+    if (!File.Exists(rf)) { Console.Error.WriteLine($"Rule-pack not found: {rf}"); return 2; }
+    try { extraPacks.Add(RulePack.FromJson(await File.ReadAllTextAsync(rf))); }
+    catch (Exception ex) { Console.Error.WriteLine($"Invalid rule-pack '{rf}': {ex.Message}"); return 2; }
+}
+
+var result = new AiWritingAnalyzer().Analyze(text, language, extraPacks);
 
 if (json)
 {
@@ -157,6 +169,7 @@ static void PrintHelp()
 
         OPTIONS
           --lang <auto|en|es>   Language of the text (default: auto-detect)
+          --rules <file.json>   Add a custom catalog (rule-pack). Repeatable.
           --json                Emit a JSON report instead of the pretty report
           --max-score <N>       Exit with code 1 if the overall score exceeds N (for CI gating)
           --top <N>             Show at most N findings in the pretty report (default: 10)
