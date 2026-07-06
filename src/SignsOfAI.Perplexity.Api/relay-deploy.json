@@ -2,7 +2,7 @@
   "name": "signsofai-perplexity",
   "tier": "demo",
   "runtime": "net10",
-  "node": "TODO-SET-IIS-NODE-NAME",
+  "node": "pwn_SignsOfAI.Perplexity.Api",
   "project": "SignsOfAI.Perplexity.Api.csproj",
   "healthPath": "/healthz"
 }

@@ -4,8 +4,10 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <!-- Guarantees the native onnxruntime.dll + tokenizers native lib are resolved under IIS. -->
-    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <!-- Publish only the win-x64 native binaries (ORT ships natives for every OS ≈ 200MB otherwise),
+         framework-dependent so the .NET runtime isn't bundled. Also fixes native-dll resolution under IIS. -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
