@@ -104,7 +104,7 @@ public sealed class PerplexityClient(HttpClient http)
 
         using var resp = await http.PostAsJsonAsync(url, req, PerplexityJsonContext.Default.PerplexityRequest, ct);
         if (resp.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
-            throw new InvalidOperationException("The model is warming up on the server — try again in a few seconds.");
+            throw new InvalidOperationException("The model is loading on the server — large models download on first use and can take a minute or two. Try again shortly.");
         if (!resp.IsSuccessStatusCode)
             throw new InvalidOperationException($"Server returned {(int)resp.StatusCode} {resp.ReasonPhrase}.");
 

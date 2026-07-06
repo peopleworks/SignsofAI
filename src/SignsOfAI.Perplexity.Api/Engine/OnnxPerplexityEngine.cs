@@ -15,7 +15,8 @@ public sealed class OnnxModelEngine(ModelProfile profile, IHostEnvironment env, 
 {
     private readonly string _dir = Path.IsPathRooted(profile.ModelDir) ? profile.ModelDir : Path.Combine(env.ContentRootPath, profile.ModelDir);
     private readonly SemaphoreSlim _gate = new(1, 1);
-    private readonly SemaphoreSlim _fileGate = new(1, 1);
+    private readonly object _downloadLock = new();
+    private Task? _downloadTask;
     private InferenceSession? _session;
     private Tokenizer? _tokenizer;
     private int _active;
@@ -28,29 +29,43 @@ public sealed class OnnxModelEngine(ModelProfile profile, IHostEnvironment env, 
     public bool IsLoaded => _loaded;
     public bool FilesReady => _filesReady;
 
-    /// <summary>Downloads the model + tokenizer + any external-data files (once), without loading into RAM.</summary>
-    public async Task EnsureFilesAsync(CancellationToken ct = default)
+    /// <summary>Ensures the model files are on disk, awaiting the (single, detached) download. Used at
+    /// startup for the default model. The download itself runs on an app-lifetime token, so a request that
+    /// triggers it and then disconnects does NOT abort a multi-minute download.</summary>
+    public Task EnsureFilesAsync(CancellationToken ct = default) => GetOrStartDownload();
+
+    private Task GetOrStartDownload()
     {
-        if (_filesReady) return;
-        await _fileGate.WaitAsync(ct);
+        if (_filesReady) return Task.CompletedTask;
+        lock (_downloadLock)
+        {
+            if (_filesReady) return Task.CompletedTask;
+            return _downloadTask ??= Task.Run(DownloadAllAsync);
+        }
+    }
+
+    private async Task DownloadAllAsync()
+    {
         try
         {
-            if (_filesReady) return;
             Directory.CreateDirectory(_dir);
             var modelPath = Path.Combine(_dir, profile.ModelFile);
             var tokPath = Path.Combine(_dir, profile.TokenizerFile);
-            await EnsureFileAsync(modelPath, profile.ModelUrl, ct);
-            await EnsureFileAsync(tokPath, profile.TokenizerUrl, ct);
+            // CancellationToken.None on purpose: a disconnecting client must not abort the download.
+            await EnsureFileAsync(modelPath, profile.ModelUrl, CancellationToken.None);
+            await EnsureFileAsync(tokPath, profile.TokenizerUrl, CancellationToken.None);
             foreach (var url in profile.AuxFileUrls)
-                await EnsureFileAsync(Path.Combine(_dir, Path.GetFileName(new Uri(url).AbsolutePath)), url, ct);
+                await EnsureFileAsync(Path.Combine(_dir, Path.GetFileName(new Uri(url).AbsolutePath)), url, CancellationToken.None);
 
             _filesReady = File.Exists(modelPath) && File.Exists(tokPath);
-            if (!_filesReady)
-                log.LogError("[{Model}] model/tokenizer missing at {Dir} and no download URL configured.", profile.Id, _dir);
-            else
-                log.LogInformation("[{Model}] files ready.", profile.Id);
+            if (!_filesReady) log.LogError("[{Model}] model/tokenizer missing at {Dir} and no download URL configured.", profile.Id, _dir);
+            else log.LogInformation("[{Model}] files ready.", profile.Id);
         }
-        finally { _fileGate.Release(); }
+        catch (Exception ex)
+        {
+            log.LogError(ex, "[{Model}] download failed; will retry on next request.", profile.Id);
+            lock (_downloadLock) _downloadTask = null; // allow a retry
+        }
     }
 
     public async Task<PerplexityRaw> ScoreAsync(string text, CancellationToken ct = default)
@@ -69,8 +84,11 @@ public sealed class OnnxModelEngine(ModelProfile profile, IHostEnvironment env, 
 
     private async Task<(InferenceSession, Tokenizer)> AcquireAsync(CancellationToken ct)
     {
-        if (!_filesReady) await EnsureFilesAsync(ct);
-        if (!_filesReady) throw new InvalidOperationException($"Model '{profile.Id}' is not available.");
+        if (!_filesReady)
+        {
+            _ = GetOrStartDownload(); // kick off (or continue) the detached download; don't block the request on it
+            throw new InvalidOperationException($"Model '{profile.Id}' is downloading on the server; retry shortly.");
+        }
 
         await _gate.WaitAsync(ct);
         try
@@ -184,7 +202,7 @@ public sealed class OnnxModelEngine(ModelProfile profile, IHostEnvironment env, 
         log.LogInformation("[{Model}] downloaded {Path} ({Bytes:N0} bytes).", profile.Id, Path.GetFileName(path), new FileInfo(path).Length);
     }
 
-    public void Dispose() { _session?.Dispose(); _tokenizer?.Dispose(); _gate.Dispose(); _fileGate.Dispose(); }
+    public void Dispose() { _session?.Dispose(); _tokenizer?.Dispose(); _gate.Dispose(); }
 }
 
 /// <summary>Holds one <see cref="OnnxModelEngine"/> per configured model and resolves a request to one.</summary>
