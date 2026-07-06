@@ -1,0 +1,76 @@
+@page "/catalog"
+@using SignsOfAI.Core.Model
+@using SignsOfAI.Core.Rules
+@using SignsOfAI.Web.Services
+@inject CatalogSearch Search
+
+<PageTitle>Catalog of AI-writing signs</PageTitle>
+
+<header class="hero">
+    <h1>The catalog of AI-writing signs</h1>
+    <p class="tagline">
+        Every tell the analyzer looks for, in English and Spanish — with why it reads as AI and how to fix it.
+        A study aid for students and writers.
+    </p>
+</header>
+
+<section class="catalog-controls card">
+    <input class="search-box" type="search" placeholder="Search signs… (e.g. “hedging”, “delve”, “tapiz”)"
+           @bind="_query" @bind:event="oninput" />
+    <div class="filters">
+        <button class="filter @(_lang is null ? "on" : "")" @onclick="@(() => _lang = null)">All</button>
+        <button class="filter @(_lang == "en" ? "on" : "")" @onclick="@(() => _lang = "en")">English</button>
+        <button class="filter @(_lang == "es" ? "on" : "")" @onclick="@(() => _lang = "es")">Español</button>
+        @foreach (var cat in Enum.GetValues<SignCategory>())
+        {
+            <button class="filter filter-@Highlighter.CategoryClass(cat) @(_category == cat ? "on" : "")"
+                    @onclick="@(() => ToggleCategory(cat))">
+                @Highlighter.CategoryLabel(cat)
+            </button>
+        }
+    </div>
+</section>
+
+@{
+    var results = Filtered().ToList();
+}
+<p class="result-count">@results.Count sign@(results.Count == 1 ? "" : "s")</p>
+
+<div class="catalog-grid">
+    @foreach (var s in results)
+    {
+        <div class="sign card sev-@s.Severity.ToString().ToLowerInvariant()">
+            <div class="sign-head">
+                <span class="badge badge-@Highlighter.CategoryClass(s.Category)">@Highlighter.CategoryLabel(s.Category)</span>
+                <span class="lang-tag">@(s.Language == "es" ? "ES" : "EN")</span>
+                <span class="sev-tag">@s.Severity</span>
+            </div>
+            <h3 class="sign-title">@s.Title</h3>
+            @if (s.Examples.Length > 0)
+            {
+                <div class="examples">
+                    @foreach (var ex in s.Examples.Take(6)) { <code>@ex</code> }
+                </div>
+            }
+            <p class="sign-msg">@s.Message</p>
+            <p class="sign-fix">💡 @s.Suggestion</p>
+            @if (!string.IsNullOrEmpty(s.Evidence)) { <p class="sign-evidence">@s.Evidence</p> }
+        </div>
+    }
+</div>
+
+@code {
+    private string _query = string.Empty;
+    private string? _lang;
+    private SignCategory? _category;
+
+    private IEnumerable<SignInfo> Filtered()
+    {
+        IEnumerable<SignInfo> items = Search.Search(_query);
+        if (_lang is not null) items = items.Where(s => s.Language == _lang);
+        if (_category is not null) items = items.Where(s => s.Category == _category);
+        return items;
+    }
+
+    private void ToggleCategory(SignCategory cat) => _category = _category == cat ? null : cat;
+}

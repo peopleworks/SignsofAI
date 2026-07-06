@@ -1,0 +1,26 @@
+@inherits LayoutComponentBase
+
+<div class="app-shell">
+    <nav class="app-nav">
+        <a class="brand" href="">✍︎ Signs of AI Writing</a>
+        <span class="dotnet-badge" title="Built with .NET 10 and Blazor WebAssembly">
+            <span class="dot"></span> Built with .NET 10 · Blazor
+        </span>
+        <div class="nav-links">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">Analyze</NavLink>
+            <NavLink class="nav-link" href="catalog">Catalog</NavLink>
+            <a class="nav-link" href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </nav>
+    <main>
+        @Body
+    </main>
+    <footer class="app-footer">
+        <p>
+            <strong>PeopleWorks — Pedro Hernández</strong> · Microsoft MVP for .NET
+        </p>
+        <p>Signs of AI Writing · built with .NET 10 &amp; Blazor WebAssembly · runs 100% in your browser ·
+            <a href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">open source</a>
+        </p>
+    </footer>
+</div>

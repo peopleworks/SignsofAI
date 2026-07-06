@@ -1,0 +1,377 @@
+@page "/"
+@using System.Text.Json
+@using Microsoft.AspNetCore.Components.Forms
+@using SignsOfAI.Core
+@using SignsOfAI.Core.Model
+@using SignsOfAI.Web.Services
+@inject AiWritingAnalyzer Analyzer
+@inject HumanizerService Humanizer
+@inject BrowserStorage Storage
+@inject IJSRuntime JS
+
+<PageTitle>Signs of AI Writing — detect & de-AI-ify your text</PageTitle>
+
+<header class="hero">
+    <p class="tagline">
+        Paste or upload your text. We flag the tells of AI writing — overused words, rhetorical
+        crutches, robotic sentence rhythm — and tell you <strong>how to fix each one</strong>.
+    </p>
+    <p class="privacy">🔒 Analysis runs entirely in your browser. Your text never leaves your device.</p>
+</header>
+
+<section class="editor card">
+    <div class="toolbar">
+        <label class="field">
+            Language
+            <select @bind="_language">
+                <option value="auto">Auto-detect</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+        </label>
+        <label class="upload-btn" title="Upload a .txt or .md document">
+            📄 Upload document
+            <InputFile OnChange="OnFileSelected" accept=".txt,.md,.markdown,.text,.csv,.log" />
+        </label>
+        <div class="samples">
+            <span>Try a sample:</span>
+            <button class="link" @onclick="@(() => LoadSample(SampleEn))">AI (EN)</button>
+            <button class="link" @onclick="@(() => LoadSample(SampleEs))">IA (ES)</button>
+            <button class="link" @onclick="@(() => LoadSample(SampleHuman))">Human</button>
+        </div>
+        <div class="counter">@WordCount words</div>
+    </div>
+
+    @if (_fileNote is not null) { <p class="file-note">@_fileNote</p> }
+
+    <textarea @bind="_text" @bind:event="oninput"
+              placeholder="Paste the text you want to check here, or upload a .txt / .md document above…"
+              spellcheck="false"></textarea>
+    <p class="hint doc-hint">Full documents welcome. For Word/PDF, copy-paste the text or save as .txt.</p>
+
+    <div class="actions">
+        <button class="primary" @onclick="Analyze" disabled="@string.IsNullOrWhiteSpace(_text)">Analyze</button>
+        <button class="ghost" @onclick="Clear" disabled="@string.IsNullOrEmpty(_text)">Clear</button>
+        <button class="ghost settings-toggle" @onclick="@(() => _showSettings = !_showSettings)">⚙ AI provider</button>
+    </div>
+
+    @if (_showSettings)
+    {
+        <div class="settings">
+            <p class="hint">
+                Optional: connect an AI provider to enable one-click “Humanize”. Credentials are stored
+                only in your browser and are sent directly to the provider — never to us.
+            </p>
+            <label class="field">
+                Provider
+                <select @bind="_settings.Provider">
+                    <option value="@AiProvider.Anthropic">Anthropic (Claude)</option>
+                    <option value="@AiProvider.AzureOpenAI">Azure OpenAI</option>
+                </select>
+            </label>
+
+            @if (_settings.Provider == AiProvider.Anthropic)
+            {
+                <div class="key-row">
+                    <input type="password" placeholder="sk-ant-…" @bind="_settings.ApiKey" @bind:event="oninput" />
+                </div>
+                <p class="hint sub">Works directly from the browser. Get a key at
+                    <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
+            }
+            else
+            {
+                <div class="azure-grid">
+                    <input placeholder="Endpoint — https://your-resource.openai.azure.com" @bind="_settings.AzureEndpoint" @bind:event="oninput" />
+                    <input placeholder="Deployment name — e.g. gpt-4o" @bind="_settings.AzureDeployment" @bind:event="oninput" />
+                    <input placeholder="API version" @bind="_settings.AzureApiVersion" @bind:event="oninput" />
+                    <input type="password" placeholder="API key" @bind="_settings.ApiKey" @bind:event="oninput" />
+                </div>
+                <p class="hint sub">For your own <strong>Azure AI</strong> resource. Azure OpenAI must allow this
+                    site's origin (CORS) — or sit behind API Management / a Function — for browser calls to work.</p>
+            }
+
+            <div class="key-row">
+                <button class="ghost" @onclick="SaveSettings">Save</button>
+                <button class="ghost" @onclick="ForgetSettings">Forget</button>
+                @if (_settingsSaved) { <span class="saved-note">✓ Saved in this browser</span> }
+            </div>
+        </div>
+    }
+</section>
+
+@if (_result is not null)
+{
+    var r = _result;
+    <section class="results">
+        <div class="summary card">
+            <div class="score-ring @ScoreClass(r.OverallScore)"
+                 style="--pct:@r.OverallScore.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+                <div class="score-inner">
+                    <span class="score-num">@Math.Round(r.OverallScore)</span>
+                    <span class="score-of">/100</span>
+                </div>
+            </div>
+            <div class="verdict">
+                <h2 class="@ScoreClass(r.OverallScore)">@r.Verdict</h2>
+                <p>@r.Findings.Count signal@(r.Findings.Count == 1 ? "" : "s") found · analyzed as
+                    <strong>@(r.Language == "es" ? "Español" : "English")</strong></p>
+                <div class="cat-chips">
+                    @foreach (var c in r.CategoryScores.Where(c => c.FindingCount > 0))
+                    {
+                        <span class="chip chip-@Highlighter.CategoryClass(c.Category)">
+                            @Highlighter.CategoryLabel(c.Category) <b>@c.FindingCount</b>
+                        </span>
+                    }
+                </div>
+                <button class="primary humanize-btn" @onclick="Humanize" disabled="@_humanizing">
+                    @(_humanizing ? "Humanizing…" : "✨ Humanize with AI")
+                </button>
+            </div>
+        </div>
+
+        <div class="stats card">
+            <div class="stat"><span class="stat-label">Words</span><span class="stat-val">@r.Statistics.WordCount</span></div>
+            <div class="stat"><span class="stat-label">Sentences</span><span class="stat-val">@r.Statistics.SentenceCount</span></div>
+            <div class="stat"><span class="stat-label">Avg length</span><span class="stat-val">@r.Statistics.MeanSentenceLength</span></div>
+            <div class="stat" title="Sentence-length variation. Low = machine-like uniformity.">
+                <span class="stat-label">Burstiness</span>
+                <span class="stat-val @(r.Statistics.Burstiness < 0.45 && r.Statistics.SentenceCount >= 4 ? "warn" : "")">
+                    @r.Statistics.Burstiness.ToString("0.00")
+                </span>
+            </div>
+            <div class="stat"><span class="stat-label">Lexical diversity</span><span class="stat-val">@r.Statistics.LexicalDiversity.ToString("0.00")</span></div>
+        </div>
+
+        @if (_humanizeError is not null)
+        {
+            <div class="card humanize-error">⚠️ Humanize failed: @_humanizeError</div>
+        }
+        @if (_humanized is not null)
+        {
+            <div class="card humanized">
+                <div class="humanized-head">
+                    <h3>✨ Humanized</h3>
+                    <div>
+                        <button class="ghost" @onclick="CopyHumanized">Copy</button>
+                        <button class="ghost" @onclick="ReanalyzeHumanized">Re-analyze this</button>
+                    </div>
+                </div>
+                <div class="text-view">@_humanized</div>
+            </div>
+        }
+
+        <div class="workspace">
+            <div class="annotated card">
+                <h3>Your text, annotated</h3>
+                <p class="hint">Highlighted spans are AI tells — hover for the suggestion.</p>
+                <div class="text-view">
+                    @foreach (var seg in Highlighter.Build(_analyzedText, r.Findings))
+                    {
+                        if (seg.Finding is { } f)
+                        {
+                            <mark class="hl hl-@Highlighter.CategoryClass(f.Category)"
+                                  title="@f.Message&#10;→ @f.Suggestion">@seg.Text</mark>
+                        }
+                        else
+                        {
+                            @seg.Text
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="findings card">
+                <h3>Recommendations (@r.Findings.Count)</h3>
+                @if (r.Findings.Count == 0)
+                {
+                    <p class="empty">✅ No strong AI tells found. This reads mostly human — nice work.</p>
+                }
+                else
+                {
+                    <ul class="finding-list">
+                        @foreach (var f in r.Findings)
+                        {
+                            <li class="finding sev-@f.Severity.ToString().ToLowerInvariant()">
+                                <div class="finding-head">
+                                    <span class="badge badge-@Highlighter.CategoryClass(f.Category)">@Highlighter.CategoryLabel(f.Category)</span>
+                                    @if (!string.IsNullOrEmpty(f.MatchedText)) { <code>@f.MatchedText</code> }
+                                    <span class="sev-tag">@f.Severity</span>
+                                </div>
+                                <p class="finding-msg">@f.Message</p>
+                                <p class="finding-fix">💡 @f.Suggestion</p>
+                                @if (!string.IsNullOrEmpty(f.Evidence)) { <p class="finding-evidence">@f.Evidence</p> }
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@code {
+    private const string SettingsStorageKey = "signsofai.humanize.v2";
+    private const long MaxFileBytes = 5 * 1024 * 1024;
+
+    private string _text = string.Empty;
+    private string _language = "auto";
+    private AnalysisResult? _result;
+    private string _analyzedText = string.Empty;
+    private string? _fileNote;
+
+    private bool _showSettings;
+    private HumanizeSettings _settings = new();
+    private bool _settingsSaved;
+
+    private bool _humanizing;
+    private string? _humanized;
+    private string? _humanizeError;
+
+    private int WordCount =>
+        string.IsNullOrWhiteSpace(_text) ? 0
+        : _text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var stored = await Storage.GetAsync(SettingsStorageKey);
+        if (!string.IsNullOrEmpty(stored))
+        {
+            try
+            {
+                _settings = JsonSerializer.Deserialize(stored, LlmJsonContext.Default.HumanizeSettings) ?? new();
+                _settingsSaved = true;
+            }
+            catch { _settings = new(); }
+        }
+    }
+
+    private async Task OnFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file is null) return;
+        if (file.Size > MaxFileBytes)
+        {
+            _fileNote = $"“{file.Name}” is too large (max 5 MB).";
+            return;
+        }
+        try
+        {
+            using var reader = new StreamReader(file.OpenReadStream(MaxFileBytes));
+            _text = await reader.ReadToEndAsync();
+            _fileNote = $"Loaded “{file.Name}” ({file.Size / 1024} KB).";
+            Analyze();
+        }
+        catch (Exception ex)
+        {
+            _fileNote = $"Could not read the file: {ex.Message}";
+        }
+    }
+
+    private void Analyze()
+    {
+        if (string.IsNullOrWhiteSpace(_text)) return;
+        _analyzedText = _text;
+        _result = Analyzer.Analyze(_text, _language);
+        _humanized = null;
+        _humanizeError = null;
+    }
+
+    private void Clear()
+    {
+        _text = string.Empty;
+        _result = null;
+        _analyzedText = string.Empty;
+        _humanized = null;
+        _humanizeError = null;
+        _fileNote = null;
+    }
+
+    private void LoadSample(string sample)
+    {
+        _text = sample;
+        _fileNote = null;
+        Analyze();
+    }
+
+    private async Task SaveSettings()
+    {
+        var json = JsonSerializer.Serialize(_settings, LlmJsonContext.Default.HumanizeSettings);
+        await Storage.SetAsync(SettingsStorageKey, json);
+        _settingsSaved = true;
+    }
+
+    private async Task ForgetSettings()
+    {
+        await Storage.RemoveAsync(SettingsStorageKey);
+        _settings = new();
+        _settingsSaved = false;
+    }
+
+    private async Task Humanize()
+    {
+        if (_result is null) return;
+
+        bool configured = _settings.Provider == AiProvider.Anthropic
+            ? !string.IsNullOrWhiteSpace(_settings.ApiKey)
+            : !string.IsNullOrWhiteSpace(_settings.ApiKey)
+              && !string.IsNullOrWhiteSpace(_settings.AzureEndpoint)
+              && !string.IsNullOrWhiteSpace(_settings.AzureDeployment);
+
+        if (!configured)
+        {
+            _showSettings = true;
+            _humanizeError = "Configure an AI provider (⚙ AI provider) to enable Humanize.";
+            return;
+        }
+
+        _humanizing = true;
+        _humanizeError = null;
+        _humanized = null;
+        StateHasChanged();
+
+        var result = await Humanizer.HumanizeAsync(_analyzedText, _result.Language, _result.Findings, _settings);
+        _humanizing = false;
+        if (result.Success) _humanized = result.Text;
+        else _humanizeError = result.Error;
+    }
+
+    private async Task CopyHumanized()
+    {
+        if (_humanized is not null)
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", _humanized);
+    }
+
+    private void ReanalyzeHumanized()
+    {
+        if (_humanized is null) return;
+        _text = _humanized;
+        _fileNote = null;
+        Analyze();
+    }
+
+    private static string ScoreClass(double score) => score switch
+    {
+        >= 70 => "danger",
+        >= 45 => "warn",
+        >= 20 => "notice",
+        _ => "good",
+    };
+
+    private const string SampleEn =
+        "In today's digital age, we must delve into the rich tapestry of modern innovation. It's worth " +
+        "noting that this multifaceted and nuanced approach serves as a testament to human progress. " +
+        "It's not just a tool, it's a pivotal, transformative solution that fosters growth and unlocks " +
+        "potential. Moreover, by leveraging cutting-edge technology, organizations can seamlessly navigate " +
+        "the ever-evolving landscape and showcase their commitment to excellence.";
+
+    private const string SampleEs =
+        "En la era digital actual, debemos sumergirnos en el vasto mundo de la innovación. Cabe destacar que " +
+        "este enfoque multifacético y matizado se erige como un testimonio del progreso humano. No solo es una " +
+        "herramienta, sino también una solución crucial y transformadora que fomenta el crecimiento. Además, al " +
+        "aprovechar la tecnología de vanguardia, las organizaciones juegan un papel fundamental en el panorama actual.";
+
+    private const string SampleHuman =
+        "The bus was late again. I stood there for twelve minutes, coffee going cold in my hands, watching the " +
+        "rain streak sideways across the shelter. Then — of course — it rolled right past without stopping. So I " +
+        "walked. Forty blocks. My shoes are still wet and I have opinions about the transit authority now.";
+}

@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SignsOfAI.Core/SignsOfAI.Core.csproj" />
+    <Project Path="src/SignsOfAI.Web/SignsOfAI.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SignsOfAI.Core.Tests/SignsOfAI.Core.Tests.csproj" />
+  </Folder>
+</Solution>

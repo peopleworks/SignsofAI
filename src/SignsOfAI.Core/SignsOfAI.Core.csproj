@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <!-- Rule-packs are read via reflection; keep them addressable under a trimmed WASM build. -->
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- WithCulture=false is essential: filenames like rules.en.json / rules.es.json would
+         otherwise be mistaken for culture-specific satellite resources and dropped from the
+         main assembly manifest. LogicalName pins the reflection lookup name. -->
+    <EmbeddedResource Include="Rules\Packs\rules.en.json" WithCulture="false" LogicalName="SignsOfAI.Core.Rules.Packs.rules.en.json" />
+    <EmbeddedResource Include="Rules\Packs\rules.es.json" WithCulture="false" LogicalName="SignsOfAI.Core.Rules.Packs.rules.es.json" />
+  </ItemGroup>
+
+</Project>

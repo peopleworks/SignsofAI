@@ -1,0 +1,22 @@
+# .NET build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+
+# Publish output
+publish/
+[Pp]ublish/
+
+# IDE / OS
+.vs/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Test / tooling artifacts
+.playwright-mcp/
+TestResults/
+*.trx
