@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/SignsOfAI.Cli/SignsOfAI.Cli.csproj" />
     <Project Path="src/SignsOfAI.Core/SignsOfAI.Core.csproj" />
+    <Project Path="src/SignsOfAI.Perplexity.Api/SignsOfAI.Perplexity.Api.csproj" />
     <Project Path="src/SignsOfAI.Web/SignsOfAI.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">

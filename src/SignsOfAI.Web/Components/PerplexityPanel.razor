@@ -1,0 +1,136 @@
+@using SignsOfAI.Web.Services
+@inject PerplexityClient Perplexity
+@inject BrowserStorage Storage
+
+<div class="ppl card">
+    <div class="ppl-head">
+        <h3>Perplexity <span class="badge-beta">beta</span></h3>
+        <button class="ppl-gear" title="Configure server" @onclick="() => _showSettings = !_showSettings">⚙</button>
+    </div>
+    <p class="hint">
+        A language model's <em>surprise</em> at your text. AI writing is unusually predictable (low perplexity);
+        human writing is more surprising. This is the signal used by research-grade detectors.
+    </p>
+
+    @if (_showSettings || !_settings.IsConfigured)
+    {
+        <div class="ppl-settings">
+            <label class="ppl-field">
+                <span>Perplexity server URL</span>
+                <input type="url" placeholder="https://your-server/perplexity" @bind="_endpointEdit" @bind:event="oninput" />
+            </label>
+            <div class="ppl-settings-actions">
+                <button class="primary" @onclick="SaveEndpoint" disabled="@(string.IsNullOrWhiteSpace(_endpointEdit))">Save</button>
+                @if (_settings.IsConfigured)
+                {
+                    <span class="ppl-ok">✓ connected to @DisplayHost(_settings.Endpoint)</span>
+                }
+            </div>
+            <p class="ppl-privacy">
+                🔒 Unlike the rest of this tool, measuring perplexity <strong>sends your text to this server</strong>
+                to run the model. It's optional and off until you connect a server. Nothing is stored there.
+            </p>
+        </div>
+    }
+
+    @if (_settings.IsConfigured)
+    {
+        <button class="primary ppl-run" @onclick="Measure"
+                disabled="@(_loading || string.IsNullOrWhiteSpace(Text))">
+            @(_loading ? "Measuring…" : "Measure perplexity")
+        </button>
+    }
+
+    @if (_error is not null)
+    {
+        <div class="ppl-error">⚠️ @_error</div>
+    }
+
+    @if (_result is not null)
+    {
+        var r = _result;
+        var pct = (int)Math.Round(r.AiLikelihood * 100);
+        <div class="ppl-result">
+            <div class="ppl-verdict @VerdictClass(r.Verdict)">
+                <span class="ppl-verdict-label">@VerdictLabel(r.Verdict)</span>
+                <span class="ppl-verdict-pct">@pct<small>% AI-like</small></span>
+            </div>
+            <div class="ppl-meter" title="Left = human-like · right = AI-like">
+                <div class="ppl-meter-fill @VerdictClass(r.Verdict)" style="width:@(pct)%"></div>
+                <div class="ppl-meter-mid"></div>
+            </div>
+            <div class="ppl-nums">
+                <div class="ppl-num"><span>Perplexity</span><strong>@r.Ppl.ToString("0.0")</strong></div>
+                <div class="ppl-num"><span>Tokens</span><strong>@r.TokenCount</strong></div>
+                <div class="ppl-num"><span>Model</span><strong class="ppl-model">@r.Model</strong></div>
+                <div class="ppl-num"><span>Time</span><strong>@r.ElapsedMs ms</strong></div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string Text { get; set; } = "";
+    [Parameter] public string Language { get; set; } = "auto";
+
+    private PerplexitySettings _settings = new();
+    private string _endpointEdit = "";
+    private bool _showSettings;
+    private bool _loading;
+    private string? _error;
+    private PerplexityResult? _result;
+    private CancellationTokenSource? _cts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _settings = await Perplexity.LoadSettingsAsync(Storage);
+        _endpointEdit = _settings.Endpoint;
+    }
+
+    private async Task SaveEndpoint()
+    {
+        _settings = _settings with { Endpoint = _endpointEdit.Trim() };
+        await Perplexity.SaveSettingsAsync(Storage, _settings);
+        _showSettings = false;
+        _error = null;
+    }
+
+    private async Task Measure()
+    {
+        if (string.IsNullOrWhiteSpace(Text) || !_settings.IsConfigured) return;
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        _loading = true; _error = null;
+        try
+        {
+            _result = await Perplexity.MeasureAsync(_settings.Endpoint, Text, Language, _cts.Token);
+        }
+        catch (OperationCanceledException) { /* superseded */ }
+        catch (Exception ex)
+        {
+            _error = ex.Message.Contains("Failed to fetch") || ex.Message.Contains("HttpRequestException")
+                ? "Couldn't reach the server. Check the URL and that it allows this site (CORS)."
+                : ex.Message;
+        }
+        finally { _loading = false; }
+    }
+
+    private static string VerdictClass(string v) => v switch
+    {
+        "likely-ai" => "v-ai",
+        "likely-human" => "v-human",
+        _ => "v-mid",
+    };
+
+    private static string VerdictLabel(string v) => v switch
+    {
+        "likely-ai" => "Likely AI",
+        "likely-human" => "Likely human",
+        _ => "Uncertain",
+    };
+
+    private static string DisplayHost(string url)
+    {
+        try { return new Uri(url).Host; } catch { return url; }
+    }
+}

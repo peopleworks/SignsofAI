@@ -18,6 +18,8 @@ builder.Services.AddSingleton<AiWritingAnalyzer>();
 builder.Services.AddScoped<BrowserStorage>();
 // Humanizer talks to the LLM provider directly, so it needs an unbound HttpClient (no app base).
 builder.Services.AddScoped(sp => new HumanizerService(new HttpClient()));
+// Perplexity client talks to our (optional) server-side endpoint — unbound HttpClient (its own base URL).
+builder.Services.AddScoped(sp => new PerplexityClient(new HttpClient()));
 // Prebuilt BM25 index over the rule catalog for the /catalog page.
 builder.Services.AddSingleton(sp => new CatalogSearch(RuleCatalog.All()));
 // User-defined catalogs (custom rule-packs) stored in the browser.

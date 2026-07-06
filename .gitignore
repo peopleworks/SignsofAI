@@ -26,3 +26,6 @@ Thumbs.db
 .playwright-mcp/
 TestResults/
 *.trx
+
+# ONNX models (large, fetched at build/deploy time)
+models/

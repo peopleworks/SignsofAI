@@ -255,6 +255,8 @@
             <RhythmChart Stats="r.Statistics" />
         </div>
 
+        <PerplexityPanel Text="@_text" Language="@r.Language" />
+
         @if (_humanizeError is not null)
         {
             <div class="card humanize-error">⚠️ Humanize failed: @_humanizeError</div>
