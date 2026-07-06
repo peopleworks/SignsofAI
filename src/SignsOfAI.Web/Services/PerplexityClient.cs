@@ -23,8 +23,11 @@ public sealed record PerplexityResult
 /// <summary>User setting for the optional perplexity server (persisted in localStorage).</summary>
 public sealed record PerplexitySettings
 {
-    /// <summary>Base URL of the perplexity API (empty = feature off). E.g. https://…/perplexity.</summary>
-    public string Endpoint { get; init; } = "";
+    /// <summary>The PeopleWorks-hosted perplexity endpoint, pre-filled so the feature works out of the box.</summary>
+    public const string DefaultEndpoint = "https://signsofai.perplexity.api.peopleworksservices.com";
+
+    /// <summary>Base URL of the perplexity API (empty = feature off). Defaults to the hosted endpoint.</summary>
+    public string Endpoint { get; init; } = DefaultEndpoint;
 
     public bool IsConfigured => !string.IsNullOrWhiteSpace(Endpoint);
 }
