@@ -1,0 +1,321 @@
+@page "/originality"
+@using Microsoft.AspNetCore.Components.Forms
+@using SignsOfAI.Core.Documents
+@using SignsOfAI.Core.Model
+@using SignsOfAI.Core.Originality
+@inject OriginalityChecker Checker
+
+<PageTitle>Originality checker — find shared passages between documents</PageTitle>
+
+<header class="hero">
+    <h1>Originality checker</h1>
+    <p class="tagline">
+        Did they write it — or copy it? Drop in two or more documents (essays, a thesis and its sources,
+        a batch of student submissions) and we surface the passages they <strong>share</strong>, highlighted
+        as evidence. Edits like changed capitalization or accents don't hide a copy. <strong>You judge.</strong>
+    </p>
+    <p class="privacy"><Icon Name="lock" /> Runs entirely in your browser. Your documents never leave your device — nothing is uploaded.</p>
+</header>
+
+<section class="orig-inputs">
+    @foreach (var doc in _docs)
+    {
+        var d = doc;
+        <div class="orig-doc card" @key="d.Id">
+            <div class="orig-doc-head">
+                <input class="orig-title" placeholder="@($"Document {_docs.IndexOf(d) + 1} — name or author")"
+                       @bind="d.Title" @bind:event="oninput" />
+                <label class="upload-btn sm" title="Upload a .docx, .txt or .md document">
+                    <Icon Name="upload" /> Upload
+                    <InputFile OnChange="@(e => OnFileSelected(e, d))" accept=".docx,.txt,.md,.markdown,.text" />
+                </label>
+                <span class="orig-wc">@WordsOf(d.Text) words</span>
+                @if (_docs.Count > 2)
+                {
+                    <button class="icon-btn" title="Remove this document" @onclick="@(() => RemoveDoc(d))"><Icon Name="close" /></button>
+                }
+            </div>
+            @if (d.Note is not null) { <p class="file-note">@d.Note</p> }
+            <textarea class="orig-text" placeholder="Paste or type the document text here…"
+                      spellcheck="false" @bind="d.Text" @bind:event="oninput"></textarea>
+        </div>
+    }
+
+    <div class="orig-actions">
+        <button class="ghost" @onclick="AddDoc"><Icon Name="plus" /> Add document</button>
+        <button class="ghost" @onclick="LoadExample">Load an example</button>
+        <button class="ghost" @onclick="ClearAll">Clear</button>
+        <button class="primary" @onclick="Compare" disabled="@(ReadyCount < 2)">
+            <Icon Name="search" /> Compare @(ReadyCount >= 2 ? $"{ReadyCount} documents" : "")
+        </button>
+        @if (ReadyCount < 2) { <span class="hint">Add text to at least two documents.</span> }
+    </div>
+</section>
+
+@if (_report is not null)
+{
+    var rep = _report;
+    var top = rep.Pairs.Count > 0 ? rep.Pairs[0] : null;
+
+    <section class="orig-results">
+        @if (top is null || top.Overlap < 0.001)
+        {
+            <div class="card orig-summary b-var">
+                <div class="orig-big"><Icon Name="check-circle" /></div>
+                <div>
+                    <h2>No meaningful overlap found</h2>
+                    <p>Across @rep.DocumentCount documents, no shared passages of @rep.ShingleSize+ consecutive
+                        words turned up. These read as independently written.</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card orig-summary @Band(top.Overlap)">
+                <div class="orig-big">@($"{top.Overlap:P0}")</div>
+                <div>
+                    <h2>@BandTitle(top.Overlap)</h2>
+                    <p>
+                        The strongest match: <strong>@top.TitleA</strong> ↔ <strong>@top.TitleB</strong> —
+                        @($"{top.Overlap:P0}") of @(top.CoverageA >= top.CoverageB ? top.TitleA : top.TitleB)'s words
+                        appear verbatim in the other (@top.SharedWords words across @top.Passages.Count
+                        passage@(top.Passages.Count == 1 ? "" : "s")). We show the shared text below — the call is yours.
+                    </p>
+                </div>
+            </div>
+        }
+
+        <div class="card orig-pairs">
+            <h3>All pairs (@rep.Pairs.Count)</h3>
+            <p class="hint">Ranked by overlap — the share of the more-copied document that appears in the other. Click a row to inspect the shared passages.</p>
+            <div class="orig-pair-list">
+                @for (int i = 0; i < rep.Pairs.Count; i++)
+                {
+                    var p = rep.Pairs[i];
+                    var idx = i;
+                    <button class="orig-pair @(idx == _selected ? "sel" : "")" @onclick="@(() => _selected = idx)">
+                        <span class="orig-pair-names">@p.TitleA <span class="vs">↔</span> @p.TitleB</span>
+                        <span class="orig-bar"><span class="orig-bar-fill @Band(p.Overlap)" style="width:@Pct(p.Overlap)"></span></span>
+                        <span class="orig-pair-pct @Band(p.Overlap)">@($"{p.Overlap:P0}")</span>
+                    </button>
+                }
+            </div>
+        </div>
+
+        @if (_selected >= 0 && _selected < rep.Pairs.Count)
+        {
+            var p = rep.Pairs[_selected];
+            var textA = _docs[p.IndexA].Text;
+            var textB = _docs[p.IndexB].Text;
+            <div class="card orig-detail">
+                <div class="orig-detail-head">
+                    <h3><span class="@Band(p.Overlap)">@($"{p.Overlap:P0}")</span> overlap · @p.TitleA ↔ @p.TitleB</h3>
+                    <div class="orig-stats">
+                        <span title="Fraction of each document's words inside a shared passage">
+                            coverage @($"{p.CoverageA:P0}") / @($"{p.CoverageB:P0}")</span>
+                        <span title="Jaccard similarity of the two shingle sets">jaccard @p.Jaccard.ToString("0.00")</span>
+                        <span title="Longest single shared run">longest run @p.LongestRunWords words</span>
+                    </div>
+                </div>
+
+                @if (p.Passages.Count == 0)
+                {
+                    <p class="empty">No shared passage of @rep.ShingleSize+ words — these two look independent.</p>
+                }
+                else
+                {
+                    <div class="orig-side-by-side">
+                        <div class="orig-col">
+                            <h4>@p.TitleA</h4>
+                            <div class="text-view orig-body">
+                                @foreach (var seg in Segments(textA, p.Passages.Select(x => x.SpanA)))
+                                {
+                                    if (seg.Match) { <mark class="orig-hl">@seg.Text</mark> } else { @seg.Text }
+                                }
+                            </div>
+                        </div>
+                        <div class="orig-col">
+                            <h4>@p.TitleB</h4>
+                            <div class="text-view orig-body">
+                                @foreach (var seg in Segments(textB, p.Passages.Select(x => x.SpanB)))
+                                {
+                                    if (seg.Match) { <mark class="orig-hl">@seg.Text</mark> } else { @seg.Text }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="orig-passages-h">Shared passages (@p.Passages.Count)</h4>
+                    <ul class="orig-passages">
+                        @foreach (var pass in p.Passages.OrderByDescending(x => x.WordLength))
+                        {
+                            <li>
+                                <span class="orig-pass-len">@pass.WordLength words</span>
+                                <q>@pass.SpanA.Slice(textA)</q>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        }
+
+        <p class="orig-disclaimer">
+            <Icon Name="scale" /> This finds text the documents literally share — it is <strong>not</strong> a whole-internet plagiarism
+            index, and shared phrasing can be legitimate (quotations, common definitions, a shared assignment prompt).
+            Treat the highlights as <strong>evidence to review</strong>, never as a verdict.
+        </p>
+    </section>
+}
+
+@code {
+    private sealed class DocEntry
+    {
+        public string Id { get; } = Guid.NewGuid().ToString("N");
+        public string Title { get; set; } = "";
+        public string Text { get; set; } = "";
+        public string? Note { get; set; }
+    }
+
+    private const long MaxFileBytes = 5 * 1024 * 1024;
+
+    private readonly List<DocEntry> _docs = new() { new(), new() };
+    private OriginalityReport? _report;
+    private int _selected = -1;
+
+    private int ReadyCount => _docs.Count(d => !string.IsNullOrWhiteSpace(d.Text));
+
+    private static int WordsOf(string? t) =>
+        string.IsNullOrWhiteSpace(t) ? 0 : t.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
+
+    private void AddDoc() => _docs.Add(new());
+
+    private void RemoveDoc(DocEntry d)
+    {
+        _docs.Remove(d);
+        _report = null;
+        _selected = -1;
+    }
+
+    private void ClearAll()
+    {
+        _docs.Clear();
+        _docs.Add(new());
+        _docs.Add(new());
+        _report = null;
+        _selected = -1;
+    }
+
+    private void Compare()
+    {
+        var inputs = new List<OriginalityInput>();
+        int n = 0;
+        foreach (var d in _docs)
+        {
+            if (string.IsNullOrWhiteSpace(d.Text)) continue;
+            n++;
+            var title = string.IsNullOrWhiteSpace(d.Title) ? $"Document {n}" : d.Title.Trim();
+            inputs.Add(new OriginalityInput(d.Id, title, d.Text));
+        }
+        if (inputs.Count < 2) { _report = null; _selected = -1; return; }
+
+        _report = Checker.Check(inputs);
+        _selected = _report.Pairs.Count > 0 ? 0 : -1;
+    }
+
+    private async Task OnFileSelected(InputFileChangeEventArgs e, DocEntry d)
+    {
+        var file = e.File;
+        if (file is null) return;
+        d.Note = null;
+        if (file.Size > MaxFileBytes) { d.Note = $"“{file.Name}” is too large (max 5 MB)."; return; }
+        try
+        {
+            if (file.Name.EndsWith(".docx", StringComparison.OrdinalIgnoreCase))
+            {
+                await using var s = file.OpenReadStream(MaxFileBytes);
+                d.Text = await DocxTextExtractor.ExtractTextAsync(s);
+            }
+            else
+            {
+                using var reader = new StreamReader(file.OpenReadStream(MaxFileBytes));
+                d.Text = await reader.ReadToEndAsync();
+            }
+            if (string.IsNullOrWhiteSpace(d.Title))
+                d.Title = Path.GetFileNameWithoutExtension(file.Name);
+            d.Note = $"Loaded “{file.Name}” ({file.Size / 1024} KB).";
+        }
+        catch (Exception ex) { d.Note = $"Could not read the file: {ex.Message}"; }
+    }
+
+    private void LoadExample()
+    {
+        _docs.Clear();
+        _docs.Add(new DocEntry
+        {
+            Title = "Source article",
+            Text = "Photosynthesis is the process by which green plants convert sunlight into chemical energy. " +
+                   "Using chlorophyll, they capture light and transform carbon dioxide and water into glucose and oxygen, " +
+                   "sustaining nearly all life on Earth."
+        });
+        _docs.Add(new DocEntry
+        {
+            Title = "Student A",
+            Text = "For my report on plants, I learned that photosynthesis is the process by which green plants convert " +
+                   "sunlight into chemical energy, and I found this fascinating. My own garden grows much faster in summer."
+        });
+        _docs.Add(new DocEntry
+        {
+            Title = "Student B (independent)",
+            Text = "Over the weekend I rebuilt the carburetor on my motorcycle. It took three tries and a lot of patience, " +
+                   "but the engine finally turned over on Sunday evening and I rode it around the block twice."
+        });
+        _report = null;
+        _selected = -1;
+    }
+
+    // ── highlight builder ────────────────────────────────────────────────────
+    private readonly record struct Seg(string Text, bool Match);
+
+    /// <summary>Splits <paramref name="text"/> into matched / unmatched segments given the (possibly
+    /// unordered, overlapping) spans for one side of a pair. Spans are sorted and merged first.</summary>
+    private static IEnumerable<Seg> Segments(string text, IEnumerable<TextSpan> spans)
+    {
+        var merged = new List<(int Start, int End)>();
+        foreach (var s in spans.Where(s => s.Length > 0).OrderBy(s => s.Start))
+        {
+            if (merged.Count > 0 && s.Start <= merged[^1].End)
+            {
+                var last = merged[^1];
+                if (s.End > last.End) merged[^1] = (last.Start, s.End);
+            }
+            else merged.Add((s.Start, s.End));
+        }
+
+        int cursor = 0;
+        foreach (var (start, end) in merged)
+        {
+            if (start > cursor) yield return new Seg(text[cursor..start], false);
+            yield return new Seg(text[start..end], true);
+            cursor = end;
+        }
+        if (cursor < text.Length) yield return new Seg(text[cursor..], false);
+    }
+
+    private static string Pct(double v) => (v * 100).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "%";
+
+    private static string Band(double overlap) => overlap switch
+    {
+        >= 0.60 => "b-pred",   // amber/red — high overlap
+        >= 0.30 => "b-typ",    // brand — notable
+        >= 0.10 => "b-some",   // light — some
+        _ => "b-var",          // green — little/none
+    };
+
+    private static string BandTitle(double overlap) => overlap switch
+    {
+        >= 0.60 => "High overlap — likely a shared source",
+        >= 0.30 => "Notable overlap — worth a closer look",
+        >= 0.10 => "Some shared phrasing",
+        _ => "Little to no overlap",
+    };
+}

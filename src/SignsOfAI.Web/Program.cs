@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SignsOfAI.Core;
+using SignsOfAI.Core.Originality;
 using SignsOfAI.Core.Rules;
 using SignsOfAI.Web;
 using SignsOfAI.Web.Services;
@@ -13,6 +14,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 // The analysis engine is pure & stateless — one instance for the whole app, runs in-browser.
 builder.Services.AddSingleton<AiWritingAnalyzer>();
+// Originality/copy checker — also pure & client-side; compares documents against each other.
+builder.Services.AddSingleton(sp => new OriginalityChecker());
 
 // Browser-side helpers.
 builder.Services.AddScoped<BrowserStorage>();

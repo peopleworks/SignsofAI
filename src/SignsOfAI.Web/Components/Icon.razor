@@ -1,0 +1,27 @@
+@* Our own minimal line-icon set — no emoji. This is a tool that flags AI-writing tells (and emoji
+   are one of them), so the UI carries hand-drawn SVG glyphs instead. Each icon is stroke-based
+   (stroke = currentColor), sized to 1em, and inherits the surrounding text color, so it drops into
+   any button or heading and themes automatically in light/dark. *@
+<svg class="icon @Class" viewBox="0 0 24 24" width="1em" height="1em" fill="none"
+     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+     aria-hidden="true" focusable="false">@((MarkupString)Glyph(Name))</svg>
+
+@code {
+    [Parameter, EditorRequired] public string Name { get; set; } = "";
+
+    /// <summary>Extra CSS class(es) for sizing/spacing tweaks.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    private static string Glyph(string name) => name switch
+    {
+        "upload"       => "<path d='M12 15V4'/><path d='m7 9 5-5 5 5'/><path d='M5 20h14'/>",
+        "plus"         => "<path d='M12 5v14'/><path d='M5 12h14'/>",
+        "search"       => "<circle cx='11' cy='11' r='7'/><path d='m20.5 20.5-4-4'/>",
+        "close"        => "<path d='M6 6l12 12'/><path d='M18 6 6 18'/>",
+        "lock"         => "<rect x='4' y='11' width='16' height='9' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/>",
+        "check-circle" => "<circle cx='12' cy='12' r='9'/><path d='m8.5 12.5 2.5 2.5 4.5-5'/>",
+        "beaker"       => "<path d='M9 3h6'/><path d='M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3'/><path d='M7.5 15h9'/>",
+        "scale"        => "<path d='M12 3v18'/><path d='M7 21h10'/><path d='M5 7h14'/><path d='M9 7 5 7 3 12a3 3 0 0 0 6 0Z'/><path d='M19 7h-4l-2 5a3 3 0 0 0 6 0Z'/>",
+        _              => "",
+    };
+}
