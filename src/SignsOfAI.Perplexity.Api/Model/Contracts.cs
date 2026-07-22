@@ -66,8 +66,34 @@ public sealed record ServiceInfo
     /// <summary>The default model can serve (its file is present).</summary>
     public bool ModelReady { get; init; }
     public string[] Languages { get; init; } = [];
-    /// <summary>All selectable models.</summary>
+    /// <summary>All selectable perplexity models.</summary>
     public ModelInfo[] Models { get; init; } = [];
+    /// <summary>The default embedding model can serve (its file is present).</summary>
+    public bool EmbeddingReady { get; init; }
+    /// <summary>Selectable embedding models (for the paraphrase check). Empty when the feature is off.</summary>
+    public ModelInfo[] EmbeddingModels { get; init; } = [];
+}
+
+/// <summary>Request body for POST /api/embed — the paraphrase/semantic-similarity embedding endpoint.</summary>
+public sealed record EmbedRequest
+{
+    /// <summary>Texts (typically sentences) to embed. Required, non-empty.</summary>
+    public string[] Texts { get; init; } = [];
+
+    /// <summary>Which embedding model to use (id from GET /). Null/blank/unknown ⇒ the default.</summary>
+    public string? Model { get; init; }
+
+    /// <summary>Matryoshka output width (e.g. 128/256/512/768). Null ⇒ the model's default.</summary>
+    public int? Dims { get; init; }
+}
+
+/// <summary>Response body for POST /api/embed. Vectors are L2-normalized, so cosine similarity == dot product.</summary>
+public sealed record EmbedResponse
+{
+    public string Model { get; init; } = "";
+    public int Dims { get; init; }
+    public float[][] Vectors { get; init; } = [];
+    public long ElapsedMs { get; init; }
 }
 
 [JsonSourceGenerationOptions(
@@ -77,4 +103,7 @@ public sealed record ServiceInfo
 [JsonSerializable(typeof(PerplexityResponse))]
 [JsonSerializable(typeof(ServiceInfo))]
 [JsonSerializable(typeof(ModelInfo))]
+[JsonSerializable(typeof(EmbedRequest))]
+[JsonSerializable(typeof(EmbedResponse))]
+[JsonSerializable(typeof(float[][]))]
 public partial class ApiJsonContext : JsonSerializerContext;

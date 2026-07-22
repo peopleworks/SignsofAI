@@ -21,6 +21,10 @@ public sealed record PerplexityServiceInfo
 {
     public bool ModelReady { get; init; }
     public PerplexityModelInfo[] Models { get; init; } = [];
+    /// <summary>The default embedding model's files are present on the server.</summary>
+    public bool EmbeddingReady { get; init; }
+    /// <summary>Embedding models available for the paraphrase check (empty when the feature is off).</summary>
+    public PerplexityModelInfo[] EmbeddingModels { get; init; } = [];
 }
 
 public sealed record PerplexityResult
@@ -86,6 +90,13 @@ public sealed class PerplexityClient(HttpClient http)
             return info?.Models ?? [];
         }
         catch { return []; }
+    }
+
+    /// <summary>Fetches full service info (perplexity + embedding availability). Null on failure.</summary>
+    public async Task<PerplexityServiceInfo?> GetServiceInfoAsync(string endpoint, CancellationToken ct = default)
+    {
+        try { return await http.GetFromJsonAsync(endpoint.TrimEnd('/') + "/", PerplexityJsonContext.Default.PerplexityServiceInfo, ct); }
+        catch { return null; }
     }
 
     /// <summary>Fire-and-forget pre-warm so the server model is loaded before the user clicks Measure.</summary>

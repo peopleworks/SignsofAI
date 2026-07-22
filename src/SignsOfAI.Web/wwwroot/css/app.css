@@ -571,6 +571,29 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     border-left: 3px solid color-mix(in srgb, var(--notice) 60%, transparent); padding: .3rem 0 .3rem .8rem;
 }
 
+/* ---- Phase B: paraphrase check ---- */
+.orig-para { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.orig-para-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.orig-para-head h4 { margin: 0; display: flex; align-items: center; gap: .4rem; }
+.orig-beta {
+    font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, transparent);
+    border-radius: 6px; padding: .1rem .4rem;
+}
+button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
+.orig-para-status { font-size: .9rem; color: var(--text-muted); margin: .5rem 0 0; }
+.orig-para-status.err { color: var(--warn); }
+.orig-para-list { list-style: none; margin: .6rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+.orig-para-list li { display: flex; gap: .7rem; align-items: flex-start; }
+.orig-sim {
+    flex: 0 0 auto; font-size: .78rem; font-weight: 700; color: var(--brand);
+    background: color-mix(in srgb, var(--brand) 12%, transparent); border-radius: 6px; padding: .15rem .45rem; margin-top: .1rem;
+}
+.orig-para-texts { display: flex; flex-direction: column; gap: .15rem; font-size: .9rem; line-height: 1.45; }
+.orig-para-texts .pa { color: var(--text); }
+.orig-para-texts .pb { color: var(--text-muted); }
+.orig-para-texts q::before, .orig-para-texts q::after { opacity: .5; }
+
 @media (max-width: 640px) {
     .orig-pair { grid-template-columns: 1fr auto; }
     .orig-pair .orig-bar { grid-column: 1 / -1; order: 3; }

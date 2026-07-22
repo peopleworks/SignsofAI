@@ -3,7 +3,12 @@
 @using SignsOfAI.Core.Documents
 @using SignsOfAI.Core.Model
 @using SignsOfAI.Core.Originality
+@using SignsOfAI.Core.Text
+@using SignsOfAI.Web.Services
 @inject OriginalityChecker Checker
+@inject PerplexityClient Perplexity
+@inject EmbeddingClient Embedding
+@inject BrowserStorage Storage
 
 <PageTitle>Originality checker — find shared passages between documents</PageTitle>
 
@@ -93,7 +98,7 @@
                 {
                     var p = rep.Pairs[i];
                     var idx = i;
-                    <button class="orig-pair @(idx == _selected ? "sel" : "")" @onclick="@(() => _selected = idx)">
+                    <button class="orig-pair @(idx == _selected ? "sel" : "")" @onclick="@(() => SelectPair(idx))">
                         <span class="orig-pair-names">@p.TitleA <span class="vs">↔</span> @p.TitleB</span>
                         <span class="orig-bar"><span class="orig-bar-fill @Band(p.Overlap)" style="width:@Pct(p.Overlap)"></span></span>
                         <span class="orig-pair-pct @Band(p.Overlap)">@($"{p.Overlap:P0}")</span>
@@ -156,6 +161,58 @@
                         }
                     </ul>
                 }
+
+                @if (_embeddingAvailable)
+                {
+                    <div class="orig-para">
+                        <div class="orig-para-head">
+                            <h4><Icon Name="beaker" /> Paraphrase check <span class="orig-beta">server · opt-in</span></h4>
+                            @if (_paraState != "running")
+                            {
+                                <button class="ghost sm" @onclick="RunParaphraseCheck">
+                                    @(_paraState == "done" ? "Re-run" : "Run deep check")
+                                </button>
+                            }
+                        </div>
+                        <p class="hint">
+                            Catches <strong>reworded</strong> copies — same idea, different words — that the literal check can't see,
+                            and even across languages. This one is <strong>not</strong> on-device: it sends these two documents' sentences to the
+                            PeopleWorks server (EmbeddingGemma) to compare their meaning. Nothing is stored.
+                        </p>
+
+                        @if (_paraState == "running")
+                        {
+                            <p class="orig-para-status">Embedding sentences on the server…</p>
+                        }
+                        else if (_paraState == "error")
+                        {
+                            <p class="orig-para-status err">@_paraError</p>
+                        }
+                        else if (_paraState == "done")
+                        {
+                            @if (_paraMatches.Count == 0)
+                            {
+                                <p class="empty">No reworded matches above @($"{ParaThreshold:P0}") similarity@(_paraLiteralExcluded > 0 ? $" (beyond the {_paraLiteralExcluded} already shown as literal copies above)" : "").</p>
+                            }
+                            else
+                            {
+                                <p class="hint">@_paraMatches.Count reworded sentence pair@(_paraMatches.Count == 1 ? "" : "s") (semantically close but not a literal copy)@(_paraLiteralExcluded > 0 ? $"; {_paraLiteralExcluded} literal match{(_paraLiteralExcluded == 1 ? "" : "es")} shown above {(_paraLiteralExcluded == 1 ? "is" : "are")} omitted here" : "").</p>
+                                <ul class="orig-para-list">
+                                    @foreach (var m in _paraMatches)
+                                    {
+                                        <li>
+                                            <span class="orig-sim">@($"{m.Similarity:P0}")</span>
+                                            <div class="orig-para-texts">
+                                                <q class="pa">@m.SpanA.Slice(textA)</q>
+                                                <q class="pb">@m.SpanB.Slice(textB)</q>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+                    </div>
+                }
             </div>
         }
 
@@ -177,12 +234,88 @@
     }
 
     private const long MaxFileBytes = 5 * 1024 * 1024;
+    private const double ParaThreshold = 0.72; // cosine cutoff: paraphrases ~0.8-0.95, unrelated ~0.4-0.6
 
     private readonly List<DocEntry> _docs = new() { new(), new() };
     private OriginalityReport? _report;
     private int _selected = -1;
 
+    // Phase B — server-side paraphrase check (opt-in)
+    private string _endpoint = "";
+    private bool _embeddingAvailable;
+    private string? _embeddingModel;
+    private string _paraState = "idle"; // idle | running | done | error
+    private List<ParaphraseMatch> _paraMatches = new();
+    private int _paraLiteralExcluded;
+    private string? _paraError;
+
     private int ReadyCount => _docs.Count(d => !string.IsNullOrWhiteSpace(d.Text));
+
+    protected override async Task OnInitializedAsync()
+    {
+        var settings = await Perplexity.LoadSettingsAsync(Storage);
+        _endpoint = settings.Endpoint;
+        if (!settings.IsConfigured) return;
+        var info = await Perplexity.GetServiceInfoAsync(_endpoint);
+        var embed = info?.EmbeddingModels ?? [];
+        if (embed.Length > 0)
+        {
+            _embeddingAvailable = true;
+            _embeddingModel = (embed.FirstOrDefault(m => m.IsDefault) ?? embed[0]).Id;
+        }
+    }
+
+    private void SelectPair(int idx)
+    {
+        _selected = idx;
+        ResetParaphrase();
+    }
+
+    private void ResetParaphrase()
+    {
+        _paraState = "idle";
+        _paraMatches = new();
+        _paraLiteralExcluded = 0;
+        _paraError = null;
+    }
+
+    private async Task RunParaphraseCheck()
+    {
+        if (_report is null || _selected < 0 || _selected >= _report.Pairs.Count) return;
+        var p = _report.Pairs[_selected];
+        var textA = _docs[p.IndexA].Text;
+        var textB = _docs[p.IndexB].Text;
+
+        var sentsA = new TextDocument(textA).Sentences.Where(s => s.WordCount >= 5).Select(s => s.Span).ToList();
+        var sentsB = new TextDocument(textB).Sentences.Where(s => s.WordCount >= 5).Select(s => s.Span).ToList();
+        if (sentsA.Count == 0 || sentsB.Count == 0)
+        {
+            _paraState = "error";
+            _paraError = "Need at least one full sentence (5+ words) in each document to compare meaning.";
+            return;
+        }
+
+        _paraState = "running";
+        _paraError = null;
+        StateHasChanged();
+        try
+        {
+            var textsA = sentsA.Select(s => s.Slice(textA)).ToArray();
+            var textsB = sentsB.Select(s => s.Slice(textB)).ToArray();
+            var vecA = await Embedding.EmbedAsync(_endpoint, textsA, _embeddingModel);
+            var vecB = await Embedding.EmbedAsync(_endpoint, textsB, _embeddingModel);
+
+            var all = ParaphraseFinder.Find(sentsA, vecA, sentsB, vecB, ParaThreshold, p.Passages.Select(x => x.SpanA));
+            _paraMatches = all.Where(m => !m.AlsoLiteral).ToList();
+            _paraLiteralExcluded = all.Count(m => m.AlsoLiteral);
+            _paraState = "done";
+        }
+        catch (Exception ex)
+        {
+            _paraState = "error";
+            _paraError = ex.Message;
+        }
+    }
 
     private static int WordsOf(string? t) =>
         string.IsNullOrWhiteSpace(t) ? 0 : t.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
@@ -194,6 +327,7 @@
         _docs.Remove(d);
         _report = null;
         _selected = -1;
+        ResetParaphrase();
     }
 
     private void ClearAll()
@@ -203,6 +337,7 @@
         _docs.Add(new());
         _report = null;
         _selected = -1;
+        ResetParaphrase();
     }
 
     private void Compare()
@@ -220,6 +355,7 @@
 
         _report = Checker.Check(inputs);
         _selected = _report.Pairs.Count > 0 ? 0 : -1;
+        ResetParaphrase();
     }
 
     private async Task OnFileSelected(InputFileChangeEventArgs e, DocEntry d)
@@ -254,14 +390,13 @@
         {
             Title = "Source article",
             Text = "Photosynthesis is the process by which green plants convert sunlight into chemical energy. " +
-                   "Using chlorophyll, they capture light and transform carbon dioxide and water into glucose and oxygen, " +
-                   "sustaining nearly all life on Earth."
+                   "In this transformation the plant captures carbon dioxide and releases oxygen, sustaining almost all life on Earth."
         });
         _docs.Add(new DocEntry
         {
             Title = "Student A",
-            Text = "For my report on plants, I learned that photosynthesis is the process by which green plants convert " +
-                   "sunlight into chemical energy, and I found this fascinating. My own garden grows much faster in summer."
+            Text = "For my report I learned that photosynthesis is the process by which green plants convert sunlight into chemical energy, and I found it fascinating. " +
+                   "During this reaction, the plant takes in carbon dioxide and gives off oxygen, which supports nearly every living thing on the planet."
         });
         _docs.Add(new DocEntry
         {
