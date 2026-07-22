@@ -8,6 +8,7 @@
 @inject OriginalityChecker Checker
 @inject PerplexityClient Perplexity
 @inject EmbeddingClient Embedding
+@inject WebCheckClient WebCheck
 @inject BrowserStorage Storage
 
 <PageTitle>Originality checker — find shared passages between documents</PageTitle>
@@ -56,8 +57,47 @@
                         <strong>distinctive passages</strong>. Search each one to see if it already appears online.
                         Nothing is sent anywhere until <em>you</em> click a search. <strong>You judge.</strong>
                     </p>
+
+                    @if (_webSearchReady)
+                    {
+                        <div class="orig-web-auto">
+                            <span class="orig-auto-badge"><Icon Name="globe" /> Auto web search: ON</span>
+                            <button class="ghost sm" @onclick="@(() => RunAutoWebCheck(d))" disabled="@(d.WebSearching || d.WebPhrases is not { Count: > 0 })">
+                                @(d.WebSearching ? "Searching the web…" : d.WebHits is not null ? "Search again" : "Search the web automatically")
+                            </button>
+                        </div>
+                        @if (d.WebError is not null) { <p class="orig-para-status err">@d.WebError</p> }
+                        @if (d.WebHits is not null)
+                        {
+                            @foreach (var ph in d.WebHits)
+                            {
+                                <div class="orig-web-hits">
+                                    <q class="orig-web-q">@ph.Phrase</q>
+                                    @if (ph.Hits.Length == 0)
+                                    {
+                                        <p class="empty sm">No web pages found for this passage.</p>
+                                    }
+                                    else
+                                    {
+                                        <ul class="orig-hitlist">
+                                            @foreach (var h in ph.Hits)
+                                            {
+                                                <li>
+                                                    <a href="@h.Url" target="_blank" rel="noopener">@(string.IsNullOrWhiteSpace(h.Title) ? h.Url : h.Title)</a>
+                                                    @if (h.Verbatim) { <span class="orig-verbatim">verbatim match</span> }
+                                                    @if (!string.IsNullOrWhiteSpace(h.Snippet)) { <span class="orig-hit-snip">@h.Snippet</span> }
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            }
+                        }
+                    }
+
                     @if (d.WebPhrases is { Count: > 0 })
                     {
+                        <p class="hint orig-manual-h">@(_webSearchReady ? "Or search manually:" : "")</p>
                         <ul class="orig-web-list">
                             @foreach (var ph in d.WebPhrases)
                             {
@@ -334,6 +374,10 @@
         // Phase D — web spot-check
         public bool ShowWeb { get; set; }
         public IReadOnlyList<DistinctivePhrase>? WebPhrases { get; set; }
+        // Phase D+ — optional automatic server web search
+        public bool WebSearching { get; set; }
+        public PhraseHitsDto[]? WebHits { get; set; }
+        public string? WebError { get; set; }
     }
 
     private const long MaxFileBytes = 5 * 1024 * 1024;
@@ -352,6 +396,7 @@
     private string _endpoint = "";
     private bool _embeddingAvailable;
     private string? _embeddingModel;
+    private bool _webSearchReady;
     private string _paraState = "idle"; // idle | running | done | error
     private List<ParaphraseMatch> _paraMatches = new();
     private int _paraLiteralExcluded;
@@ -370,6 +415,28 @@
         {
             _embeddingAvailable = true;
             _embeddingModel = (embed.FirstOrDefault(m => m.IsDefault) ?? embed[0]).Id;
+        }
+        _webSearchReady = info?.WebSearchReady ?? false;
+    }
+
+    private async Task RunAutoWebCheck(DocEntry d)
+    {
+        if (d.WebPhrases is not { Count: > 0 }) return;
+        d.WebSearching = true;
+        d.WebError = null;
+        StateHasChanged();
+        try
+        {
+            var phrases = d.WebPhrases.Select(p => p.Phrase).ToArray();
+            d.WebHits = await WebCheck.CheckAsync(_endpoint, phrases);
+        }
+        catch (Exception ex)
+        {
+            d.WebError = ex.Message;
+        }
+        finally
+        {
+            d.WebSearching = false;
         }
     }
 
@@ -433,8 +500,13 @@
     private void ToggleWeb(DocEntry d)
     {
         d.ShowWeb = !d.ShowWeb;
-        // Recompute on each open so edits are reflected (extraction is cheap).
-        if (d.ShowWeb) d.WebPhrases = DistinctivePhraseExtractor.Extract(d.Text);
+        // Recompute on each open so edits are reflected (extraction is cheap); clear any stale auto-search.
+        if (d.ShowWeb)
+        {
+            d.WebPhrases = DistinctivePhraseExtractor.Extract(d.Text);
+            d.WebHits = null;
+            d.WebError = null;
+        }
     }
 
     private static string SearchUrl(string engine, string phrase)

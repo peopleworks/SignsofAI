@@ -644,6 +644,27 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
 }
 .orig-web-links a:hover { background: color-mix(in srgb, var(--brand) 18%, transparent); }
 
+/* ---- Phase D+: optional automatic web search ---- */
+.orig-web-auto { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; margin-bottom: .6rem; }
+.orig-auto-badge {
+    display: inline-flex; align-items: center; gap: .3rem; font-size: .72rem; font-weight: 700;
+    color: var(--good); background: color-mix(in srgb, var(--good) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--good) 30%, transparent); border-radius: 6px; padding: .12rem .5rem;
+}
+.orig-web-hits { padding: .5rem 0; border-bottom: 1px solid var(--border); }
+.orig-web-hits:last-of-type { border-bottom: none; }
+.orig-web-q { display: block; font-size: .88rem; color: var(--text); margin-bottom: .35rem; }
+.orig-hitlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .4rem; }
+.orig-hitlist li { display: flex; flex-direction: column; gap: .1rem; }
+.orig-hitlist a { font-size: .88rem; font-weight: 600; }
+.orig-verbatim {
+    align-self: flex-start; font-size: .68rem; font-weight: 700; color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 12%, transparent); border-radius: 5px; padding: .05rem .35rem;
+}
+.orig-hit-snip { font-size: .8rem; color: var(--text-muted); line-height: 1.4; }
+.empty.sm { font-size: .82rem; }
+.orig-manual-h { margin: .7rem 0 .3rem; font-weight: 600; }
+
 @media (max-width: 640px) {
     .orig-pair { grid-template-columns: 1fr auto; }
     .orig-pair .orig-bar { grid-column: 1 / -1; order: 3; }

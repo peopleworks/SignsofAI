@@ -72,6 +72,39 @@ public sealed record ServiceInfo
     public bool EmbeddingReady { get; init; }
     /// <summary>Selectable embedding models (for the paraphrase check). Empty when the feature is off.</summary>
     public ModelInfo[] EmbeddingModels { get; init; } = [];
+    /// <summary>The operator has configured an automatic web search (Phase D+). Off by default.</summary>
+    public bool WebSearchReady { get; init; }
+}
+
+/// <summary>One web page returned for a searched phrase.</summary>
+public sealed record WebHit
+{
+    public string Url { get; init; } = "";
+    public string Title { get; init; } = "";
+    public string Snippet { get; init; } = "";
+    /// <summary>The returned snippet visibly contains the phrase (strong evidence, not just a loose match).</summary>
+    public bool Verbatim { get; init; }
+}
+
+/// <summary>The web hits found for one distinctive phrase.</summary>
+public sealed record PhraseHits
+{
+    public string Phrase { get; init; } = "";
+    public WebHit[] Hits { get; init; } = [];
+}
+
+/// <summary>Request body for POST /api/webcheck.</summary>
+public sealed record WebCheckRequest
+{
+    /// <summary>Distinctive phrases to look up on the web (exact-phrase). Required, non-empty.</summary>
+    public string[] Phrases { get; init; } = [];
+}
+
+/// <summary>Response body for POST /api/webcheck.</summary>
+public sealed record WebCheckResponse
+{
+    public PhraseHits[] Results { get; init; } = [];
+    public long ElapsedMs { get; init; }
 }
 
 /// <summary>Request body for POST /api/embed — the paraphrase/semantic-similarity embedding endpoint.</summary>
@@ -106,4 +139,6 @@ public sealed record EmbedResponse
 [JsonSerializable(typeof(EmbedRequest))]
 [JsonSerializable(typeof(EmbedResponse))]
 [JsonSerializable(typeof(float[][]))]
+[JsonSerializable(typeof(WebCheckRequest))]
+[JsonSerializable(typeof(WebCheckResponse))]
 public partial class ApiJsonContext : JsonSerializerContext;

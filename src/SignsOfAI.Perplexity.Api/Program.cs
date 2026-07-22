@@ -22,6 +22,11 @@ builder.Services.AddSingleton(embedOptions);
 builder.Services.AddSingleton<EmbeddingRegistry>();
 builder.Services.AddHostedService<EmbeddingLifecycleService>();
 
+// ── Optional automatic web spot-check (Phase D+) — inert unless an operator configured a provider + key ──
+var webSearchOptions = builder.Configuration.GetSection("WebSearch").Get<WebSearchOptions>() ?? new WebSearchOptions();
+builder.Services.AddSingleton(webSearchOptions);
+builder.Services.AddSingleton<SignsOfAI.Perplexity.Api.Search.WebSearchService>();
+
 // Source-generated JSON so we stay trim/AOT-friendly.
 builder.Services.Configure<JsonOptions>(o =>
     o.SerializerOptions.TypeInfoResolverChain.Insert(0, ApiJsonContext.Default));
@@ -36,7 +41,7 @@ var app = builder.Build();
 app.UseCors();
 
 // ── Endpoints ─────────────────────────────────────────────────────────────────
-app.MapGet("/", (PerplexityRegistry reg, EmbeddingRegistry embed) => Results.Ok(new ServiceInfo
+app.MapGet("/", (PerplexityRegistry reg, EmbeddingRegistry embed, SignsOfAI.Perplexity.Api.Search.WebSearchService web) => Results.Ok(new ServiceInfo
 {
     ModelReady = reg.Default.FilesReady,
     Languages = [.. reg.Default.Profile.Baselines.Keys],
@@ -51,6 +56,7 @@ app.MapGet("/", (PerplexityRegistry reg, EmbeddingRegistry embed) => Results.Ok(
         Id = e.ModelId, Label = e.Profile.Label, Note = e.Profile.Note,
         IsDefault = e == embed.Default, Loaded = e.IsLoaded,
     })],
+    WebSearchReady = web.IsActive,
 }));
 
 app.MapGet("/healthz", (PerplexityRegistry reg) =>
@@ -125,6 +131,18 @@ app.MapPost("/api/embed", async (EmbedRequest req, EmbeddingRegistry embed, Canc
     {
         return Results.Json(new { error = $"embedding model '{engine.ModelId}' is warming up or downloading, retry shortly" }, statusCode: 503);
     }
+});
+
+// ── Optional automatic web spot-check (Phase D+) ──
+app.MapPost("/api/webcheck", async (WebCheckRequest req, SignsOfAI.Perplexity.Api.Search.WebSearchService web, CancellationToken ct) =>
+{
+    if (!web.IsActive) return Results.Json(new { enabled = false }, statusCode: 404);
+    if (req.Phrases is null || req.Phrases.Length == 0)
+        return Results.BadRequest(new { error = "phrases is required" });
+
+    var sw = System.Diagnostics.Stopwatch.StartNew();
+    var results = await web.CheckAsync(req.Phrases, ct);
+    return Results.Ok(new WebCheckResponse { Results = [.. results], ElapsedMs = sw.ElapsedMilliseconds });
 });
 
 app.Run();

@@ -25,6 +25,8 @@ builder.Services.AddScoped(sp => new HumanizerService(new HttpClient()));
 builder.Services.AddScoped(sp => new PerplexityClient(new HttpClient()));
 // Embedding client for the optional server-side paraphrase check — also an unbound HttpClient.
 builder.Services.AddScoped(sp => new EmbeddingClient(new HttpClient()));
+// Web-check client for the optional server-side automatic web search — also an unbound HttpClient.
+builder.Services.AddScoped(sp => new WebCheckClient(new HttpClient()));
 // Prebuilt BM25 index over the rule catalog for the /catalog page.
 builder.Services.AddSingleton(sp => new CatalogSearch(RuleCatalog.All()));
 // User-defined catalogs (custom rule-packs) stored in the browser.

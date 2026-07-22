@@ -25,6 +25,8 @@ public sealed record PerplexityServiceInfo
     public bool EmbeddingReady { get; init; }
     /// <summary>Embedding models available for the paraphrase check (empty when the feature is off).</summary>
     public PerplexityModelInfo[] EmbeddingModels { get; init; } = [];
+    /// <summary>The operator configured an automatic web search (Phase D+). Off by default.</summary>
+    public bool WebSearchReady { get; init; }
 }
 
 public sealed record PerplexityResult

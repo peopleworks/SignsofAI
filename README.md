@@ -1,19 +1,31 @@
 # ✍︎ Signs of AI Writing
 
-A free, privacy-first tool that flags the tells of AI-generated writing — overused vocabulary,
-rhetorical crutches, robotic sentence rhythm — and, for **every** finding, tells you *how to fix it*.
+A free, privacy-first toolkit for **academic and writing integrity**. It does two things:
 
-Unlike black-box detectors that only spit out a score, this is a **de-AI-ifying linter**: explainable,
-actionable, and educational. Built for students and professionals.
+1. **De-AI-ify linter** — flags the tells of AI-generated writing (overused vocabulary, rhetorical
+   crutches, robotic sentence rhythm) and, for **every** finding, tells you *how to fix it*.
+2. **Originality checker** — *"did they write it, or copy it?"* Compares documents against each other
+   and surfaces the passages they share — verbatim copies, **reworded paraphrases** (even across
+   languages), and a whole-cohort overview — as **evidence a human judges**. Not a black-box verdict.
 
-> 🔒 **Analysis runs 100% in your browser.** Your text never leaves your device.
+> 🔒 **Almost everything runs 100% in your browser. Your documents never leave your device.**
+> The only exception is the optional paraphrase check, which is strictly opt-in and clearly disclosed.
 
 Built with **.NET 10** and **Blazor WebAssembly** by **Pedro Hernández (PeopleWorks)**, Microsoft MVP
-for .NET — for the .NET and Microsoft developer community.
+for .NET — for the .NET and Microsoft developer community, *por y para la comunidad educativa*.
 
 Repo: https://github.com/peopleworks/SignsofAI
 
-## What it detects
+Both **English** and **Spanish** are supported throughout (auto-detected or selectable). The Spanish
+rule-pack is an original derivation of AI-writing markers for Spanish.
+
+---
+
+## 1. The AI-writing linter ("Analyze")
+
+Unlike black-box detectors that only spit out a score, this is an **explainable, actionable, educational**
+linter. Paste, upload (`.docx` / `.txt` / `.md`), or **just start typing** — the 0–100 score, highlights,
+statistics, and per-finding fixes update **as you write**.
 
 | Category       | Examples |
 |----------------|----------|
@@ -22,60 +34,70 @@ Repo: https://github.com/peopleworks/SignsofAI
 | **Syntactic**   | Copula avoidance (*"serves as a…"*, *"a testament to…"*), inflated constructions (*"plays a crucial role"*) |
 | **Statistical** | **Burstiness** — sentence-length uniformity. Machine text hovers at 0.0–0.2; human prose 0.6–0.8 |
 
-Every finding carries a concrete suggestion and, where available, the research evidence behind it.
-
-Both **English** and **Spanish** are supported (auto-detected or selectable). The Spanish rule-pack is
-an original derivation of AI-writing markers for Spanish.
-
-## Features
-
-- **Live analysis** — paste, upload a document (`.docx` / `.txt` / `.md`), or **just start typing**:
-  the 0–100 score, highlights, statistics, and recommendations update **as you write** (debounced),
-  with a smoothly animated score ring.
-- **Sentence-rhythm visualization** — a per-sentence bar chart that makes *burstiness* visible: flat,
-  grey, uniform bars = machine cadence; tall/short, green, varied bars = human variance. A teachable
-  view no other AI detector shows.
-- **Per-finding recommendations** — every flagged tell carries a concrete fix, plus the research
-  evidence behind it. Highlights are colour-coded by category.
+- **Sentence-rhythm visualization** — a per-sentence bar chart that makes *burstiness* visible.
+- **Per-finding recommendations** — every flagged tell carries a concrete fix and the research behind it.
 - **Humanize (optional, BYOK)** — connect an AI provider and rewrite the flagged text in one click.
-  Five providers, chosen in ⚙ AI provider:
-  - **Anthropic** (`claude-opus-4-8`) — works directly from the browser out of the box.
-  - **OpenAI** / **DeepSeek** — OpenAI-style chat completions (bring your model + key).
-  - **Azure OpenAI** — your own **Azure AI** resource (endpoint + deployment + key).
-  - **Ollama (local)** — run a model **on your own machine**, no cloud and no key. Works best when you
-    run SignsOfAI locally; start Ollama with `OLLAMA_ORIGINS=*`. (From the hosted HTTPS site, browsers
-    may block calls to `http://localhost`; cloud providers need to allow the site's origin via CORS.)
+  Anthropic (`claude-opus-4-8`, works from the browser), OpenAI / DeepSeek, Azure OpenAI, or **Ollama**
+  (local, no key). Credentials live only in your browser and are sent **directly** to the provider.
+- **Before/after diff** and a **shareable result card** (a PNG summary that never includes your text).
+- **Custom catalogs (BYO rules)** — paste banned words or import a rule-pack JSON; merges live.
+- **Catalog page** — a searchable library of every AI-writing sign, in both languages, ranked with an
+  in-browser BM25 index.
 
-  Credentials are stored only in your browser and sent **directly** to the provider — never to us
-  (there is no backend).
-- **Custom catalogs (bring your own)** — extend the detector with your own rules: paste your team's
-  banned words for an instant catalog, or import a full rule-pack JSON. Catalogs are stored only in
-  your browser, merge on top of the built-in packs (overriding by rule id), and apply **live**. The
-  CLI takes them too: `signsofai check post.md --rules my-style.json`.
-- **Before/after diff** — after Humanize, see a word-level diff (removed in red, added in green) and
-  the AI score dropping from before → after.
-- **Shareable result card** — one click renders a clean PNG summary card (score, categories, sentence
-  rhythm, branding) you can post — privacy-preserving, it never includes your text.
-- **Catalog** — a searchable library of every AI-writing sign the analyzer knows, in both languages,
-  with explanations and fixes. Ranked with an in-browser BM25 index. A study aid for students.
+## 2. The Originality checker ("Originality")
+
+*"¿Lo escribió la IA, lo copiaste, o lo parafraseaste para esconderlo?"* Drop in two or more documents —
+a thesis and its sources, a batch of student submissions — and see exactly what they share. The guiding
+principle is honest: **we surface the evidence and highlight it; a human judges. We never accuse.** This is
+**not** a whole-internet index like Turnitin.
+
+| Phase | What it catches | How | Where it runs |
+|-------|-----------------|-----|---------------|
+| **A — Literal copy** | verbatim shared passages, resistant to changed capitalization/accents | accent/case-folded word *k*-shingles + greedy longest-match tiling, verified token-by-token | 🔒 **in your browser** |
+| **B — Paraphrase** | *reworded* copies — same idea, different words — **even across languages** | sentence embeddings (Google **EmbeddingGemma-300M**, ONNX) + cosine similarity | 🌐 optional server (**opt-in**) |
+| **C — Cohort** | who copied whom across a whole class, at a glance | batch upload + an N×N **overlap heatmap**; click a cell to inspect the pair | 🔒 **in your browser** |
+| **D — Web spot-check** | whether a passage already exists online | extracts a document's most **distinctive passages** and hands you one-click exact-phrase searches (Google/Bing/DuckDuckGo) | 🔒 **in your browser** |
+
+- **Shared-passage evidence** — matches are highlighted in both documents, side by side; the headline
+  overlap number equals exactly what you see highlighted (the evidence *is* the score).
+- **Phase B is the one feature that leaves the device.** It's opt-in, disclosed in the UI, and sends only
+  the sentences you choose to check to the PeopleWorks server. Everything else stays on your machine.
+- **Phase D** is deliberately honest: we can't index the whole web, so instead of pretending to, we surface
+  the passages worth checking and prepare the searches — nothing is sent anywhere until *you* click one.
+  An **optional automatic web search** can be enabled by the server operator (see *Optional server* below).
+
+## 3. The predictability meter (optional server)
+
+An honest reframing of perplexity. A small language model (Qwen2.5-0.5B or Microsoft Phi-4-mini, int8 ONNX)
+measures how *predictable / generic* a text's phrasing is. **This is not an AI-vs-human verdict** — on a
+labelled corpus the two overlap badly (memorized human text scores *predictable* too). We surface
+predictability honestly as one signal among many, calibrated per language. Opt-in; runs on the PeopleWorks
+server. The model lazily loads and idle-unloads to keep the server light.
+
+---
 
 ## Architecture
 
 ```
-SignsOfAI.sln
+SignsOfAI.slnx
 ├─ src/
-│  ├─ SignsOfAI.Core        # Pure C# analysis engine (no UI/server deps)
-│  │  ├─ Analyzers/         # LexicalAnalyzer, PatternAnalyzer, BurstinessAnalyzer (IAnalyzer)
-│  │  ├─ Rules/Packs/       # rules.en.json, rules.es.json (embedded, community-extensible)
-│  │  ├─ Text/              # Tokenizer, sentence splitter, language detector, statistics
-│  │  ├─ Scoring/           # Transparent saturating density scorer
-│  │  └─ AiWritingAnalyzer  # Public facade: Analyze(text, language)
-│  └─ SignsOfAI.Web         # Blazor WebAssembly front end
+│  ├─ SignsOfAI.Core            # Pure C# engines (no UI/server deps)
+│  │  ├─ Analyzers/             # Lexical, Pattern, Burstiness (IAnalyzer)
+│  │  ├─ Originality/           # OriginalityChecker (shingles+tiling), ParaphraseFinder,
+│  │  │                         #   DistinctivePhraseExtractor
+│  │  ├─ Rules/Packs/           # rules.en.json, rules.es.json (embedded, community-extensible)
+│  │  ├─ Text/                  # Tokenizer, sentence splitter, language detector, statistics
+│  │  └─ AiWritingAnalyzer      # Public facade: Analyze(text, language)
+│  ├─ SignsOfAI.Web             # Blazor WebAssembly front end (Analyze, Originality, Catalog)
+│  ├─ SignsOfAI.Cli             # `dotnet tool` for CI pipelines
+│  └─ SignsOfAI.Perplexity.Api  # Optional ASP.NET Core server: predictability + embeddings
+│     ├─ Engine/                #   OnnxPerplexityEngine, OnnxEmbeddingEngine (lazy-load + idle-unload)
+│     └─ Config/                #   model profiles, calibration, embedding + web-search options
 └─ tests/
-   └─ SignsOfAI.Core.Tests  # xUnit
+   └─ SignsOfAI.Core.Tests      # xUnit (40+)
 ```
 
-The engine is decoupled from the UI, so a CLI / `dotnet tool` or Web API can reuse it later.
+The Core engines are decoupled from the UI and server — the CLI, the Blazor app, and the API all reuse them.
 
 ## Run it
 
@@ -92,7 +114,7 @@ dotnet test
 
 ## Command line & CI (`dotnet tool`)
 
-The engine ships as a global tool so you can lint prose in scripts and CI pipelines:
+The linter ships as a global tool so you can gate prose in CI:
 
 ```bash
 dotnet tool install --global SignsOfAI.Cli
@@ -101,57 +123,62 @@ signsofai check README.md                 # pretty report
 signsofai check article.docx --lang en    # Word documents too
 signsofai check post.md --json            # machine-readable
 signsofai check post.md --max-score 40    # exit 1 if it reads too much like AI → fails CI
+signsofai check post.md --rules my-style.json   # your custom catalog
 ```
 
-The analysis engine is also published as a library — embed it in your own .NET app:
-
-```bash
-dotnet add package SignsOfAI.Core
-```
+The analysis engine is also a library — `dotnet add package SignsOfAI.Core`:
 
 ```csharp
 var result = new SignsOfAI.Core.AiWritingAnalyzer().Analyze(text, "auto");
 Console.WriteLine($"{result.OverallScore}/100 — {result.Verdict}");
-foreach (var f in result.Findings)
-    Console.WriteLine($"{f.MatchedText}: {f.Suggestion}");
 ```
+
+## Optional server (`SignsOfAI.Perplexity.Api`)
+
+The client works fully on its own; this server only powers the **opt-in** features (the predictability meter
+and the Phase B paraphrase check). It's ASP.NET Core (.NET 10) hosting ONNX models with lazy-load and
+idle-unload so it stays light. Model files are **not** in git — they download on first use.
+
+The client points at a hosted instance by default; to run your own, set the endpoint in the app's server
+settings and configure CORS for your origin.
+
+### Enabling the optional automatic web search (Phase D)
+
+By default Phase D is the on-device, one-click-search experience (no key, nothing sent until you click).
+An operator can additionally enable an **automatic** web search — useful for presentations — by configuring
+a search provider **on the server** (the key never touches the browser). It stays **off unless configured**:
+
+```jsonc
+// appsettings.json (or environment variables)
+"WebSearch": {
+  "Enabled": true,
+  "Provider": "brave",              // Brave Search API (free tier); provider-abstracted
+  "ApiKey": "",                     // prefer the BRAVE_API_KEY environment variable
+  "MaxPhrasesPerDoc": 8,
+  "MaxResultsPerPhrase": 5
+}
+```
+
+When enabled, the server advertises the capability and the client offers an automatic "search the web"
+action that reports pages containing a passage **verbatim**. If it's off, quota-exhausted, or errors, the UI
+falls back to the manual one-click searches — it never breaks.
 
 ## Extending the rules
 
-Add entries to `src/SignsOfAI.Core/Rules/Packs/rules.<lang>.json`:
+Add entries to `src/SignsOfAI.Core/Rules/Packs/rules.<lang>.json` — **lexical** rules match single word
+tokens, **pattern** rules are regexes for multi-word tells. Each sets a `weight`, `severity`, and `suggestion`.
 
-- **Lexical** rules match single word tokens (with all surface forms).
-- **Pattern** rules are regexes for multi-word rhetorical/syntactic tells.
+## Deploy
 
-Each rule sets a `weight`, `severity`, and a human-friendly `suggestion`.
+The Blazor client is a static bundle (hosts anywhere free). Included GitHub Actions:
 
-## Deploy (free static hosting)
+- **GitHub Pages** (`deploy-pages.yml`) — Settings → Pages → Source: "GitHub Actions". The workflow rewrites
+  the base href and writes an SPA `404.html` fallback.
+- **Azure Static Web Apps** (`azure-static-web-apps.yml`) — add the deployment token as a repo secret.
 
-The app is a static Blazor WebAssembly bundle, so it hosts anywhere for free. Two ready-made GitHub
-Actions workflows are included in `.github/workflows/`:
-
-- **Azure Static Web Apps** (`azure-static-web-apps.yml`) — provision a Static Web App in the Azure
-  portal, add its deployment token as the `AZURE_STATIC_WEB_APPS_API_TOKEN` repo secret, push to `main`.
-  SPA deep-links (e.g. `/catalog`) are handled by `wwwroot/staticwebapp.config.json`.
-- **GitHub Pages** (`deploy-pages.yml`) — enable Pages (Settings → Pages → Source: "GitHub Actions").
-  The workflow rewrites the base href to `/<repo>/` and writes a `404.html` SPA fallback automatically.
-
-Manual publish:
-
-```bash
-dotnet publish src/SignsOfAI.Web -c Release -o publish
-# serve publish/wwwroot with any static file server
-```
-
-## Roadmap ideas
-
-- CLI / `dotnet tool` for CI pipelines (the Core engine is already UI-agnostic)
-- Phase 2: contrastive-perplexity (Binoculars-style) scoring as an optional signal
-- Shareable report export
+The optional server is a normal ASP.NET Core app (`dotnet publish` the `SignsOfAI.Perplexity.Api` project).
 
 ## Credits
 
-Created by **Pedro Hernández — PeopleWorks**, Microsoft MVP for .NET.
-
-Detection markers are grounded in linguistics research on AI stylometry — see `Docs/GoogleResearch.md`
-and the Wikipedia "Signs of AI writing" guidance.
+Created by **Pedro Hernández — PeopleWorks**, Microsoft MVP for .NET. Detection markers are grounded in
+linguistics research on AI stylometry — see `Docs/GoogleResearch.md`.
