@@ -74,6 +74,35 @@ labelled corpus the two overlap badly (memorized human text scores *predictable*
 predictability honestly as one signal among many, calibrated per language. Opt-in; runs on the PeopleWorks
 server. The model lazily loads and idle-unloads to keep the server light.
 
+## 4. Use it from other apps — MCP server
+
+Everything above is also available to **Claude Desktop and any [MCP](https://modelcontextprotocol.io)
+client** through `SignsOfAI.Mcp`, a Model Context Protocol server (built on the official
+[`ModelContextProtocol`](https://www.nuget.org/packages/ModelContextProtocol) SDK, stdio transport). Because
+the engine lives in `SignsOfAI.Core` — pure .NET, no browser — the server just exposes it as tools:
+
+| Tool | What it does | Where it runs |
+|------|--------------|---------------|
+| `analyze_ai_writing` | score + verdict + findings (with fixes) + statistics | 🔒 on-device |
+| `check_originality` | overlap % and shared passages across 2+ documents | 🔒 on-device |
+| `search_catalog` | search the catalog of AI-writing signs (EN/ES) | 🔒 on-device |
+| `extract_distinctive_phrases` | distinctive phrases + ready-made web-search links | 🔒 on-device |
+| `measure_predictability` | perplexity via the optional server | 🌐 server (**opt-in**) |
+| `check_paraphrase` | reworded/translated matches via EmbeddingGemma | 🌐 server (**opt-in**) |
+
+The first four run entirely on the machine; the last two disclose that they send text to the server
+(endpoint via the `SIGNSOFAI_API_ENDPOINT` environment variable). Point Claude Desktop at it:
+
+```jsonc
+// %APPDATA%\Claude\claude_desktop_config.json
+{ "mcpServers": { "signs-of-ai": {
+  "command": "dotnet",
+  "args": ["…/src/SignsOfAI.Mcp/bin/Release/net10.0/SignsOfAI.Mcp.dll"]
+}}}
+```
+
+It also packs as a global tool (`signsofai-mcp`). See `src/SignsOfAI.Mcp/README.md` for details.
+
 ---
 
 ## Architecture
@@ -90,6 +119,7 @@ SignsOfAI.slnx
 │  │  └─ AiWritingAnalyzer      # Public facade: Analyze(text, language)
 │  ├─ SignsOfAI.Web             # Blazor WebAssembly front end (Analyze, Originality, Catalog)
 │  ├─ SignsOfAI.Cli             # `dotnet tool` for CI pipelines
+│  ├─ SignsOfAI.Mcp             # MCP server (stdio): the engine as tools for Claude Desktop / any client
 │  └─ SignsOfAI.Perplexity.Api  # Optional ASP.NET Core server: predictability + embeddings
 │     ├─ Engine/                #   OnnxPerplexityEngine, OnnxEmbeddingEngine (lazy-load + idle-unload)
 │     └─ Config/                #   model profiles, calibration, embedding + web-search options

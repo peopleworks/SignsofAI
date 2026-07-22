@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Distributable as a global .NET tool: `dotnet tool install -g SignsOfAI.Mcp` gives the
+         `signsofai-mcp` command, which Claude Desktop (or any MCP client) launches over stdio. -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>signsofai-mcp</ToolCommandName>
+    <PackageId>SignsOfAI.Mcp</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Pedro Hernández (PeopleWorks)</Authors>
+    <Company>PeopleWorks</Company>
+    <Description>Model Context Protocol (MCP) server for Signs of AI Writing. Exposes the engine as tools — analyze text for AI tells, check originality between documents, search the sign catalog, extract distinctive phrases, and (optionally, via the hosted API) measure perplexity and find paraphrases — to Claude Desktop and any MCP client.</Description>
+    <PackageTags>mcp;ai;writing;detector;claude;modelcontextprotocol;stylometry</PackageTags>
+    <PackageProjectUrl>https://github.com/peopleworks/SignsofAI</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/peopleworks/SignsofAI</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ModelContextProtocol" Version="1.4.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SignsOfAI.Core\SignsOfAI.Core.csproj" />
+  </ItemGroup>
+
+</Project>
