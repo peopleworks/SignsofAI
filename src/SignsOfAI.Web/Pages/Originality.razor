@@ -35,6 +35,10 @@
                     <InputFile OnChange="@(e => OnFileSelected(e, d))" accept=".docx,.txt,.md,.markdown,.text" />
                 </label>
                 <span class="orig-wc">@WordsOf(d.Text) words</span>
+                <button class="link orig-webbtn" title="Check the web for this document's distinctive passages"
+                        disabled="@string.IsNullOrWhiteSpace(d.Text)" @onclick="@(() => ToggleWeb(d))">
+                    <Icon Name="globe" /> Web check
+                </button>
                 @if (_docs.Count > 2)
                 {
                     <button class="icon-btn" title="Remove this document" @onclick="@(() => RemoveDoc(d))"><Icon Name="close" /></button>
@@ -43,13 +47,49 @@
             @if (d.Note is not null) { <p class="file-note">@d.Note</p> }
             <textarea class="orig-text" placeholder="Paste or type the document text here…"
                       spellcheck="false" @bind="d.Text" @bind:event="oninput"></textarea>
+
+            @if (d.ShowWeb)
+            {
+                <div class="orig-web">
+                    <p class="hint">
+                        We can't index the whole web — so instead of guessing, here are this document's most
+                        <strong>distinctive passages</strong>. Search each one to see if it already appears online.
+                        Nothing is sent anywhere until <em>you</em> click a search. <strong>You judge.</strong>
+                    </p>
+                    @if (d.WebPhrases is { Count: > 0 })
+                    {
+                        <ul class="orig-web-list">
+                            @foreach (var ph in d.WebPhrases)
+                            {
+                                <li>
+                                    <q>@ph.Phrase</q>
+                                    <span class="orig-web-links">
+                                        <a href="@SearchUrl("google", ph.Phrase)" target="_blank" rel="noopener">Google</a>
+                                        <a href="@SearchUrl("bing", ph.Phrase)" target="_blank" rel="noopener">Bing</a>
+                                        <a href="@SearchUrl("ddg", ph.Phrase)" target="_blank" rel="noopener">DuckDuckGo</a>
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="empty">Not enough distinctive text here to spot-check.</p>
+                    }
+                </div>
+            }
         </div>
     }
 
     <div class="orig-actions">
         <button class="ghost" @onclick="AddDoc"><Icon Name="plus" /> Add document</button>
+        <label class="upload-btn" title="Add many documents at once — a whole cohort">
+            <Icon Name="upload" /> Add files
+            <InputFile OnChange="OnBatchFiles" multiple accept=".docx,.txt,.md,.markdown,.text" />
+        </label>
         <button class="ghost" @onclick="LoadExample">Load an example</button>
         <button class="ghost" @onclick="ClearAll">Clear</button>
+        @if (_batchNote is not null) { <span class="hint">@_batchNote</span> }
         <button class="primary" @onclick="Compare" disabled="@(ReadyCount < 2)">
             <Icon Name="search" /> Compare @(ReadyCount >= 2 ? $"{ReadyCount} documents" : "")
         </button>
@@ -90,21 +130,81 @@
             </div>
         }
 
-        <div class="card orig-pairs">
-            <h3>All pairs (@rep.Pairs.Count)</h3>
-            <p class="hint">Ranked by overlap — the share of the more-copied document that appears in the other. Click a row to inspect the shared passages.</p>
-            <div class="orig-pair-list">
-                @for (int i = 0; i < rep.Pairs.Count; i++)
-                {
-                    var p = rep.Pairs[i];
-                    var idx = i;
-                    <button class="orig-pair @(idx == _selected ? "sel" : "")" @onclick="@(() => SelectPair(idx))">
-                        <span class="orig-pair-names">@p.TitleA <span class="vs">↔</span> @p.TitleB</span>
-                        <span class="orig-bar"><span class="orig-bar-fill @Band(p.Overlap)" style="width:@Pct(p.Overlap)"></span></span>
-                        <span class="orig-pair-pct @Band(p.Overlap)">@($"{p.Overlap:P0}")</span>
-                    </button>
-                }
+        @if (rep.DocumentCount >= 3 && _overlap is not null)
+        {
+            <div class="card orig-matrix-card">
+                <h3>Cohort overlap matrix</h3>
+                <p class="hint">Every document against every other — darker means more shared text. Click a cell to inspect that pair.</p>
+                <div class="orig-matrix-scroll">
+                    <div class="orig-matrix" style="grid-template-columns: 1.7rem repeat(@rep.DocumentCount, minmax(1.7rem, 2.6rem));">
+                        <div class="orig-mx-corner"></div>
+                        @for (int j = 0; j < rep.DocumentCount; j++)
+                        {
+                            <div class="orig-mx-head" title="@rep.Titles[j]">@(j + 1)</div>
+                        }
+                        @for (int i = 0; i < rep.DocumentCount; i++)
+                        {
+                            var r = i;
+                            <div class="orig-mx-rowhead" title="@rep.Titles[r]">@(r + 1)</div>
+                            @for (int j = 0; j < rep.DocumentCount; j++)
+                            {
+                                var c = j;
+                                if (r == c)
+                                {
+                                    <div class="orig-mx-cell self"></div>
+                                }
+                                else
+                                {
+                                    var v = _overlap[r][c];
+                                    <button class="orig-mx-cell @(v > 0.0001 ? "hot" : "")"
+                                            title="@rep.Titles[r] ↔ @rep.Titles[c]: @($"{v:P0}")"
+                                            style="background: color-mix(in srgb, var(--danger) @(((int)Math.Round(v * 100)))%, transparent);"
+                                            @onclick="@(() => SelectPairByCell(r, c))">@(v >= 0.10 ? $"{v:P0}" : "")</button>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <ol class="orig-legend">
+                    @for (int i = 0; i < rep.DocumentCount; i++)
+                    {
+                        <li><span class="orig-legend-n">@(i + 1)</span> @rep.Titles[i]</li>
+                    }
+                </ol>
             </div>
+        }
+
+        @{
+            int meaningful = rep.Pairs.Count(x => x.Overlap > 0.0001);
+            int hiddenPairs = rep.Pairs.Count - meaningful;
+        }
+        <div class="card orig-pairs">
+            <h3>Most similar pairs@(meaningful > 0 ? $" ({meaningful})" : "")</h3>
+            <p class="hint">Ranked by overlap — the share of the more-copied document that appears in the other. Click a row to inspect the shared passages.</p>
+            @if (meaningful == 0)
+            {
+                <p class="empty">No pair shares any passage of @rep.ShingleSize+ words.</p>
+            }
+            else
+            {
+                <div class="orig-pair-list">
+                    @for (int i = 0; i < rep.Pairs.Count; i++)
+                    {
+                        var p = rep.Pairs[i];
+                        if (p.Overlap <= 0.0001) { continue; }
+                        var idx = i;
+                        <button class="orig-pair @(idx == _selected ? "sel" : "")" @onclick="@(() => SelectPair(idx))">
+                            <span class="orig-pair-names">@p.TitleA <span class="vs">↔</span> @p.TitleB</span>
+                            <span class="orig-bar"><span class="orig-bar-fill @Band(p.Overlap)" style="width:@Pct(p.Overlap)"></span></span>
+                            <span class="orig-pair-pct @Band(p.Overlap)">@($"{p.Overlap:P0}")</span>
+                        </button>
+                    }
+                </div>
+            }
+            @if (hiddenPairs > 0)
+            {
+                <p class="hint orig-hidden-note">@hiddenPairs pair@(hiddenPairs == 1 ? "" : "s") with no shared text @(hiddenPairs == 1 ? "is" : "are") not shown.</p>
+            }
         </div>
 
         @if (_selected >= 0 && _selected < rep.Pairs.Count)
@@ -231,6 +331,9 @@
         public string Title { get; set; } = "";
         public string Text { get; set; } = "";
         public string? Note { get; set; }
+        // Phase D — web spot-check
+        public bool ShowWeb { get; set; }
+        public IReadOnlyList<DistinctivePhrase>? WebPhrases { get; set; }
     }
 
     private const long MaxFileBytes = 5 * 1024 * 1024;
@@ -239,6 +342,11 @@
     private readonly List<DocEntry> _docs = new() { new(), new() };
     private OriginalityReport? _report;
     private int _selected = -1;
+    private string? _batchNote;
+
+    // Phase C — cohort overview
+    private double[][]? _overlap;                       // symmetric overlap[i][j] for the heatmap
+    private Dictionary<(int, int), int>? _pairAt;       // (min,max doc index) → index into report.Pairs
 
     // Phase B — server-side paraphrase check (opt-in)
     private string _endpoint = "";
@@ -322,10 +430,30 @@
 
     private void AddDoc() => _docs.Add(new());
 
+    private void ToggleWeb(DocEntry d)
+    {
+        d.ShowWeb = !d.ShowWeb;
+        // Recompute on each open so edits are reflected (extraction is cheap).
+        if (d.ShowWeb) d.WebPhrases = DistinctivePhraseExtractor.Extract(d.Text);
+    }
+
+    private static string SearchUrl(string engine, string phrase)
+    {
+        var q = Uri.EscapeDataString("\"" + phrase + "\"");
+        return engine switch
+        {
+            "google" => "https://www.google.com/search?q=" + q,
+            "bing" => "https://www.bing.com/search?q=" + q,
+            _ => "https://duckduckgo.com/?q=" + q,
+        };
+    }
+
     private void RemoveDoc(DocEntry d)
     {
         _docs.Remove(d);
         _report = null;
+        _overlap = null;
+        _pairAt = null;
         _selected = -1;
         ResetParaphrase();
     }
@@ -336,7 +464,10 @@
         _docs.Add(new());
         _docs.Add(new());
         _report = null;
+        _overlap = null;
+        _pairAt = null;
         _selected = -1;
+        _batchNote = null;
         ResetParaphrase();
     }
 
@@ -354,8 +485,62 @@
         if (inputs.Count < 2) { _report = null; _selected = -1; return; }
 
         _report = Checker.Check(inputs);
+        BuildMatrix(_report);
         _selected = _report.Pairs.Count > 0 ? 0 : -1;
         ResetParaphrase();
+    }
+
+    private void BuildMatrix(OriginalityReport rep)
+    {
+        int n = rep.DocumentCount;
+        _overlap = new double[n][];
+        for (int i = 0; i < n; i++) _overlap[i] = new double[n];
+        _pairAt = new Dictionary<(int, int), int>();
+        for (int k = 0; k < rep.Pairs.Count; k++)
+        {
+            var p = rep.Pairs[k];
+            _overlap[p.IndexA][p.IndexB] = p.Overlap;
+            _overlap[p.IndexB][p.IndexA] = p.Overlap;
+            _pairAt[(Math.Min(p.IndexA, p.IndexB), Math.Max(p.IndexA, p.IndexB))] = k;
+        }
+    }
+
+    private void SelectPairByCell(int i, int j)
+    {
+        if (i == j || _pairAt is null) return;
+        if (_pairAt.TryGetValue((Math.Min(i, j), Math.Max(i, j)), out var idx))
+            SelectPair(idx);
+    }
+
+    private async Task OnBatchFiles(InputFileChangeEventArgs e)
+    {
+        _batchNote = null;
+        int added = 0, skipped = 0;
+        foreach (var file in e.GetMultipleFiles(200))
+        {
+            if (file.Size > MaxFileBytes) { skipped++; continue; }
+            try
+            {
+                string text;
+                if (file.Name.EndsWith(".docx", StringComparison.OrdinalIgnoreCase))
+                {
+                    await using var s = file.OpenReadStream(MaxFileBytes);
+                    text = await DocxTextExtractor.ExtractTextAsync(s);
+                }
+                else
+                {
+                    using var reader = new StreamReader(file.OpenReadStream(MaxFileBytes));
+                    text = await reader.ReadToEndAsync();
+                }
+                if (string.IsNullOrWhiteSpace(text)) { skipped++; continue; }
+                _docs.Add(new DocEntry { Title = Path.GetFileNameWithoutExtension(file.Name), Text = text });
+                added++;
+            }
+            catch { skipped++; }
+        }
+        // Drop the empty starter slots once real documents have arrived.
+        if (added > 0) _docs.RemoveAll(d => string.IsNullOrWhiteSpace(d.Text));
+        _batchNote = $"Added {added} document{(added == 1 ? "" : "s")}" + (skipped > 0 ? $" ({skipped} skipped)" : "") + ".";
     }
 
     private async Task OnFileSelected(InputFileChangeEventArgs e, DocEntry d)
@@ -386,26 +571,48 @@
     private void LoadExample()
     {
         _docs.Clear();
+        // A cohort of six submissions: two copy clusters (Ana↔Bruno, Carla↔Diego) and two independents.
         _docs.Add(new DocEntry
         {
-            Title = "Source article",
+            Title = "Ana — Biology",
             Text = "Photosynthesis is the process by which green plants convert sunlight into chemical energy. " +
                    "In this transformation the plant captures carbon dioxide and releases oxygen, sustaining almost all life on Earth."
         });
         _docs.Add(new DocEntry
         {
-            Title = "Student A",
+            Title = "Bruno — Biology",
             Text = "For my report I learned that photosynthesis is the process by which green plants convert sunlight into chemical energy, and I found it fascinating. " +
                    "During this reaction, the plant takes in carbon dioxide and gives off oxygen, which supports nearly every living thing on the planet."
         });
         _docs.Add(new DocEntry
         {
-            Title = "Student B (independent)",
+            Title = "Carla — History",
+            Text = "The French Revolution began in 1789 and fundamentally reshaped the political order of Europe. " +
+                   "Driven by inequality and financial crisis, ordinary citizens rose up against the monarchy and the old aristocratic privileges."
+        });
+        _docs.Add(new DocEntry
+        {
+            Title = "Diego — History",
+            Text = "As we know, the French Revolution began in 1789 and fundamentally reshaped the political order of Europe. " +
+                   "Because of deep inequality and a money crisis, everyday people revolted against the king and the old noble privileges of the time."
+        });
+        _docs.Add(new DocEntry
+        {
+            Title = "Elena — Personal",
             Text = "Over the weekend I rebuilt the carburetor on my motorcycle. It took three tries and a lot of patience, " +
                    "but the engine finally turned over on Sunday evening and I rode it around the block twice."
         });
+        _docs.Add(new DocEntry
+        {
+            Title = "Faisal — Cooking",
+            Text = "My grandmother's lentil soup starts with onions browned slowly in olive oil until they are sweet. " +
+                   "She adds cumin and a bay leaf, then lets the whole pot simmer for an hour while the kitchen fills with warmth."
+        });
         _report = null;
+        _overlap = null;
+        _pairAt = null;
         _selected = -1;
+        _batchNote = null;
     }
 
     // ── highlight builder ────────────────────────────────────────────────────

@@ -113,6 +113,30 @@ public class OriginalityCheckerTests
     }
 
     [Fact]
+    public void Cohort_surfaces_the_copy_clusters_and_ignores_the_rest()
+    {
+        var bio = "Photosynthesis is the process by which green plants convert sunlight into chemical energy for growth.";
+        var hist = "The French Revolution began in 1789 and reshaped the entire political order of Europe forever.";
+        var report = _checker.Check([
+            Doc("Ana", bio),
+            Doc("Bruno", "In my essay, " + bio + " That is what I learned."),
+            Doc("Carla", hist),
+            Doc("Diego", "As we know, " + hist + " It mattered a lot."),
+            Doc("Elena", "I spent the weekend rebuilding the carburetor on my old motorcycle in the cold garage."),
+            Doc("Faisal", "My grandmother browns onions slowly in olive oil before adding cumin to her lentil soup."),
+        ]);
+
+        Assert.Equal(15, report.Pairs.Count); // 6 choose 2
+        // The two copy clusters must be the two highest-overlap pairs.
+        var topTwo = report.Pairs.Take(2).ToList();
+        Assert.All(topTwo, p => Assert.True(p.Overlap > 0.5, $"{p.TitleA}<->{p.TitleB} = {p.Overlap:P0}"));
+        var topNames = topTwo.SelectMany(p => new[] { p.TitleA, p.TitleB }).ToHashSet();
+        Assert.Equal(new[] { "Ana", "Bruno", "Carla", "Diego" }.ToHashSet(), topNames);
+        // Everything else is essentially unrelated.
+        Assert.All(report.Pairs.Skip(2), p => Assert.True(p.Overlap < 0.2));
+    }
+
+    [Fact]
     public void Common_short_phrases_below_threshold_are_ignored()
     {
         // Both mention "on the other hand" (4 words) but share nothing substantial.
