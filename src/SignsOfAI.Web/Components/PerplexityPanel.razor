@@ -5,7 +5,7 @@
 <div class="ppl card">
     <div class="ppl-head">
         <h3>Predictability <span class="badge-beta">beta</span></h3>
-        <button class="ppl-gear" title="Configure server" @onclick="() => _showSettings = !_showSettings">⚙</button>
+        <button class="ppl-gear icon-btn" title="Configure server" @onclick="() => _showSettings = !_showSettings"><Icon Name="settings" /></button>
     </div>
     <p class="hint">
         How <em>predictable</em> a language model finds your phrasing (its perplexity). Predictable, generic
@@ -24,11 +24,11 @@
                 <button class="primary" @onclick="SaveEndpoint" disabled="@(string.IsNullOrWhiteSpace(_endpointEdit))">Save</button>
                 @if (_settings.IsConfigured)
                 {
-                    <span class="ppl-ok">✓ connected to @DisplayHost(_settings.Endpoint)</span>
+                    <span class="ppl-ok"><Icon Name="check" /> connected to @DisplayHost(_settings.Endpoint)</span>
                 }
             </div>
             <p class="ppl-privacy">
-                🔒 Unlike the rest of this tool, measuring perplexity <strong>sends your text to this server</strong>
+                <Icon Name="lock" /> Unlike the rest of this tool, measuring perplexity <strong>sends your text to this server</strong>
                 to run the model. It's optional and off until you connect a server. Nothing is stored there.
             </p>
         </div>
@@ -56,7 +56,7 @@
 
     @if (_error is not null)
     {
-        <div class="ppl-error">⚠️ @_error</div>
+        <div class="ppl-error"><Icon Name="alert" /> @_error</div>
     }
 
     @if (_result is not null)

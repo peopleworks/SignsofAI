@@ -20,7 +20,7 @@
         Paste, upload, or just start typing. We flag the tells of AI writing — overused words,
         rhetorical crutches, robotic rhythm — <strong>live, as you write</strong>, and show you how to fix each one.
     </p>
-    <p class="privacy">🔒 Analysis runs entirely in your browser. Your text never leaves your device.</p>
+    <p class="privacy"><Icon Name="lock" /> Analysis runs entirely in your browser. Your text never leaves your device.</p>
 </header>
 
 <section class="editor card">
@@ -34,7 +34,7 @@
             </select>
         </label>
         <label class="upload-btn" title="Upload a .docx, .txt or .md document">
-            📄 Upload document
+            <Icon Name="upload" /> Upload document
             <InputFile OnChange="OnFileSelected" accept=".docx,.txt,.md,.markdown,.text,.csv,.log" />
         </label>
         <div class="samples">
@@ -57,9 +57,9 @@
     <div class="actions">
         <button class="ghost" @onclick="Clear" disabled="@string.IsNullOrEmpty(_text)">Clear</button>
         <button class="ghost" @onclick="@(() => _showCatalogs = !_showCatalogs)">
-            📚 Catalogs@(Catalogs.Catalogs.Count > 0 ? $" ({Catalogs.Catalogs.Count})" : "")
+            <Icon Name="layers" /> Catalogs@(Catalogs.Catalogs.Count > 0 ? $" ({Catalogs.Catalogs.Count})" : "")
         </button>
-        <button class="ghost settings-toggle" @onclick="@(() => _showSettings = !_showSettings)">⚙ AI provider</button>
+        <button class="ghost settings-toggle" @onclick="@(() => _showSettings = !_showSettings)"><Icon Name="settings" /> AI provider</button>
     </div>
 
     @if (_showCatalogs)
@@ -71,8 +71,8 @@
             </p>
 
             <div class="catalog-list">
-                <div class="catalog-row builtin"><span>✓ English (built-in)</span></div>
-                <div class="catalog-row builtin"><span>✓ Español (built-in)</span></div>
+                <div class="catalog-row builtin"><span><Icon Name="check" /> English (built-in)</span></div>
+                <div class="catalog-row builtin"><span><Icon Name="check" /> Español (built-in)</span></div>
                 @foreach (var c in Catalogs.Catalogs)
                 {
                     <div class="catalog-row">
@@ -174,7 +174,7 @@
                         <input placeholder="Base URL — http://localhost:11434" @bind="_settings.OllamaBaseUrl" @bind:event="oninput" />
                         <input placeholder="Model — e.g. llama3.1" @bind="_settings.Model" @bind:event="oninput" />
                     </div>
-                    <p class="hint sub">🖥️ Run a model <strong>on your own machine</strong> — no cloud, no key. Best when you run
+                    <p class="hint sub"><Icon Name="monitor" /> Run a model <strong>on your own machine</strong> — no cloud, no key. Best when you run
                         SignsOfAI locally; start Ollama with <code>OLLAMA_ORIGINS=* ollama serve</code>. From this hosted
                         HTTPS site the browser may block calls to <code>http://localhost</code>.</p>
                     break;
@@ -183,7 +183,7 @@
             <div class="key-row">
                 <button class="ghost" @onclick="SaveSettings">Save</button>
                 <button class="ghost" @onclick="ForgetSettings">Forget</button>
-                @if (_settingsSaved) { <span class="saved-note">✓ Saved in this browser</span> }
+                @if (_settingsSaved) { <span class="saved-note"><Icon Name="check" /> Saved in this browser</span> }
             </div>
         </div>
     }
@@ -215,9 +215,10 @@
                 </div>
                 <div class="summary-actions">
                     <button class="primary humanize-btn" @onclick="Humanize" disabled="@_humanizing">
-                        @(_humanizing ? "Humanizing…" : "✨ Humanize with AI")
+                        @if (_humanizing) { <text>Humanizing…</text> }
+                        else { <Icon Name="sparkle" /> <span>Humanize with AI</span> }
                     </button>
-                    <button class="ghost" @onclick="ShowCard">📸 Share card</button>
+                    <button class="ghost" @onclick="ShowCard"><Icon Name="image" /> Share card</button>
                 </div>
             </div>
         </div>
@@ -228,7 +229,7 @@
                 <div class="humanized-head">
                     <h3>Shareable card</h3>
                     <div>
-                        <button class="primary" @onclick="DownloadCard">⬇ Download PNG</button>
+                        <button class="primary" @onclick="DownloadCard"><Icon Name="download" /> Download PNG</button>
                         <button class="ghost" @onclick="@(() => _showCard = false)">Close</button>
                     </div>
                 </div>
@@ -259,13 +260,13 @@
 
         @if (_humanizeError is not null)
         {
-            <div class="card humanize-error">⚠️ Humanize failed: @_humanizeError</div>
+            <div class="card humanize-error"><Icon Name="alert" /> Humanize failed: @_humanizeError</div>
         }
         @if (_humanized is not null)
         {
             <div class="card humanized">
                 <div class="humanized-head">
-                    <h3>✨ Humanized</h3>
+                    <h3><Icon Name="sparkle" /> Humanized</h3>
                     <div>
                         @if (_humanizedResult is not null)
                         {
@@ -331,7 +332,7 @@
                 <h3>Recommendations (@r.Findings.Count)</h3>
                 @if (r.Findings.Count == 0)
                 {
-                    <p class="empty">✅ No strong AI tells found. This reads mostly human — nice work.</p>
+                    <p class="empty"><Icon Name="check-circle" /> No strong AI tells found. This reads mostly human — nice work.</p>
                 }
                 else
                 {
@@ -345,7 +346,7 @@
                                     <span class="sev-tag">@f.Severity</span>
                                 </div>
                                 <p class="finding-msg">@f.Message</p>
-                                <p class="finding-fix">💡 @f.Suggestion</p>
+                                <p class="finding-fix"><Icon Name="lightbulb" /> @f.Suggestion</p>
                                 @if (!string.IsNullOrEmpty(f.Evidence)) { <p class="finding-evidence">@f.Evidence</p> }
                             </li>
                         }
@@ -557,7 +558,7 @@ else
         if (!_settings.IsConfigured())
         {
             _showSettings = true;
-            _humanizeError = "Configure an AI provider (⚙ AI provider) to enable Humanize.";
+            _humanizeError = "Configure an AI provider to enable Humanize.";
             return;
         }
 
