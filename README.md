@@ -103,6 +103,23 @@ The first four run entirely on the machine; the last two disclose that they send
 
 It also packs as a global tool (`signsofai-mcp`). See `src/SignsOfAI.Mcp/README.md` for details.
 
+## 5. Use it as an agent skill — `/signs-of-ai`
+
+Prefer to work inside your editor? `skill/signs-of-ai` is a drop-in **Claude Code / Codex / agent skill**
+that de-slops a draft — or judges whether text reads as AI-written — in **English and Spanish**. It's a
+human-readable distillation of the same `rules.en.json` / `rules.es.json` taxonomy, so it edits by the
+same rules the engine scores by. Install by pasting the repo link into your AI harness, or copy the
+folder into `~/.claude/skills/`, then:
+
+```
+/signs-of-ai            <your draft>          # edit mode: rewrite + change summary
+/signs-of-ai is this AI slop?  <the text>     # detect mode: quoted verdict, no rewrite
+```
+
+The skill deliberately **never fakes a numeric score** — for a calibrated 0–100 verdict, burstiness,
+originality, or perplexity it hands off to this engine (web app, CLI, or the MCP tools above). See
+`skill/README.md`.
+
 ---
 
 ## Architecture
