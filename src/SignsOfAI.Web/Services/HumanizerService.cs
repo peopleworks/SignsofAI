@@ -197,7 +197,9 @@ public sealed class HumanizerService(HttpClient http)
             "(delve, tapestry, multifaceted, nuanced, underscore, pivotal, robust, foster, leverage, and their " +
             "Spanish analogues), rhetorical crutches (the rule of three, negative parallelisms like \"it's not " +
             "just X, it's Y\", false ranges, and hedging fillers such as \"it's worth noting that\"), copula " +
-            "avoidance (\"serves as\", \"stands as a testament to\"), and uniform sentence rhythm. Deliberately " +
+            "avoidance (\"serves as\", \"stands as a testament to\"), throat-clearing openers (\"here's the thing\", " +
+            "\"let me be clear\"), weasel attribution (\"experts agree\", \"studies show\"), empty intensifiers " +
+            "(just, simply, actually, truly), over-reliance on em-dashes, and uniform sentence rhythm. Deliberately " +
             "vary sentence length — follow a long, clause-heavy sentence with a short punchy one, so the cadence " +
             "breathes (high burstiness). Preserve the original meaning, facts, and language exactly. Do not add " +
             "new claims or invent details. Keep roughly the same length. Return ONLY the rewritten text — no " +
