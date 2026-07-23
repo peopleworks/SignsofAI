@@ -14,7 +14,7 @@ public sealed class AiWritingAnalyzer
 {
     private readonly IReadOnlyList<IAnalyzer> _analyzers;
 
-    /// <summary>Uses the default analyzer set (lexical + pattern + burstiness).</summary>
+    /// <summary>Uses the default analyzer set (lexical + pattern + burstiness + em-dash).</summary>
     public AiWritingAnalyzer() : this(DefaultAnalyzers()) { }
 
     public AiWritingAnalyzer(IReadOnlyList<IAnalyzer> analyzers) => _analyzers = analyzers;
@@ -24,6 +24,7 @@ public sealed class AiWritingAnalyzer
         new LexicalAnalyzer(),
         new PatternAnalyzer(),
         new BurstinessAnalyzer(),
+        new EmDashAnalyzer(),
     ];
 
     /// <param name="text">The text to analyze.</param>
