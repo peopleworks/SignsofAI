@@ -1,5 +1,13 @@
 # ✍︎ Signs of AI Writing
 
+[![Live demo](https://img.shields.io/badge/demo-live-brightgreen?logo=googlechrome&logoColor=white)](https://peopleworks.github.io/SignsofAI/)
+[![License: MIT](https://img.shields.io/github/license/peopleworks/SignsofAI?color=blue)](LICENSE)
+[![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![Blazor WebAssembly](https://img.shields.io/badge/Blazor-WASM-512BD4?logo=blazor&logoColor=white)](https://learn.microsoft.com/aspnet/core/blazor/)
+[![GitHub stars](https://img.shields.io/github/stars/peopleworks/SignsofAI?style=social)](https://github.com/peopleworks/SignsofAI/stargazers)
+
+**[Try the live demo &rarr;](https://peopleworks.github.io/SignsofAI/)** — English & Spanish, runs 100% in your browser. No signup, and nothing leaves your device.
+
 A free, privacy-first toolkit for **academic and writing integrity**. It does two things:
 
 1. **De-AI-ify linter** — flags the tells of AI-generated writing (overused vocabulary, rhetorical
