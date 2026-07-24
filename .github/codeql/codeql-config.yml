@@ -1,0 +1,11 @@
+# CodeQL configuration.
+#
+# The build materialises source-generator output (System.Text.Json, the Regex generator, Razor)
+# under obj/. CodeQL will happily analyse it and report on code nobody wrote — 152 of the 227
+# alerts from the first run came from exactly there. Excluding it is the difference between a
+# dashboard someone triages and one everybody ignores.
+name: SignsOfAI CodeQL config
+
+paths-ignore:
+  - "**/obj/**"
+  - "**/bin/**"
