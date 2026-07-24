@@ -10,7 +10,7 @@ lang: es
 
 # Construí un detector de escritura con IA que muestra sus pruebas — y habla español
 
-Casi todos los detectores de IA son cajas negras. Pegas un párrafo, vuelve un número — "87% IA" — y se supone que confíes. Un profesor no puede actuar con eso. Un escritor no puede aprender de eso. Y si escribiste en español, el número muchas veces es peor que lanzar una moneda.
+Casi todos los detectores de IA son cajas negras. Pegas un párrafo, vuelve un número ("87% IA") y se supone que confíes. Un profesor no puede actuar con eso. Un escritor no puede aprender de eso. Y si escribiste en español, el número muchas veces es peor que lanzar una moneda.
 
 Así que construí lo contrario. Se llama **SignsOfAI**, es gratis, corre 100% en tu navegador, y por cada señal que marca te dice *cuál* es la pista y *cómo arreglarla*. Pruébalo: [peopleworks.github.io/SignsofAI](https://peopleworks.github.io/SignsofAI/).
 
@@ -26,9 +26,9 @@ Dos cosas me molestaban de los detectores que todo el mundo enlaza.
 
 Primero, esconden su razonamiento. Un porcentaje no es evidencia. Si acusan a un estudiante de usar IA, "la herramienta dijo 87%" no es algo que puedas defender, apelar o corregir. El número se siente preciso y objetivo. No es ninguna de las dos.
 
-Segundo, piensan en inglés. La investigación, los datos de entrenamiento, las pistas — todo en inglés. El español recibe una traducción mecánica de reglas gringas, que se pierde cómo *suena* de verdad la IA en español: "sumérgete en el vasto mundo de", "cabe destacar que", "no solo… sino también". Media humanidad escribe en otra lengua, y las herramientas tratan a esa mitad como una idea de último minuto.
+Segundo, piensan en inglés. La investigación, los datos de entrenamiento, las pistas: todo en inglés. El español recibe una traducción mecánica de reglas gringas, que se pierde cómo *suena* de verdad la IA en español: "sumérgete en el vasto mundo de", "cabe destacar que", "no solo… sino también". Media humanidad escribe en otra lengua, y las herramientas tratan a esa mitad como una idea de último minuto.
 
-Quería una herramienta **explicable, accionable y bilingüe** — que nunca fingiera ser un detector de mentiras.
+Quería una herramienta **explicable, accionable y bilingüe**, que nunca fingiera ser un detector de mentiras.
 
 ## Qué hace, en concreto
 
@@ -47,7 +47,7 @@ Cada marca trae un arreglo concreto y la razón detrás. Es un linter, no un ver
 
 *Todo el argumento en una captura: no "87% IA", sino cuáles palabras, por qué se marcaron, y qué escribir en su lugar.*
 
-**2. Revisa originalidad.** Suelta dos o más documentos — una tesis y sus fuentes, o los trabajos de una clase entera — y resalta los pasajes que comparten: copias literales, y *paráfrasis reescritas, incluso entre idiomas*. El número que ves es exactamente lo que está resaltado. La evidencia **es** el puntaje. Un humano juzga; la herramienta nunca acusa.
+**2. Revisa originalidad.** Suelta dos o más documentos (una tesis y sus fuentes, o los trabajos de una clase entera) y resalta los pasajes que comparten: copias literales, y *paráfrasis reescritas, incluso entre idiomas*. El número que ves es exactamente lo que está resaltado. La evidencia **es** el puntaje. Un humano juzga; la herramienta nunca acusa.
 
 ![Matriz de solapamiento de la cohorte que muestra qué documentos comparten texto, con los pares más similares ordenados debajo](https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/originality.png)
 
@@ -57,9 +57,9 @@ Cada marca trae un arreglo concreto y la razón detrás. Es un linter, no un ver
 
 Esta es la pista más difícil de falsificar y más fácil de medir. Los humanos escribimos con un ritmo desparejo. Una frase larga, con tres cláusulas y un inciso, y luego una corta. Después un fragmento. Las máquinas no. A su aire, un modelo se acomoda en unas 15 a 25 palabras por frase y ahí se queda, párrafo tras párrafo.
 
-Eso se puede cuantificar como **burstiness** — el coeficiente de variación del largo de las frases. La prosa humana suele dar 0.6–0.8. La salida por defecto de un modelo se queda en 0.0–0.2. No necesita lista de palabras ni modelo; es pura estadística sobre los largos de frase. SignsOfAI lo calcula, lo muestra como un gráfico de barras por frase, y lo integra en el puntaje.
+Eso se puede cuantificar como **burstiness**: el coeficiente de variación del largo de las frases. La prosa humana suele dar 0.6–0.8. La salida por defecto de un modelo se queda en 0.0–0.2. No necesita lista de palabras ni modelo; es pura estadística sobre los largos de frase. SignsOfAI lo calcula, lo muestra como un gráfico de barras por frase, y lo integra en el puntaje.
 
-Por cierto — este artículo se escribió para pasar su propio linter. Frases cortas junto a largas. Ni un "tapiz". Ese es el punto.
+Por cierto: pasé este artículo por su propio linter. Da 33/100. Señales leves. Casi todas las marcas son las palabras que el propio texto cita, `sumérgete` y `tapiz` entre ellas, y la burstiness queda en 0.86, bien dentro del rango humano. La herramienta me mostró dónde me estaba desviando y lo corregí. Un porcentaje no hace eso.
 
 ## Por qué reglas, no una red neuronal
 
@@ -77,11 +77,11 @@ Esta es la parte que ninguna herramienta solo-inglés puede copiar traduciendo u
 
 ## El giro: convertir a un competidor en ventaja
 
-Un tiempo después del lanzamiento encontré un proyecto llamado *no-ai-slop* — un skill viral para editar escritura de IA, miles de estrellas. Mi primera reacción fue la honesta: *ellos tienen miles, yo tengo tres.*
+Un tiempo después del lanzamiento encontré un proyecto llamado *no-ai-slop*, un skill viral para editar escritura de IA, miles de estrellas. Mi primera reacción fue la honesta: *ellos tienen miles, yo tengo tres.*
 
 Luego miré de cerca. Es un solo archivo Markdown de reglas. Solo inglés. Sin puntaje, sin estadística, sin revisión de originalidad. Se volvió viral porque no tenía fricción y montó la ola de los "agent skills", no porque hiciera algo que mi motor no pudiera.
 
-Así que no competí. **Extraje su taxonomía** — una veintena de patrones de escritura de IA — la metí en mis packs de reglas (bilingües, ponderados, con evidencia), agregué un detector de abuso de guiones largos, y publiqué mi propio skill, `/signs-of-ai`, que hace la misma edición rápida pero delega al motor real para un veredicto medido. Misma ola. Mejor barco.
+Así que no competí. **Extraje su taxonomía**, una veintena de patrones de escritura de IA, y la metí en mis packs de reglas (bilingües, ponderados, con evidencia), agregué un detector de abuso de guiones largos, y publiqué mi propio skill, `/signs-of-ai`, que hace la misma edición rápida pero delega al motor real para un veredicto medido. Misma ola. Mejor barco.
 
 La lección: cuando el formato de alguien está ganando, no necesitas su formato. Necesitas su taxonomía y un cimiento más fuerte debajo.
 
@@ -95,6 +95,6 @@ SignsOfAI es de licencia MIT y está hecho para la comunidad educativa y la de .
 - **Servidor MCP + skill de agente:** llama al motor desde Claude Desktop o cualquier cliente MCP, o suelta `/signs-of-ai` en tu editor.
 - **Trae tus propias reglas:** pega una lista de palabras vetadas o un rule-pack JSON; se fusiona al vuelo.
 
-Si enseñas, escribes o calificas — o solo quieres que tu prosa deje de sonar a máquina — dale un párrafo y mira qué dice. Y si encuentras una pista que se le escapa, los packs de reglas son dos archivos JSON. Los pull requests son bienvenidos.
+Si enseñas, escribes o calificas, o solo quieres que tu prosa deje de sonar a máquina, dale un párrafo y mira qué dice. Y si encuentras una pista que se le escapa, los packs de reglas son dos archivos JSON. Los pull requests son bienvenidos.
 
 *Hecho por Pedro Hernández — PeopleWorks, Microsoft MVP para .NET. Por y para la comunidad educativa.*

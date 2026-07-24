@@ -188,8 +188,113 @@ de los seis (video / voz / cola en segundos):
 | 2 — burstiness | 30.0 / 23.1 / 6.9 | 30.0 / 23.7 / 6.3 |
 | 3 — español | 28.0 / 24.3 / 3.7 | 28.0 / 26.5 / 1.5 |
 
-## 6. Notas de publicación
+## 6. ARTÍCULOS — dónde va cada archivo
+
+| Archivo | Plataforma |
+| --- | --- |
+| `signsofai-maker-story.{en,es}.md` | dev.to · Hashnode · Medium (importa el Markdown) |
+| `signsofai-maker-story.{en,es}.html` | WordPress (bloque HTML) · Blogger (vista HTML) |
+
+Las imágenes van embebidas por URL de GitHub, así que **no hay que subir nada** en cada plataforma.
+
+> **Ojo con `canonical_url`.** En el front-matter apunta al demo. Eso está bien si el artículo solo
+> vive en dev.to/Medium, pero si lo publicas **primero en tu blog**, cambia `canonical_url` a la URL
+> de tu blog en las copias de dev.to / Hashnode / Medium. Si no, le estás diciendo a Google que la
+> versión original de tu artículo es la página del demo, y tu propio blog compite consigo mismo.
+
+**Los artículos se auditan a sí mismos.** Cada uno declara su propio puntaje: EN 35/100 · burstiness
+0.83, ES 33/100 · burstiness 0.86. Si editas el texto, vuelve a correr
+`dotnet run --project src/SignsOfAI.Cli -- check Docs/Blog/signsofai-maker-story.en.md` y **ajusta las
+cifras del párrafo**, porque cambiar el artículo cambia su medición. Alguien va a pegar el artículo
+en la herramienta; que los números cuadren es media credibilidad.
+
+## 7. REDES — copy para acompañar el lanzamiento
+
+### X / Twitter (EN)
+```
+Every AI detector I could point students at gives you one number: "87% AI".
+
+A teacher can't accuse on that. A student can't appeal it. A writer can't learn from it.
+
+So I built one that shows the evidence instead. Every tell highlighted, with the fix.
+English + Spanish. Runs in your browser. MIT.
+
+https://peopleworks.github.io/SignsofAI/
+```
+
+### X / Twitter (ES)
+```
+Todos los detectores de IA te dan un número: "87% IA".
+
+Con eso un profesor no puede acusar, un estudiante no puede apelar, y quien escribe no aprende nada.
+
+Construí uno que muestra la evidencia: cada pista resaltada, con su arreglo.
+Inglés y español. En tu navegador. MIT.
+
+https://peopleworks.github.io/SignsofAI/
+```
+
+### LinkedIn (EN)
+```
+"87% AI."
+
+That's what the detectors give a teacher who suspects a student used ChatGPT. It's a number with no
+argument attached — you can't defend it, appeal it, or learn from it. And if the essay was written in
+Spanish, it's often worse than a coin flip, because almost every one of these tools thinks in English
+and translates the rest.
+
+I built the opposite, and I'm giving it away.
+
+Signs of AI Writing highlights the specific tells in a text — overused vocabulary, rhetorical
+crutches, syntactic patterns, and the statistical rhythm of sentence lengths — and for every single
+one it tells you how to fix it. The Spanish rule pack is derived from scratch, not machine-translated.
+It runs 100% in the browser: no account, no upload, documents never leave the device. It also compares
+documents against each other and highlights the passages they share, as evidence a human judges.
+
+Free and open source (MIT), built with .NET 10 and Blazor WebAssembly.
+
+Try it: https://peopleworks.github.io/SignsofAI/
+Code: https://github.com/peopleworks/SignsofAI
+
+It is a heuristic linter, not a verdict machine. That's deliberate. I'd rather be wrong in a way you
+can see than right in a way you can't.
+
+#AI #AcademicIntegrity #EdTech #dotnet #Blazor #OpenSource
+```
+
+### LinkedIn (ES)
+```
+"87% IA."
+
+Eso es lo que un detector le da a un profesor que sospecha que un estudiante usó ChatGPT. Un número
+sin argumento: no se puede defender, ni apelar, ni aprender de él. Y si el ensayo se escribió en
+español, muchas veces acierta menos que lanzar una moneda, porque casi todas esas herramientas piensan
+en inglés y traducen el resto.
+
+Construí lo contrario, y lo regalo.
+
+Signs of AI Writing resalta las pistas concretas de un texto —vocabulario sobreusado, muletillas
+retóricas, patrones sintácticos y el ritmo estadístico del largo de las frases— y por cada una te dice
+cómo arreglarla. El pack de reglas en español está derivado desde cero, no traducido a máquina. Corre
+100% en el navegador: sin cuenta, sin subir nada, los documentos nunca salen del equipo. Además compara
+documentos entre sí y resalta los pasajes que comparten, como evidencia que juzga una persona.
+
+Gratis y de código abierto (MIT), hecho con .NET 10 y Blazor WebAssembly.
+
+Pruébalo: https://peopleworks.github.io/SignsofAI/
+Código: https://github.com/peopleworks/SignsofAI
+
+Es un linter heurístico, no una máquina de veredictos. Es a propósito: prefiero equivocarme de una
+forma que puedas ver, a acertar de una forma que no puedas revisar.
+
+#IA #IntegridadAcadémica #EdTech #DotNet #Blazor #OpenSource
+```
+
+## 8. Notas de publicación
 - Sube el `.srt` de cada video como subtítulos (clave para reproducción sin sonido en Shorts/Reels/TikTok).
 - Cruza los enlaces: el video enlaza al artículo del blog y viceversa; ambos enlazan al demo.
 - YouTube normaliza el audio a ~−14 LUFS; no hace falta retocar niveles.
-- Orden sugerido de lanzamiento: artículo del blog → shorts (goteo diario) → video grande → Show HN / Reddit con las señales ya acumuladas.
+- **Antes de compartir cualquier link del repo**, sube la tarjeta social (Settings → Social preview,
+  `Docs/Blog/social/social-preview.png`). Si no, X/LinkedIn/Slack muestran la tarjeta gris genérica.
+- Orden sugerido de lanzamiento: artículo del blog → redes (arriba) → shorts (goteo diario) → video
+  grande → Show HN / Reddit con las señales ya acumuladas.
