@@ -128,7 +128,7 @@ Casi todos piensan en inglés y traducen mal el español. SignsOfAI trae un pack
 
 Same three beats as the Spanish set, with English scenes (`shorts/en/*.html`) and English narration.
 
-### Short 1 — The hook  (`short1-gancho-en.mp4` · ~26s)
+### Short 1 — The hook  (`short1-gancho-en.mp4` · 26s)
 **Title:** `87% AI… so what now? A number is not evidence #Shorts`
 **Description:**
 ```
@@ -137,7 +137,7 @@ AI detectors hand you a percentage, not proof. SignsOfAI shows you EVERY tell an
 #AI #AIDetection #AcademicIntegrity #OpenSource #EdTech #Shorts
 ```
 
-### Short 2 — Burstiness  (`short2-burstiness-en.mp4` · ~30s)
+### Short 2 — Burstiness  (`short2-burstiness-en.mp4` · 30s)
 **Title:** `The tell that gives AI away: rhythm (burstiness) #Shorts`
 **Description:**
 ```
@@ -146,7 +146,7 @@ AI or human? Look at the rhythm: machines write every sentence the same length; 
 #AI #Burstiness #AIDetection #Writing #OpenSource #Shorts
 ```
 
-### Short 3 — The Spanish wedge  (`short3-espanol-en.mp4` · ~28s)
+### Short 3 — The Spanish wedge  (`short3-espanol-en.mp4` · 28s)
 **Title:** `AI detectors don't speak Spanish #Shorts`
 **Description:**
 ```
@@ -168,9 +168,25 @@ Fuentes editables: `video/thumb/thumb-{es,en}.html`. Re-renderizar con `snap.mjs
 cd Docs/Blog/video   && node build-video.mjs guion.video.es.json     # (o .en.json)
 cd Docs/Blog/shorts  && node build-short.mjs scenes/short1-gancho-en.json
 ```
-Requiere ffmpeg/ffprobe en PATH y la key de ElevenLabs. **Ojo:** el appliance de SSL-decrypt de Waubonsee
-bloquea `api.elevenlabs.io`; hay que renderizar fuera de esa red (hotspot) o el TLS falla con
-`UNABLE_TO_GET_ISSUER_CERT_LOCALLY`.
+Requiere ffmpeg/ffprobe en PATH y la key de ElevenLabs. Dos trampas conocidas:
+
+- **La voz inglesa hay que fijarla por ID.** "Rachel" no está en la lista de voces de la cuenta (es una
+  voz por defecto de ElevenLabs), así que buscarla por nombre falla. Renderizar los assets EN con
+  `ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM` delante del comando. El español usa Marcela por nombre.
+- **La red de Waubonsee bloquea `api.elevenlabs.io`** (su appliance de SSL-decrypt sustituye el
+  certificado). Desde ahí el render muere con `UNABLE_TO_GET_ISSUER_CERT_LOCALLY`; hay que salir de
+  esa red. GitHub y el resto pasan sin problema — el filtro es específico de IA.
+
+**Cuadra el guion con la animación.** El largo del video lo manda `max(minSeconds, voz + cola)`, pero
+las animaciones del HTML tienen tiempos fijos. Si la narración queda corta, el short termina en
+silencio mirando una pantalla quieta; si queda larga, la voz sigue sobre la tarjeta final. Referencia
+de los seis (video / voz / cola en segundos):
+
+| Short | ES | EN |
+| --- | --- | --- |
+| 1 — gancho | 26.0 / 19.9 / 6.1 | 25.7 / 20.7 / 5.0 |
+| 2 — burstiness | 30.0 / 23.1 / 6.9 | 30.0 / 23.7 / 6.3 |
+| 3 — español | 28.0 / 24.3 / 3.7 | 28.0 / 26.5 / 1.5 |
 
 ## 6. Notas de publicación
 - Sube el `.srt` de cada video como subtítulos (clave para reproducción sin sonido en Shorts/Reels/TikTok).
