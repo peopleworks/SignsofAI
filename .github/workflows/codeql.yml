@@ -1,0 +1,54 @@
+# CodeQL static analysis for the C# code.
+#
+# Uses build-mode: manual with an explicit `dotnet build` rather than autobuild, because this
+# repository uses the newer .slnx solution format and autobuild's project discovery can miss it.
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Mondays, 06:23 UTC — catches newly published queries against unchanged code.
+    - cron: "23 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze C#
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      security-events: write # to upload the results
+      actions: read
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+          build-mode: manual
+          queries: security-and-quality
+
+      - name: Build
+        run: dotnet build SignsOfAI.slnx -c Release --nologo
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:csharp"
