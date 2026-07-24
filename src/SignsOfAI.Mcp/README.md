@@ -21,47 +21,56 @@ Built on the official [`ModelContextProtocol`](https://www.nuget.org/packages/Mo
 The first four run **entirely on the machine** — the text never leaves it. The last two **send the text**
 to the SignsOfAI server (their descriptions disclose this); see [Server tools](#server-tools-optional).
 
-## Run it
+## Install
+
+It's on NuGet as [`SignsOfAI.Mcp`](https://www.nuget.org/packages/SignsOfAI.Mcp), a .NET tool. You need
+the [.NET 10 SDK](https://dotnet.microsoft.com/download); nothing else to build.
 
 ```bash
-# From the repo root — for development:
-dotnet run --project src/SignsOfAI.Mcp
+# Run it on demand — no install step:
+dnx SignsOfAI.Mcp --yes
 
-# …or build once and point Claude Desktop at the DLL (see below):
-dotnet build src/SignsOfAI.Mcp -c Release
+# …or install the `signsofai-mcp` command once:
+dotnet tool install --global SignsOfAI.Mcp
 ```
 
-To install as a global command (`signsofai-mcp`):
-
-```bash
-dotnet pack src/SignsOfAI.Mcp -c Release
-dotnet tool install --global --add-source src/SignsOfAI.Mcp/bin/Release SignsOfAI.Mcp
-```
+To hack on it instead, run it straight from the repo: `dotnet run --project src/SignsOfAI.Mcp`.
 
 ## Claude Desktop
 
 Add one of these to `claude_desktop_config.json`
 (Windows: `%APPDATA%\Claude\claude_desktop_config.json`), then restart Claude Desktop.
 
-Using the built DLL:
+```json
+{
+  "mcpServers": {
+    "signs-of-ai": {
+      "command": "dnx",
+      "args": ["SignsOfAI.Mcp", "--yes"]
+    }
+  }
+}
+```
+
+Or, if you installed the global tool:
+
+```json
+{
+  "mcpServers": {
+    "signs-of-ai": { "command": "signsofai-mcp" }
+  }
+}
+```
+
+Working from a clone instead? Point it at the built DLL:
 
 ```json
 {
   "mcpServers": {
     "signs-of-ai": {
       "command": "dotnet",
-      "args": ["C:\\Proyecto\\AI\\SignsofAI\\src\\SignsOfAI.Mcp\\bin\\Release\\net10.0\\SignsOfAI.Mcp.dll"]
+      "args": ["C:\\path\\to\\SignsofAI\\src\\SignsOfAI.Mcp\\bin\\Release\\net10.0\\SignsOfAI.Mcp.dll"]
     }
-  }
-}
-```
-
-Or, if installed as a global tool:
-
-```json
-{
-  "mcpServers": {
-    "signs-of-ai": { "command": "signsofai-mcp" }
   }
 }
 ```

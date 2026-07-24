@@ -1,12 +1,23 @@
-# Publish SignsOfAI.Core (library) and SignsOfAI.Cli (dotnet tool) to NuGet.org.
-# Add your NuGet API key as the NUGET_API_KEY repo secret, bump the <Version> in the
-# csproj files, then create a GitHub Release — this packs and pushes both packages.
+# Publish SignsOfAI.Core (library), SignsOfAI.Cli and SignsOfAI.Mcp (dotnet tools) to NuGet.org.
+#
+# No API key: this uses NuGet Trusted Publishing, which trades this workflow's OIDC token for a
+# short-lived key at run time. It requires a policy at nuget.org → Account → Trusted Publishing:
+#
+#   Package Owner: peopleworksservices · Repository Owner: peopleworks
+#   Repository: SignsofAI · Workflow File: nuget.yml
+#
+# To ship a version: bump <Version> in the three csproj files, merge, then publish a GitHub Release
+# tagged v<that version> (e.g. v0.1.0). Tests must pass before anything is pushed.
 name: Publish NuGet
 
 on:
   release:
     types: [published]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # required to obtain the OIDC token for trusted publishing
 
 jobs:
   publish:
@@ -19,10 +30,40 @@ jobs:
         with:
           dotnet-version: "10.0.x"
 
+      # A broken build must never reach NuGet — published versions can't be deleted.
+      - name: Test
+        run: dotnet test -c Release --nologo
+
       - name: Pack
         run: |
           dotnet pack src/SignsOfAI.Core -c Release -o out
-          dotnet pack src/SignsOfAI.Cli -c Release -o out
+          dotnet pack src/SignsOfAI.Cli  -c Release -o out
+          dotnet pack src/SignsOfAI.Mcp  -c Release -o out
+          ls -1 out/
+
+      # Guards the classic footgun: tagging v0.2.0 while the csproj files still say 0.1.0.
+      # --skip-duplicate would swallow that silently and report success.
+      - name: Check the release tag matches the packed version
+        if: github.event_name == 'release'
+        run: |
+          want="${GITHUB_REF_NAME#v}"
+          if ! ls out/*."$want".nupkg >/dev/null 2>&1; then
+            echo "::error::Release is tagged $GITHUB_REF_NAME, but nothing packed as version $want."
+            echo "Bump <Version> in the csproj files to $want, or retag the release."
+            ls -1 out/
+            exit 1
+          fi
+          echo "Tag $GITHUB_REF_NAME matches the packed version $want."
+
+      - name: NuGet login (trusted publishing)
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: peopleworksservices
 
       - name: Push to NuGet
-        run: dotnet nuget push "out/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: |
+          dotnet nuget push "out/*.nupkg" \
+            --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate

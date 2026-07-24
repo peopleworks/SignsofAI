@@ -113,15 +113,19 @@ the engine lives in `SignsOfAI.Core` — pure .NET, no browser — the server ju
 The first four run entirely on the machine; the last two disclose that they send text to the server
 (endpoint via the `SIGNSOFAI_API_ENDPOINT` environment variable). Point Claude Desktop at it:
 
+It ships on NuGet as [`SignsOfAI.Mcp`](https://www.nuget.org/packages/SignsOfAI.Mcp), so nothing needs
+building. Point Claude Desktop at it:
+
 ```jsonc
 // %APPDATA%\Claude\claude_desktop_config.json
 { "mcpServers": { "signs-of-ai": {
-  "command": "dotnet",
-  "args": ["…/src/SignsOfAI.Mcp/bin/Release/net10.0/SignsOfAI.Mcp.dll"]
+  "command": "dnx",
+  "args": ["SignsOfAI.Mcp", "--yes"]
 }}}
 ```
 
-It also packs as a global tool (`signsofai-mcp`). See `src/SignsOfAI.Mcp/README.md` for details.
+Or install it as a global tool once — `dotnet tool install --global SignsOfAI.Mcp` — and use
+`"command": "signsofai-mcp"`. See `src/SignsOfAI.Mcp/README.md` for details.
 
 ## 5. Use it as an agent skill — `/signs-of-ai`
 
