@@ -62,6 +62,9 @@ pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;pa
 pre code{background:none;border:0;padding:0}
 blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
   background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
 ul{padding-left:1.2em}
 li{margin:.35em 0}
 .cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
@@ -94,6 +97,7 @@ footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color
   <p>Casi todos los detectores de IA son cajas negras. Pegas un párrafo, vuelve un número — "87% IA" — y se supone que confíes. Un profesor no puede actuar con eso. Un escritor no puede aprender de eso. Y si escribiste en español, el número muchas veces es peor que lanzar una moneda.</p>
   <p>Así que construí lo contrario. Se llama <strong>SignsOfAI</strong>, es gratis, corre 100% en tu navegador, y por cada señal que marca te dice <em>cuál</em> es la pista y <em>cómo arreglarla</em>.</p>
   <p>Esta es la historia de cómo funciona y las decisiones detrás.</p>
+  <figure><img src="https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/analyze-live.gif" alt="El puntaje sube en vivo de 76 a 87 mientras se acumulan las pistas de IA al escribir"><figcaption>El puntaje se actualiza mientras escribes. Cada resaltado trae su sugerencia de arreglo.</figcaption></figure>
 
   <h2>La comezón: un puntaje que no puedes discutir es un puntaje que no puedes creer</h2>
   <p>Dos cosas me molestaban de los detectores que todo el mundo enlaza.</p>
@@ -111,7 +115,9 @@ footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color
     <li><span class="chip stat">Estadístico</span> el ritmo. De esto hablo abajo, porque es lo interesante.</li>
   </ul>
   <p>Cada marca trae un arreglo concreto y la razón detrás. Es un linter, no un veredicto.</p>
+  <figure><img src="https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/evidence.png" alt="El texto anotado junto a la lista de recomendaciones"><figcaption>No &ldquo;87% IA&rdquo;, sino cuáles palabras, por qué se marcaron, y qué escribir en su lugar.</figcaption></figure>
   <p><strong>2. Revisa originalidad.</strong> Suelta dos o más documentos — una tesis y sus fuentes, o los trabajos de una clase entera — y resalta los pasajes que comparten: copias literales, y <em>paráfrasis reescritas, incluso entre idiomas</em>. El número que ves es exactamente lo que está resaltado. La evidencia <strong>es</strong> el puntaje. Un humano juzga; la herramienta nunca acusa.</p>
+  <figure><img src="https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/originality.png" alt="Matriz de solapamiento de la cohorte con los pares más similares ordenados debajo"><figcaption>Una clase entera de un vistazo: cada documento contra todos los demás, y luego los pasajes compartidos.</figcaption></figure>
 
   <h2>La señal en la que más confío: burstiness</h2>
   <p>Esta es la pista más difícil de falsificar y más fácil de medir. Los humanos escribimos con un ritmo desparejo. Una frase larga, con tres cláusulas y un inciso, y luego una corta. Después un fragmento. Las máquinas no. A su aire, un modelo se acomoda en unas 15 a 25 palabras por frase y ahí se queda, párrafo tras párrafo.</p>
