@@ -8,6 +8,10 @@
 
 **[Try the live demo &rarr;](https://peopleworks.github.io/SignsofAI/)** — English & Spanish, runs 100% in your browser. No signup, and nothing leaves your device.
 
+![Signs of AI Writing analyzing text live: the score climbs as AI tells accumulate, then every tell is highlighted with a fix](Docs/screenshots/analyze-live.gif)
+
+<sub>Real recording of the live demo — the score updates as you type, and every highlight comes with a suggested fix.</sub>
+
 A free, privacy-first toolkit for **academic and writing integrity**. It does two things:
 
 1. **De-AI-ify linter** — flags the tells of AI-generated writing (overused vocabulary, rhetorical
@@ -52,6 +56,10 @@ statistics, and per-finding fixes update **as you write**.
 - **Catalog page** — a searchable library of every AI-writing sign, in both languages, ranked with an
   in-browser BM25 index.
 
+![The annotated text with every AI tell highlighted, beside the recommendation list explaining and fixing each one](Docs/screenshots/evidence.png)
+
+<sub>This is the difference: not "87% AI", but *which* words, *why* they were flagged, and *what to write instead*.</sub>
+
 ## 2. The Originality checker ("Originality")
 
 *"¿Lo escribió la IA, lo copiaste, o lo parafraseaste para esconderlo?"* Drop in two or more documents —
@@ -73,6 +81,10 @@ principle is honest: **we surface the evidence and highlight it; a human judges.
 - **Phase D** is deliberately honest: we can't index the whole web, so instead of pretending to, we surface
   the passages worth checking and prepare the searches — nothing is sent anywhere until *you* click one.
   An **optional automatic web search** can be enabled by the server operator (see *Optional server* below).
+
+![Cohort overlap matrix showing which documents share text, with the most similar pairs ranked below](Docs/screenshots/originality.png)
+
+<sub>A whole class at a glance: every document against every other, then the shared passages themselves — evidence, not an accusation.</sub>
 
 ## 3. The predictability meter (optional server)
 
