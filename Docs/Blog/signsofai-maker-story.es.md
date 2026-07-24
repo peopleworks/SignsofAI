@@ -2,7 +2,7 @@
 title: "Construí un detector de escritura con IA que muestra sus pruebas — y habla español"
 description: "Casi todos los detectores de IA son cajas negras que escupen un número. Construí uno que te muestra la evidencia, corre entero en tu navegador y trata el español como idioma de primera. Aquí está cómo, y por qué."
 canonical_url: "https://peopleworks.github.io/SignsofAI/"
-cover_image: ""
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
 tags: [dotnet, blazor, ia, webassembly]
 author: "Pedro Hernández (PeopleWorks)"
 lang: es
@@ -15,6 +15,10 @@ Casi todos los detectores de IA son cajas negras. Pegas un párrafo, vuelve un n
 Así que construí lo contrario. Se llama **SignsOfAI**, es gratis, corre 100% en tu navegador, y por cada señal que marca te dice *cuál* es la pista y *cómo arreglarla*. Pruébalo: [peopleworks.github.io/SignsofAI](https://peopleworks.github.io/SignsofAI/).
 
 Esta es la historia de cómo funciona y las decisiones detrás.
+
+![El puntaje sube en vivo de 76 a 87 mientras se acumulan las pistas de IA al escribir, y luego cada pista queda resaltada con su arreglo](https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/analyze-live.gif)
+
+*El puntaje se actualiza mientras escribes. Cada resaltado trae su sugerencia de arreglo.*
 
 ## La comezón: un puntaje que no puedes discutir es un puntaje que no puedes creer
 
@@ -39,7 +43,15 @@ SignsOfAI hace dos trabajos.
 
 Cada marca trae un arreglo concreto y la razón detrás. Es un linter, no un veredicto.
 
+![El texto anotado con cada pista de IA resaltada, junto a la lista de recomendaciones que explica y arregla cada una](https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/evidence.png)
+
+*Todo el argumento en una captura: no "87% IA", sino cuáles palabras, por qué se marcaron, y qué escribir en su lugar.*
+
 **2. Revisa originalidad.** Suelta dos o más documentos — una tesis y sus fuentes, o los trabajos de una clase entera — y resalta los pasajes que comparten: copias literales, y *paráfrasis reescritas, incluso entre idiomas*. El número que ves es exactamente lo que está resaltado. La evidencia **es** el puntaje. Un humano juzga; la herramienta nunca acusa.
+
+![Matriz de solapamiento de la cohorte que muestra qué documentos comparten texto, con los pares más similares ordenados debajo](https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/originality.png)
+
+*Una clase entera de un vistazo: cada documento contra todos los demás, y luego los pasajes compartidos.*
 
 ## La señal en la que más confío: burstiness
 

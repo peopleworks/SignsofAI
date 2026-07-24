@@ -2,7 +2,7 @@
 title: "I built an AI-writing detector that shows its work — and speaks Spanish"
 description: "Most AI detectors are black boxes that spit out a number. I built one that shows you the evidence, runs entirely in your browser, and treats Spanish as a first-class language. Here's how, and why."
 canonical_url: "https://peopleworks.github.io/SignsofAI/"
-cover_image: ""
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
 tags: [dotnet, blazor, ai, webassembly]
 author: "Pedro Hernández (PeopleWorks)"
 lang: en
@@ -15,6 +15,10 @@ Most AI detectors are black boxes. You paste a paragraph, a number comes back �
 So I built the opposite. It's called **SignsOfAI**, it's free, it runs 100% in your browser, and for every signal it flags it tells you *what* the tell is and *how to fix it*. Try it: [peopleworks.github.io/SignsofAI](https://peopleworks.github.io/SignsofAI/).
 
 This is the story of how it works and the decisions behind it.
+
+![The score climbing live from 76 to 87 as AI tells accumulate while typing, then every tell highlighted with its fix](https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/analyze-live.gif)
+
+*The score updates as you type. Every highlight comes with a suggested fix.*
 
 ## The itch: a score you can't argue with is a score you can't trust
 
@@ -39,7 +43,15 @@ SignsOfAI does two jobs.
 
 Every flag carries a concrete fix and the reason behind it. It's a linter, not a verdict.
 
+![The annotated text with every AI tell highlighted, beside the recommendation list explaining and fixing each one](https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/evidence.png)
+
+*This is the whole argument in one screenshot: not "87% AI", but which words, why they were flagged, and what to write instead.*
+
 **2. It checks originality.** Drop in two or more documents — a thesis and its sources, or a whole class's submissions — and it highlights the passages they share: verbatim copies, and *reworded paraphrases, even across languages*. The number you see equals exactly what's highlighted. The evidence **is** the score. A human judges; the tool never accuses.
+
+![Cohort overlap matrix showing which documents share text, with the most similar pairs ranked below](https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/originality.png)
+
+*A whole class at a glance: every document against every other, then the shared passages themselves.*
 
 ## The one signal I trust most: burstiness
 
