@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Try the live demo first
+    url: https://peopleworks.github.io/SignsofAI/
+    about: Runs entirely in your browser — often the fastest way to check whether something is really a bug.
+  - name: Security vulnerability
+    url: https://github.com/peopleworks/SignsofAI/security/advisories/new
+    about: Report privately, not as a public issue. See SECURITY.md for what counts.
+  - name: How the rules work
+    url: https://github.com/peopleworks/SignsofAI/blob/main/CONTRIBUTING.md
+    about: The rule format, weights, and the calibration invariant — worth a read before proposing a rule.

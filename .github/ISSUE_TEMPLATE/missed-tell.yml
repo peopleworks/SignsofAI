@@ -1,0 +1,80 @@
+name: Missed tell — propose a rule
+description: AI writing that slips through, or a marker we should be catching.
+labels: ["rules", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Rule proposals are welcome from anyone — you don't need to write C#. The rule packs are two
+        JSON files, and we can turn a good example into a rule.
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example text
+      description: Text a model produced (or a faithful reconstruction) containing the tell.
+      placeholder: Paste the sentence or paragraph.
+    validations:
+      required: true
+
+  - type: input
+    id: tell
+    attributes:
+      label: The tell itself
+      description: The word, phrase or pattern. If it's a pattern, describe its shape.
+      placeholder: e.g. "stands as a testament to" — copula avoidance
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - English
+        - Spanish
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Which family does it belong to
+      options:
+        - Lexical — a single overused word
+        - Rhetorical — a crutch, cliché, or hedge
+        - Syntactic — a sentence structure
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: fix
+    attributes:
+      label: What should the writer do instead
+      description: >
+        Every rule ships with a suggestion. A flag with no fix is a black box with extra steps, so
+        this shapes the rule as much as the pattern does.
+      placeholder: e.g. Use "is" — "X is a testament to Y" → "X shows Y".
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence, if you have any
+      description: >
+        A frequency observation, a paper, a corpus, or simply "I've seen four models do this". Not
+        required, but it's what decides the weight the rule gets.
+    validations:
+      required: false
+
+  - type: textarea
+    id: humans
+    attributes:
+      label: Would a human plausibly write this?
+      description: >
+        The hard part of every rule. If careful human writers use this phrase too, say so — it likely
+        means a low weight rather than no rule.
+    validations:
+      required: false
