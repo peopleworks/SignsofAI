@@ -1,0 +1,36 @@
+@* A reusable slide-in explanation panel. Controlled: the parent owns the open state.
+   Usage:
+     <button @onclick="() => _open = true">Explain</button>
+     <InfoDrawer Open="_open" OpenChanged="v => _open = v" Title="…" Icon="lock">…content…</InfoDrawer>
+   It renders a Blazor overlay (never a native browser dialog), so it can't block the extension. *@
+
+@if (Open)
+{
+    <div class="drawer-backdrop" @onclick="Close"></div>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-label="@Title"
+           tabindex="-1" @onkeydown="OnKeyDown">
+        <div class="drawer-head">
+            <h2 class="drawer-title">
+                @if (!string.IsNullOrEmpty(Icon)) { <Icon Name="@Icon" /> }
+                @Title
+            </h2>
+            <button class="icon-btn" title="Close" aria-label="Close" @onclick="Close"><Icon Name="close" /></button>
+        </div>
+        <div class="drawer-body">
+            @ChildContent
+        </div>
+    </aside>
+}
+
+@code {
+    [Parameter] public bool Open { get; set; }
+    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string? Icon { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private Task Close() => OpenChanged.InvokeAsync(false);
+
+    private Task OnKeyDown(KeyboardEventArgs e) =>
+        e.Key == "Escape" ? Close() : Task.CompletedTask;
+}
