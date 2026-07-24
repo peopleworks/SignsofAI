@@ -43,7 +43,10 @@ jobs:
         with:
           languages: csharp
           build-mode: manual
-          queries: security-and-quality
+          # security-extended, not security-and-quality: the quality suite produced 227 alerts and
+          # not one of them was a security finding, which trains everyone to ignore the tab.
+          queries: security-extended
+          config-file: ./.github/codeql/codeql-config.yml
 
       - name: Build
         run: dotnet build SignsOfAI.slnx -c Release --nologo
