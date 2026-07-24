@@ -6,6 +6,10 @@
 [![Blazor WebAssembly](https://img.shields.io/badge/Blazor-WASM-512BD4?logo=blazor&logoColor=white)](https://learn.microsoft.com/aspnet/core/blazor/)
 [![GitHub stars](https://img.shields.io/github/stars/peopleworks/SignsofAI?style=social)](https://github.com/peopleworks/SignsofAI/stargazers)
 
+[![NuGet Core](https://img.shields.io/nuget/v/SignsOfAI.Core?logo=nuget&label=Core)](https://www.nuget.org/packages/SignsOfAI.Core)
+[![NuGet CLI](https://img.shields.io/nuget/v/SignsOfAI.Cli?logo=nuget&label=CLI)](https://www.nuget.org/packages/SignsOfAI.Cli)
+[![NuGet MCP](https://img.shields.io/nuget/v/SignsOfAI.Mcp?logo=nuget&label=MCP%20server)](https://www.nuget.org/packages/SignsOfAI.Mcp)
+
 **[Try the live demo &rarr;](https://peopleworks.github.io/SignsofAI/)** — English & Spanish, runs 100% in your browser. No signup, and nothing leaves your device.
 
 ![Signs of AI Writing analyzing text live: the score climbs as AI tells accumulate, then every tell is highlighted with a fix](Docs/screenshots/analyze-live.gif)
@@ -111,7 +115,7 @@ the engine lives in `SignsOfAI.Core` — pure .NET, no browser — the server ju
 | `check_paraphrase` | reworded/translated matches via EmbeddingGemma | 🌐 server (**opt-in**) |
 
 The first four run entirely on the machine; the last two disclose that they send text to the server
-(endpoint via the `SIGNSOFAI_API_ENDPOINT` environment variable). Point Claude Desktop at it:
+(endpoint via the `SIGNSOFAI_API_ENDPOINT` environment variable).
 
 It ships on NuGet as [`SignsOfAI.Mcp`](https://www.nuget.org/packages/SignsOfAI.Mcp), so nothing needs
 building. Point Claude Desktop at it:
@@ -126,6 +130,10 @@ building. Point Claude Desktop at it:
 
 Or install it as a global tool once — `dotnet tool install --global SignsOfAI.Mcp` — and use
 `"command": "signsofai-mcp"`. See `src/SignsOfAI.Mcp/README.md` for details.
+
+**VS Code**: the package ships an MCP manifest, so its
+[NuGet page](https://www.nuget.org/packages/SignsOfAI.Mcp) has an **MCP Server** tab with the config
+already generated — copy it into `.vscode/mcp.json` and you're done.
 
 ## 5. Use it as an agent skill — `/signs-of-ai`
 
