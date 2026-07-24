@@ -1,0 +1,71 @@
+{
+  "id": "signsofai-explainer-en",
+  "title": "SignsOfAI — Explainable, bilingual AI-writing detector (EN)",
+  "voice": "Rachel",
+  "intro": { "html": "scenes/en/intro.html", "seconds": 3.5 },
+  "scenes": [
+    {
+      "id": "01-gancho",
+      "html": "scenes/en/01-gancho.html",
+      "minSeconds": 12,
+      "voice": "Rachel",
+      "narration": "You paste a paragraph into an A I detector, and back comes a number: eighty-seven percent. Now what? A teacher can't accuse with that. A writer can't learn from it."
+    },
+    {
+      "id": "02-dos-problemas",
+      "html": "scenes/en/02-dos-problemas.html",
+      "minSeconds": 13,
+      "voice": "Rachel",
+      "narration": "Detectors have two problems. They hide their reasoning: a percentage is not evidence. And they think in English; Spanish gets a clumsy translation of English rules."
+    },
+    {
+      "id": "03-que-hace",
+      "html": "scenes/en/03-que-hace.html",
+      "minSeconds": 12,
+      "voice": "Rachel",
+      "narration": "So I built the opposite. SignsOfAI flags the tells of A I in four families, and for each one it tells you what it is and how to fix it. It's a linter, not a verdict."
+    },
+    {
+      "id": "04-lexico",
+      "html": "scenes/en/04-lexico.html",
+      "minSeconds": 11,
+      "voice": "Rachel",
+      "narration": "Lexical: overused vocabulary. Delve, tapestry, multifaceted. Each word is weighted by how much more common it became after Chat G P T."
+    },
+    {
+      "id": "05-burstiness",
+      "html": "scenes/en/05-burstiness.html",
+      "minSeconds": 15,
+      "voice": "Rachel",
+      "narration": "But the signal I trust most is rhythm. Machines settle into fifteen to twenty-five words per sentence and stay there. Humans vary. You can measure it: burstiness. Human, zero point seven; machine, zero point one."
+    },
+    {
+      "id": "06-privacidad",
+      "html": "scenes/en/06-privacidad.html",
+      "minSeconds": 12,
+      "voice": "Rachel",
+      "narration": "And it all runs in your browser. No server, no upload, no account. Your documents never leave your device. Rules and statistics, not a neural black box."
+    },
+    {
+      "id": "07-espanol",
+      "html": "scenes/en/07-espanol.html",
+      "minSeconds": 11,
+      "voice": "Rachel",
+      "narration": "The Spanish pack isn't translated; I derived it from scratch, because the tells are different. That's the part no English-only tool can copy."
+    },
+    {
+      "id": "08-originalidad",
+      "html": "scenes/en/08-originalidad.html",
+      "minSeconds": 13,
+      "voice": "Rachel",
+      "narration": "And there's more: an originality checker. It highlights passages two texts share, even paraphrases across languages. The evidence is the score. A human judges; it never accuses."
+    },
+    {
+      "id": "09-cierre",
+      "html": "scenes/en/09-cierre.html",
+      "minSeconds": 10,
+      "voice": "Rachel",
+      "narration": "Free, open source, for the education community. Try it at the link. Give it a paragraph and see what it says."
+    }
+  ]
+}

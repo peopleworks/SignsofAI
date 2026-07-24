@@ -16,15 +16,24 @@
     <Authors>Pedro Hernández (PeopleWorks)</Authors>
     <Company>PeopleWorks</Company>
     <Description>Model Context Protocol (MCP) server for Signs of AI Writing. Exposes the engine as tools — analyze text for AI tells, check originality between documents, search the sign catalog, extract distinctive phrases, and (optionally, via the hosted API) measure perplexity and find paraphrases — to Claude Desktop and any MCP client.</Description>
-    <PackageTags>mcp;ai;writing;detector;claude;modelcontextprotocol;stylometry</PackageTags>
+    <!-- `mcpserver` is what puts the package in the MCP server galleries (VS Code, NuGet). -->
+    <PackageTags>mcpserver;mcp;ai;writing;detector;claude;modelcontextprotocol;stylometry;academic-integrity;plagiarism;spanish</PackageTags>
     <PackageProjectUrl>https://github.com/peopleworks/SignsofAI</PackageProjectUrl>
     <RepositoryUrl>https://github.com/peopleworks/SignsofAI</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <!-- PackAsTool already contributes DotnetTool (so `dnx SignsOfAI.Mcp` works);
+         McpServer is what the MCP galleries and the official registry look for. -->
+    <PackageType>McpServer</PackageType>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="icon.png" Pack="true" PackagePath="\" />
+    <!-- MCP manifest: clients and registries read this to learn how to launch the server. -->
+    <None Include=".mcp/server.json" Pack="true" PackagePath="/.mcp/" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(240,85,111,.16),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(109,124,255,.18),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+.brand{position:absolute;left:48px;top:40px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.bmark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+@keyframes rv{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.kick{position:absolute;top:88px;width:100%;text-align:center;font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#f0556f;font-weight:800;opacity:0;animation:rv .6s .2s forwards}
+.title{position:absolute;top:118px;width:100%;text-align:center;font-size:40px;font-weight:800;opacity:0;animation:rv .7s .4s forwards}
+.panel{position:absolute;width:470px;top:250px}
+.pL{left:110px} .pR{left:700px}
+.plabel{font-size:24px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.score{margin-left:auto;font-family:'Cascadia Code',Consolas,monospace;font-size:22px;padding:4px 12px;border-radius:8px}
+.chart{height:230px;display:flex;align-items:flex-end;gap:10px;border-bottom:2px solid rgba(255,255,255,.18);padding-bottom:2px}
+.bar{flex:1;border-radius:6px 6px 0 0;transform-origin:bottom;animation:grow .5s cubic-bezier(.2,.8,.2,1) forwards;opacity:.95}
+.mach .bar{background:linear-gradient(180deg,#7c8aa6,#4a5772)}
+.hum .bar{background:linear-gradient(180deg,#f0556f,#db2777)}
+.note{margin-top:16px;font-size:20px;color:#b9c6de}
+.pL .plabel .score{background:rgba(124,138,166,.25);color:#c7d2e6}
+.pR .plabel .score{background:rgba(240,85,111,.22);color:#ffd0da}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="kick">Estadístico · la pista más difícil de falsificar</div>
+<div class="title">El ritmo delata a la máquina</div>
+
+<div class="panel pL">
+ <div class="plabel">MÁQUINA <span class="score">burstiness 0.1</span></div>
+ <div class="chart mach">
+  <div class="bar" style="height:62%;animation-delay:1.0s"></div>
+  <div class="bar" style="height:66%;animation-delay:1.08s"></div>
+  <div class="bar" style="height:60%;animation-delay:1.16s"></div>
+  <div class="bar" style="height:64%;animation-delay:1.24s"></div>
+  <div class="bar" style="height:61%;animation-delay:1.32s"></div>
+  <div class="bar" style="height:65%;animation-delay:1.40s"></div>
+  <div class="bar" style="height:63%;animation-delay:1.48s"></div>
+  <div class="bar" style="height:62%;animation-delay:1.56s"></div>
+ </div>
+ <div class="note">Todas las frases del mismo largo.</div>
+</div>
+
+<div class="panel pR">
+ <div class="plabel">HUMANO <span class="score">burstiness 0.7</span></div>
+ <div class="chart hum">
+  <div class="bar" style="height:90%;animation-delay:2.0s"></div>
+  <div class="bar" style="height:28%;animation-delay:2.08s"></div>
+  <div class="bar" style="height:66%;animation-delay:2.16s"></div>
+  <div class="bar" style="height:100%;animation-delay:2.24s"></div>
+  <div class="bar" style="height:20%;animation-delay:2.32s"></div>
+  <div class="bar" style="height:54%;animation-delay:2.40s"></div>
+  <div class="bar" style="height:84%;animation-delay:2.48s"></div>
+  <div class="bar" style="height:34%;animation-delay:2.56s"></div>
+ </div>
+ <div class="note">Larga, corta, fragmento. <b style="color:#eaf1fb">Varía.</b></div>
+</div>
+</body></html>

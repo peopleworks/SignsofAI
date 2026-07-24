@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(219,39,119,.18),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(109,124,255,.16),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+.brand{position:absolute;left:48px;top:40px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.bmark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+@keyframes rv{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes slide{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+.kick{position:absolute;top:96px;left:0;width:100%;text-align:center;font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#db2777;font-weight:800;opacity:0;animation:rv .6s .2s forwards}
+.title{position:absolute;top:126px;width:100%;text-align:center;font-size:40px;font-weight:800;opacity:0;animation:rv .7s .4s forwards}
+.rows{position:absolute;top:250px;left:0;width:100%;display:flex;flex-direction:column;gap:26px;align-items:center}
+.row{display:flex;align-items:center;gap:26px;font-size:34px;opacity:0}
+.bad{background:linear-gradient(90deg,rgba(219,39,119,.32),rgba(219,39,119,.14));border:1px solid rgba(219,39,119,.5);color:#ffd7e8;padding:12px 26px;border-radius:12px;font-weight:700;min-width:360px;text-align:center}
+.arw{color:#6d7cff;font-size:40px;font-weight:900}
+.good{color:#bfe9cf;font-weight:600;min-width:260px}
+.r1{animation:slide .6s 1s forwards} .r2{animation:slide .6s 1.5s forwards} .r3{animation:slide .6s 2s forwards}
+.cap{position:absolute;bottom:56px;width:100%;text-align:center;font-size:26px;color:#b9c6de;opacity:0;animation:rv .7s 2.7s forwards}
+.cap b{color:#fff}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="kick">Léxico</div>
+<div class="title">Vocabulario que la IA sobreusa</div>
+<div class="rows">
+ <div class="row r1"><span class="bad">sumérgete en el vasto mundo de</span><span class="arw">→</span><span class="good">explora</span></div>
+ <div class="row r2"><span class="bad">cabe destacar que</span><span class="arw">→</span><span class="good">(bórralo)</span></div>
+ <div class="row r3"><span class="bad">un rico tapiz de</span><span class="arw">→</span><span class="good">una mezcla de</span></div>
+</div>
+<div class="cap">Cada palabra pesa según cuánto creció <b>tras ChatGPT</b>.</div>
+</body></html>

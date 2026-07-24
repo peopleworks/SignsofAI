@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I built an AI-writing detector that shows its work — and speaks Spanish · SignsOfAI</title>
+<meta name="description" content="Most AI detectors are black boxes that spit out a number. I built one that shows you the evidence, runs entirely in your browser, and treats Spanish as a first-class language.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · Microsoft MVP for .NET</span>
+  </div>
+
+  <div class="kicker">Maker story · Writing integrity</div>
+  <h1>I built an AI-writing detector that shows its work — and speaks Spanish</h1>
+  <p class="lead">Most AI detectors are black boxes that spit out a number. I built one that shows you the evidence, runs entirely in your browser, and treats Spanish as a first-class language.</p>
+  <p class="byline">By Pedro Hernández — PeopleWorks · <em>por y para la comunidad educativa</em></p>
+
+  <a class="cta" href="https://peopleworks.github.io/SignsofAI/"><b>▶ Try the live demo</b> — English &amp; Spanish, 100% in your browser. No signup, and nothing leaves your device.</a>
+
+  <hr>
+
+  <p>Most AI detectors are black boxes. You paste a paragraph, a number comes back — "87% AI" — and you're supposed to trust it. A teacher can't act on that. A writer can't learn from it. And if you wrote in Spanish, the number is often worse than a coin flip.</p>
+  <p>So I built the opposite. It's called <strong>SignsOfAI</strong>, it's free, it runs 100% in your browser, and for every signal it flags it tells you <em>what</em> the tell is and <em>how to fix it</em>.</p>
+  <p>This is the story of how it works and the decisions behind it.</p>
+
+  <h2>The itch: a score you can't argue with is a score you can't trust</h2>
+  <p>Two things bothered me about the detectors everyone links to.</p>
+  <p>First, they hide their reasoning. A percentage is not evidence. If a student is accused of using AI, "the tool said 87%" is not something you can defend, appeal, or learn from. The number feels precise and objective. It is neither.</p>
+  <p>Second, they think in English. The research, the training data, the tells — all English. Spanish gets a machine translation of English rules, which misses how AI actually <em>sounds</em> in Spanish: "sumérgete en el vasto mundo de", "cabe destacar que", "no solo… sino también". Half the planet writes in something other than English, and the tools treat that half as an afterthought.</p>
+  <p>I wanted a tool that was <strong>explainable, actionable, and bilingual</strong> — and that never pretended to be a lie detector.</p>
+
+  <h2>What it actually does</h2>
+  <p>SignsOfAI does two jobs.</p>
+  <p><strong>1. It lints writing for the tells of AI.</strong> Paste, upload a <code>.docx</code>, or just start typing. As you write, it scores the text 0–100 and highlights the signals in four families:</p>
+  <ul>
+    <li><span class="chip lex">Lexical</span> overused vocabulary. <code>delve</code>, <code>tapestry</code>, <code>multifaceted</code>, <code>underscore</code>, <code>leverage</code>. Each word is weighted by how much more common it became after ChatGPT shipped. <code>delve</code> alone is about 48× more frequent now.</li>
+    <li><span class="chip rhet">Rhetorical</span> the crutches. Negative parallelism ("it's not just X, it's Y"), cliché openers ("in today's digital age"), hedging ("it's worth noting that").</li>
+    <li><span class="chip syn">Syntactic</span> the structures. Copula avoidance ("serves as a…" instead of "is a…"), inflated constructions ("plays a crucial role").</li>
+    <li><span class="chip stat">Statistical</span> the rhythm. More on this below, because it's the interesting one.</li>
+  </ul>
+  <p>Every flag carries a concrete fix and the reason behind it. It's a linter, not a verdict.</p>
+  <p><strong>2. It checks originality.</strong> Drop in two or more documents — a thesis and its sources, or a whole class's submissions — and it highlights the passages they share: verbatim copies, and <em>reworded paraphrases, even across languages</em>. The number you see equals exactly what's highlighted. The evidence <strong>is</strong> the score. A human judges; the tool never accuses.</p>
+
+  <h2>The one signal I trust most: burstiness</h2>
+  <p>Here's the tell that's hardest to fake and easiest to measure. Humans write with wildly uneven rhythm. A long, winding sentence with three clauses and an aside, then a short one. Then a fragment. Machines don't. Left alone, an LLM settles into a steady 15–25 words per sentence and holds it, paragraph after paragraph.</p>
+  <p>You can quantify that as <strong>burstiness</strong> — the coefficient of variation of sentence length. Human prose usually scores 0.6–0.8. Default LLM output sits at 0.0–0.2. It needs no word list and no model; it's just statistics on sentence lengths. SignsOfAI computes it, shows it as a per-sentence bar chart, and folds it into the score.</p>
+  <blockquote>By the way — this article was written to pass its own linter. Short sentences next to long ones. No <code>tapestry</code>. That's the point.</blockquote>
+
+  <h2>Why rules, not a neural net</h2>
+  <p>I didn't train a classifier. That was deliberate.</p>
+  <p>A rules-and-statistics engine is <strong>explainable by construction</strong>. When it flags <code>delve</code>, it can tell you <em>delve</em>, show you where, and hand you three replacements. A neural net gives you a probability and a shrug. For a tool whose whole promise is "show your work," transparency beats a couple of points of accuracy.</p>
+  <p>It also means the whole thing runs in the browser. No server, no upload, no account. Your documents never leave your device. That matters a lot when the documents are student essays or an unpublished manuscript. The engine is a small, pure .NET library (<code>SignsOfAI.Core</code>); the site is Blazor WebAssembly on .NET 10.</p>
+
+  <h2>Spanish as a first-class citizen</h2>
+  <p>The Spanish rule-pack isn't translated. I derived it from scratch, because the tells are different. English AI loves <code>delve</code> and <code>tapestry</code>; Spanish AI loves <code>sumérgete</code>, <code>cabe destacar</code>, <code>un rico tapiz de</code>, <code>se erige como</code>. The rhetorical patterns rhyme across languages but the words don't. Language is auto-detected, and both packs carry the same weights, severities, and evidence.</p>
+  <p>This is the part no English-only tool can copy by translating a word list.</p>
+
+  <h2>The plot twist: turning a competitor into an advantage</h2>
+  <p>A while after launch, I found a project called <em>no-ai-slop</em> — a viral little skill for editing AI writing, thousands of stars. My first reaction was the honest one: <em>they have thousands, I have three.</em></p>
+  <p>Then I looked closer. It's a single Markdown file of rules. English only. No score, no statistics, no originality check. It went viral because it was frictionless and rode the "agent skills" wave, not because it was doing something my engine couldn't.</p>
+  <p>So I didn't compete. I <strong>mined its taxonomy</strong> — 20-odd patterns of AI writing — folded them into my rule packs (bilingual, weighted, with evidence), added an em-dash-overuse detector, and shipped my own drop-in skill, <code>/signs-of-ai</code>, that does the same fast edit but hands off to the real engine for a measured verdict. Same wave. Better boat.</p>
+  <p>The lesson: when someone's format is winning, you don't need their format. You need their taxonomy and a stronger foundation underneath.</p>
+
+  <h2>Try it, break it, extend it</h2>
+  <p>SignsOfAI is MIT-licensed and built for the education and .NET communities.</p>
+  <ul>
+    <li><strong>Live demo:</strong> <a href="https://peopleworks.github.io/SignsofAI/">peopleworks.github.io/SignsofAI</a> — runs in your browser, nothing leaves your device.</li>
+    <li><strong>Code:</strong> <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a></li>
+    <li><strong>CLI:</strong> <code>dotnet tool install --global SignsOfAI.Cli</code> then <code>signsofai check draft.md</code> — gate prose in CI with <code>--max-score</code>.</li>
+    <li><strong>MCP server + agent skill:</strong> call the engine from Claude Desktop or any MCP client, or drop <code>/signs-of-ai</code> into your editor.</li>
+    <li><strong>Bring your own rules:</strong> paste a banned-word list or a rule-pack JSON; it merges live.</li>
+  </ul>
+  <p>If you teach, write, or grade — or you just want your own prose to stop sounding like a machine — give it a paragraph and see what it says. And if you find a tell it misses, the rule packs are two JSON files. Pull requests welcome.</p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, Microsoft MVP for .NET. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

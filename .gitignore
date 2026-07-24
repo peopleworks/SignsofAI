@@ -29,3 +29,6 @@ TestResults/
 
 # ONNX models (large, fetched at build/deploy time)
 models/
+
+# Render intermediates for the blog/video pipeline (webm/mp3 scratch)
+_work/

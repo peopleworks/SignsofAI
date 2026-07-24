@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(219,39,119,.20),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(109,124,255,.22),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.15),0 0 40px rgba(109,124,255,.35)}50%{box-shadow:0 0 0 1px rgba(255,255,255,.2),0 0 70px rgba(219,39,119,.5)}}
+.mark{width:96px;height:96px;border-radius:26px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);animation:pop .8s forwards,glow 3.4s ease-in-out .8s infinite}
+.name{font-size:64px;font-weight:800;letter-spacing:-1px;margin-top:26px;opacity:0;animation:rv .7s .4s forwards}
+.name b{color:#fff}
+.url{font-family:'Cascadia Code',Consolas,monospace;font-size:34px;color:#bfe9cf;margin-top:14px;padding:12px 26px;border:1px solid rgba(255,255,255,.16);border-radius:12px;opacity:0;animation:rv .7s .8s forwards}
+.pills{display:flex;gap:16px;margin-top:28px}
+.pill{padding:12px 26px;border-radius:999px;font-weight:800;font-size:24px;opacity:0}
+.p1{background:rgba(47,210,122,.16);color:#2fd27a;border:1px solid rgba(47,210,122,.4);animation:pop .5s 1.3s forwards}
+.p2{background:rgba(109,124,255,.16);color:#9aa8ff;border:1px solid rgba(109,124,255,.4);animation:pop .5s 1.6s forwards}
+.p3{background:rgba(219,39,119,.16);color:#ff8fbc;border:1px solid rgba(219,39,119,.4);animation:pop .5s 1.9s forwards}
+.tech{margin-top:26px;font-size:23px;color:#9fb0cc;opacity:0;animation:rv .7s 2.3s forwards;display:flex;align-items:center;gap:12px}
+.tech .n{font-weight:800;color:#c9b6ff}
+.tech .dot{width:6px;height:6px;border-radius:50%;background:#4a5772;display:inline-block}
+</style></head><body>
+<div class="mark"></div>
+<div class="name">Signs<b>OfAI</b></div>
+<div class="url">peopleworks.github.io/SignsofAI</div>
+<div class="pills">
+ <span class="pill p1">Free</span>
+ <span class="pill p2">Open Source · MIT</span>
+ <span class="pill p3">In your browser</span>
+</div>
+<div class="tech"><span class="n">.NET 10</span><span class="dot"></span>Blazor WebAssembly<span class="dot"></span>by PeopleWorks</div>
+</body></html>

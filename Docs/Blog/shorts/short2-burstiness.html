@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 82% 8%,rgba(240,85,111,.18),transparent 60%),
+   radial-gradient(700px 700px at 15% 55%,rgba(109,124,255,.20),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}60%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 2px rgba(255,255,255,.15),0 0 60px rgba(109,124,255,.4)}50%{box-shadow:0 0 0 2px rgba(255,255,255,.22),0 0 100px rgba(219,39,119,.55)}}
+.brand{position:absolute;top:90px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.title{position:absolute;top:230px;width:100%;font-size:82px;font-weight:900;line-height:1.1;opacity:0;animation:rv .7s .3s forwards}
+.title b{background:linear-gradient(90deg,#f0556f,#db2777);-webkit-background-clip:text;background-clip:text;color:transparent}
+.panel{position:absolute;left:80px;width:920px}
+.pTop{top:520px} .pBot{top:1120px}
+.plabel{display:flex;align-items:center;font-size:50px;font-weight:800;margin-bottom:24px}
+.score{margin-left:auto;font-family:'Cascadia Code',Consolas,monospace;font-size:44px;padding:8px 22px;border-radius:12px}
+.chart{height:300px;display:flex;align-items:flex-end;gap:16px;border-bottom:4px solid rgba(255,255,255,.18)}
+.bar{flex:1;border-radius:10px 10px 0 0;transform-origin:bottom;animation:grow .5s cubic-bezier(.2,.8,.2,1) forwards}
+.mach .bar{background:linear-gradient(180deg,#7c8aa6,#4a5772)}
+.hum .bar{background:linear-gradient(180deg,#f0556f,#db2777)}
+.note{margin-top:22px;font-size:44px;color:#b9c6de;text-align:left}
+.pTop .score{background:rgba(124,138,166,.25);color:#c7d2e6}
+.pBot .score{background:rgba(240,85,111,.22);color:#ffd0da}
+.foot{position:absolute;bottom:150px;width:100%;font-size:60px;font-weight:800;opacity:0;animation:rv .8s 24s forwards}
+.foot b{background:linear-gradient(90deg,#db2777,#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">El <b>ritmo</b> delata a la IA</div>
+
+<div class="panel pTop">
+ <div class="plabel">MÁQUINA <span class="score">burstiness 0.1</span></div>
+ <div class="chart mach">
+  <div class="bar" style="height:62%;animation-delay:4.0s"></div>
+  <div class="bar" style="height:66%;animation-delay:4.1s"></div>
+  <div class="bar" style="height:60%;animation-delay:4.2s"></div>
+  <div class="bar" style="height:64%;animation-delay:4.3s"></div>
+  <div class="bar" style="height:61%;animation-delay:4.4s"></div>
+  <div class="bar" style="height:65%;animation-delay:4.5s"></div>
+  <div class="bar" style="height:63%;animation-delay:4.6s"></div>
+ </div>
+ <div class="note">Frases todas del mismo largo.</div>
+</div>
+
+<div class="panel pBot">
+ <div class="plabel">HUMANO <span class="score">burstiness 0.7</span></div>
+ <div class="chart hum">
+  <div class="bar" style="height:92%;animation-delay:11.0s"></div>
+  <div class="bar" style="height:30%;animation-delay:11.1s"></div>
+  <div class="bar" style="height:68%;animation-delay:11.2s"></div>
+  <div class="bar" style="height:100%;animation-delay:11.3s"></div>
+  <div class="bar" style="height:22%;animation-delay:11.4s"></div>
+  <div class="bar" style="height:80%;animation-delay:11.5s"></div>
+  <div class="bar" style="height:40%;animation-delay:11.6s"></div>
+ </div>
+ <div class="note">Larga, corta, fragmento. <b style="color:#eaf1fb">Varía.</b></div>
+</div>
+
+<div class="foot">SignsOfAI <b>lo mide</b> por ti</div>
+</body></html>

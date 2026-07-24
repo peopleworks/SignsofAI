@@ -1,0 +1,8 @@
+{
+  "id": "short2-burstiness-es",
+  "html": "short2-burstiness.html",
+  "voice": "Marcela",
+  "minSeconds": 30,
+  "tailSeconds": 1.4,
+  "narration": "¿Quieres saber si algo lo escribió una inteligencia artificial? Mira el ritmo. Las máquinas hacen frases todas del mismo largo, quince a veinticinco palabras, una tras otra. Los humanos variamos: una larga, luego una corta. Eso se mide, se llama burstiness, y es la pista más difícil de falsificar. SignsOfAI te la muestra en un gráfico."
+}
