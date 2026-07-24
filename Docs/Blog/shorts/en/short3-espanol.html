@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 80% 8%,rgba(219,39,119,.18),transparent 60%),
+   radial-gradient(700px 700px at 15% 50%,rgba(109,124,255,.20),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes slide{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes sealpop{0%{opacity:0;transform:translateX(-50%) scale(.5) rotate(-8deg)}70%{transform:translateX(-50%) scale(1.1) rotate(3deg)}100%{opacity:1;transform:translateX(-50%) scale(1) rotate(-5deg)}}
+.brand{position:absolute;top:90px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.title{position:absolute;top:220px;width:100%;font-size:80px;font-weight:900;line-height:1.12;opacity:0;animation:rv .7s .3s forwards}
+.title b{color:#f0556f}
+.flags{position:absolute;top:520px;width:100%;display:flex;gap:34px;justify-content:center;opacity:0;animation:rv .6s 1.2s forwards}
+.fl{padding:24px 54px;border-radius:20px;font-weight:900;font-size:80px;border:4px solid rgba(255,255,255,.14)}
+.en{background:rgba(109,124,255,.2);color:#fff;border-color:#6d7cff}
+.es{color:#7c8aa6;position:relative}
+.es::after{content:"";position:absolute;left:6%;top:52%;width:88%;height:7px;background:#f0556f;transform:rotate(-8deg)}
+.words{position:absolute;top:760px;width:100%;display:flex;flex-direction:column;gap:22px;align-items:center}
+.w{background:linear-gradient(90deg,rgba(219,39,119,.30),rgba(219,39,119,.12));border:2px solid rgba(219,39,119,.5);
+ color:#ffd7e8;padding:22px 40px;border-radius:16px;font-weight:700;font-size:52px;opacity:0}
+.w1{animation:slide .5s 8s forwards} .w2{animation:slide .5s 8.6s forwards} .w3{animation:slide .5s 9.2s forwards}
+.seal{position:absolute;top:1240px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#db2777,#f59e0b);
+ color:#0b1020;font-weight:900;font-size:46px;padding:22px 40px;border-radius:20px;white-space:nowrap;opacity:0;animation:sealpop .6s 15s forwards;box-shadow:0 16px 50px rgba(219,39,119,.35)}
+.foot{position:absolute;bottom:180px;width:100%;opacity:0;animation:rv .8s 20s forwards}
+.foot .big{font-size:72px;font-weight:900}
+.foot .big b{background:linear-gradient(90deg,#22b8cf,#6d7cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pills{display:flex;gap:24px;justify-content:center;margin-top:30px}
+.pill{padding:20px 40px;border-radius:999px;font-weight:800;font-size:44px;opacity:0}
+.p1{background:rgba(47,210,122,.16);color:#2fd27a;border:2px solid rgba(47,210,122,.4);animation:pop .5s 22s forwards}
+.p2{background:rgba(109,124,255,.16);color:#9aa8ff;border:2px solid rgba(109,124,255,.4);animation:pop .5s 22.4s forwards}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">AI detectors<br><b>don't speak Spanish</b></div>
+<div class="flags"><span class="fl en">EN</span><span class="fl es">ES</span></div>
+<div class="words">
+ <div class="w w1">sum&eacute;rgete en el vasto mundo de</div>
+ <div class="w w2">cabe destacar que</div>
+ <div class="w w3">un rico tapiz de</div>
+</div>
+<div class="seal">Spanish pack, built from scratch</div>
+<div class="foot">
+ <div class="big">Detect AI <b>in your language</b></div>
+ <div class="pills"><span class="pill p1">Free</span><span class="pill p2">Open Source</span></div>
+</div>
+</body></html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(219,39,119,.15),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(109,124,255,.18),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+.brand{position:absolute;left:48px;top:40px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.bmark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+@keyframes rv{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.title{position:absolute;top:96px;width:100%;text-align:center;font-size:44px;font-weight:800;opacity:0;animation:rv .7s .2s forwards}
+.col{position:absolute;top:220px;width:470px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
+ border-radius:18px;padding:34px;opacity:0}
+.left{left:110px;animation:rv .7s .8s forwards}
+.right{left:700px;animation:rv .7s 1.5s forwards}
+.num{font-size:20px;font-weight:800;color:#6d7cff;letter-spacing:2px}
+.col h3{font-size:30px;margin:.3em 0 .5em}
+.col p{font-size:22px;color:#b9c6de;line-height:1.5;margin:0}
+.lock{width:66px;height:66px;border:4px solid #96a8c6;border-radius:12px;position:relative;margin:14px 0 22px}
+.lock::before{content:"";position:absolute;left:50%;top:-26px;transform:translateX(-50%);width:34px;height:34px;border:4px solid #96a8c6;border-bottom:none;border-radius:18px 18px 0 0}
+.lock::after{content:"";position:absolute;left:50%;top:20px;transform:translateX(-50%);width:12px;height:16px;background:#96a8c6;border-radius:3px}
+.flags{display:flex;gap:14px;margin:6px 0 22px}
+.fl{padding:10px 22px;border-radius:12px;font-weight:800;font-size:26px;border:2px solid rgba(255,255,255,.14)}
+.en{background:rgba(109,124,255,.18);color:#fff;border-color:#6d7cff}
+.es{color:#7c8aa6;position:relative}
+.es::after{content:"";position:absolute;left:8%;top:50%;width:84%;height:3px;background:#f0556f;transform:rotate(-10deg)}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">Los detectores tienen <b>dos problemas</b></div>
+<div class="col left">
+ <div class="num">01</div><h3>Caja negra</h3>
+ <div class="lock"></div>
+ <p>Esconden su razonamiento. Un <b style="color:#eaf1fb">porcentaje no es evidencia</b>.</p>
+</div>
+<div class="col right">
+ <div class="num">02</div><h3>Piensan en inglés</h3>
+ <div class="flags"><span class="fl en">EN</span><span class="fl es">ES</span></div>
+ <p>Al español le dan una <b style="color:#eaf1fb">traducción tosca</b> de reglas gringas.</p>
+</div>
+</body></html>

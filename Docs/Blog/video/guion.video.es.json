@@ -1,0 +1,61 @@
+{
+  "id": "signsofai-explainer-es",
+  "title": "SignsOfAI — Detector de IA explicable y bilingüe (ES)",
+  "intro": { "html": "scenes/intro.html", "seconds": 3.5 },
+  "scenes": [
+    {
+      "id": "01-gancho",
+      "html": "scenes/01-gancho.html",
+      "minSeconds": 12,
+      "narration": "Pegas un parrafo en un detector de inteligencia artificial, y vuelve un numero: ochenta y siete por ciento. Y ahora que. Un profesor no puede acusar con eso. Un escritor no puede aprender de eso."
+    },
+    {
+      "id": "02-dos-problemas",
+      "html": "scenes/02-dos-problemas.html",
+      "minSeconds": 13,
+      "narration": "Los detectores tienen dos problemas. Esconden su razonamiento: un porcentaje no es evidencia. Y piensan en ingles; al espanol le dan una traduccion tosca de reglas gringas."
+    },
+    {
+      "id": "03-que-hace",
+      "html": "scenes/03-que-hace.html",
+      "minSeconds": 12,
+      "narration": "Asi que construi lo contrario. SignsOfAI marca las pistas de la inteligencia artificial en cuatro familias, y por cada una te dice cual es y como arreglarla. Es un linter, no un veredicto."
+    },
+    {
+      "id": "04-lexico",
+      "html": "scenes/04-lexico.html",
+      "minSeconds": 11,
+      "narration": "Lexico: vocabulario sobreusado. Sumergete, cabe destacar, un rico tapiz de. Cada palabra pesa segun cuanto crecio despues de Chat G P T."
+    },
+    {
+      "id": "05-burstiness",
+      "html": "scenes/05-burstiness.html",
+      "minSeconds": 15,
+      "narration": "Pero la senal en la que mas confio es el ritmo. Las maquinas se acomodan en quince a veinticinco palabras por frase, y ahi se quedan. Los humanos varian. Eso se mide: burstiness. Humano, cero punto siete; maquina, cero punto uno."
+    },
+    {
+      "id": "06-privacidad",
+      "html": "scenes/06-privacidad.html",
+      "minSeconds": 12,
+      "narration": "Y todo corre en tu navegador. Sin servidor, sin subir nada, sin cuenta. Tus documentos nunca salen de tu equipo. Reglas y estadistica, no una caja negra neuronal."
+    },
+    {
+      "id": "07-espanol",
+      "html": "scenes/07-espanol.html",
+      "minSeconds": 11,
+      "narration": "El espanol no esta traducido; lo derive desde cero, porque las pistas son distintas. Esa es la parte que ninguna herramienta solo ingles puede copiar."
+    },
+    {
+      "id": "08-originalidad",
+      "html": "scenes/08-originalidad.html",
+      "minSeconds": 13,
+      "narration": "Y hay mas: un comparador de originalidad. Resalta los pasajes que dos textos comparten, incluso parafrasis entre idiomas. La evidencia es el puntaje. Un humano juzga; nunca acusa."
+    },
+    {
+      "id": "09-cierre",
+      "html": "scenes/09-cierre.html",
+      "minSeconds": 10,
+      "narration": "Gratis, codigo abierto, para la comunidad educativa. Pruebalo en el enlace. Dale un parrafo y mira que te dice."
+    }
+  ]
+}

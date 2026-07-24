@@ -1,0 +1,8 @@
+{
+  "id": "short2-burstiness-en",
+  "html": "en/short2-burstiness.html",
+  "voice": "Rachel",
+  "minSeconds": 30,
+  "tailSeconds": 1.4,
+  "narration": "Want to know if a machine wrote it? Look at the rhythm. Machines write sentences that are all the same length, fifteen to twenty-five words, one after another. Humans vary: a long one, then a short one. That is measurable, it is called burstiness, and it is the hardest tell to fake. SignsOfAI charts it for you."
+}

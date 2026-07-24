@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 80% 6%,rgba(219,39,119,.20),transparent 60%),
+   radial-gradient(700px 700px at 15% 40%,rgba(109,124,255,.20),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:56px;padding:220px 60px 120px;box-sizing:border-box}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes stamp{0%{opacity:0;transform:scale(2.3) rotate(-20deg)}70%{opacity:1;transform:scale(.9) rotate(-7deg)}100%{opacity:1;transform:scale(1) rotate(-7deg)}}
+@keyframes shake{0%,100%{transform:rotate(-7deg)}25%{transform:rotate(-10deg)}75%{transform:rotate(-4deg)}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+.brand{position:absolute;top:90px;left:0;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.stamp{border:11px solid #f0556f;color:#f0556f;border-radius:26px;padding:26px 46px;font-weight:900;font-size:132px;line-height:1;white-space:nowrap;
+ opacity:0;animation:stamp .5s 1s forwards, shake .5s 4s 2;box-shadow:0 0 70px rgba(240,85,111,.3) inset}
+.q{font-size:104px;font-weight:900;margin:0;opacity:0;animation:rv .7s 3.6s forwards}
+.ev{font-size:56px;color:#b9c6de;margin:0;opacity:0;animation:rv .7s 5.4s forwards}
+.ev b{color:#fff}
+.strike{display:flex;flex-direction:column;gap:26px;align-items:center;margin:6px 0}
+.st{position:relative;font-size:58px;font-weight:700;color:#7c8aa6;opacity:0}
+.st::after{content:"";position:absolute;left:-6%;top:52%;width:112%;height:5px;background:#f0556f;transform:rotate(-4deg)}
+.s1{animation:rv .5s 6.4s forwards} .s2{animation:rv .5s 6.9s forwards} .s3{animation:rv .5s 7.4s forwards}
+.foot{opacity:0;animation:rv .8s 13s forwards;margin-top:10px}
+.foot .big{font-size:70px;font-weight:800;line-height:1.15}
+.foot .big b{background:linear-gradient(90deg,#db2777,#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pills{display:flex;gap:24px;justify-content:center;margin-top:34px}
+.pill{padding:20px 40px;border-radius:999px;font-weight:800;font-size:46px;opacity:0}
+.p1{background:rgba(47,210,122,.16);color:#2fd27a;border:2px solid rgba(47,210,122,.4);animation:pop .5s 18s forwards}
+.p2{background:rgba(109,124,255,.16);color:#9aa8ff;border:2px solid rgba(109,124,255,.4);animation:pop .5s 18.4s forwards}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="stamp">87% AI</div>
+<div class="q">So what now?</div>
+<div class="ev">A percentage <b>is not evidence</b>.</div>
+<div class="strike">
+ <div class="st s1">You can't accuse</div>
+ <div class="st s2">or appeal</div>
+ <div class="st s3">or learn from a number</div>
+</div>
+<div class="foot">
+ <div class="big">SignsOfAI shows you <b>the evidence</b></div>
+ <div class="pills"><span class="pill p1">Free</span><span class="pill p2">In your browser</span></div>
+</div>
+</body></html>

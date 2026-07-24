@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(219,39,119,.16),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(109,124,255,.18),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+.brand{position:absolute;left:48px;top:40px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.bmark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+@keyframes rv{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes stamp{0%{opacity:0;transform:translate(-50%,-50%) scale(2.4) rotate(-18deg)}70%{opacity:1;transform:translate(-50%,-50%) scale(.92) rotate(-8deg)}100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-8deg)}}
+@keyframes shake{0%,100%{transform:translate(-50%,-50%) rotate(-8deg)}25%{transform:translate(-51%,-50%) rotate(-8deg)}75%{transform:translate(-49%,-50%) rotate(-8deg)}}
+.card{position:absolute;left:120px;top:170px;width:560px;background:rgba(255,255,255,.04);
+ border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:34px 36px;opacity:0;animation:rv .7s .2s forwards}
+.card .h{font-size:16px;letter-spacing:2px;text-transform:uppercase;color:#96a8c6}
+.line{height:14px;border-radius:7px;background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,.06));margin:18px 0}
+.stampbox{position:absolute;left:770px;top:330px}
+.stamp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ border:7px solid #f0556f;color:#f0556f;border-radius:16px;padding:18px 30px;font-weight:900;font-size:74px;
+ letter-spacing:1px;opacity:0;animation:stamp .5s 2s forwards, shake .5s 4.1s 2;text-shadow:0 2px 10px rgba(240,85,111,.3);box-shadow:0 0 40px rgba(240,85,111,.25) inset}
+.q{position:absolute;left:770px;top:470px;width:420px;font-size:44px;font-weight:800;opacity:0;animation:rv .7s 5s forwards}
+.q small{display:block;font-size:22px;font-weight:500;color:#b9c6de;margin-top:12px}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="card">
+ <div class="h">AI detector</div>
+ <div class="line" style="width:96%"></div>
+ <div class="line" style="width:100%"></div>
+ <div class="line" style="width:88%"></div>
+ <div class="line" style="width:94%"></div>
+ <div class="line" style="width:70%"></div>
+</div>
+<div class="stampbox"><div class="stamp">87% AI</div></div>
+<div class="q">Now what?<small>A teacher can't accuse. A writer can't learn.</small></div>
+</body></html>
