@@ -99,3 +99,11 @@ embedding feature enabled on the server.
 
 MCP speaks JSON-RPC over **stdout**, so this server logs everything to **stderr** — never write to stdout
 from a tool.
+
+## MCP registry
+
+Listed in the [official MCP registry](https://registry.modelcontextprotocol.io) under the name below.
+The registry reads that line out of this README to verify that whoever publishes the registry entry also
+owns the NuGet package, so **don't remove or reword it** — publishing would start failing.
+
+mcp-name: io.github.peopleworks/signs-of-ai
