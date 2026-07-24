@@ -1,0 +1,76 @@
+name: Bug report
+description: Something is broken — a crash, wrong output, or a feature that doesn't work.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For a wrong *score* rather than a broken feature, the false-positive and missed-tell templates
+        will get you a better answer.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the demo
+        2. Paste …
+        3. Click …
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where
+      options:
+        - Web app (peopleworks.github.io/SignsofAI)
+        - CLI (SignsOfAI.Cli)
+        - MCP server (SignsOfAI.Mcp)
+        - Library (SignsOfAI.Core)
+        - The /signs-of-ai skill
+        - Self-hosted API
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Package version, or the date if you used the hosted demo.
+      placeholder: "0.1.1"
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser and OS, or .NET SDK version and OS.
+      placeholder: "Edge 141 on Windows 11 / .NET 10.0.100 on Ubuntu 24.04"
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console output or stack trace
+      description: >
+        Browser console for the web app, terminal output for the CLI. The MCP server logs to stderr.
+      render: text
+    validations:
+      required: false

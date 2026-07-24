@@ -1,0 +1,63 @@
+name: False positive — it flagged human writing
+description: The linter marked something a person wrote, and it shouldn't have.
+labels: ["false-positive", "rules"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        These are the most valuable reports we get. A tool that cries wolf on ordinary prose is worse
+        than no tool at all, because someone might act on it.
+
+        **Please use text you wrote yourself or a synthetic example.** Don't paste a student's essay,
+        a colleague's draft, or anyone's unpublished writing.
+
+  - type: textarea
+    id: text
+    attributes:
+      label: The text that was flagged
+      description: The sentence or paragraph, not the whole document.
+      placeholder: Paste the smallest piece that still reproduces the flag.
+    validations:
+      required: true
+
+  - type: input
+    id: rule
+    attributes:
+      label: Which rule fired
+      description: The rule id, shown in the finding (for example `lex.delve` or `rhet.not-just`).
+      placeholder: lex.delve
+    validations:
+      required: false
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - English
+        - Spanish
+        - Other / mixed
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why this is a false positive
+      description: >
+        What makes this legitimate writing? A technical term of art, a quotation, a domain where the
+        phrase is normal, deliberate style?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where you saw it
+      options:
+        - Web app (peopleworks.github.io/SignsofAI)
+        - CLI (signsofai check)
+        - MCP server
+        - The /signs-of-ai skill
+    validations:
+      required: true
