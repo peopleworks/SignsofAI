@@ -43,7 +43,7 @@ jobs:
 
       # Guards the classic footgun: tagging v0.2.0 while the csproj files still say 0.1.0.
       # --skip-duplicate would swallow that silently and report success.
-      - name: Check the release tag matches the packed version
+      - name: Check the release tag matches what we built
         if: github.event_name == 'release'
         run: |
           want="${GITHUB_REF_NAME#v}"
@@ -53,7 +53,18 @@ jobs:
             ls -1 out/
             exit 1
           fi
-          echo "Tag $GITHUB_REF_NAME matches the packed version $want."
+
+          # The MCP manifest carries its own version twice, and the MCP registry serves it to
+          # clients. If it drifts, the registry advertises a version that doesn't exist.
+          manifest="src/SignsOfAI.Mcp/.mcp/server.json"
+          server_version=$(jq -r '.version' "$manifest")
+          package_version=$(jq -r '.packages[0].version' "$manifest")
+          if [ "$server_version" != "$want" ] || [ "$package_version" != "$want" ]; then
+            echo "::error::$manifest says version=$server_version, packages[0].version=$package_version — expected $want."
+            exit 1
+          fi
+
+          echo "Tag $GITHUB_REF_NAME matches the packages and the MCP manifest."
 
       - name: NuGet login (trusted publishing)
         id: login
