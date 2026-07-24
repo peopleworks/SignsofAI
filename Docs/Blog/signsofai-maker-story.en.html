@@ -94,7 +94,7 @@ footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color
 
   <hr>
 
-  <p>Most AI detectors are black boxes. You paste a paragraph, a number comes back — "87% AI" — and you're supposed to trust it. A teacher can't act on that. A writer can't learn from it. And if you wrote in Spanish, the number is often worse than a coin flip.</p>
+  <p>Most AI detectors are black boxes. You paste a paragraph, a number comes back ("87% AI") and you're supposed to trust it. A teacher can't act on that. A writer can't learn from it. And if you wrote in Spanish, the number is often worse than a coin flip.</p>
   <p>So I built the opposite. It's called <strong>SignsOfAI</strong>, it's free, it runs 100% in your browser, and for every signal it flags it tells you <em>what</em> the tell is and <em>how to fix it</em>.</p>
   <p>This is the story of how it works and the decisions behind it.</p>
   <figure><img src="https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/analyze-live.gif" alt="The score climbing live from 76 to 87 as AI tells accumulate while typing"><figcaption>The score updates as you type. Every highlight comes with a suggested fix.</figcaption></figure>
@@ -102,8 +102,8 @@ footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color
   <h2>The itch: a score you can't argue with is a score you can't trust</h2>
   <p>Two things bothered me about the detectors everyone links to.</p>
   <p>First, they hide their reasoning. A percentage is not evidence. If a student is accused of using AI, "the tool said 87%" is not something you can defend, appeal, or learn from. The number feels precise and objective. It is neither.</p>
-  <p>Second, they think in English. The research, the training data, the tells — all English. Spanish gets a machine translation of English rules, which misses how AI actually <em>sounds</em> in Spanish: "sumérgete en el vasto mundo de", "cabe destacar que", "no solo… sino también". Half the planet writes in something other than English, and the tools treat that half as an afterthought.</p>
-  <p>I wanted a tool that was <strong>explainable, actionable, and bilingual</strong> — and that never pretended to be a lie detector.</p>
+  <p>Second, they think in English. The research, the training data, the tells: all English. Spanish gets a machine translation of English rules, which misses how AI actually <em>sounds</em> in Spanish: "sumérgete en el vasto mundo de", "cabe destacar que", "no solo… sino también". Half the planet writes in something other than English, and the tools treat that half as an afterthought.</p>
+  <p>I wanted a tool that was <strong>explainable, actionable, and bilingual</strong>, and that never pretended to be a lie detector.</p>
 
   <h2>What it actually does</h2>
   <p>SignsOfAI does two jobs.</p>
@@ -116,13 +116,13 @@ footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color
   </ul>
   <p>Every flag carries a concrete fix and the reason behind it. It's a linter, not a verdict.</p>
   <figure><img src="https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/evidence.png" alt="The annotated text beside the recommendation list"><figcaption>Not &ldquo;87% AI&rdquo;, but which words, why they were flagged, and what to write instead.</figcaption></figure>
-  <p><strong>2. It checks originality.</strong> Drop in two or more documents — a thesis and its sources, or a whole class's submissions — and it highlights the passages they share: verbatim copies, and <em>reworded paraphrases, even across languages</em>. The number you see equals exactly what's highlighted. The evidence <strong>is</strong> the score. A human judges; the tool never accuses.</p>
+  <p><strong>2. It checks originality.</strong> Drop in two or more documents (a thesis and its sources, or a whole class's submissions) and it highlights the passages they share: verbatim copies, and <em>reworded paraphrases, even across languages</em>. The number you see equals exactly what's highlighted. The evidence <strong>is</strong> the score. A human judges; the tool never accuses.</p>
   <figure><img src="https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/screenshots/originality.png" alt="Cohort overlap matrix with the most similar pairs ranked below"><figcaption>A whole class at a glance: every document against every other, then the shared passages themselves.</figcaption></figure>
 
   <h2>The one signal I trust most: burstiness</h2>
   <p>Here's the tell that's hardest to fake and easiest to measure. Humans write with wildly uneven rhythm. A long, winding sentence with three clauses and an aside, then a short one. Then a fragment. Machines don't. Left alone, an LLM settles into a steady 15–25 words per sentence and holds it, paragraph after paragraph.</p>
-  <p>You can quantify that as <strong>burstiness</strong> — the coefficient of variation of sentence length. Human prose usually scores 0.6–0.8. Default LLM output sits at 0.0–0.2. It needs no word list and no model; it's just statistics on sentence lengths. SignsOfAI computes it, shows it as a per-sentence bar chart, and folds it into the score.</p>
-  <blockquote>By the way — this article was written to pass its own linter. Short sentences next to long ones. No <code>tapestry</code>. That's the point.</blockquote>
+  <p>You can quantify that as <strong>burstiness</strong>: the coefficient of variation of sentence length. Human prose usually scores 0.6–0.8. Default LLM output sits at 0.0–0.2. It needs no word list and no model; it's just statistics on sentence lengths. SignsOfAI computes it, shows it as a per-sentence bar chart, and folds it into the score.</p>
+  <blockquote>By the way: I ran this article through its own linter. It scores 35/100. Light signs. Most of the hits are the slop words the text quotes at you, <code>delve</code> and <code>tapestry</code> among them, and burstiness lands at 0.83, comfortably inside human range. The tool showed me where I was drifting and I fixed it. A percentage can't do that.</blockquote>
 
   <h2>Why rules, not a neural net</h2>
   <p>I didn't train a classifier. That was deliberate.</p>
@@ -134,9 +134,9 @@ footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color
   <p>This is the part no English-only tool can copy by translating a word list.</p>
 
   <h2>The plot twist: turning a competitor into an advantage</h2>
-  <p>A while after launch, I found a project called <em>no-ai-slop</em> — a viral little skill for editing AI writing, thousands of stars. My first reaction was the honest one: <em>they have thousands, I have three.</em></p>
+  <p>A while after launch, I found a project called <em>no-ai-slop</em>, a viral little skill for editing AI writing, thousands of stars. My first reaction was the honest one: <em>they have thousands, I have three.</em></p>
   <p>Then I looked closer. It's a single Markdown file of rules. English only. No score, no statistics, no originality check. It went viral because it was frictionless and rode the "agent skills" wave, not because it was doing something my engine couldn't.</p>
-  <p>So I didn't compete. I <strong>mined its taxonomy</strong> — 20-odd patterns of AI writing — folded them into my rule packs (bilingual, weighted, with evidence), added an em-dash-overuse detector, and shipped my own drop-in skill, <code>/signs-of-ai</code>, that does the same fast edit but hands off to the real engine for a measured verdict. Same wave. Better boat.</p>
+  <p>So I didn't compete. I <strong>mined its taxonomy</strong>, 20-odd patterns of AI writing, and folded them into my rule packs (bilingual, weighted, with evidence), added an em-dash-overuse detector, and shipped my own drop-in skill, <code>/signs-of-ai</code>, that does the same fast edit but hands off to the real engine for a measured verdict. Same wave. Better boat.</p>
   <p>The lesson: when someone's format is winning, you don't need their format. You need their taxonomy and a stronger foundation underneath.</p>
 
   <h2>Try it, break it, extend it</h2>
@@ -148,7 +148,7 @@ footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color
     <li><strong>MCP server + agent skill:</strong> call the engine from Claude Desktop or any MCP client, or drop <code>/signs-of-ai</code> into your editor.</li>
     <li><strong>Bring your own rules:</strong> paste a banned-word list or a rule-pack JSON; it merges live.</li>
   </ul>
-  <p>If you teach, write, or grade — or you just want your own prose to stop sounding like a machine — give it a paragraph and see what it says. And if you find a tell it misses, the rule packs are two JSON files. Pull requests welcome.</p>
+  <p>If you teach, write, or grade, or you just want your own prose to stop sounding like a machine, give it a paragraph and see what it says. And if you find a tell it misses, the rule packs are two JSON files. Pull requests welcome.</p>
 
   <footer>
     Built by Pedro Hernández — PeopleWorks, Microsoft MVP for .NET. MIT licensed.<br>
