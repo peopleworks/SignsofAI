@@ -670,3 +670,85 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
     .orig-pair .orig-bar { grid-column: 1 / -1; order: 3; }
     .orig-side-by-side { grid-template-columns: 1fr; }
 }
+
+/* ── InfoDrawer (reusable slide-in explanation panel) ──────────────────────── */
+.explain-trigger {
+    display: inline-flex; align-items: center; gap: .3rem;
+    margin-left: .5rem; padding: .1rem .25rem;
+    background: none; border: none; cursor: pointer;
+    color: var(--brand); font: inherit; font-size: .82rem; font-weight: 600;
+    border-bottom: 1px solid transparent;
+}
+.explain-trigger:hover { border-bottom-color: currentColor; }
+.explain-trigger svg { width: .9em; height: .9em; }
+
+.drawer-backdrop {
+    position: fixed; inset: 0; z-index: 1200;
+    background: rgba(0, 0, 0, .45);
+    backdrop-filter: blur(2px);
+    animation: drawer-fade .18s ease-out;
+}
+.drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 1201;
+    width: min(440px, 92vw);
+    background: var(--surface); border-left: 1px solid var(--border);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, .18);
+    display: flex; flex-direction: column;
+    animation: drawer-in .22s cubic-bezier(.2, .8, .2, 1);
+    overflow: hidden;
+}
+@keyframes drawer-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes drawer-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) {
+    .drawer, .drawer-backdrop { animation: none; }
+}
+
+.drawer-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.1rem; border-bottom: 1px solid var(--border); flex: 0 0 auto;
+}
+.drawer-title {
+    display: flex; align-items: center; gap: .5rem;
+    margin: 0; font-size: 1.05rem; line-height: 1.2;
+}
+.drawer-title svg { width: 1.1em; height: 1.1em; color: var(--brand); }
+.drawer-body { padding: 1.1rem; overflow-y: auto; }
+
+.explain-lead { margin: 0 0 1.1rem; color: var(--text); font-size: .92rem; line-height: 1.55; }
+
+.explain-case {
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: .85rem .95rem; margin-bottom: .9rem; background: var(--surface-2);
+}
+.explain-h { display: flex; flex-direction: column; gap: .35rem; margin-bottom: .5rem; }
+.explain-h h3 { margin: 0; font-size: 1rem; }
+.explain-badge {
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: .3rem;
+    padding: .15rem .5rem; border-radius: 999px;
+    font-size: .72rem; font-weight: 700; letter-spacing: .01em;
+    border: 1px solid transparent;
+}
+.explain-badge svg { width: .9em; height: .9em; }
+.explain-badge.good   { color: var(--good);   background: color-mix(in srgb, var(--good) 14%, transparent);   border-color: color-mix(in srgb, var(--good) 35%, transparent); }
+.explain-badge.notice { color: var(--notice); background: color-mix(in srgb, var(--notice) 16%, transparent); border-color: color-mix(in srgb, var(--notice) 38%, transparent); }
+.explain-badge.muted  { color: var(--text-muted); background: var(--surface); border-color: var(--border); }
+
+.explain-case p { margin: .4rem 0; font-size: .88rem; line-height: 1.5; color: var(--text); }
+.explain-list { margin: .5rem 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: .35rem; }
+.explain-list li { font-size: .86rem; line-height: 1.45; color: var(--text); }
+.explain-fit { color: var(--text-muted); }
+.explain-note {
+    display: flex; align-items: flex-start; gap: .4rem;
+    margin-top: .6rem; padding: .5rem .6rem; border-radius: 9px;
+    background: color-mix(in srgb, var(--notice) 12%, transparent);
+    color: var(--text); font-size: .84rem;
+}
+.explain-note svg { width: 1em; height: 1em; flex: 0 0 auto; margin-top: .15rem; color: var(--notice); }
+
+.explain-bottom {
+    display: flex; align-items: flex-start; gap: .45rem;
+    margin: 1rem 0 0; padding-top: .9rem; border-top: 1px solid var(--border);
+    font-size: .9rem; line-height: 1.5; color: var(--text);
+}
+.explain-bottom svg { width: 1.1em; height: 1.1em; flex: 0 0 auto; margin-top: .15rem; color: var(--good); }

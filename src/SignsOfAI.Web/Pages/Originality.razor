@@ -56,6 +56,9 @@
                         We can't index the whole web — so instead of guessing, here are this document's most
                         <strong>distinctive passages</strong>. Search each one to see if it already appears online.
                         Nothing is sent anywhere until <em>you</em> click a search. <strong>You judge.</strong>
+                        <button type="button" class="explain-trigger" @onclick="@(() => _showWebHelp = true)">
+                            <Icon Name="lock" /> What happens to your text?
+                        </button>
                     </p>
 
                     @if (_webSearchReady)
@@ -136,6 +139,70 @@
         @if (ReadyCount < 2) { <span class="hint">Add text to at least two documents.</span> }
     </div>
 </section>
+
+<InfoDrawer Open="_showWebHelp" OpenChanged="@(v => _showWebHelp = v)"
+            Title="What happens to your text" Icon="lock">
+    <p class="explain-lead">
+        These web searches are the one place a piece of your document can leave your device. Here is
+        exactly <strong>when</strong> that happens and <strong>where</strong> the text goes — so you can
+        pick the way that fits what you're checking.
+    </p>
+
+    <div class="explain-case">
+        <div class="explain-h">
+            <span class="explain-badge good"><Icon Name="lock" /> Most private</span>
+            <h3>Manual search</h3>
+        </div>
+        <p>You click a <strong>Google</strong>, <strong>Bing</strong> or <strong>DuckDuckGo</strong> link
+           for one passage.</p>
+        <ul class="explain-list">
+            <li><strong>What leaves:</strong> only the passage you clicked, and only when you click it.</li>
+            <li><strong>Where it goes:</strong> straight from your browser to that search engine. It never
+                touches the SignsOfAI server.</li>
+            <li><strong>When it's over:</strong> close the tab and nothing lingers.</li>
+        </ul>
+        <p class="explain-fit">Best for <strong>unpublished work</strong> — a thesis, a manuscript, a
+           draft you don't want sitting in anyone else's logs.</p>
+    </div>
+
+    <div class="explain-case">
+        <div class="explain-h">
+            @if (_webSearchReady)
+            {
+                <span class="explain-badge notice"><Icon Name="globe" /> Convenient · enabled here</span>
+            }
+            else
+            {
+                <span class="explain-badge muted"><Icon Name="globe" /> Not enabled on this server</span>
+            }
+            <h3>Automatic search</h3>
+        </div>
+        <p>One button searches <em>every</em> distinctive passage for you and lists the matches in one place.</p>
+        <ul class="explain-list">
+            <li><strong>What leaves:</strong> all of the distinctive passages (up to 8), the moment you
+                press the button — no per-passage click.</li>
+            <li><strong>Where it goes:</strong> your browser → the SignsOfAI server → the
+                <strong>Brave Search</strong> API. Two hops off your machine instead of one.</li>
+            <li><strong>When:</strong> automatically, as one batch.</li>
+        </ul>
+        <p class="explain-fit">Faster when you're checking many passages or presenting live. Because it
+           sends passages out for you, prefer the manual path for <strong>someone else's</strong>
+           unpublished writing unless they're fine with it.</p>
+        @if (!_webSearchReady)
+        {
+            <p class="explain-note">
+                <Icon Name="alert" /> Automatic search isn't switched on for this server, so you'll only
+                see the manual links below — and they find exactly the same thing.
+            </p>
+        }
+    </div>
+
+    <p class="explain-bottom">
+        <Icon Name="check-circle" />
+        <span><strong>Both find the same thing</strong> — pages that contain your passage word-for-word.
+        The only difference is who does the clicking, and how much text leaves your device to get there.</span>
+    </p>
+</InfoDrawer>
 
 @if (_report is not null)
 {
@@ -397,6 +464,7 @@
     private bool _embeddingAvailable;
     private string? _embeddingModel;
     private bool _webSearchReady;
+    private bool _showWebHelp;          // the "what happens to your text" explainer drawer
     private string _paraState = "idle"; // idle | running | done | error
     private List<ParaphraseMatch> _paraMatches = new();
     private int _paraLiteralExcluded;
