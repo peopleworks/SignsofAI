@@ -9,6 +9,7 @@
 [![NuGet Core](https://img.shields.io/nuget/v/SignsOfAI.Core?logo=nuget&label=Core)](https://www.nuget.org/packages/SignsOfAI.Core)
 [![NuGet CLI](https://img.shields.io/nuget/v/SignsOfAI.Cli?logo=nuget&label=CLI)](https://www.nuget.org/packages/SignsOfAI.Cli)
 [![NuGet MCP](https://img.shields.io/nuget/v/SignsOfAI.Mcp?logo=nuget&label=MCP%20server)](https://www.nuget.org/packages/SignsOfAI.Mcp)
+[![Available on CodeGuilds](https://img.shields.io/badge/Available_on-CodeGuilds-6366f1?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgN2wxMCA1IDEwLTV6TTIgMTdsMTAgNSAxMC01TTIgMTJsMTAgNSAxMC01Ii8+PC9zdmc+)](https://codeguilds.dev/packages/signsofai)
 
 **[Try the live demo &rarr;](https://peopleworks.github.io/SignsofAI/)** — English & Spanish, runs 100% in your browser. No signup, and nothing leaves your device.
 
