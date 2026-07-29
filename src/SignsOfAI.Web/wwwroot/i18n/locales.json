@@ -1,0 +1,7 @@
+{
+  "fallback": "en",
+  "locales": [
+    { "code": "en", "name": "English", "endonym": "English", "credit": "" },
+    { "code": "es", "name": "Spanish", "endonym": "Español", "credit": "PeopleWorks" }
+  ]
+}

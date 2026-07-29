@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using SignsOfAI.Core;
 using SignsOfAI.Core.Originality;
 using SignsOfAI.Core.Rules;
@@ -31,5 +32,14 @@ builder.Services.AddScoped(sp => new WebCheckClient(new HttpClient()));
 builder.Services.AddSingleton(sp => new CatalogSearch(RuleCatalog.All()));
 // User-defined catalogs (custom rule-packs) stored in the browser.
 builder.Services.AddScoped<CatalogStore>();
+// Interface language (EN/ES), remembered in localStorage.
+builder.Services.AddScoped<Loc>();
 
-await builder.Build().RunAsync();
+var host = builder.Build();
+
+// Resolve the stored/browser language before the first render, so a Spanish visitor never sees a
+// flash of English chrome. In WASM the root provider is the one scope components resolve from, so
+// this is the very same Loc instance the components inject.
+await host.Services.GetRequiredService<Loc>().InitAsync();
+
+await host.RunAsync();

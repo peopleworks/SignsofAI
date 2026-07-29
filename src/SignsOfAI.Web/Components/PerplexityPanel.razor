@@ -1,35 +1,30 @@
-@using SignsOfAI.Web.Services
+@inherits LocalizedComponent
 @inject PerplexityClient Perplexity
 @inject BrowserStorage Storage
 
 <div class="ppl card">
     <div class="ppl-head">
-        <h3>Predictability <span class="badge-beta">beta</span></h3>
-        <button class="ppl-gear icon-btn" title="Configure server" @onclick="() => _showSettings = !_showSettings"><Icon Name="settings" /></button>
+        <h3>@L["ppl.h"] <span class="badge-beta">@L["ppl.beta"]</span></h3>
+        <button class="ppl-gear icon-btn" title="@L["ppl.gear.title"]" @onclick="() => _showSettings = !_showSettings"><Icon Name="settings" /></button>
     </div>
-    <p class="hint">
-        How <em>predictable</em> a language model finds your phrasing (its perplexity). Predictable, generic
-        wording is common in AI writing — but formulaic human text scores predictable too, and stylized AI can
-        score varied. A useful signal, <strong>not</strong> proof of AI.
-    </p>
+    <p class="hint">@L.M("ppl.hint")</p>
 
     @if (_showSettings || !_settings.IsConfigured)
     {
         <div class="ppl-settings">
             <label class="ppl-field">
-                <span>Perplexity server URL</span>
-                <input type="url" placeholder="https://your-server/perplexity" @bind="_endpointEdit" @bind:event="oninput" />
+                <span>@L["ppl.url.label"]</span>
+                <input type="url" placeholder="@L["ppl.url.ph"]" @bind="_endpointEdit" @bind:event="oninput" />
             </label>
             <div class="ppl-settings-actions">
-                <button class="primary" @onclick="SaveEndpoint" disabled="@(string.IsNullOrWhiteSpace(_endpointEdit))">Save</button>
+                <button class="primary" @onclick="SaveEndpoint" disabled="@(string.IsNullOrWhiteSpace(_endpointEdit))">@L["common.save"]</button>
                 @if (_settings.IsConfigured)
                 {
-                    <span class="ppl-ok"><Icon Name="check" /> connected to @DisplayHost(_settings.Endpoint)</span>
+                    <span class="ppl-ok"><Icon Name="check" /> @L.F("ppl.connected", DisplayHost(_settings.Endpoint))</span>
                 }
             </div>
             <p class="ppl-privacy">
-                <Icon Name="lock" /> Unlike the rest of this tool, measuring perplexity <strong>sends your text to this server</strong>
-                to run the model. It's optional and off until you connect a server. Nothing is stored there.
+                <Icon Name="lock" /> @L.M("ppl.privacy")
             </p>
         </div>
     }
@@ -38,7 +33,7 @@
     {
         @if (_models.Length > 1)
         {
-            <div class="ppl-models" role="group" aria-label="Model">
+            <div class="ppl-models" role="group" aria-label="@L["ppl.model.aria"]">
                 @foreach (var m in _models)
                 {
                     <button class="ppl-model-btn @(m.Id == _selectedModel ? "sel" : "")"
@@ -50,7 +45,7 @@
         }
         <button class="primary ppl-run" @onclick="Measure"
                 disabled="@(_loading || string.IsNullOrWhiteSpace(Text))">
-            @(_loading ? "Measuring…" : "Measure predictability")
+            @(_loading ? L["ppl.measuring"] : L["ppl.measure"])
         </button>
     }
 
@@ -66,17 +61,17 @@
         <div class="ppl-result">
             <div class="ppl-verdict @BandClass(r.Band)">
                 <span class="ppl-verdict-label">@BandLabel(r.Band)</span>
-                <span class="ppl-verdict-pct">@pct<small>% predictable</small></span>
+                <span class="ppl-verdict-pct">@pct<small>@L["ppl.pct"]</small></span>
             </div>
-            <div class="ppl-meter" title="Left = varied / surprising · right = predictable / generic">
+            <div class="ppl-meter" title="@L["ppl.meter.title"]">
                 <div class="ppl-meter-fill @BandClass(r.Band)" style="width:@(pct)%"></div>
             </div>
             <p class="ppl-note">@BandNote(r.Band)</p>
             <div class="ppl-nums">
-                <div class="ppl-num"><span>Perplexity</span><strong>@r.Ppl.ToString("0.0")</strong></div>
-                <div class="ppl-num"><span>Tokens</span><strong>@r.TokenCount</strong></div>
-                <div class="ppl-num"><span>Model</span><strong class="ppl-model">@r.Model</strong></div>
-                <div class="ppl-num"><span>Time</span><strong>@r.ElapsedMs ms</strong></div>
+                <div class="ppl-num"><span>@L["ppl.num.ppl"]</span><strong>@r.Ppl.ToString("0.0")</strong></div>
+                <div class="ppl-num"><span>@L["ppl.num.tokens"]</span><strong>@r.TokenCount</strong></div>
+                <div class="ppl-num"><span>@L["ppl.num.model"]</span><strong class="ppl-model">@r.Model</strong></div>
+                <div class="ppl-num"><span>@L["ppl.num.time"]</span><strong>@r.ElapsedMs ms</strong></div>
             </div>
         </div>
     }
@@ -142,7 +137,7 @@
         catch (Exception ex)
         {
             _error = ex.Message.Contains("Failed to fetch") || ex.Message.Contains("HttpRequestException")
-                ? "Couldn't reach the server. Check the URL and that it allows this site (CORS)."
+                ? L["ppl.error.unreachable"]
                 : ex.Message;
         }
         finally { _loading = false; }
@@ -155,18 +150,18 @@
         _ => "b-typ",                    // neutral
     };
 
-    private static string BandLabel(string b) => b switch
+    private string BandLabel(string b) => b switch
     {
-        "very-predictable" => "Very predictable",
-        "varied" => "Varied phrasing",
-        _ => "Typical",
+        "very-predictable" => L["ppl.band.pred"],
+        "varied" => L["ppl.band.varied"],
+        _ => L["ppl.band.typical"],
     };
 
-    private static string BandNote(string b) => b switch
+    private string BandNote(string b) => b switch
     {
-        "very-predictable" => "Generic, easy-to-predict wording. Common in AI writing — though formulaic human text reads this way too.",
-        "varied" => "Surprising, less predictable wording — more typical of personal human writing (but stylized AI can score here).",
-        _ => "A mix of predictable and surprising wording.",
+        "very-predictable" => L["ppl.note.pred"],
+        "varied" => L["ppl.note.varied"],
+        _ => L["ppl.note.typical"],
     };
 
     private static string DisplayHost(string url)

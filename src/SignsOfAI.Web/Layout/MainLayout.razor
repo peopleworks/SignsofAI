@@ -1,16 +1,19 @@
 @inherits LayoutComponentBase
+@implements IDisposable
+@inject Loc L
 
 <div class="app-shell">
     <nav class="app-nav">
         <a class="brand" href=""><Icon Name="pen" /> Signs of AI Writing</a>
-        <span class="dotnet-badge" title="Built with .NET 10 and Blazor WebAssembly">
-            <span class="dot"></span> Built with .NET 10 · Blazor
+        <span class="dotnet-badge" title="@L["nav.builtwith.title"]">
+            <span class="dot"></span> @L["nav.builtwith"]
         </span>
         <div class="nav-links">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">Analyze</NavLink>
-            <NavLink class="nav-link" href="originality">Originality</NavLink>
-            <NavLink class="nav-link" href="catalog">Catalog</NavLink>
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">@L["nav.analyze"]</NavLink>
+            <NavLink class="nav-link" href="originality">@L["nav.originality"]</NavLink>
+            <NavLink class="nav-link" href="catalog">@L["nav.catalog"]</NavLink>
             <a class="nav-link" href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">GitHub</a>
+            <LanguageSwitch />
         </div>
     </nav>
     <main>
@@ -18,10 +21,20 @@
     </main>
     <footer class="app-footer">
         <p>
-            <strong>PeopleWorks — Pedro Hernández</strong> · Microsoft MVP for .NET
+            <strong>PeopleWorks — Pedro Hernández</strong> · @L["footer.role"]
         </p>
-        <p>Signs of AI Writing · built with .NET 10 &amp; Blazor WebAssembly · runs 100% in your browser ·
-            <a href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">open source</a>
+        <p>Signs of AI Writing · @L.M("footer.line") ·
+            <a href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">@L["footer.opensource"]</a>
         </p>
     </footer>
 </div>
+
+@code {
+    // The layout can't derive from LocalizedComponent (it must be a LayoutComponentBase), so it
+    // subscribes by hand to re-render its own nav and footer when the switch flips.
+    protected override void OnInitialized() => L.Changed += OnLanguageChanged;
+
+    private void OnLanguageChanged() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => L.Changed -= OnLanguageChanged;
+}

@@ -1,9 +1,10 @@
 @using SignsOfAI.Core.Model
+@inherits LocalizedComponent
 
 @if (_bars.Length >= 2)
 {
     <svg class="rhythm-svg" viewBox="0 0 @W 80" preserveAspectRatio="none" role="img"
-         aria-label="Sentence rhythm — bar height is each sentence's length">
+         aria-label="@L["rhythm.aria"]">
         <line class="rhythm-mean" x1="0" y1="@_meanY.ToString(Inv)" x2="@W" y2="@_meanY.ToString(Inv)" />
         @for (int i = 0; i < _bars.Length; i++)
         {
@@ -12,11 +13,11 @@
                   height="@b.H.ToString(Inv)" rx="1.5" fill="@b.Color" />
         }
     </svg>
-    <p class="rhythm-caption">@_caption</p>
+    <p class="rhythm-caption">@L[_captionKey]</p>
 }
 else
 {
-    <p class="rhythm-empty">Add a few more sentences to reveal the rhythm.</p>
+    <p class="rhythm-empty">@L["rhythm.empty"]</p>
 }
 
 @code {
@@ -36,7 +37,10 @@ else
     private Bar[] _bars = [];
     private double _barW;
     private double _meanY;
-    private string _caption = string.Empty;
+
+    // The key, not the resolved sentence: OnParametersSet doesn't re-run when the language flips,
+    // so the caption has to be looked up at render time to follow the switch.
+    private string _captionKey = "rhythm.cap.short";
 
     protected override void OnParametersSet()
     {
@@ -63,14 +67,14 @@ else
             _bars[i] = new Bar(x, H - h, h, Lerp(Uniform, Varied, t));
         }
 
-        _caption = Stats.SentenceCount < 4
-            ? "Short sample — the rhythm reading firms up with more sentences."
+        _captionKey = Stats.SentenceCount < 4
+            ? "rhythm.cap.short"
             : Stats.Burstiness switch
             {
-                < 0.25 => "Very uniform bars — a machine-like, metronomic cadence.",
-                < 0.45 => "Somewhat uniform — the rhythm barely varies.",
-                < 0.60 => "Fairly varied — getting closer to human cadence.",
-                _ => "Nicely varied, jagged rhythm — reads human.",
+                < 0.25 => "rhythm.cap.uniform",
+                < 0.45 => "rhythm.cap.somewhat",
+                < 0.60 => "rhythm.cap.fairly",
+                _ => "rhythm.cap.varied",
             };
     }
 

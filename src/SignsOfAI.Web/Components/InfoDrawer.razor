@@ -3,6 +3,7 @@
      <button @onclick="() => _open = true">Explain</button>
      <InfoDrawer Open="_open" OpenChanged="v => _open = v" Title="…" Icon="lock">…content…</InfoDrawer>
    It renders a Blazor overlay (never a native browser dialog), so it can't block the extension. *@
+@inherits LocalizedComponent
 
 @if (Open)
 {
@@ -14,7 +15,8 @@
                 @if (!string.IsNullOrEmpty(Icon)) { <Icon Name="@Icon" /> }
                 @Title
             </h2>
-            <button class="icon-btn" title="Close" aria-label="Close" @onclick="Close"><Icon Name="close" /></button>
+            <button class="icon-btn" title="@L["common.close"]" aria-label="@L["common.close"]"
+                    @onclick="Close"><Icon Name="close" /></button>
         </div>
         <div class="drawer-body">
             @ChildContent

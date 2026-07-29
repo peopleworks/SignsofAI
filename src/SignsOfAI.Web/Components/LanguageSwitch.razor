@@ -1,0 +1,53 @@
+@* The interface-language toggle: one segment per language in wwwroot/i18n/locales.json, with a
+   thumb that slides under the active one. Rendered from the manifest, so a community translation
+   appears here the moment its file is added — no code change. Both options stay visible and
+   readable, so a Spanish speaker landing on the English UI can see "ES" without having to guess
+   what a flag or a lone globe would do. Real <button>s, so it is keyboard- and screen-reader-
+   navigable.
+
+   Segments share the width evenly (--n) and the thumb is offset by index (--i), which holds up
+   nicely to about four languages. Past that this should become a dropdown — a good problem to
+   have, and a small change when it arrives. *@
+@inherits LocalizedComponent
+
+@if (L.Locales.Count > 1)
+{
+    <div class="lang-switch" role="group" aria-label="@L["lang.switch.aria"]">
+        <Icon Name="globe" Class="lang-globe" />
+        <div class="lang-track" style="--n:@L.Locales.Count; --i:@ActiveIndex">
+            <span class="lang-thumb" aria-hidden="true"></span>
+            @for (var i = 0; i < L.Locales.Count; i++)
+            {
+                var locale = L.Locales[i];
+                var active = locale.Code == L.Current;
+                <button type="button" class="lang-opt @(active ? "on" : "")"
+                        title="@Title(locale)" aria-pressed="@(active ? "true" : "false")"
+                        @onclick="@(() => L.SetAsync(locale.Code))">@Label(locale)</button>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private int ActiveIndex
+    {
+        get
+        {
+            for (var i = 0; i < L.Locales.Count; i++)
+                if (L.Locales[i].Code == L.Current) return i;
+            return 0;
+        }
+    }
+
+    private static string Label(LocaleInfo locale) => locale.Code.ToUpperInvariant();
+
+    /// <summary>Endonym plus a credit line, so a contributed translation names its contributor.</summary>
+    private string Title(LocaleInfo locale)
+    {
+        var name = string.IsNullOrWhiteSpace(locale.Endonym) ? locale.Name : locale.Endonym;
+        var to = L.F("lang.switch.to", name);
+        return string.IsNullOrWhiteSpace(locale.Credit)
+            ? to
+            : $"{to} — {L.F("lang.switch.credit", locale.Credit)}";
+    }
+}
