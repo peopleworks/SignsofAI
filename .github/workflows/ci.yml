@@ -1,0 +1,40 @@
+# Build and test on every push and pull request.
+#
+# The NuGet workflow also runs the tests, but only when a release is published — too late to help a
+# contributor. This runs on the pull request itself, which matters most for the community-contributed
+# UI translations in src/SignsOfAI.Web/wwwroot/i18n: the locale tests report a mistyped key, a lost
+# {0} placeholder or a duplicated entry by name, so a translation PR can be reviewed on evidence
+# rather than by reading JSON side by side. See Docs/TRANSLATING.md.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Build
+        run: dotnet build SignsOfAI.slnx -c Release --nologo
+
+      - name: Test
+        run: dotnet test SignsOfAI.slnx -c Release --no-build --nologo
