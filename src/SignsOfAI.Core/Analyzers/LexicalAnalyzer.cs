@@ -32,8 +32,10 @@ public sealed class LexicalAnalyzer : IAnalyzer
                 Severity = rule.Severity,
                 Span = word.Span,
                 MatchedText = word.Text,
-                Message = $"“{word.Text}” is heavily overused in AI writing.",
-                Suggestion = $"Consider: {rule.Suggestion}",
+                // Both come from the pack: the sentence and the "Consider:" lead-in alike. The
+                // lead-in used to be English even when the rule's own suggestion was Spanish.
+                Message = context.RulePack.Text(PackMessages.LexicalOverused, word.Text),
+                Suggestion = context.RulePack.Text(PackMessages.LexicalSuggestion, rule.Suggestion),
                 Evidence = rule.Evidence,
                 Weight = rule.Weight,
             };

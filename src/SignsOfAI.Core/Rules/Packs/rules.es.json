@@ -1,79 +1,885 @@
 {
   "language": "es",
+  "messages": {
+    "lexical.overused": "«{0}» está muy sobreusada en la escritura con IA.",
+    "lexical.suggestion": "Prueba con: {0}",
+    "burstiness.message": "Ritmo de oraciones uniforme (variabilidad {0}, media de {1} palabras). El texto generado por máquina tiende a mantener una cadencia fija de 15 a 25 palabras.",
+    "burstiness.suggestion": "Varía la longitud a propósito: detrás de una oración larga y llena de subordinadas, pon una corta y seca. Deja que el ritmo respire.",
+    "burstiness.evidence": "La prosa humana suele puntuar entre 0.6 y 0.8; la salida por defecto de un LLM, entre 0.0 y 0.2.",
+    "emdash.message": "Abuso de la raya ({0} en {1} palabras, {2} por cada 100). Los LLM se apoyan en la raya como muleta de ritmo.",
+    "emdash.suggestion": "Cambia la mayoría por un punto, una coma o un paréntesis; deja la raya para cuando sea deliberada.",
+    "emdash.evidence": "La prosa humana promedia bastante menos de una raya por cada 100 palabras."
+  },
   "lexical": [
-    { "id": "lex.sumergir",     "terms": ["sumérgete", "sumergirse", "adentrémonos", "adéntrate", "adentrarse"], "weight": 5.5, "severity": "High",   "suggestion": "explora, analiza, examina", "replacements": ["explora", "analiza", "examina"], "evidence": "Análogo directo de “delve”: apertura típica de IA" },
-    { "id": "lex.abordar",      "terms": ["abordar", "aborda", "abordando"], "weight": 3.5, "severity": "Medium", "suggestion": "tratar, resolver, atender", "replacements": ["tratar", "resolver", "atender"] },
-    { "id": "lex.fomentar",     "terms": ["fomentar", "fomenta", "fomentando", "fomento"], "weight": 3.0, "severity": "Low", "suggestion": "impulsar, promover, apoyar", "replacements": ["impulsar", "promover", "apoyar"], "evidence": "Verbo de estilo reforzado por RLHF" },
-    { "id": "lex.aprovechar",   "terms": ["aprovechar", "aprovecha", "aprovechando"], "weight": 3.0, "severity": "Low", "suggestion": "usar, emplear, sacar partido de", "replacements": ["usar", "emplear", "sacar partido de"], "evidence": "Análogo de “leverage”" },
-    { "id": "lex.robusto",      "terms": ["robusto", "robusta", "robustas", "robustos"], "weight": 3.5, "severity": "Medium", "suggestion": "sólido, fuerte, fiable", "replacements": ["sólido", "fuerte", "fiable"], "evidence": "Análogo de “robust”" },
-    { "id": "lex.solido",       "terms": ["sólido", "sólida", "sólidas", "sólidos"], "weight": 3.0, "severity": "Low", "suggestion": "firme, fiable, consistente", "replacements": ["firme", "fiable", "consistente"] },
-    { "id": "lex.multifacetico","terms": ["multifacético", "multifacética", "polifacético"], "weight": 4.0, "severity": "Medium", "suggestion": "complejo — o nombra las facetas reales", "replacements": ["complejo"], "evidence": "Análogo de “multifaceted”" },
-    { "id": "lex.matizado",     "terms": ["matizado", "matizada", "matices"], "weight": 3.5, "severity": "Medium", "suggestion": "sutil, detallado — o precisa la distinción", "replacements": ["sutil", "detallado"], "evidence": "Análogo de “nuanced”" },
-    { "id": "lex.integral",     "terms": ["integral", "integrales"], "weight": 2.5, "severity": "Low", "suggestion": "completo, global", "replacements": ["completo", "global"] },
-    { "id": "lex.holistico",    "terms": ["holístico", "holística"], "weight": 3.5, "severity": "Medium", "suggestion": "global, de conjunto", "replacements": ["global", "de conjunto"] },
-    { "id": "lex.sinergia",     "terms": ["sinergia", "sinergias"], "weight": 3.5, "severity": "Medium", "suggestion": "colaboración, refuerzo mutuo", "replacements": ["colaboración", "refuerzo mutuo"] },
-    { "id": "lex.vasto",        "terms": ["vasto", "vasta", "vastas", "vastos"], "weight": 3.5, "severity": "Medium", "suggestion": "amplio, extenso, enorme", "replacements": ["amplio", "extenso", "enorme"] },
-    { "id": "lex.panorama",     "terms": ["panorama"], "weight": 3.0, "severity": "Low", "suggestion": "situación, contexto, campo", "replacements": ["situación", "contexto", "campo"], "evidence": "Análogo de “landscape”" },
-    { "id": "lex.crucial",      "terms": ["crucial", "cruciales"], "weight": 3.5, "severity": "Medium", "suggestion": "importante, esencial, clave", "replacements": ["importante", "esencial", "clave"], "evidence": "Análogo de “crucial”" },
-    { "id": "lex.primordial",   "terms": ["primordial", "primordiales"], "weight": 3.5, "severity": "Medium", "suggestion": "esencial, básico, principal", "replacements": ["esencial", "básico", "principal"] },
-    { "id": "lex.fundamental",  "terms": ["fundamental", "fundamentales"], "weight": 2.5, "severity": "Low", "suggestion": "clave, esencial, básico", "replacements": ["clave", "esencial", "básico"] },
-    { "id": "lex.pivotal",      "terms": ["pivotal", "pivotales"], "weight": 4.0, "severity": "Medium", "suggestion": "central, decisivo, clave", "replacements": ["central", "decisivo", "clave"] },
-    { "id": "lex.resaltar",     "terms": ["resaltar", "subrayar", "recalcar"], "weight": 3.0, "severity": "Low", "suggestion": "mostrar, señalar, destacar", "replacements": ["mostrar", "señalar", "destacar"], "evidence": "Análogo de “underscore”" },
-    { "id": "lex.vibrante",     "terms": ["vibrante", "vibrantes"], "weight": 3.0, "severity": "Low", "suggestion": "animado, lleno de vida — o un detalle concreto", "replacements": ["animado", "lleno de vida"] },
-    { "id": "lex.meticuloso",   "terms": ["meticuloso", "meticulosa", "meticulosamente"], "weight": 3.5, "severity": "Medium", "suggestion": "cuidadoso, minucioso, con cuidado", "replacements": ["cuidadoso", "minucioso", "con cuidado"] },
-    { "id": "lex.pletora",      "terms": ["plétora", "sinnúmero", "sinfín", "miríada"], "weight": 3.5, "severity": "Medium", "suggestion": "muchos, montones — o da la cifra", "replacements": ["muchos", "montones"] },
-    { "id": "lex.transformador","terms": ["transformador", "transformadora", "transformadoras"], "weight": 3.5, "severity": "Medium", "suggestion": "de gran impacto — o muestra el cambio", "replacements": ["de gran impacto"] },
-    { "id": "lex.empoderar",    "terms": ["empoderar", "empodera", "empoderando", "empoderamiento"], "weight": 3.5, "severity": "Medium", "suggestion": "dar poder a, capacitar, habilitar", "replacements": ["dar poder a", "capacitar", "habilitar"] },
-    { "id": "lex.desbloquear",  "terms": ["desbloquear", "desbloquea", "desbloqueando"], "weight": 3.0, "severity": "Low", "suggestion": "habilitar, abrir, permitir", "replacements": ["habilitar", "abrir", "permitir"], "evidence": "Análogo de “unlock”" },
-    { "id": "lex.elevar",       "terms": ["elevar", "eleva", "elevando"], "weight": 2.5, "severity": "Low", "suggestion": "subir, mejorar", "replacements": ["subir", "mejorar"] },
-    { "id": "lex.vanguardia",   "terms": ["vanguardia"], "weight": 3.0, "severity": "Low", "suggestion": "de punta, lo más avanzado", "replacements": ["punta"] },
-    { "id": "lex.innovador",    "terms": ["innovador", "innovadora", "innovadoras", "innovadores"], "weight": 2.5, "severity": "Low", "suggestion": "nuevo — o di qué lo hace nuevo", "replacements": ["nuevo"] },
-    { "id": "lex.profundo",     "terms": ["profundo", "profunda", "profundamente"], "weight": 2.5, "severity": "Low", "suggestion": "hondo, marcado, intenso", "replacements": ["hondo", "marcado", "intenso"] },
-    { "id": "lex.ademas",       "terms": ["además"], "weight": 1.5, "severity": "Info", "suggestion": "y, también (con moderación)", "replacements": ["y", "también"] },
-    { "id": "lex.asimismo",     "terms": ["asimismo"], "weight": 2.0, "severity": "Info", "suggestion": "también, igualmente", "replacements": ["también", "igualmente"] },
-    { "id": "lex.utilizar",     "terms": ["utilizar", "utiliza", "utilizando", "utilizamos"], "weight": 3.0, "severity": "Low", "suggestion": "usar", "replacements": ["usar"], "evidence": "Inflación de “usar”" },
-    { "id": "lex.agilizar",     "terms": ["agilizar", "agiliza", "agilizando"], "weight": 3.0, "severity": "Low", "suggestion": "acelerar, simplificar", "replacements": ["acelerar", "simplificar"], "evidence": "Análogo de “streamline”" },
-    { "id": "lex.simplemente",  "terms": ["simplemente"], "weight": 1.0, "severity": "Info", "suggestion": "muletilla — suele sobrar", "delete": true },
-    { "id": "lex.realmente",    "terms": ["realmente"], "weight": 1.0, "severity": "Info", "suggestion": "muletilla — suele sobrar", "delete": true },
-    { "id": "lex.basicamente",  "terms": ["básicamente", "basicamente"], "weight": 1.5, "severity": "Info", "suggestion": "muletilla — suele sobrar", "delete": true },
-    { "id": "lex.esencialmente","terms": ["esencialmente"], "weight": 1.5, "severity": "Info", "suggestion": "muletilla — suele sobrar", "delete": true },
-    { "id": "lex.honestamente", "terms": ["honestamente", "sinceramente"], "weight": 1.5, "severity": "Info", "suggestion": "muletilla — córtala", "delete": true },
-    { "id": "lex.literalmente", "terms": ["literalmente"], "weight": 1.5, "severity": "Info", "suggestion": "muletilla — córtala salvo sentido literal", "delete": true },
-    { "id": "lex.fundamentalmente", "terms": ["fundamentalmente"], "weight": 2.0, "severity": "Low", "suggestion": "muletilla — córtala", "delete": true },
-    { "id": "lex.inevitablemente",  "terms": ["inevitablemente"], "weight": 2.0, "severity": "Low", "suggestion": "muletilla — córtala", "delete": true }
+    {
+      "id": "lex.sumergir",
+      "terms": [
+        "sumérgete",
+        "sumergirse",
+        "adentrémonos",
+        "adéntrate",
+        "adentrarse"
+      ],
+      "weight": 5.5,
+      "severity": "High",
+      "suggestion": "explora, analiza, examina",
+      "replacements": [
+        "explora",
+        "analiza",
+        "examina"
+      ],
+      "evidence": "Análogo directo de “delve”: apertura típica de IA"
+    },
+    {
+      "id": "lex.abordar",
+      "terms": [
+        "abordar",
+        "aborda",
+        "abordando"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "tratar, resolver, atender",
+      "replacements": [
+        "tratar",
+        "resolver",
+        "atender"
+      ]
+    },
+    {
+      "id": "lex.fomentar",
+      "terms": [
+        "fomentar",
+        "fomenta",
+        "fomentando",
+        "fomento"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "impulsar, promover, apoyar",
+      "replacements": [
+        "impulsar",
+        "promover",
+        "apoyar"
+      ],
+      "evidence": "Verbo de estilo reforzado por RLHF"
+    },
+    {
+      "id": "lex.aprovechar",
+      "terms": [
+        "aprovechar",
+        "aprovecha",
+        "aprovechando"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "usar, emplear, sacar partido de",
+      "replacements": [
+        "usar",
+        "emplear",
+        "sacar partido de"
+      ],
+      "evidence": "Análogo de “leverage”"
+    },
+    {
+      "id": "lex.robusto",
+      "terms": [
+        "robusto",
+        "robusta",
+        "robustas",
+        "robustos"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "sólido, fuerte, fiable",
+      "replacements": [
+        "sólido",
+        "fuerte",
+        "fiable"
+      ],
+      "evidence": "Análogo de “robust”"
+    },
+    {
+      "id": "lex.solido",
+      "terms": [
+        "sólido",
+        "sólida",
+        "sólidas",
+        "sólidos"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "firme, fiable, consistente",
+      "replacements": [
+        "firme",
+        "fiable",
+        "consistente"
+      ]
+    },
+    {
+      "id": "lex.multifacetico",
+      "terms": [
+        "multifacético",
+        "multifacética",
+        "polifacético"
+      ],
+      "weight": 4.0,
+      "severity": "Medium",
+      "suggestion": "complejo — o nombra las facetas reales",
+      "replacements": [
+        "complejo"
+      ],
+      "evidence": "Análogo de “multifaceted”"
+    },
+    {
+      "id": "lex.matizado",
+      "terms": [
+        "matizado",
+        "matizada",
+        "matices"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "sutil, detallado — o precisa la distinción",
+      "replacements": [
+        "sutil",
+        "detallado"
+      ],
+      "evidence": "Análogo de “nuanced”"
+    },
+    {
+      "id": "lex.integral",
+      "terms": [
+        "integral",
+        "integrales"
+      ],
+      "weight": 2.5,
+      "severity": "Low",
+      "suggestion": "completo, global",
+      "replacements": [
+        "completo",
+        "global"
+      ]
+    },
+    {
+      "id": "lex.holistico",
+      "terms": [
+        "holístico",
+        "holística"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "global, de conjunto",
+      "replacements": [
+        "global",
+        "de conjunto"
+      ]
+    },
+    {
+      "id": "lex.sinergia",
+      "terms": [
+        "sinergia",
+        "sinergias"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "colaboración, refuerzo mutuo",
+      "replacements": [
+        "colaboración",
+        "refuerzo mutuo"
+      ]
+    },
+    {
+      "id": "lex.vasto",
+      "terms": [
+        "vasto",
+        "vasta",
+        "vastas",
+        "vastos"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "amplio, extenso, enorme",
+      "replacements": [
+        "amplio",
+        "extenso",
+        "enorme"
+      ]
+    },
+    {
+      "id": "lex.panorama",
+      "terms": [
+        "panorama"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "situación, contexto, campo",
+      "replacements": [
+        "situación",
+        "contexto",
+        "campo"
+      ],
+      "evidence": "Análogo de “landscape”"
+    },
+    {
+      "id": "lex.crucial",
+      "terms": [
+        "crucial",
+        "cruciales"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "importante, esencial, clave",
+      "replacements": [
+        "importante",
+        "esencial",
+        "clave"
+      ],
+      "evidence": "Análogo de “crucial”"
+    },
+    {
+      "id": "lex.primordial",
+      "terms": [
+        "primordial",
+        "primordiales"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "esencial, básico, principal",
+      "replacements": [
+        "esencial",
+        "básico",
+        "principal"
+      ]
+    },
+    {
+      "id": "lex.fundamental",
+      "terms": [
+        "fundamental",
+        "fundamentales"
+      ],
+      "weight": 2.5,
+      "severity": "Low",
+      "suggestion": "clave, esencial, básico",
+      "replacements": [
+        "clave",
+        "esencial",
+        "básico"
+      ]
+    },
+    {
+      "id": "lex.pivotal",
+      "terms": [
+        "pivotal",
+        "pivotales"
+      ],
+      "weight": 4.0,
+      "severity": "Medium",
+      "suggestion": "central, decisivo, clave",
+      "replacements": [
+        "central",
+        "decisivo",
+        "clave"
+      ]
+    },
+    {
+      "id": "lex.resaltar",
+      "terms": [
+        "resaltar",
+        "subrayar",
+        "recalcar"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "mostrar, señalar, destacar",
+      "replacements": [
+        "mostrar",
+        "señalar",
+        "destacar"
+      ],
+      "evidence": "Análogo de “underscore”"
+    },
+    {
+      "id": "lex.vibrante",
+      "terms": [
+        "vibrante",
+        "vibrantes"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "animado, lleno de vida — o un detalle concreto",
+      "replacements": [
+        "animado",
+        "lleno de vida"
+      ]
+    },
+    {
+      "id": "lex.meticuloso",
+      "terms": [
+        "meticuloso",
+        "meticulosa",
+        "meticulosamente"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "cuidadoso, minucioso, con cuidado",
+      "replacements": [
+        "cuidadoso",
+        "minucioso",
+        "con cuidado"
+      ]
+    },
+    {
+      "id": "lex.pletora",
+      "terms": [
+        "plétora",
+        "sinnúmero",
+        "sinfín",
+        "miríada"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "muchos, montones — o da la cifra",
+      "replacements": [
+        "muchos",
+        "montones"
+      ]
+    },
+    {
+      "id": "lex.transformador",
+      "terms": [
+        "transformador",
+        "transformadora",
+        "transformadoras"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "de gran impacto — o muestra el cambio",
+      "replacements": [
+        "de gran impacto"
+      ]
+    },
+    {
+      "id": "lex.empoderar",
+      "terms": [
+        "empoderar",
+        "empodera",
+        "empoderando",
+        "empoderamiento"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "dar poder a, capacitar, habilitar",
+      "replacements": [
+        "dar poder a",
+        "capacitar",
+        "habilitar"
+      ]
+    },
+    {
+      "id": "lex.desbloquear",
+      "terms": [
+        "desbloquear",
+        "desbloquea",
+        "desbloqueando"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "habilitar, abrir, permitir",
+      "replacements": [
+        "habilitar",
+        "abrir",
+        "permitir"
+      ],
+      "evidence": "Análogo de “unlock”"
+    },
+    {
+      "id": "lex.elevar",
+      "terms": [
+        "elevar",
+        "eleva",
+        "elevando"
+      ],
+      "weight": 2.5,
+      "severity": "Low",
+      "suggestion": "subir, mejorar",
+      "replacements": [
+        "subir",
+        "mejorar"
+      ]
+    },
+    {
+      "id": "lex.vanguardia",
+      "terms": [
+        "vanguardia"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "de punta, lo más avanzado",
+      "replacements": [
+        "punta"
+      ]
+    },
+    {
+      "id": "lex.innovador",
+      "terms": [
+        "innovador",
+        "innovadora",
+        "innovadoras",
+        "innovadores"
+      ],
+      "weight": 2.5,
+      "severity": "Low",
+      "suggestion": "nuevo — o di qué lo hace nuevo",
+      "replacements": [
+        "nuevo"
+      ]
+    },
+    {
+      "id": "lex.profundo",
+      "terms": [
+        "profundo",
+        "profunda",
+        "profundamente"
+      ],
+      "weight": 2.5,
+      "severity": "Low",
+      "suggestion": "hondo, marcado, intenso",
+      "replacements": [
+        "hondo",
+        "marcado",
+        "intenso"
+      ]
+    },
+    {
+      "id": "lex.ademas",
+      "terms": [
+        "además"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "y, también (con moderación)",
+      "replacements": [
+        "y",
+        "también"
+      ]
+    },
+    {
+      "id": "lex.asimismo",
+      "terms": [
+        "asimismo"
+      ],
+      "weight": 2.0,
+      "severity": "Info",
+      "suggestion": "también, igualmente",
+      "replacements": [
+        "también",
+        "igualmente"
+      ]
+    },
+    {
+      "id": "lex.utilizar",
+      "terms": [
+        "utilizar",
+        "utiliza",
+        "utilizando",
+        "utilizamos"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "usar",
+      "replacements": [
+        "usar"
+      ],
+      "evidence": "Inflación de “usar”"
+    },
+    {
+      "id": "lex.agilizar",
+      "terms": [
+        "agilizar",
+        "agiliza",
+        "agilizando"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "acelerar, simplificar",
+      "replacements": [
+        "acelerar",
+        "simplificar"
+      ],
+      "evidence": "Análogo de “streamline”"
+    },
+    {
+      "id": "lex.simplemente",
+      "terms": [
+        "simplemente"
+      ],
+      "weight": 1.0,
+      "severity": "Info",
+      "suggestion": "muletilla — suele sobrar",
+      "delete": true
+    },
+    {
+      "id": "lex.realmente",
+      "terms": [
+        "realmente"
+      ],
+      "weight": 1.0,
+      "severity": "Info",
+      "suggestion": "muletilla — suele sobrar",
+      "delete": true
+    },
+    {
+      "id": "lex.basicamente",
+      "terms": [
+        "básicamente",
+        "basicamente"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "muletilla — suele sobrar",
+      "delete": true
+    },
+    {
+      "id": "lex.esencialmente",
+      "terms": [
+        "esencialmente"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "muletilla — suele sobrar",
+      "delete": true
+    },
+    {
+      "id": "lex.honestamente",
+      "terms": [
+        "honestamente",
+        "sinceramente"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "muletilla — córtala",
+      "delete": true
+    },
+    {
+      "id": "lex.literalmente",
+      "terms": [
+        "literalmente"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "muletilla — córtala salvo sentido literal",
+      "delete": true
+    },
+    {
+      "id": "lex.fundamentalmente",
+      "terms": [
+        "fundamentalmente"
+      ],
+      "weight": 2.0,
+      "severity": "Low",
+      "suggestion": "muletilla — córtala",
+      "delete": true
+    },
+    {
+      "id": "lex.inevitablemente",
+      "terms": [
+        "inevitablemente"
+      ],
+      "weight": 2.0,
+      "severity": "Low",
+      "suggestion": "muletilla — córtala",
+      "delete": true
+    }
   ],
   "patterns": [
-    { "id": "rhet.no-solo-sino",   "category": "Rhetorical", "regex": "\\bno s[oó]lo\\b[^.?!\\n]{1,80}?\\bsino (también|que también|que)\\b", "weight": 5.0, "severity": "High",   "message": "Paralelismo negativo (“no solo… sino también…”).", "suggestion": "Divídelo en dos frases claras o empieza por lo más fuerte." },
-    { "id": "rhet.no-se-trata",    "category": "Rhetorical", "regex": "\\bno se trata (solo|s[oó]lo|únicamente|solamente) de\\b", "weight": 5.0, "severity": "High", "message": "Paralelismo negativo (“no se trata solo de X, sino de Y”).", "suggestion": "Afirma directamente lo que sí es." },
-    { "id": "rhet.era-digital",    "category": "Rhetorical", "regex": "\\ben (la |el )?(era|mundo|[ée]poca) (digital|actual|moderna|moderno)\\b", "weight": 4.5, "severity": "High", "message": "Apertura cliché (“en la era digital actual”).", "suggestion": "Abre con un dato, una afirmación o una escena concreta." },
-    { "id": "rhet.cabe-destacar",  "category": "Rhetorical", "regex": "\\bcabe (destacar|mencionar|se[ñn]alar|resaltar|recordar) que\\b", "weight": 4.0, "severity": "Medium", "message": "Muletilla de relleno (“cabe destacar que”).", "suggestion": "Bórralo y afirma el punto directamente." },
-    { "id": "rhet.es-importante",  "category": "Rhetorical", "regex": "\\bes importante (destacar|se[ñn]alar|recordar|mencionar|tener en cuenta|considerar)\\b", "weight": 3.5, "severity": "Medium", "message": "Muletilla de relleno (“es importante destacar…”).", "suggestion": "Si es importante, dilo sin el preámbulo." },
-    { "id": "rhet.vale-la-pena",   "category": "Rhetorical", "regex": "\\bvale la pena (mencionar|destacar|se[ñn]alar|recordar)\\b", "weight": 3.5, "severity": "Medium", "message": "Muletilla de relleno (“vale la pena mencionar”).", "suggestion": "Elimínala; ve directo al punto." },
-    { "id": "rhet.vasto-mundo",    "category": "Rhetorical", "regex": "\\ben el (vasto |amplio |fascinante )?(mundo|[áa]mbito|panorama|universo|campo) de\\b", "weight": 3.5, "severity": "Medium", "message": "Marco de relleno (“en el vasto mundo de…”).", "suggestion": "Nombra el tema directamente: “en la medicina…”." },
-    { "id": "syn.testimonio-de",   "category": "Syntactic", "regex": "\\bun (claro |verdadero |auténtico )?testimonio de\\b", "weight": 5.0, "severity": "High", "message": "Inflación retórica (“un testimonio de…”).", "suggestion": "Di qué demuestra: “muestra…”, “prueba…”." },
-    { "id": "syn.juega-papel",     "category": "Syntactic", "regex": "\\bjuega un papel (crucial|fundamental|clave|primordial|vital|importante|decisivo)\\b", "weight": 3.5, "severity": "Medium", "message": "Construcción inflada (“juega un papel crucial”).", "suggestion": "Di qué hace: “X impulsa Y”, no “X juega un papel crucial en Y”." },
-    { "id": "syn.se-erige",        "category": "Syntactic", "regex": "\\bse (erige|alza|posiciona|consolida) como\\b", "weight": 4.0, "severity": "Medium", "message": "Evasión de cópula (“se erige como…” en vez de “es…”).", "suggestion": "Usa “es” salvo que el verbo aporte significado real." },
-    { "id": "syn.rico-tapiz",      "category": "Syntactic", "regex": "\\b(rico|intrincado|vibrante|complejo) (tapiz|entramado|mosaico) de\\b", "weight": 5.5, "severity": "High", "message": "Metáfora cliché (“un rico tapiz de…”).", "suggestion": "Suelta la metáfora y nombra los elementos." },
-    { "id": "rhet.embarcate",      "category": "Rhetorical", "regex": "\\bemb[aá]rcate en (un|una|este|esta)\\b|\\bsum[eé]rgete en\\b", "weight": 3.5, "severity": "Medium", "message": "Llamada de relleno (“embárcate en este viaje”).", "suggestion": "Empieza directo; borra el rodeo." },
-    { "id": "rhet.en-resumen",     "category": "Rhetorical", "regex": "\\ben (resumen|conclusi[óo]n|síntesis)\\b|\\bpara concluir\\b", "weight": 2.5, "severity": "Low", "message": "Etiqueta de cierre formulaica (“en conclusión”).", "suggestion": "Cierra con tu idea, no con un letrero." },
-    { "id": "rhet.por-un-lado",    "category": "Rhetorical", "regex": "\\bpor un lado\\b", "weight": 3.0, "severity": "Medium", "message": "Marco simétrico (“por un lado… por otro”) — falso equilibrio.", "suggestion": "Si la evidencia favorece un lado, dilo." },
-    { "id": "rhet.regla-de-tres",  "category": "Rhetorical", "regex": "\\b(\\w+), (\\w+) y (\\w+)[.,;]", "weight": 1.2, "severity": "Info", "message": "Posible “regla de tres” — la IA abusa de los tríos.", "suggestion": "Bien de vez en cuando; si todas las listas son de tres, varía." },
-    { "id": "rhet.al-final-del-dia", "category": "Rhetorical", "regex": "\\bal final del d[ií]a\\b", "weight": 2.5, "severity": "Low", "message": "Muletilla de cierre (“al final del día”).", "suggestion": "Córtala y ve al punto." },
-    { "id": "rhet.en-esencia",     "category": "Rhetorical", "regex": "\\ben esencia\\b|\\ben su (esencia|n[úu]cleo|centro)\\b", "weight": 2.5, "severity": "Low", "message": "Marco de relleno (“en esencia”).", "suggestion": "Di qué es, sin rodeos." },
-    { "id": "rhet.la-realidad-es", "category": "Rhetorical", "regex": "\\bla (realidad|verdad) es que\\b", "weight": 3.0, "severity": "Low", "message": "Apertura de falsa franqueza (“la verdad es que”).", "suggestion": "Suelta el preámbulo; afirma el punto." },
-    { "id": "rhet.en-terminos-de", "category": "Rhetorical", "regex": "\\ben t[ée]rminos de\\b", "weight": 2.0, "severity": "Info", "message": "Relleno (“en términos de”).", "suggestion": "Suele poder sustituirse por una preposición." },
-    { "id": "rhet.con-respecto-a", "category": "Rhetorical", "regex": "\\bcon respecto a\\b|\\ben cuanto a\\b|\\ben lo que respecta a\\b", "weight": 2.0, "severity": "Info", "message": "Relleno (“con respecto a”).", "suggestion": "Usa “sobre” o “para”." },
-    { "id": "rhet.de-cara-al-futuro", "category": "Rhetorical", "regex": "\\bde cara al futuro\\b|\\bde aqu[ií] en adelante\\b", "weight": 2.0, "severity": "Info", "message": "Relleno corporativo (“de cara al futuro”).", "suggestion": "“A partir de ahora”, o córtalo." },
-    { "id": "rhet.en-este-articulo", "category": "Rhetorical", "regex": "\\ben este (art[ií]culo|post|texto|ensayo|blog|escrito|apartado)\\b", "weight": 2.5, "severity": "Low", "message": "Metarreferencia (“en este artículo…”).", "suggestion": "Entrega el contenido sin anunciarlo." },
-    { "id": "rhet.frase-grandilocuente", "category": "Rhetorical", "regex": "\\bcambio de paradigma\\b|\\besto (lo cambia todo|es enorme)\\b|\\bun antes y un despu[ée]s\\b|\\blo cambia todo\\b", "weight": 3.5, "severity": "Medium", "message": "Frase grandilocuente (“cambio de paradigma”, “esto lo cambia todo”).", "suggestion": "Di el impacto concreto." },
-    { "id": "rhet.atribucion-vaga", "category": "Rhetorical", "regex": "\\blos? (expertos?|cient[ií]ficos?|estudios?|investigadores?|analistas) (coinciden|afirman|dicen|sostienen|demuestran|muestran|sugieren|aseguran|indican|se[ñn]alan)\\b|\\bse (cree|dice|considera|sabe) (ampliamente |com[úu]nmente )?que\\b|\\bes ampliamente (considerad[oa]|reconocid[oa])\\b|\\bmuchos (creen|consideran|opinan|dicen)\\b", "weight": 4.0, "severity": "Medium", "message": "Atribución vaga (“los expertos coinciden”, “estudios demuestran”) sin fuente.", "suggestion": "Nombra la fuente o corta la apelación a la autoridad." },
-    { "id": "rhet.carraspeo",      "category": "Rhetorical", "regex": "\\bseamos (honestos|claros|sinceros|realistas)\\b|\\bd[ée]jame ser (claro|honesto|sincero)\\b|\\bpara ser (honestos?|claros?|sinceros?|justos?)\\b|\\bque quede claro\\b|\\bno nos enga[ñn]emos\\b", "weight": 3.5, "severity": "Medium", "message": "Carraspeo introductorio (“seamos honestos”, “que quede claro”).", "suggestion": "Bórralo y ve al punto." },
-    { "id": "rhet.gancho-retorico", "category": "Rhetorical", "regex": "\\b¿?y si te dijera\\b|\\bpi[ée]nsalo\\b|\\bimagina (esto|por un momento)\\b|\\baqu[ií] (viene|est[áa]) lo (bueno|interesante|mejor)\\b", "weight": 3.5, "severity": "Medium", "message": "Gancho retórico (“¿y si te dijera…”, “piénsalo”).", "suggestion": "Corta el anzuelo; dilo directo." },
-    { "id": "rhet.falsa-revelacion", "category": "Rhetorical", "regex": "\\blo que (nadie|casi nadie) te (dice|cuenta)\\b|\\blo que (todos|la mayor[ií]a|casi todos) (hacen mal|ignoran|pasan por alto)\\b|\\blo que (nadie|la mayor[ií]a) (sabe|entiende)\\b", "weight": 4.0, "severity": "Medium", "message": "Falsa revelación (“lo que nadie te dice”).", "suggestion": "Suelta el marco; comparte el punto." },
-    { "id": "syn.revelacion-dos-puntos", "category": "Syntactic", "regex": "\\bla (verdad|realidad|clave|trampa|cuesti[óo]n|lecci[óo]n)\\s*:", "weight": 3.0, "severity": "Low", "message": "Revelación con dos puntos (“la verdad:”).", "suggestion": "Usa una frase normal." },
-    { "id": "syn.gerundio-superficial", "category": "Syntactic", "regex": ",\\s+(destacando|subrayando|resaltando|enfatizando|demostrando|reflejando|evidenciando|consolidando|reforzando|ilustrando|se[ñn]alando)\\b", "weight": 3.5, "severity": "Medium", "message": "Relleno de gerundio (“, destacando…”) que finge análisis.", "suggestion": "Dilo en su propia frase, o córtalo." },
-    { "id": "rhet.listado-negativo", "category": "Rhetorical", "regex": "\\bno es [^.?!\\n]{1,30}\\.\\s+no es [^.?!\\n]{1,30}\\.", "weight": 3.0, "severity": "Low", "message": "Listado negativo (“No es X. No es Y.”).", "suggestion": "Afirma lo que SÍ es." },
-    { "id": "fmt.emoji-heading",   "category": "Rhetorical", "regex": "(?m)^\\s{0,3}#{1,6}\\s+[^\\n]*[\\u2190-\\u21FF\\u2300-\\u27BF\\u2600-\\u26FF\\u2B00-\\u2BFF\\uD83C-\\uDBFF]", "weight": 3.0, "severity": "Low", "message": "Emoji en un encabezado — ruido de formato.", "suggestion": "Los encabezados no necesitan emoji." },
-    { "id": "fmt.midsentence-bold","category": "Rhetorical", "regex": "(?m)(?<=[a-z,;áéíóúñ])\\s\\*\\*[^\\n*]{1,60}\\*\\*", "weight": 2.0, "severity": "Info", "message": "Negrita a media frase — ruido de formato.", "suggestion": "El énfasis rara vez ayuda a la prosa; quita la negrita." }
+    {
+      "id": "rhet.no-solo-sino",
+      "category": "Rhetorical",
+      "regex": "\\bno s[oó]lo\\b[^.?!\\n]{1,80}?\\bsino (también|que también|que)\\b",
+      "weight": 5.0,
+      "severity": "High",
+      "message": "Paralelismo negativo (“no solo… sino también…”).",
+      "suggestion": "Divídelo en dos frases claras o empieza por lo más fuerte."
+    },
+    {
+      "id": "rhet.no-se-trata",
+      "category": "Rhetorical",
+      "regex": "\\bno se trata (solo|s[oó]lo|únicamente|solamente) de\\b",
+      "weight": 5.0,
+      "severity": "High",
+      "message": "Paralelismo negativo (“no se trata solo de X, sino de Y”).",
+      "suggestion": "Afirma directamente lo que sí es."
+    },
+    {
+      "id": "rhet.era-digital",
+      "category": "Rhetorical",
+      "regex": "\\ben (la |el )?(era|mundo|[ée]poca) (digital|actual|moderna|moderno)\\b",
+      "weight": 4.5,
+      "severity": "High",
+      "message": "Apertura cliché (“en la era digital actual”).",
+      "suggestion": "Abre con un dato, una afirmación o una escena concreta."
+    },
+    {
+      "id": "rhet.cabe-destacar",
+      "category": "Rhetorical",
+      "regex": "\\bcabe (destacar|mencionar|se[ñn]alar|resaltar|recordar) que\\b",
+      "weight": 4.0,
+      "severity": "Medium",
+      "message": "Muletilla de relleno (“cabe destacar que”).",
+      "suggestion": "Bórralo y afirma el punto directamente."
+    },
+    {
+      "id": "rhet.es-importante",
+      "category": "Rhetorical",
+      "regex": "\\bes importante (destacar|se[ñn]alar|recordar|mencionar|tener en cuenta|considerar)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Muletilla de relleno (“es importante destacar…”).",
+      "suggestion": "Si es importante, dilo sin el preámbulo."
+    },
+    {
+      "id": "rhet.vale-la-pena",
+      "category": "Rhetorical",
+      "regex": "\\bvale la pena (mencionar|destacar|se[ñn]alar|recordar)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Muletilla de relleno (“vale la pena mencionar”).",
+      "suggestion": "Elimínala; ve directo al punto."
+    },
+    {
+      "id": "rhet.vasto-mundo",
+      "category": "Rhetorical",
+      "regex": "\\ben el (vasto |amplio |fascinante )?(mundo|[áa]mbito|panorama|universo|campo) de\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Marco de relleno (“en el vasto mundo de…”).",
+      "suggestion": "Nombra el tema directamente: “en la medicina…”."
+    },
+    {
+      "id": "syn.testimonio-de",
+      "category": "Syntactic",
+      "regex": "\\bun (claro |verdadero |auténtico )?testimonio de\\b",
+      "weight": 5.0,
+      "severity": "High",
+      "message": "Inflación retórica (“un testimonio de…”).",
+      "suggestion": "Di qué demuestra: “muestra…”, “prueba…”."
+    },
+    {
+      "id": "syn.juega-papel",
+      "category": "Syntactic",
+      "regex": "\\bjuega un papel (crucial|fundamental|clave|primordial|vital|importante|decisivo)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Construcción inflada (“juega un papel crucial”).",
+      "suggestion": "Di qué hace: “X impulsa Y”, no “X juega un papel crucial en Y”."
+    },
+    {
+      "id": "syn.se-erige",
+      "category": "Syntactic",
+      "regex": "\\bse (erige|alza|posiciona|consolida) como\\b",
+      "weight": 4.0,
+      "severity": "Medium",
+      "message": "Evasión de cópula (“se erige como…” en vez de “es…”).",
+      "suggestion": "Usa “es” salvo que el verbo aporte significado real."
+    },
+    {
+      "id": "syn.rico-tapiz",
+      "category": "Syntactic",
+      "regex": "\\b(rico|intrincado|vibrante|complejo) (tapiz|entramado|mosaico) de\\b",
+      "weight": 5.5,
+      "severity": "High",
+      "message": "Metáfora cliché (“un rico tapiz de…”).",
+      "suggestion": "Suelta la metáfora y nombra los elementos."
+    },
+    {
+      "id": "rhet.embarcate",
+      "category": "Rhetorical",
+      "regex": "\\bemb[aá]rcate en (un|una|este|esta)\\b|\\bsum[eé]rgete en\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Llamada de relleno (“embárcate en este viaje”).",
+      "suggestion": "Empieza directo; borra el rodeo."
+    },
+    {
+      "id": "rhet.en-resumen",
+      "category": "Rhetorical",
+      "regex": "\\ben (resumen|conclusi[óo]n|síntesis)\\b|\\bpara concluir\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Etiqueta de cierre formulaica (“en conclusión”).",
+      "suggestion": "Cierra con tu idea, no con un letrero."
+    },
+    {
+      "id": "rhet.por-un-lado",
+      "category": "Rhetorical",
+      "regex": "\\bpor un lado\\b",
+      "weight": 3.0,
+      "severity": "Medium",
+      "message": "Marco simétrico (“por un lado… por otro”) — falso equilibrio.",
+      "suggestion": "Si la evidencia favorece un lado, dilo."
+    },
+    {
+      "id": "rhet.regla-de-tres",
+      "category": "Rhetorical",
+      "regex": "\\b(\\w+), (\\w+) y (\\w+)[.,;]",
+      "weight": 1.2,
+      "severity": "Info",
+      "message": "Posible “regla de tres” — la IA abusa de los tríos.",
+      "suggestion": "Bien de vez en cuando; si todas las listas son de tres, varía."
+    },
+    {
+      "id": "rhet.al-final-del-dia",
+      "category": "Rhetorical",
+      "regex": "\\bal final del d[ií]a\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Muletilla de cierre (“al final del día”).",
+      "suggestion": "Córtala y ve al punto."
+    },
+    {
+      "id": "rhet.en-esencia",
+      "category": "Rhetorical",
+      "regex": "\\ben esencia\\b|\\ben su (esencia|n[úu]cleo|centro)\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Marco de relleno (“en esencia”).",
+      "suggestion": "Di qué es, sin rodeos."
+    },
+    {
+      "id": "rhet.la-realidad-es",
+      "category": "Rhetorical",
+      "regex": "\\bla (realidad|verdad) es que\\b",
+      "weight": 3.0,
+      "severity": "Low",
+      "message": "Apertura de falsa franqueza (“la verdad es que”).",
+      "suggestion": "Suelta el preámbulo; afirma el punto."
+    },
+    {
+      "id": "rhet.en-terminos-de",
+      "category": "Rhetorical",
+      "regex": "\\ben t[ée]rminos de\\b",
+      "weight": 2.0,
+      "severity": "Info",
+      "message": "Relleno (“en términos de”).",
+      "suggestion": "Suele poder sustituirse por una preposición."
+    },
+    {
+      "id": "rhet.con-respecto-a",
+      "category": "Rhetorical",
+      "regex": "\\bcon respecto a\\b|\\ben cuanto a\\b|\\ben lo que respecta a\\b",
+      "weight": 2.0,
+      "severity": "Info",
+      "message": "Relleno (“con respecto a”).",
+      "suggestion": "Usa “sobre” o “para”."
+    },
+    {
+      "id": "rhet.de-cara-al-futuro",
+      "category": "Rhetorical",
+      "regex": "\\bde cara al futuro\\b|\\bde aqu[ií] en adelante\\b",
+      "weight": 2.0,
+      "severity": "Info",
+      "message": "Relleno corporativo (“de cara al futuro”).",
+      "suggestion": "“A partir de ahora”, o córtalo."
+    },
+    {
+      "id": "rhet.en-este-articulo",
+      "category": "Rhetorical",
+      "regex": "\\ben este (art[ií]culo|post|texto|ensayo|blog|escrito|apartado)\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Metarreferencia (“en este artículo…”).",
+      "suggestion": "Entrega el contenido sin anunciarlo."
+    },
+    {
+      "id": "rhet.frase-grandilocuente",
+      "category": "Rhetorical",
+      "regex": "\\bcambio de paradigma\\b|\\besto (lo cambia todo|es enorme)\\b|\\bun antes y un despu[ée]s\\b|\\blo cambia todo\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Frase grandilocuente (“cambio de paradigma”, “esto lo cambia todo”).",
+      "suggestion": "Di el impacto concreto."
+    },
+    {
+      "id": "rhet.atribucion-vaga",
+      "category": "Rhetorical",
+      "regex": "\\blos? (expertos?|cient[ií]ficos?|estudios?|investigadores?|analistas) (coinciden|afirman|dicen|sostienen|demuestran|muestran|sugieren|aseguran|indican|se[ñn]alan)\\b|\\bse (cree|dice|considera|sabe) (ampliamente |com[úu]nmente )?que\\b|\\bes ampliamente (considerad[oa]|reconocid[oa])\\b|\\bmuchos (creen|consideran|opinan|dicen)\\b",
+      "weight": 4.0,
+      "severity": "Medium",
+      "message": "Atribución vaga (“los expertos coinciden”, “estudios demuestran”) sin fuente.",
+      "suggestion": "Nombra la fuente o corta la apelación a la autoridad."
+    },
+    {
+      "id": "rhet.carraspeo",
+      "category": "Rhetorical",
+      "regex": "\\bseamos (honestos|claros|sinceros|realistas)\\b|\\bd[ée]jame ser (claro|honesto|sincero)\\b|\\bpara ser (honestos?|claros?|sinceros?|justos?)\\b|\\bque quede claro\\b|\\bno nos enga[ñn]emos\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Carraspeo introductorio (“seamos honestos”, “que quede claro”).",
+      "suggestion": "Bórralo y ve al punto."
+    },
+    {
+      "id": "rhet.gancho-retorico",
+      "category": "Rhetorical",
+      "regex": "\\b¿?y si te dijera\\b|\\bpi[ée]nsalo\\b|\\bimagina (esto|por un momento)\\b|\\baqu[ií] (viene|est[áa]) lo (bueno|interesante|mejor)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Gancho retórico (“¿y si te dijera…”, “piénsalo”).",
+      "suggestion": "Corta el anzuelo; dilo directo."
+    },
+    {
+      "id": "rhet.falsa-revelacion",
+      "category": "Rhetorical",
+      "regex": "\\blo que (nadie|casi nadie) te (dice|cuenta)\\b|\\blo que (todos|la mayor[ií]a|casi todos) (hacen mal|ignoran|pasan por alto)\\b|\\blo que (nadie|la mayor[ií]a) (sabe|entiende)\\b",
+      "weight": 4.0,
+      "severity": "Medium",
+      "message": "Falsa revelación (“lo que nadie te dice”).",
+      "suggestion": "Suelta el marco; comparte el punto."
+    },
+    {
+      "id": "syn.revelacion-dos-puntos",
+      "category": "Syntactic",
+      "regex": "\\bla (verdad|realidad|clave|trampa|cuesti[óo]n|lecci[óo]n)\\s*:",
+      "weight": 3.0,
+      "severity": "Low",
+      "message": "Revelación con dos puntos (“la verdad:”).",
+      "suggestion": "Usa una frase normal."
+    },
+    {
+      "id": "syn.gerundio-superficial",
+      "category": "Syntactic",
+      "regex": ",\\s+(destacando|subrayando|resaltando|enfatizando|demostrando|reflejando|evidenciando|consolidando|reforzando|ilustrando|se[ñn]alando)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Relleno de gerundio (“, destacando…”) que finge análisis.",
+      "suggestion": "Dilo en su propia frase, o córtalo."
+    },
+    {
+      "id": "rhet.listado-negativo",
+      "category": "Rhetorical",
+      "regex": "\\bno es [^.?!\\n]{1,30}\\.\\s+no es [^.?!\\n]{1,30}\\.",
+      "weight": 3.0,
+      "severity": "Low",
+      "message": "Listado negativo (“No es X. No es Y.”).",
+      "suggestion": "Afirma lo que SÍ es."
+    },
+    {
+      "id": "fmt.emoji-heading",
+      "category": "Rhetorical",
+      "regex": "(?m)^\\s{0,3}#{1,6}\\s+[^\\n]*[\\u2190-\\u21FF\\u2300-\\u27BF\\u2600-\\u26FF\\u2B00-\\u2BFF\\uD83C-\\uDBFF]",
+      "weight": 3.0,
+      "severity": "Low",
+      "message": "Emoji en un encabezado — ruido de formato.",
+      "suggestion": "Los encabezados no necesitan emoji."
+    },
+    {
+      "id": "fmt.midsentence-bold",
+      "category": "Rhetorical",
+      "regex": "(?m)(?<=[a-z,;áéíóúñ])\\s\\*\\*[^\\n*]{1,60}\\*\\*",
+      "weight": 2.0,
+      "severity": "Info",
+      "message": "Negrita a media frase — ruido de formato.",
+      "suggestion": "El énfasis rara vez ayuda a la prosa; quita la negrita."
+    }
   ]
 }

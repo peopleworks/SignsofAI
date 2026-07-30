@@ -1,4 +1,5 @@
 using SignsOfAI.Core.Model;
+using SignsOfAI.Core.Rules;
 
 namespace SignsOfAI.Core.Analyzers;
 
@@ -36,10 +37,14 @@ public sealed class BurstinessAnalyzer : IAnalyzer
             Severity = severity,
             Span = new TextSpan(0, 0), // document-level
             MatchedText = string.Empty,
-            Message = $"Uniform sentence rhythm (burstiness {stats.Burstiness:0.00}, mean {stats.MeanSentenceLength:0.#} words). " +
-                      "Machine-generated text tends to hold a steady 15–25 word cadence.",
-            Suggestion = "Vary sentence length deliberately: follow a long, clause-heavy sentence with a short, punchy fragment. Let the rhythm breathe.",
-            Evidence = "Human prose typically scores 0.6–0.8; default LLM output 0.0–0.2.",
+            // Numbers are formatted before they reach the template so the pack holds words, not
+            // format specifiers a translator would have to understand.
+            Message = context.RulePack.Text(
+                PackMessages.BurstinessMessage,
+                stats.Burstiness.ToString("0.00"),
+                stats.MeanSentenceLength.ToString("0.#")),
+            Suggestion = context.RulePack.Text(PackMessages.BurstinessSuggestion),
+            Evidence = context.RulePack.Text(PackMessages.BurstinessEvidence),
             Weight = weight,
         };
     }

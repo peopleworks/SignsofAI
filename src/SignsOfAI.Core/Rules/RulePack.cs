@@ -126,6 +126,33 @@ public sealed class RulePack
 
     public PatternRule[] Patterns { get; init; } = [];
 
+    /// <summary>
+    /// Wording for the analyzers that compute their findings instead of matching a rule — the
+    /// overused-word message, the rhythm one, the em-dash one. Optional: anything missing falls back
+    /// to <see cref="PackMessages.Defaults"/>, so a pack written before this existed still works.
+    /// </summary>
+    public Dictionary<string, string>? Messages { get; init; }
+
+    /// <summary>
+    /// A template from this pack, filled in. Falls back to the built-in English when the pack does
+    /// not carry the key.
+    ///
+    /// A bad placeholder in a community-contributed template returns the raw template rather than
+    /// throwing — the same choice the interface translations make. One mistyped brace should cost a
+    /// clumsy sentence, not a blank page.
+    /// </summary>
+    public string Text(string key, params object?[] args)
+    {
+        var template = Messages is not null && Messages.TryGetValue(key, out var custom)
+                       && !string.IsNullOrWhiteSpace(custom)
+            ? custom
+            : PackMessages.Defaults.TryGetValue(key, out var fallback) ? fallback : key;
+
+        if (args.Length == 0) return template;
+        try { return string.Format(template, args); }
+        catch (FormatException) { return template; }
+    }
+
     /// <summary>Parse a rule-pack from JSON (the same schema as the built-in packs).</summary>
     public static RulePack FromJson(string json) =>
         JsonSerializer.Deserialize(json, RulePackJsonContext.Default.RulePack)
@@ -141,17 +168,21 @@ public sealed class RulePack
     {
         var lexical = new Dictionary<string, LexicalRule>(StringComparer.Ordinal);
         var patterns = new Dictionary<string, PatternRule>(StringComparer.Ordinal);
+        var messages = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var pack in packs)
         {
             // A custom pack parsed from JSON may omit a section, leaving the array null under source-gen.
             foreach (var rule in pack.Lexical ?? []) lexical[rule.Id] = rule;
             foreach (var rule in pack.Patterns ?? []) patterns[rule.Id] = rule;
+            // Merged key by key, so a custom catalog can reword one message without restating them all.
+            foreach (var (key, text) in pack.Messages ?? []) messages[key] = text;
         }
         return new RulePack
         {
             Language = language,
             Lexical = [.. lexical.Values],
             Patterns = [.. patterns.Values],
+            Messages = messages.Count > 0 ? messages : null,
         };
     }
 

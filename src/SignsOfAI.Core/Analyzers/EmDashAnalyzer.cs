@@ -1,4 +1,5 @@
 using SignsOfAI.Core.Model;
+using SignsOfAI.Core.Rules;
 
 namespace SignsOfAI.Core.Analyzers;
 
@@ -41,10 +42,10 @@ public sealed class EmDashAnalyzer : IAnalyzer
             Severity = severity,
             Span = new TextSpan(0, 0), // document-level
             MatchedText = string.Empty,
-            Message = $"Em-dash overuse ({dashes} in {words} words, {per100:0.0}/100). " +
-                      "LLMs lean on the em-dash as a rhythm crutch.",
-            Suggestion = "Replace most with a period, comma, or parentheses; keep em-dashes rare and deliberate.",
-            Evidence = "Human prose averages well under one em-dash per 100 words.",
+            Message = context.RulePack.Text(
+                PackMessages.EmDashMessage, dashes, words, per100.ToString("0.0")),
+            Suggestion = context.RulePack.Text(PackMessages.EmDashSuggestion),
+            Evidence = context.RulePack.Text(PackMessages.EmDashEvidence),
             Weight = weight,
         };
     }

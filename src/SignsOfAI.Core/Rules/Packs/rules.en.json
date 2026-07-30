@@ -1,95 +1,1065 @@
 {
   "language": "en",
+  "messages": {
+    "lexical.overused": "“{0}” is heavily overused in AI writing.",
+    "lexical.suggestion": "Consider: {0}",
+    "burstiness.message": "Uniform sentence rhythm (burstiness {0}, mean {1} words). Machine-generated text tends to hold a steady 15–25 word cadence.",
+    "burstiness.suggestion": "Vary sentence length deliberately: follow a long, clause-heavy sentence with a short, punchy fragment. Let the rhythm breathe.",
+    "burstiness.evidence": "Human prose typically scores 0.6–0.8; default LLM output 0.0–0.2.",
+    "emdash.message": "Em-dash overuse ({0} in {1} words, {2}/100). LLMs lean on the em-dash as a rhythm crutch.",
+    "emdash.suggestion": "Replace most with a period, comma, or parentheses; keep em-dashes rare and deliberate.",
+    "emdash.evidence": "Human prose averages well under one em-dash per 100 words."
+  },
   "lexical": [
-    { "id": "lex.delve",         "terms": ["delve", "delves", "delving", "delved"], "weight": 6.0, "severity": "High",   "suggestion": "examine, explore, look into, dig into", "replacements": ["examine", "explore", "look into", "dig into"], "evidence": "48× more frequent post-ChatGPT (excess ratio r=28)" },
-    { "id": "lex.tapestry",      "terms": ["tapestry"], "weight": 5.5, "severity": "High", "suggestion": "mix, blend, range — or just name the thing", "replacements": ["mix", "blend", "range"], "evidence": "35× more common post-ChatGPT" },
-    { "id": "lex.multifaceted",  "terms": ["multifaceted", "multi-faceted"], "weight": 4.0, "severity": "Medium", "suggestion": "complex, or specify the actual facets", "replacements": ["complex"], "evidence": "28× more common post-ChatGPT" },
-    { "id": "lex.nuanced",       "terms": ["nuanced"], "weight": 4.0, "severity": "Medium", "suggestion": "subtle, detailed — or state the specific distinction", "replacements": ["subtle", "detailed"], "evidence": "22× more common post-ChatGPT" },
-    { "id": "lex.pivotal",       "terms": ["pivotal"], "weight": 4.0, "severity": "Medium", "suggestion": "key, central, important", "replacements": ["key", "central", "important"], "evidence": "16× more common post-ChatGPT" },
-    { "id": "lex.underscore",    "terms": ["underscore", "underscores", "underscoring", "underscored"], "weight": 4.0, "severity": "Medium", "suggestion": "show, highlight, stress", "replacements": ["show", "highlight", "stress"], "evidence": "10–20× more common (r=13.8)" },
-    { "id": "lex.showcase",      "terms": ["showcase", "showcases", "showcasing", "showcased"], "weight": 3.5, "severity": "Medium", "suggestion": "show, present, display", "replacements": ["show", "present", "display"], "evidence": "10–20× more common (r=10.7)" },
-    { "id": "lex.crucial",       "terms": ["crucial"], "weight": 3.5, "severity": "Medium", "suggestion": "important, essential, key", "replacements": ["important", "essential", "key"], "evidence": "14× more common post-ChatGPT (δ=0.037)" },
-    { "id": "lex.intricate",     "terms": ["intricate", "intricacies", "intricately"], "weight": 4.0, "severity": "Medium", "suggestion": "complex, detailed", "replacements": ["complex", "detailed"], "evidence": "RLHF-reinforced 'complexity' word" },
-    { "id": "lex.testament",     "terms": ["testament"], "weight": 4.5, "severity": "High", "suggestion": "proof, evidence, sign — or drop the flourish", "replacements": ["proof", "evidence", "sign"], "evidence": "Common in copula-avoidance ('a testament to')" },
-    { "id": "lex.realm",         "terms": ["realm"], "weight": 3.5, "severity": "Medium", "suggestion": "field, area, world", "replacements": ["field", "area", "world"], "evidence": "Filler noun ('in the realm of')" },
-    { "id": "lex.robust",        "terms": ["robust"], "weight": 3.0, "severity": "Low", "suggestion": "strong, reliable, solid", "replacements": ["strong", "reliable", "solid"], "evidence": "RLHF style word" },
-    { "id": "lex.foster",        "terms": ["foster", "fosters", "fostering", "fostered"], "weight": 3.0, "severity": "Low", "suggestion": "encourage, support, build", "replacements": ["encourage", "support", "build"], "evidence": "RLHF style verb" },
-    { "id": "lex.leverage",      "terms": ["leverage", "leverages", "leveraging", "leveraged"], "weight": 3.5, "severity": "Medium", "suggestion": "use, apply, draw on", "replacements": ["use", "apply", "draw on"], "evidence": "RLHF style verb" },
-    { "id": "lex.seamless",      "terms": ["seamless", "seamlessly"], "weight": 3.5, "severity": "Medium", "suggestion": "smooth, smoothly — or show it, don't claim it", "replacements": ["smooth", "smoothly"] },
-    { "id": "lex.meticulous",    "terms": ["meticulous", "meticulously"], "weight": 3.5, "severity": "Medium", "suggestion": "careful, carefully, thorough", "replacements": ["careful", "carefully", "thorough"] },
-    { "id": "lex.myriad",        "terms": ["myriad"], "weight": 3.5, "severity": "Medium", "suggestion": "many, countless — or give the number", "replacements": ["many", "countless"] },
-    { "id": "lex.plethora",      "terms": ["plethora"], "weight": 3.5, "severity": "Medium", "suggestion": "many, plenty, a lot of", "replacements": ["many", "plenty", "a lot of"] },
-    { "id": "lex.transformative","terms": ["transformative"], "weight": 3.5, "severity": "Medium", "suggestion": "major, far-reaching — or show the change", "replacements": ["major", "far-reaching"] },
-    { "id": "lex.vibrant",       "terms": ["vibrant"], "weight": 3.0, "severity": "Low", "suggestion": "lively, colorful — or a concrete detail", "replacements": ["lively", "colorful"] },
-    { "id": "lex.bustling",      "terms": ["bustling"], "weight": 3.5, "severity": "Medium", "suggestion": "busy, crowded — or describe the scene", "replacements": ["busy", "crowded"] },
-    { "id": "lex.embark",        "terms": ["embark", "embarks", "embarking", "embarked"], "weight": 3.5, "severity": "Medium", "suggestion": "start, begin, set out", "replacements": ["start", "begin", "set out"] },
-    { "id": "lex.harness",       "terms": ["harness", "harnessing", "harnesses"], "weight": 3.0, "severity": "Low", "suggestion": "use, tap, apply", "replacements": ["use", "tap", "apply"] },
-    { "id": "lex.elevate",       "terms": ["elevate", "elevates", "elevating"], "weight": 3.0, "severity": "Low", "suggestion": "raise, improve, lift", "replacements": ["raise", "improve", "lift"] },
-    { "id": "lex.unlock",        "terms": ["unlock", "unlocks", "unlocking"], "weight": 3.0, "severity": "Low", "suggestion": "enable, open up, allow", "replacements": ["enable", "open up", "allow"] },
-    { "id": "lex.paramount",     "terms": ["paramount"], "weight": 3.5, "severity": "Medium", "suggestion": "essential, most important", "replacements": ["essential", "most important"] },
-    { "id": "lex.holistic",      "terms": ["holistic"], "weight": 3.0, "severity": "Low", "suggestion": "whole, complete, overall", "replacements": ["whole", "complete", "overall"] },
-    { "id": "lex.profound",      "terms": ["profound", "profoundly"], "weight": 3.0, "severity": "Low", "suggestion": "deep, deeply, major", "replacements": ["deep", "deeply", "major"] },
-    { "id": "lex.comprehensive", "terms": ["comprehensive"], "weight": 2.5, "severity": "Low", "suggestion": "complete, thorough, full", "replacements": ["complete", "thorough", "full"] },
-    { "id": "lex.evolving",      "terms": ["ever-evolving", "ever-changing"], "weight": 3.5, "severity": "Medium", "suggestion": "changing — or say how it changes", "replacements": ["changing"] },
-    { "id": "lex.cuttingedge",   "terms": ["cutting-edge"], "weight": 3.0, "severity": "Low", "suggestion": "advanced, new, the latest", "replacements": ["advanced", "new"] },
-    { "id": "lex.gamechanger",   "terms": ["game-changer", "game-changing"], "weight": 3.0, "severity": "Low", "suggestion": "major shift — or state the actual impact", "replacements": ["major shift"] },
-    { "id": "lex.moreover",      "terms": ["moreover"], "weight": 2.0, "severity": "Info", "suggestion": "also, and, besides", "replacements": ["also", "and", "besides"] },
-    { "id": "lex.furthermore",   "terms": ["furthermore"], "weight": 2.0, "severity": "Info", "suggestion": "also, and, plus", "replacements": ["also", "and", "plus"] },
-    { "id": "lex.notably",       "terms": ["notably"], "weight": 1.5, "severity": "Info", "suggestion": "often removable", "delete": true },
-    { "id": "lex.utilize",       "terms": ["utilize", "utilizes", "utilizing", "utilized", "utilization"], "weight": 3.5, "severity": "Medium", "suggestion": "use", "replacements": ["use"], "evidence": "Textbook AI inflation of “use”" },
-    { "id": "lex.facilitate",    "terms": ["facilitate", "facilitates", "facilitating", "facilitated"], "weight": 3.0, "severity": "Low", "suggestion": "help, ease, run", "replacements": ["help", "ease", "run"] },
-    { "id": "lex.streamline",    "terms": ["streamline", "streamlines", "streamlining", "streamlined"], "weight": 3.0, "severity": "Low", "suggestion": "simplify, speed up", "replacements": ["simplify", "speed up"] },
-    { "id": "lex.empower",       "terms": ["empower", "empowers", "empowering", "empowerment"], "weight": 3.0, "severity": "Low", "suggestion": "enable, equip, let", "replacements": ["enable", "equip", "let"] },
-    { "id": "lex.beacon",        "terms": ["beacon"], "weight": 3.5, "severity": "Medium", "suggestion": "example, model — or drop the metaphor", "replacements": ["example", "model"] },
-    { "id": "lex.supercharge",   "terms": ["supercharge", "supercharges", "supercharging", "supercharged"], "weight": 3.5, "severity": "Medium", "suggestion": "boost, speed up", "replacements": ["boost", "speed up"] },
-    { "id": "lex.just",          "terms": ["just"], "weight": 1.0, "severity": "Info", "suggestion": "empty intensifier — usually deletable", "delete": true },
-    { "id": "lex.simply",        "terms": ["simply"], "weight": 1.0, "severity": "Info", "suggestion": "empty intensifier — usually deletable", "delete": true },
-    { "id": "lex.actually",      "terms": ["actually"], "weight": 1.0, "severity": "Info", "suggestion": "empty intensifier — usually deletable", "delete": true },
-    { "id": "lex.literally",     "terms": ["literally"], "weight": 1.5, "severity": "Info", "suggestion": "empty intensifier — cut unless it's meant literally", "delete": true },
-    { "id": "lex.honestly",      "terms": ["honestly"], "weight": 1.5, "severity": "Info", "suggestion": "empty intensifier — cut it", "delete": true },
-    { "id": "lex.truly",         "terms": ["truly"], "weight": 1.5, "severity": "Info", "suggestion": "empty intensifier — cut it", "delete": true },
-    { "id": "lex.importantly",   "terms": ["importantly"], "weight": 1.5, "severity": "Info", "suggestion": "often removable", "delete": true },
-    { "id": "lex.fundamentally", "terms": ["fundamentally"], "weight": 2.0, "severity": "Low", "suggestion": "empty intensifier — cut it", "delete": true },
-    { "id": "lex.crucially",     "terms": ["crucially"], "weight": 2.0, "severity": "Low", "suggestion": "empty intensifier — cut it", "delete": true },
-    { "id": "lex.inherently",    "terms": ["inherently"], "weight": 2.0, "severity": "Low", "suggestion": "empty intensifier — cut it", "delete": true },
-    { "id": "lex.inevitably",    "terms": ["inevitably"], "weight": 2.0, "severity": "Low", "suggestion": "empty intensifier — cut it", "delete": true }
+    {
+      "id": "lex.delve",
+      "terms": [
+        "delve",
+        "delves",
+        "delving",
+        "delved"
+      ],
+      "weight": 6.0,
+      "severity": "High",
+      "suggestion": "examine, explore, look into, dig into",
+      "replacements": [
+        "examine",
+        "explore",
+        "look into",
+        "dig into"
+      ],
+      "evidence": "48× more frequent post-ChatGPT (excess ratio r=28)"
+    },
+    {
+      "id": "lex.tapestry",
+      "terms": [
+        "tapestry"
+      ],
+      "weight": 5.5,
+      "severity": "High",
+      "suggestion": "mix, blend, range — or just name the thing",
+      "replacements": [
+        "mix",
+        "blend",
+        "range"
+      ],
+      "evidence": "35× more common post-ChatGPT"
+    },
+    {
+      "id": "lex.multifaceted",
+      "terms": [
+        "multifaceted",
+        "multi-faceted"
+      ],
+      "weight": 4.0,
+      "severity": "Medium",
+      "suggestion": "complex, or specify the actual facets",
+      "replacements": [
+        "complex"
+      ],
+      "evidence": "28× more common post-ChatGPT"
+    },
+    {
+      "id": "lex.nuanced",
+      "terms": [
+        "nuanced"
+      ],
+      "weight": 4.0,
+      "severity": "Medium",
+      "suggestion": "subtle, detailed — or state the specific distinction",
+      "replacements": [
+        "subtle",
+        "detailed"
+      ],
+      "evidence": "22× more common post-ChatGPT"
+    },
+    {
+      "id": "lex.pivotal",
+      "terms": [
+        "pivotal"
+      ],
+      "weight": 4.0,
+      "severity": "Medium",
+      "suggestion": "key, central, important",
+      "replacements": [
+        "key",
+        "central",
+        "important"
+      ],
+      "evidence": "16× more common post-ChatGPT"
+    },
+    {
+      "id": "lex.underscore",
+      "terms": [
+        "underscore",
+        "underscores",
+        "underscoring",
+        "underscored"
+      ],
+      "weight": 4.0,
+      "severity": "Medium",
+      "suggestion": "show, highlight, stress",
+      "replacements": [
+        "show",
+        "highlight",
+        "stress"
+      ],
+      "evidence": "10–20× more common (r=13.8)"
+    },
+    {
+      "id": "lex.showcase",
+      "terms": [
+        "showcase",
+        "showcases",
+        "showcasing",
+        "showcased"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "show, present, display",
+      "replacements": [
+        "show",
+        "present",
+        "display"
+      ],
+      "evidence": "10–20× more common (r=10.7)"
+    },
+    {
+      "id": "lex.crucial",
+      "terms": [
+        "crucial"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "important, essential, key",
+      "replacements": [
+        "important",
+        "essential",
+        "key"
+      ],
+      "evidence": "14× more common post-ChatGPT (δ=0.037)"
+    },
+    {
+      "id": "lex.intricate",
+      "terms": [
+        "intricate",
+        "intricacies",
+        "intricately"
+      ],
+      "weight": 4.0,
+      "severity": "Medium",
+      "suggestion": "complex, detailed",
+      "replacements": [
+        "complex",
+        "detailed"
+      ],
+      "evidence": "RLHF-reinforced 'complexity' word"
+    },
+    {
+      "id": "lex.testament",
+      "terms": [
+        "testament"
+      ],
+      "weight": 4.5,
+      "severity": "High",
+      "suggestion": "proof, evidence, sign — or drop the flourish",
+      "replacements": [
+        "proof",
+        "evidence",
+        "sign"
+      ],
+      "evidence": "Common in copula-avoidance ('a testament to')"
+    },
+    {
+      "id": "lex.realm",
+      "terms": [
+        "realm"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "field, area, world",
+      "replacements": [
+        "field",
+        "area",
+        "world"
+      ],
+      "evidence": "Filler noun ('in the realm of')"
+    },
+    {
+      "id": "lex.robust",
+      "terms": [
+        "robust"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "strong, reliable, solid",
+      "replacements": [
+        "strong",
+        "reliable",
+        "solid"
+      ],
+      "evidence": "RLHF style word"
+    },
+    {
+      "id": "lex.foster",
+      "terms": [
+        "foster",
+        "fosters",
+        "fostering",
+        "fostered"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "encourage, support, build",
+      "replacements": [
+        "encourage",
+        "support",
+        "build"
+      ],
+      "evidence": "RLHF style verb"
+    },
+    {
+      "id": "lex.leverage",
+      "terms": [
+        "leverage",
+        "leverages",
+        "leveraging",
+        "leveraged"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "use, apply, draw on",
+      "replacements": [
+        "use",
+        "apply",
+        "draw on"
+      ],
+      "evidence": "RLHF style verb"
+    },
+    {
+      "id": "lex.seamless",
+      "terms": [
+        "seamless",
+        "seamlessly"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "smooth, smoothly — or show it, don't claim it",
+      "replacements": [
+        "smooth",
+        "smoothly"
+      ]
+    },
+    {
+      "id": "lex.meticulous",
+      "terms": [
+        "meticulous",
+        "meticulously"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "careful, carefully, thorough",
+      "replacements": [
+        "careful",
+        "carefully",
+        "thorough"
+      ]
+    },
+    {
+      "id": "lex.myriad",
+      "terms": [
+        "myriad"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "many, countless — or give the number",
+      "replacements": [
+        "many",
+        "countless"
+      ]
+    },
+    {
+      "id": "lex.plethora",
+      "terms": [
+        "plethora"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "many, plenty, a lot of",
+      "replacements": [
+        "many",
+        "plenty",
+        "a lot of"
+      ]
+    },
+    {
+      "id": "lex.transformative",
+      "terms": [
+        "transformative"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "major, far-reaching — or show the change",
+      "replacements": [
+        "major",
+        "far-reaching"
+      ]
+    },
+    {
+      "id": "lex.vibrant",
+      "terms": [
+        "vibrant"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "lively, colorful — or a concrete detail",
+      "replacements": [
+        "lively",
+        "colorful"
+      ]
+    },
+    {
+      "id": "lex.bustling",
+      "terms": [
+        "bustling"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "busy, crowded — or describe the scene",
+      "replacements": [
+        "busy",
+        "crowded"
+      ]
+    },
+    {
+      "id": "lex.embark",
+      "terms": [
+        "embark",
+        "embarks",
+        "embarking",
+        "embarked"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "start, begin, set out",
+      "replacements": [
+        "start",
+        "begin",
+        "set out"
+      ]
+    },
+    {
+      "id": "lex.harness",
+      "terms": [
+        "harness",
+        "harnessing",
+        "harnesses"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "use, tap, apply",
+      "replacements": [
+        "use",
+        "tap",
+        "apply"
+      ]
+    },
+    {
+      "id": "lex.elevate",
+      "terms": [
+        "elevate",
+        "elevates",
+        "elevating"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "raise, improve, lift",
+      "replacements": [
+        "raise",
+        "improve",
+        "lift"
+      ]
+    },
+    {
+      "id": "lex.unlock",
+      "terms": [
+        "unlock",
+        "unlocks",
+        "unlocking"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "enable, open up, allow",
+      "replacements": [
+        "enable",
+        "open up",
+        "allow"
+      ]
+    },
+    {
+      "id": "lex.paramount",
+      "terms": [
+        "paramount"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "essential, most important",
+      "replacements": [
+        "essential",
+        "most important"
+      ]
+    },
+    {
+      "id": "lex.holistic",
+      "terms": [
+        "holistic"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "whole, complete, overall",
+      "replacements": [
+        "whole",
+        "complete",
+        "overall"
+      ]
+    },
+    {
+      "id": "lex.profound",
+      "terms": [
+        "profound",
+        "profoundly"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "deep, deeply, major",
+      "replacements": [
+        "deep",
+        "deeply",
+        "major"
+      ]
+    },
+    {
+      "id": "lex.comprehensive",
+      "terms": [
+        "comprehensive"
+      ],
+      "weight": 2.5,
+      "severity": "Low",
+      "suggestion": "complete, thorough, full",
+      "replacements": [
+        "complete",
+        "thorough",
+        "full"
+      ]
+    },
+    {
+      "id": "lex.evolving",
+      "terms": [
+        "ever-evolving",
+        "ever-changing"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "changing — or say how it changes",
+      "replacements": [
+        "changing"
+      ]
+    },
+    {
+      "id": "lex.cuttingedge",
+      "terms": [
+        "cutting-edge"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "advanced, new, the latest",
+      "replacements": [
+        "advanced",
+        "new"
+      ]
+    },
+    {
+      "id": "lex.gamechanger",
+      "terms": [
+        "game-changer",
+        "game-changing"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "major shift — or state the actual impact",
+      "replacements": [
+        "major shift"
+      ]
+    },
+    {
+      "id": "lex.moreover",
+      "terms": [
+        "moreover"
+      ],
+      "weight": 2.0,
+      "severity": "Info",
+      "suggestion": "also, and, besides",
+      "replacements": [
+        "also",
+        "and",
+        "besides"
+      ]
+    },
+    {
+      "id": "lex.furthermore",
+      "terms": [
+        "furthermore"
+      ],
+      "weight": 2.0,
+      "severity": "Info",
+      "suggestion": "also, and, plus",
+      "replacements": [
+        "also",
+        "and",
+        "plus"
+      ]
+    },
+    {
+      "id": "lex.notably",
+      "terms": [
+        "notably"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "often removable",
+      "delete": true
+    },
+    {
+      "id": "lex.utilize",
+      "terms": [
+        "utilize",
+        "utilizes",
+        "utilizing",
+        "utilized",
+        "utilization"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "use",
+      "replacements": [
+        "use"
+      ],
+      "evidence": "Textbook AI inflation of “use”"
+    },
+    {
+      "id": "lex.facilitate",
+      "terms": [
+        "facilitate",
+        "facilitates",
+        "facilitating",
+        "facilitated"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "help, ease, run",
+      "replacements": [
+        "help",
+        "ease",
+        "run"
+      ]
+    },
+    {
+      "id": "lex.streamline",
+      "terms": [
+        "streamline",
+        "streamlines",
+        "streamlining",
+        "streamlined"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "simplify, speed up",
+      "replacements": [
+        "simplify",
+        "speed up"
+      ]
+    },
+    {
+      "id": "lex.empower",
+      "terms": [
+        "empower",
+        "empowers",
+        "empowering",
+        "empowerment"
+      ],
+      "weight": 3.0,
+      "severity": "Low",
+      "suggestion": "enable, equip, let",
+      "replacements": [
+        "enable",
+        "equip",
+        "let"
+      ]
+    },
+    {
+      "id": "lex.beacon",
+      "terms": [
+        "beacon"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "example, model — or drop the metaphor",
+      "replacements": [
+        "example",
+        "model"
+      ]
+    },
+    {
+      "id": "lex.supercharge",
+      "terms": [
+        "supercharge",
+        "supercharges",
+        "supercharging",
+        "supercharged"
+      ],
+      "weight": 3.5,
+      "severity": "Medium",
+      "suggestion": "boost, speed up",
+      "replacements": [
+        "boost",
+        "speed up"
+      ]
+    },
+    {
+      "id": "lex.just",
+      "terms": [
+        "just"
+      ],
+      "weight": 1.0,
+      "severity": "Info",
+      "suggestion": "empty intensifier — usually deletable",
+      "delete": true
+    },
+    {
+      "id": "lex.simply",
+      "terms": [
+        "simply"
+      ],
+      "weight": 1.0,
+      "severity": "Info",
+      "suggestion": "empty intensifier — usually deletable",
+      "delete": true
+    },
+    {
+      "id": "lex.actually",
+      "terms": [
+        "actually"
+      ],
+      "weight": 1.0,
+      "severity": "Info",
+      "suggestion": "empty intensifier — usually deletable",
+      "delete": true
+    },
+    {
+      "id": "lex.literally",
+      "terms": [
+        "literally"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "empty intensifier — cut unless it's meant literally",
+      "delete": true
+    },
+    {
+      "id": "lex.honestly",
+      "terms": [
+        "honestly"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "empty intensifier — cut it",
+      "delete": true
+    },
+    {
+      "id": "lex.truly",
+      "terms": [
+        "truly"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "empty intensifier — cut it",
+      "delete": true
+    },
+    {
+      "id": "lex.importantly",
+      "terms": [
+        "importantly"
+      ],
+      "weight": 1.5,
+      "severity": "Info",
+      "suggestion": "often removable",
+      "delete": true
+    },
+    {
+      "id": "lex.fundamentally",
+      "terms": [
+        "fundamentally"
+      ],
+      "weight": 2.0,
+      "severity": "Low",
+      "suggestion": "empty intensifier — cut it",
+      "delete": true
+    },
+    {
+      "id": "lex.crucially",
+      "terms": [
+        "crucially"
+      ],
+      "weight": 2.0,
+      "severity": "Low",
+      "suggestion": "empty intensifier — cut it",
+      "delete": true
+    },
+    {
+      "id": "lex.inherently",
+      "terms": [
+        "inherently"
+      ],
+      "weight": 2.0,
+      "severity": "Low",
+      "suggestion": "empty intensifier — cut it",
+      "delete": true
+    },
+    {
+      "id": "lex.inevitably",
+      "terms": [
+        "inevitably"
+      ],
+      "weight": 2.0,
+      "severity": "Low",
+      "suggestion": "empty intensifier — cut it",
+      "delete": true
+    }
   ],
   "patterns": [
-    { "id": "rhet.not-just",       "category": "Rhetorical", "regex": "\\bit'?s not (just|only|merely|about)\\b[^.?!\\n]{1,60}?,\\s*it'?s\\b", "weight": 6.0, "severity": "High",   "message": "Negative parallelism (“it's not just X, it's Y”) — feigns depth.", "suggestion": "State the claim directly. Cut the “not just… it's…” frame." },
-    { "id": "rhet.not-only-but",   "category": "Rhetorical", "regex": "\\bnot only\\b[^.?!\\n]{1,80}?\\bbut (also|it also)\\b", "weight": 5.0, "severity": "Medium", "message": "Negative parallelism (“not only… but also…”).", "suggestion": "Split into two plain statements, or lead with the stronger point." },
-    { "id": "rhet.worth-noting",   "category": "Rhetorical", "regex": "\\bit(('?s)| is) worth noting that\\b", "weight": 4.0, "severity": "Medium", "message": "Hedging filler (“it's worth noting that”).", "suggestion": "Delete it and state the point outright." },
-    { "id": "rhet.important-note",  "category": "Rhetorical", "regex": "\\bit is important to (note|remember|consider|understand)\\b", "weight": 3.5, "severity": "Medium", "message": "Hedging filler (“it is important to note…”).", "suggestion": "If it's important, just say it. Drop the preamble." },
-    { "id": "rhet.in-todays",      "category": "Rhetorical", "regex": "\\bin today'?s (digital |modern |fast-paced |ever-changing )?(age|world|era|landscape|society)\\b", "weight": 4.5, "severity": "High", "message": "Cliché opener (“in today's digital age”).", "suggestion": "Open with a specific fact, claim, or scene instead." },
-    { "id": "rhet.in-realm",       "category": "Rhetorical", "regex": "\\bin the (realm|world|landscape) of\\b", "weight": 3.5, "severity": "Medium", "message": "Filler frame (“in the realm of…”).", "suggestion": "Name the field directly: “in medicine…” not “in the realm of medicine…”." },
-    { "id": "rhet.that-being-said","category": "Rhetorical", "regex": "\\bthat being said\\b|\\bwith that being said\\b", "weight": 2.5, "severity": "Low", "message": "Transitional padding (“that being said”).", "suggestion": "Use “but”, “still”, or nothing." },
-    { "id": "rhet.when-it-comes",  "category": "Rhetorical", "regex": "\\bwhen it comes to\\b", "weight": 2.5, "severity": "Low", "message": "Padding phrase (“when it comes to”).", "suggestion": "Often deletable: “when it comes to pricing, it's…” → “pricing is…”." },
-    { "id": "rhet.on-one-hand",    "category": "Rhetorical", "regex": "\\bon (the )?one hand\\b", "weight": 3.0, "severity": "Medium", "message": "Symmetrical framing (“on one hand… on the other”) — false balance.", "suggestion": "If the evidence favors one side, say so. Don't force a two-sided frame." },
-    { "id": "rhet.in-conclusion",  "category": "Rhetorical", "regex": "\\bin conclusion\\b|\\bto sum up\\b|\\bin summary\\b", "weight": 2.5, "severity": "Low", "message": "Formulaic wrap-up label.", "suggestion": "End with your actual point, not a signpost." },
-    { "id": "rhet.dive-in",        "category": "Rhetorical", "regex": "\\blet'?s (dive|delve) (in|into)\\b", "weight": 3.5, "severity": "Medium", "message": "Filler call-to-action (“let's dive in”).", "suggestion": "Just start. Delete the runway." },
-    { "id": "rhet.rule-of-three",  "category": "Rhetorical", "regex": "\\b(\\w+), (\\w+),? and (\\w+)[.,;]", "weight": 1.2, "severity": "Info", "message": "Possible “rule of three” — AI defaults to tricolons.", "suggestion": "Fine occasionally; if every list is three items, vary the count." },
-    { "id": "syn.serves-as",       "category": "Syntactic", "regex": "\\b(serves|stands|acts|functions) as (a|an|the)\\b", "weight": 3.5, "severity": "Medium", "message": "Copula avoidance (“serves as a…” instead of “is a…”).", "suggestion": "Use “is”/“are” unless the verb adds real meaning." },
-    { "id": "syn.testament-to",    "category": "Syntactic", "regex": "\\b(stands|is) as a testament to\\b|\\ba testament to\\b", "weight": 5.0, "severity": "High", "message": "Copula inflation (“a testament to…”).", "suggestion": "Say what it proves plainly, e.g. “shows…” or “proves…”." },
-    { "id": "syn.plays-role",      "category": "Syntactic", "regex": "\\bplays a (vital|crucial|key|pivotal|significant|central|major) role\\b", "weight": 3.5, "severity": "Medium", "message": "Inflated construction (“plays a crucial role”).", "suggestion": "Say what it does: “X drives Y”, not “X plays a crucial role in Y”." },
-    { "id": "syn.rich-tapestry",   "category": "Syntactic", "regex": "\\b(rich|intricate|vibrant|complex) tapestry of\\b", "weight": 5.5, "severity": "High", "message": "Cliché metaphor (“rich tapestry of…”).", "suggestion": "Drop the metaphor and name the elements directly." },
-    { "id": "rhet.false-range",    "category": "Rhetorical", "regex": "\\bfrom (ancient|the birth of|the smallest|humble|the dawn of|the depths of)\\b[^.?!\\n]{1,50}?\\bto\\b", "weight": 3.5, "severity": "Medium", "message": "Possible “false range” (“from X to Y”) inflating scope.", "suggestion": "Keep the range only if the span in between is genuinely relevant." },
-    { "id": "rhet.end-of-day",     "category": "Rhetorical", "regex": "\\bat the end of the day\\b", "weight": 2.5, "severity": "Low", "message": "Filler wrap-up (“at the end of the day”).", "suggestion": "Cut it and state the point." },
-    { "id": "rhet.at-its-core",    "category": "Rhetorical", "regex": "\\bat (its|the) core\\b", "weight": 2.5, "severity": "Low", "message": "Filler frame (“at its core”).", "suggestion": "Say what it is, plainly." },
-    { "id": "rhet.in-age-of",      "category": "Rhetorical", "regex": "\\bin the age of\\b", "weight": 3.0, "severity": "Low", "message": "Cliché opener frame (“in the age of…”).", "suggestion": "Open with a specific fact or claim." },
-    { "id": "rhet.the-reality-is", "category": "Rhetorical", "regex": "\\bthe (reality|truth) is\\b", "weight": 3.0, "severity": "Low", "message": "Faux-candor opener (“the truth is…”).", "suggestion": "Drop the preamble; just state the claim." },
-    { "id": "rhet.in-terms-of",    "category": "Rhetorical", "regex": "\\bin terms of\\b", "weight": 2.0, "severity": "Info", "message": "Padding phrase (“in terms of”).", "suggestion": "Often deletable, or replace with a simple preposition." },
-    { "id": "rhet.with-regard-to", "category": "Rhetorical", "regex": "\\b(with|in) regards? to\\b", "weight": 2.0, "severity": "Info", "message": "Padding phrase (“with regard to”).", "suggestion": "Use “about” or “for”." },
-    { "id": "rhet.in-order-to",    "category": "Rhetorical", "regex": "\\bin order to\\b", "weight": 1.0, "severity": "Info", "message": "Padding (“in order to”).", "suggestion": "Usually just “to”." },
-    { "id": "rhet.going-forward",  "category": "Rhetorical", "regex": "\\bgoing forward\\b", "weight": 2.0, "severity": "Info", "message": "Corporate filler (“going forward”).", "suggestion": "Use “from now on”, or cut it." },
-    { "id": "rhet.in-this-article","category": "Rhetorical", "regex": "\\bin this (article|post|blog|essay|piece|guide|section)\\b", "weight": 2.5, "severity": "Low", "message": "Meta-reference (“in this article…”).", "suggestion": "Just deliver the content; don't announce it." },
-    { "id": "rhet.hype-phrase",    "category": "Rhetorical", "regex": "\\bparadigm shift\\b|\\bthis (is|changes) (huge|everything)\\b|\\bchanges everything\\b", "weight": 3.5, "severity": "Medium", "message": "Hype phrase (“paradigm shift”, “this changes everything”).", "suggestion": "State the concrete impact instead." },
-    { "id": "rhet.weasel-attribution", "category": "Rhetorical", "regex": "\\b(experts?|scientists?|researchers?|studies|research|critics|analysts) (agree|say|claim|believe|show|shows|suggest|argue|note|found)\\b|\\bit is widely (regarded|considered|believed|accepted|known)\\b|\\bwidely (regarded|considered|seen) as\\b|\\bit(('| i)s| is) (said|believed|thought) that\\b|\\bmany (people )?(believe|argue|say)\\b", "weight": 4.0, "severity": "Medium", "message": "Weasel attribution (“experts agree”, “studies show”) with no named source.", "suggestion": "Name the source, or cut the appeal to authority." },
-    { "id": "rhet.throat-clearing", "category": "Rhetorical", "regex": "\\bhere'?s the thing\\b|\\blet me be (clear|honest)\\b|\\blet'?s be (clear|honest|real)\\b|\\bi'?ll be honest\\b|\\bmake no mistake\\b|\\bto be (clear|honest|fair)\\b", "weight": 3.5, "severity": "Medium", "message": "Throat-clearing opener (“here's the thing”, “let me be clear”).", "suggestion": "Delete it and make the point." },
-    { "id": "rhet.rhetorical-setup", "category": "Rhetorical", "regex": "\\bwhat if i told you\\b|\\bthink about it\\b|\\bplot twist\\b|\\bhere'?s the (kicker|catch|secret)\\b|\\bpicture this\\b", "weight": 3.5, "severity": "Medium", "message": "Rhetorical setup (“what if I told you”, “plot twist”).", "suggestion": "Cut the tease; state it." },
-    { "id": "rhet.faux-insight",   "category": "Rhetorical", "regex": "\\bwhat (everyone|most people|nobody) (gets? wrong|miss(es)?|forgets?|doesn'?t (tell|know))\\b|\\bwhat nobody tells you\\b|\\bthe (part|thing) (that )?(most people|everyone) (skip|skips|miss|misses|gets? wrong)\\b|\\bhere'?s what (most people|everyone|nobody) (miss(es)?|gets? wrong)\\b", "weight": 4.0, "severity": "Medium", "message": "Faux-insight setup (“what nobody tells you”, “the part most people skip”).", "suggestion": "Drop the framing; just share the point." },
-    { "id": "syn.colon-reveal",    "category": "Syntactic", "regex": "\\bthe (truth|reality|catch|problem|point|kicker|bottom line|secret|result|lesson|takeaway)\\s*:", "weight": 3.0, "severity": "Low", "message": "Dramatic colon reveal (“the truth:”).", "suggestion": "Use a plain sentence." },
-    { "id": "syn.superficial-ing", "category": "Syntactic", "regex": ",\\s+(highlighting|underscoring|emphasi[sz]ing|showcasing|demonstrating|illustrating|reflecting|signal(l)?ing|cementing|solidifying|reinforcing|underlining)\\b", "weight": 3.5, "severity": "Medium", "message": "Participial padding (“, highlighting…”) that fakes analysis.", "suggestion": "State the point in its own sentence, or cut it." },
-    { "id": "rhet.negative-listing", "category": "Rhetorical", "regex": "\\bnot [^.?!\\n]{1,30}\\.\\s+not [^.?!\\n]{1,30}\\.", "weight": 3.0, "severity": "Low", "message": "Negative listing (“Not X. Not Y.”) staccato.", "suggestion": "State what it IS, directly." },
-    { "id": "fmt.emoji-heading",   "category": "Rhetorical", "regex": "(?m)^\\s{0,3}#{1,6}\\s+[^\\n]*[\\u2190-\\u21FF\\u2300-\\u27BF\\u2600-\\u26FF\\u2B00-\\u2BFF\\uD83C-\\uDBFF]", "weight": 3.0, "severity": "Low", "message": "Emoji in a heading — formatting slop.", "suggestion": "Headings don't need emoji." },
-    { "id": "fmt.midsentence-bold","category": "Rhetorical", "regex": "(?m)(?<=[a-z,;])\\s\\*\\*[^\\n*]{1,60}\\*\\*", "weight": 2.0, "severity": "Info", "message": "Mid-sentence bold — formatting slop.", "suggestion": "Emphasis rarely helps prose; cut the bold." }
+    {
+      "id": "rhet.not-just",
+      "category": "Rhetorical",
+      "regex": "\\bit'?s not (just|only|merely|about)\\b[^.?!\\n]{1,60}?,\\s*it'?s\\b",
+      "weight": 6.0,
+      "severity": "High",
+      "message": "Negative parallelism (“it's not just X, it's Y”) — feigns depth.",
+      "suggestion": "State the claim directly. Cut the “not just… it's…” frame."
+    },
+    {
+      "id": "rhet.not-only-but",
+      "category": "Rhetorical",
+      "regex": "\\bnot only\\b[^.?!\\n]{1,80}?\\bbut (also|it also)\\b",
+      "weight": 5.0,
+      "severity": "Medium",
+      "message": "Negative parallelism (“not only… but also…”).",
+      "suggestion": "Split into two plain statements, or lead with the stronger point."
+    },
+    {
+      "id": "rhet.worth-noting",
+      "category": "Rhetorical",
+      "regex": "\\bit(('?s)| is) worth noting that\\b",
+      "weight": 4.0,
+      "severity": "Medium",
+      "message": "Hedging filler (“it's worth noting that”).",
+      "suggestion": "Delete it and state the point outright."
+    },
+    {
+      "id": "rhet.important-note",
+      "category": "Rhetorical",
+      "regex": "\\bit is important to (note|remember|consider|understand)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Hedging filler (“it is important to note…”).",
+      "suggestion": "If it's important, just say it. Drop the preamble."
+    },
+    {
+      "id": "rhet.in-todays",
+      "category": "Rhetorical",
+      "regex": "\\bin today'?s (digital |modern |fast-paced |ever-changing )?(age|world|era|landscape|society)\\b",
+      "weight": 4.5,
+      "severity": "High",
+      "message": "Cliché opener (“in today's digital age”).",
+      "suggestion": "Open with a specific fact, claim, or scene instead."
+    },
+    {
+      "id": "rhet.in-realm",
+      "category": "Rhetorical",
+      "regex": "\\bin the (realm|world|landscape) of\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Filler frame (“in the realm of…”).",
+      "suggestion": "Name the field directly: “in medicine…” not “in the realm of medicine…”."
+    },
+    {
+      "id": "rhet.that-being-said",
+      "category": "Rhetorical",
+      "regex": "\\bthat being said\\b|\\bwith that being said\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Transitional padding (“that being said”).",
+      "suggestion": "Use “but”, “still”, or nothing."
+    },
+    {
+      "id": "rhet.when-it-comes",
+      "category": "Rhetorical",
+      "regex": "\\bwhen it comes to\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Padding phrase (“when it comes to”).",
+      "suggestion": "Often deletable: “when it comes to pricing, it's…” → “pricing is…”."
+    },
+    {
+      "id": "rhet.on-one-hand",
+      "category": "Rhetorical",
+      "regex": "\\bon (the )?one hand\\b",
+      "weight": 3.0,
+      "severity": "Medium",
+      "message": "Symmetrical framing (“on one hand… on the other”) — false balance.",
+      "suggestion": "If the evidence favors one side, say so. Don't force a two-sided frame."
+    },
+    {
+      "id": "rhet.in-conclusion",
+      "category": "Rhetorical",
+      "regex": "\\bin conclusion\\b|\\bto sum up\\b|\\bin summary\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Formulaic wrap-up label.",
+      "suggestion": "End with your actual point, not a signpost."
+    },
+    {
+      "id": "rhet.dive-in",
+      "category": "Rhetorical",
+      "regex": "\\blet'?s (dive|delve) (in|into)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Filler call-to-action (“let's dive in”).",
+      "suggestion": "Just start. Delete the runway."
+    },
+    {
+      "id": "rhet.rule-of-three",
+      "category": "Rhetorical",
+      "regex": "\\b(\\w+), (\\w+),? and (\\w+)[.,;]",
+      "weight": 1.2,
+      "severity": "Info",
+      "message": "Possible “rule of three” — AI defaults to tricolons.",
+      "suggestion": "Fine occasionally; if every list is three items, vary the count."
+    },
+    {
+      "id": "syn.serves-as",
+      "category": "Syntactic",
+      "regex": "\\b(serves|stands|acts|functions) as (a|an|the)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Copula avoidance (“serves as a…” instead of “is a…”).",
+      "suggestion": "Use “is”/“are” unless the verb adds real meaning."
+    },
+    {
+      "id": "syn.testament-to",
+      "category": "Syntactic",
+      "regex": "\\b(stands|is) as a testament to\\b|\\ba testament to\\b",
+      "weight": 5.0,
+      "severity": "High",
+      "message": "Copula inflation (“a testament to…”).",
+      "suggestion": "Say what it proves plainly, e.g. “shows…” or “proves…”."
+    },
+    {
+      "id": "syn.plays-role",
+      "category": "Syntactic",
+      "regex": "\\bplays a (vital|crucial|key|pivotal|significant|central|major) role\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Inflated construction (“plays a crucial role”).",
+      "suggestion": "Say what it does: “X drives Y”, not “X plays a crucial role in Y”."
+    },
+    {
+      "id": "syn.rich-tapestry",
+      "category": "Syntactic",
+      "regex": "\\b(rich|intricate|vibrant|complex) tapestry of\\b",
+      "weight": 5.5,
+      "severity": "High",
+      "message": "Cliché metaphor (“rich tapestry of…”).",
+      "suggestion": "Drop the metaphor and name the elements directly."
+    },
+    {
+      "id": "rhet.false-range",
+      "category": "Rhetorical",
+      "regex": "\\bfrom (ancient|the birth of|the smallest|humble|the dawn of|the depths of)\\b[^.?!\\n]{1,50}?\\bto\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Possible “false range” (“from X to Y”) inflating scope.",
+      "suggestion": "Keep the range only if the span in between is genuinely relevant."
+    },
+    {
+      "id": "rhet.end-of-day",
+      "category": "Rhetorical",
+      "regex": "\\bat the end of the day\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Filler wrap-up (“at the end of the day”).",
+      "suggestion": "Cut it and state the point."
+    },
+    {
+      "id": "rhet.at-its-core",
+      "category": "Rhetorical",
+      "regex": "\\bat (its|the) core\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Filler frame (“at its core”).",
+      "suggestion": "Say what it is, plainly."
+    },
+    {
+      "id": "rhet.in-age-of",
+      "category": "Rhetorical",
+      "regex": "\\bin the age of\\b",
+      "weight": 3.0,
+      "severity": "Low",
+      "message": "Cliché opener frame (“in the age of…”).",
+      "suggestion": "Open with a specific fact or claim."
+    },
+    {
+      "id": "rhet.the-reality-is",
+      "category": "Rhetorical",
+      "regex": "\\bthe (reality|truth) is\\b",
+      "weight": 3.0,
+      "severity": "Low",
+      "message": "Faux-candor opener (“the truth is…”).",
+      "suggestion": "Drop the preamble; just state the claim."
+    },
+    {
+      "id": "rhet.in-terms-of",
+      "category": "Rhetorical",
+      "regex": "\\bin terms of\\b",
+      "weight": 2.0,
+      "severity": "Info",
+      "message": "Padding phrase (“in terms of”).",
+      "suggestion": "Often deletable, or replace with a simple preposition."
+    },
+    {
+      "id": "rhet.with-regard-to",
+      "category": "Rhetorical",
+      "regex": "\\b(with|in) regards? to\\b",
+      "weight": 2.0,
+      "severity": "Info",
+      "message": "Padding phrase (“with regard to”).",
+      "suggestion": "Use “about” or “for”."
+    },
+    {
+      "id": "rhet.in-order-to",
+      "category": "Rhetorical",
+      "regex": "\\bin order to\\b",
+      "weight": 1.0,
+      "severity": "Info",
+      "message": "Padding (“in order to”).",
+      "suggestion": "Usually just “to”."
+    },
+    {
+      "id": "rhet.going-forward",
+      "category": "Rhetorical",
+      "regex": "\\bgoing forward\\b",
+      "weight": 2.0,
+      "severity": "Info",
+      "message": "Corporate filler (“going forward”).",
+      "suggestion": "Use “from now on”, or cut it."
+    },
+    {
+      "id": "rhet.in-this-article",
+      "category": "Rhetorical",
+      "regex": "\\bin this (article|post|blog|essay|piece|guide|section)\\b",
+      "weight": 2.5,
+      "severity": "Low",
+      "message": "Meta-reference (“in this article…”).",
+      "suggestion": "Just deliver the content; don't announce it."
+    },
+    {
+      "id": "rhet.hype-phrase",
+      "category": "Rhetorical",
+      "regex": "\\bparadigm shift\\b|\\bthis (is|changes) (huge|everything)\\b|\\bchanges everything\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Hype phrase (“paradigm shift”, “this changes everything”).",
+      "suggestion": "State the concrete impact instead."
+    },
+    {
+      "id": "rhet.weasel-attribution",
+      "category": "Rhetorical",
+      "regex": "\\b(experts?|scientists?|researchers?|studies|research|critics|analysts) (agree|say|claim|believe|show|shows|suggest|argue|note|found)\\b|\\bit is widely (regarded|considered|believed|accepted|known)\\b|\\bwidely (regarded|considered|seen) as\\b|\\bit(('| i)s| is) (said|believed|thought) that\\b|\\bmany (people )?(believe|argue|say)\\b",
+      "weight": 4.0,
+      "severity": "Medium",
+      "message": "Weasel attribution (“experts agree”, “studies show”) with no named source.",
+      "suggestion": "Name the source, or cut the appeal to authority."
+    },
+    {
+      "id": "rhet.throat-clearing",
+      "category": "Rhetorical",
+      "regex": "\\bhere'?s the thing\\b|\\blet me be (clear|honest)\\b|\\blet'?s be (clear|honest|real)\\b|\\bi'?ll be honest\\b|\\bmake no mistake\\b|\\bto be (clear|honest|fair)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Throat-clearing opener (“here's the thing”, “let me be clear”).",
+      "suggestion": "Delete it and make the point."
+    },
+    {
+      "id": "rhet.rhetorical-setup",
+      "category": "Rhetorical",
+      "regex": "\\bwhat if i told you\\b|\\bthink about it\\b|\\bplot twist\\b|\\bhere'?s the (kicker|catch|secret)\\b|\\bpicture this\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Rhetorical setup (“what if I told you”, “plot twist”).",
+      "suggestion": "Cut the tease; state it."
+    },
+    {
+      "id": "rhet.faux-insight",
+      "category": "Rhetorical",
+      "regex": "\\bwhat (everyone|most people|nobody) (gets? wrong|miss(es)?|forgets?|doesn'?t (tell|know))\\b|\\bwhat nobody tells you\\b|\\bthe (part|thing) (that )?(most people|everyone) (skip|skips|miss|misses|gets? wrong)\\b|\\bhere'?s what (most people|everyone|nobody) (miss(es)?|gets? wrong)\\b",
+      "weight": 4.0,
+      "severity": "Medium",
+      "message": "Faux-insight setup (“what nobody tells you”, “the part most people skip”).",
+      "suggestion": "Drop the framing; just share the point."
+    },
+    {
+      "id": "syn.colon-reveal",
+      "category": "Syntactic",
+      "regex": "\\bthe (truth|reality|catch|problem|point|kicker|bottom line|secret|result|lesson|takeaway)\\s*:",
+      "weight": 3.0,
+      "severity": "Low",
+      "message": "Dramatic colon reveal (“the truth:”).",
+      "suggestion": "Use a plain sentence."
+    },
+    {
+      "id": "syn.superficial-ing",
+      "category": "Syntactic",
+      "regex": ",\\s+(highlighting|underscoring|emphasi[sz]ing|showcasing|demonstrating|illustrating|reflecting|signal(l)?ing|cementing|solidifying|reinforcing|underlining)\\b",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Participial padding (“, highlighting…”) that fakes analysis.",
+      "suggestion": "State the point in its own sentence, or cut it."
+    },
+    {
+      "id": "rhet.negative-listing",
+      "category": "Rhetorical",
+      "regex": "\\bnot [^.?!\\n]{1,30}\\.\\s+not [^.?!\\n]{1,30}\\.",
+      "weight": 3.0,
+      "severity": "Low",
+      "message": "Negative listing (“Not X. Not Y.”) staccato.",
+      "suggestion": "State what it IS, directly."
+    },
+    {
+      "id": "fmt.emoji-heading",
+      "category": "Rhetorical",
+      "regex": "(?m)^\\s{0,3}#{1,6}\\s+[^\\n]*[\\u2190-\\u21FF\\u2300-\\u27BF\\u2600-\\u26FF\\u2B00-\\u2BFF\\uD83C-\\uDBFF]",
+      "weight": 3.0,
+      "severity": "Low",
+      "message": "Emoji in a heading — formatting slop.",
+      "suggestion": "Headings don't need emoji."
+    },
+    {
+      "id": "fmt.midsentence-bold",
+      "category": "Rhetorical",
+      "regex": "(?m)(?<=[a-z,;])\\s\\*\\*[^\\n*]{1,60}\\*\\*",
+      "weight": 2.0,
+      "severity": "Info",
+      "message": "Mid-sentence bold — formatting slop.",
+      "suggestion": "Emphasis rarely helps prose; cut the bold."
+    }
   ]
 }

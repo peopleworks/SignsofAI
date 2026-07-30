@@ -67,6 +67,23 @@ There are two kinds.
 }
 ```
 
+**Messages** — three analyzers compute their findings instead of matching a rule (overused words,
+sentence rhythm, em-dash overuse), so their wording lives in a `messages` block at the top of the
+pack rather than in a rule:
+
+```json
+"messages": {
+  "lexical.overused":   "«{0}» está muy sobreusada en la escritura con IA.",
+  "lexical.suggestion": "Prueba con: {0}",
+  "burstiness.message": "Ritmo de oraciones uniforme (variabilidad {0}, media de {1} palabras). …",
+  "emdash.message":     "Abuso de la raya ({0} en {1} palabras, {2} por cada 100). …"
+}
+```
+
+The `{0}`-style placeholders are positional and each key takes a fixed number of them; a test names
+the file and the key if one is missing or invented. Anything you leave out falls back to English, so
+a pack that predates this block keeps working, and a translation can be sent in one key at a time.
+
 What we ask of a new rule:
 
 - **A `suggestion` that tells the writer what to do instead.** A flag with no fix is a black box with
