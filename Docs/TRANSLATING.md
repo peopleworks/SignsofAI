@@ -13,7 +13,7 @@ If you speak a language this tool doesn't, you can add it. That's the whole idea
 Everything lives in one folder:
 
 ```
-src/SignsOfAI.Web/wwwroot/i18n/
+src/SignsOfAI.UI/wwwroot/i18n/
 ├── locales.json     ← the list of available languages
 ├── en.json          ← English (the reference)
 └── es.json          ← Spanish
@@ -41,7 +41,7 @@ Say you want French (`fr`).
 **1. Copy the reference.**
 
 ```bash
-cp src/SignsOfAI.Web/wwwroot/i18n/en.json src/SignsOfAI.Web/wwwroot/i18n/fr.json
+cp src/SignsOfAI.UI/wwwroot/i18n/en.json src/SignsOfAI.UI/wwwroot/i18n/fr.json
 ```
 
 **2. Translate the values in `fr.json`.** Change only the text on the right of each colon. Never

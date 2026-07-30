@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 /// <summary>One web page returned for a searched phrase.</summary>
 public sealed record WebHitDto

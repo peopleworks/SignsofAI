@@ -1,0 +1,26 @@
+<Window x:Class="SignsOfAI.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:blazor="clr-namespace:Microsoft.AspNetCore.Components.WebView.Wpf;assembly=Microsoft.AspNetCore.Components.WebView.Wpf"
+        xmlns:web="clr-namespace:Microsoft.AspNetCore.Components.Web;assembly=Microsoft.AspNetCore.Components.Web"
+        xmlns:ui="clr-namespace:SignsOfAI.UI;assembly=SignsOfAI.UI"
+        Title="Signs of AI Writing"
+        Height="900" Width="1440"
+        MinHeight="600" MinWidth="900"
+        WindowStartupLocation="CenterScreen">
+
+    <!--
+      The entire window is one WebView hosting the shared Blazor components — the same App root the
+      web app mounts, so there is no second copy of the interface to keep in step. HeadOutlet is
+      registered for parity with the web host: it makes <PageTitle> a no-op rather than nothing.
+    -->
+    <Grid>
+        <blazor:BlazorWebView HostPage="wwwroot\index.html" Services="{DynamicResource services}">
+            <blazor:BlazorWebView.RootComponents>
+                <blazor:RootComponent Selector="#app" ComponentType="{x:Type ui:App}" />
+                <blazor:RootComponent Selector="head::after" ComponentType="{x:Type web:HeadOutlet}" />
+            </blazor:BlazorWebView.RootComponents>
+        </blazor:BlazorWebView>
+    </Grid>
+
+</Window>

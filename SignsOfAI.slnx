@@ -1,8 +1,17 @@
 <Solution>
+
+  <!--
+    src/SignsOfAI.Desktop is deliberately NOT listed here, and Visual Studio will offer to add it —
+    please don't. It is a WPF app on net10.0-windows, and three workflows build this solution on
+    ubuntu-latest (ci, codeql, nuget), so adding it turns all three red on the next push. Open
+    SignsOfAI.Desktop.slnx for desktop work; CI builds it in its own windows-latest job.
+  -->
+
   <Folder Name="/src/">
     <Project Path="src/SignsOfAI.Cli/SignsOfAI.Cli.csproj" />
     <Project Path="src/SignsOfAI.Core/SignsOfAI.Core.csproj" />
     <Project Path="src/SignsOfAI.Perplexity.Api/SignsOfAI.Perplexity.Api.csproj" />
+    <Project Path="src/SignsOfAI.UI/SignsOfAI.UI.csproj" />
     <Project Path="src/SignsOfAI.Web/SignsOfAI.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">

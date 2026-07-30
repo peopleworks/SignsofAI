@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 /// <summary>Summary data passed to the JS canvas renderer for the shareable card (no analyzed text).</summary>
 public sealed record ShareCardData(

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using SignsOfAI.Core.Model;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 /// <summary>One entry in <c>wwwroot/i18n/locales.json</c>.</summary>
 public sealed class LocaleInfo
@@ -44,10 +44,18 @@ public sealed class LocaleManifest
 ///
 /// Components re-render on change by deriving from <see cref="Components.LocalizedComponent"/>.
 /// </summary>
-public sealed class Loc(HttpClient http, IJSRuntime js, BrowserStorage storage)
+public sealed class Loc(IJSRuntime js, BrowserStorage storage)
 {
     private const string StorageKey = "signsofai.ui.lang";
-    private const string BasePath = "i18n";
+
+    /// <summary>
+    /// Where the locale files land once this library's static assets are published into a host: a
+    /// Razor class library serves its <c>wwwroot</c> under <c>_content/{assembly}/</c>. Derived from
+    /// the assembly name rather than written out, so renaming the project can't silently 404 the
+    /// translations.
+    /// </summary>
+    private static readonly string BasePath =
+        $"_content/{typeof(Loc).Assembly.GetName().Name}/i18n";
 
     private readonly Dictionary<string, Dictionary<string, string>> _loaded = new(StringComparer.OrdinalIgnoreCase);
 
@@ -112,12 +120,27 @@ public sealed class Loc(HttpClient http, IJSRuntime js, BrowserStorage storage)
 
     // ── loading ──────────────────────────────────────────────────────────────
 
+    private Task? _init;
+
+    /// <summary>
+    /// Loads the language, once, no matter how many callers ask.
+    ///
+    /// The two hosts reach this at different moments and both are correct. The web app awaits it in
+    /// <c>Program.cs</c> before the first render, so a Spanish visitor never sees a flash of English
+    /// chrome. The desktop app cannot: JS interop only comes alive once the WebView has booted, so
+    /// <c>App.razor</c> awaits it on first render instead and holds the router back until it is done.
+    /// Whichever gets there first, the other is a no-op.
+    /// </summary>
+    public Task EnsureInitializedAsync() => _init ??= InitCoreAsync();
+
+    /// <summary>True once the strings are in memory and the interface can safely render.</summary>
+    public bool IsReady => _init is { IsCompletedSuccessfully: true };
+
     /// <summary>
     /// Reads the manifest, picks the language (stored preference → browser language → fallback) and
-    /// loads its strings. Called once from <c>Program.cs</c> before the first render, so a Spanish
-    /// visitor never sees a flash of English chrome.
+    /// loads its strings.
     /// </summary>
-    public async Task InitAsync()
+    private async Task InitCoreAsync()
     {
         var manifest = await GetJsonAsync($"{BasePath}/locales.json", LocJsonContext.Default.LocaleManifest);
         if (manifest is { Locales.Length: > 0 })
@@ -170,9 +193,8 @@ public sealed class Loc(HttpClient http, IJSRuntime js, BrowserStorage storage)
         {
             // Read as a string first: a mis-deployed path returns index.html with a 200, and that
             // would otherwise surface as a confusing JSON error.
-            using var response = await http.GetAsync(path);
-            if (!response.IsSuccessStatusCode) return null;
-            var body = await response.Content.ReadAsStringAsync();
+            var body = await js.InvokeAsync<string?>("signsofai.fetchText", path);
+            if (string.IsNullOrWhiteSpace(body)) return null;
             return JsonSerializer.Deserialize(body, typeInfo);
         }
         catch (Exception ex)

@@ -187,8 +187,11 @@ SignsOfAI.slnx
 │  │  ├─ Rules/Packs/           # rules.en.json, rules.es.json (embedded, community-extensible)
 │  │  ├─ Text/                  # Tokenizer, sentence splitter, language detector, statistics
 │  │  └─ AiWritingAnalyzer      # Public facade: Analyze(text, language)
-│  ├─ SignsOfAI.Web             # Blazor WebAssembly front end (Analyze, Originality, Catalog)
+│  ├─ SignsOfAI.UI              # The whole interface (Analyze, Originality, Catalog) — shared by
+│  │  │                         #   both hosts below, so a change lands in web and desktop at once
 │  │  └─ wwwroot/i18n/          # UI translations: en.json, es.json + locales.json (community-extensible)
+│  ├─ SignsOfAI.Web             # Host: Blazor WebAssembly, runs in the browser
+│  ├─ SignsOfAI.Desktop         # Host: WPF + WebView2, runs offline and reaches local models
 │  ├─ SignsOfAI.Cli             # `dotnet tool` for CI pipelines
 │  ├─ SignsOfAI.Mcp             # MCP server (stdio): the engine as tools for Claude Desktop / any client
 │  └─ SignsOfAI.Perplexity.Api  # Optional ASP.NET Core server: predictability + embeddings
@@ -291,7 +294,7 @@ field is simply reported and never auto-edited, which is why every built-in rule
 **If you speak a language this tool doesn't, you can add it — and you don't need to know C#.**
 
 The interface is plain JSON: one file per language in
-[`src/SignsOfAI.Web/wwwroot/i18n/`](src/SignsOfAI.Web/wwwroot/i18n), plus a `locales.json` manifest.
+[`src/SignsOfAI.UI/wwwroot/i18n/`](src/SignsOfAI.UI/wwwroot/i18n), plus a `locales.json` manifest.
 Adding a language is *copy `en.json`, translate the values on the right, add one line to the manifest*.
 No build step, no code to read, and the language switch picks it up on its own.
 

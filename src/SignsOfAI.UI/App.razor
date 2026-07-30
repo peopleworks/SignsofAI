@@ -1,0 +1,19 @@
+@inject Loc L
+
+@if (L.IsReady)
+{
+    <Router AppAssembly="@typeof(App).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+    </Router>
+}
+
+@code {
+    // Hold the router back until the interface has its strings. The web app already resolved the
+    // language in Program.cs, so this is a no-op there and nothing blank is ever shown; the desktop
+    // app arrives here first, because JS interop only wakes up once its WebView has booted. Either
+    // way the interface never renders half-translated.
+    protected override Task OnInitializedAsync() => L.EnsureInitializedAsync();
+}

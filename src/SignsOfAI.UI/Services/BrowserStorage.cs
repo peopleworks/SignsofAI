@@ -1,6 +1,6 @@
 using Microsoft.JSInterop;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 /// <summary>Thin wrapper over the browser's localStorage. Used to persist the user's own API key
 /// locally — it is never sent anywhere except directly to the Anthropic API from the browser.</summary>

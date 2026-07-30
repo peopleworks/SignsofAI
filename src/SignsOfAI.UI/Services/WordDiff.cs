@@ -1,4 +1,4 @@
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 public enum DiffKind { Equal, Removed, Added }
 

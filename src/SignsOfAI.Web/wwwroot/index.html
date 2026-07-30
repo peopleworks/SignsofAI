@@ -8,7 +8,10 @@
     <meta name="description" content="Free, privacy-first tool that flags the tells of AI writing and tells you how to fix each one. Runs 100% in your browser." />
     <base href="/" />
     <link rel="preload" id="webassembly" />
-    <link rel="stylesheet" href="css/app.css" />
+    <!-- The interface lives in the SignsOfAI.UI class library, shared with the desktop app; a Razor
+         class library serves its wwwroot under _content/{assembly}/. Paths stay relative so the
+         GitHub Pages deploy, which rewrites <base href> to /<repo>/, still resolves them. -->
+    <link rel="stylesheet" href="_content/SignsOfAI.UI/css/app.css" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2" />
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2" />
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2" />
@@ -32,8 +35,8 @@
         <a href="." class="reload">Reload</a>
         <span class="dismiss">🗙</span>
     </div>
-    <script src="js/lang.js"></script>
-    <script src="js/share-card.js"></script>
+    <script src="_content/SignsOfAI.UI/js/lang.js"></script>
+    <script src="_content/SignsOfAI.UI/js/share-card.js"></script>
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
 </body>
 

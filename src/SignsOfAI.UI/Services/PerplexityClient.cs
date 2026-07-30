@@ -2,7 +2,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 /// <summary>Request/response DTOs for the SignsOfAI perplexity server (see SignsOfAI.Perplexity.Api).</summary>
 public sealed record PerplexityRequest(string Text, string Lang, string? Model = null);

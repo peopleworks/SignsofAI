@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 /// <summary>Request body for POST /api/embed.</summary>
 public sealed record EmbedRequestDto(string[] Texts, string? Model = null, int? Dims = null);

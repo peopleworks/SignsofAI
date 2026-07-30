@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using SignsOfAI.Core.Model;
 using SignsOfAI.Core.Rules;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 /// <summary>A user-supplied catalog, persisted in the browser as its rule-pack JSON.</summary>
 public sealed class CustomCatalog

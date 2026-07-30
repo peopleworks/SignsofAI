@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
-using SignsOfAI.Web.Services;
+using SignsOfAI.UI.Services;
 
-namespace SignsOfAI.Web.Components;
+namespace SignsOfAI.UI.Components;
 
 /// <summary>
 /// Base for any component whose copy comes from <see cref="Loc"/>. It injects the service as

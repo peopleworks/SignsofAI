@@ -1,6 +1,6 @@
 using SignsOfAI.Core.Model;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 /// <summary>A run of source text, optionally tied to the finding that highlights it.</summary>
 public readonly record struct HighlightSegment(string Text, Finding? Finding);
