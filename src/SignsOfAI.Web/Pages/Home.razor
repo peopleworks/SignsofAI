@@ -5,74 +5,67 @@
 @using SignsOfAI.Core.Documents
 @using SignsOfAI.Core.Model
 @using SignsOfAI.Core.Rules
-@using SignsOfAI.Web.Components
-@using SignsOfAI.Web.Services
+@inherits LocalizedComponent
 @inject AiWritingAnalyzer Analyzer
 @inject HumanizerService Humanizer
 @inject BrowserStorage Storage
 @inject CatalogStore Catalogs
 @inject IJSRuntime JS
 
-<PageTitle>Signs of AI Writing — detect & de-AI-ify your text</PageTitle>
+<PageTitle>@L["home.pagetitle"]</PageTitle>
 
 <header class="hero">
-    <p class="tagline">
-        Paste, upload, or just start typing. We flag the tells of AI writing — overused words,
-        rhetorical crutches, robotic rhythm — <strong>live, as you write</strong>, and show you how to fix each one.
-    </p>
-    <p class="privacy"><Icon Name="lock" /> Analysis runs entirely in your browser. Your text never leaves your device.</p>
+    <p class="tagline">@L.M("home.tagline")</p>
+    <p class="privacy"><Icon Name="lock" /> @L["home.privacy"]</p>
 </header>
 
 <section class="editor card">
     <div class="toolbar">
         <label class="field">
-            Language
+            @L["home.textlang"]
             <select @bind="_language" @bind:after="OnControlChanged">
-                <option value="auto">Auto-detect</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
+                <option value="auto">@L["home.textlang.auto"]</option>
+                <option value="en">@L["lang.english"]</option>
+                <option value="es">@L["lang.spanish"]</option>
             </select>
         </label>
-        <label class="upload-btn" title="Upload a .docx, .txt or .md document">
-            <Icon Name="upload" /> Upload document
+        <label class="upload-btn" title="@L["common.upload.title"]">
+            <Icon Name="upload" /> @L["home.upload"]
             <InputFile OnChange="OnFileSelected" accept=".docx,.txt,.md,.markdown,.text,.csv,.log" />
         </label>
         <div class="samples">
-            <span>Try a sample:</span>
-            <button class="link" @onclick="@(() => LoadSample(SampleEn))">AI (EN)</button>
-            <button class="link" @onclick="@(() => LoadSample(SampleEs))">IA (ES)</button>
-            <button class="link" @onclick="@(() => LoadSample(SampleHuman))">Human</button>
+            <span>@L["home.samples"]</span>
+            <button class="link" @onclick="@(() => LoadSample(SampleEn))">@L["home.sample.en"]</button>
+            <button class="link" @onclick="@(() => LoadSample(SampleEs))">@L["home.sample.es"]</button>
+            <button class="link" @onclick="@(() => LoadSample(SampleHuman))">@L["home.sample.human"]</button>
         </div>
-        <span class="live-pill" title="Analysis updates automatically as you type"><span class="live-dot"></span> Live</span>
-        <div class="counter">@WordCount words</div>
+        <span class="live-pill" title="@L["home.live.title"]"><span class="live-dot"></span> @L["home.live"]</span>
+        <div class="counter">@WordCount @L["common.words"]</div>
     </div>
 
     @if (_fileNote is not null) { <p class="file-note">@_fileNote</p> }
 
     <textarea @bind="_text" @bind:event="oninput" @bind:after="OnTextChanged"
-              placeholder="Start typing here, paste your text, or upload a document above…"
+              placeholder="@L["home.editor.placeholder"]"
               spellcheck="false"></textarea>
-    <p class="hint doc-hint">Full documents welcome — including Word (<code>.docx</code>). For PDF, copy-paste the text.</p>
+    <p class="hint doc-hint">@L.M("home.dochint")</p>
 
     <div class="actions">
-        <button class="ghost" @onclick="Clear" disabled="@string.IsNullOrEmpty(_text)">Clear</button>
+        <button class="ghost" @onclick="Clear" disabled="@string.IsNullOrEmpty(_text)">@L["common.clear"]</button>
         <button class="ghost" @onclick="@(() => _showCatalogs = !_showCatalogs)">
-            <Icon Name="layers" /> Catalogs@(Catalogs.Catalogs.Count > 0 ? $" ({Catalogs.Catalogs.Count})" : "")
+            <Icon Name="layers" /> @L["home.catalogs"]@(Catalogs.Catalogs.Count > 0 ? $" ({Catalogs.Catalogs.Count})" : "")
         </button>
-        <button class="ghost settings-toggle" @onclick="@(() => _showSettings = !_showSettings)"><Icon Name="settings" /> AI provider</button>
+        <button class="ghost settings-toggle" @onclick="@(() => _showSettings = !_showSettings)"><Icon Name="settings" /> @L["home.provider.btn"]</button>
     </div>
 
     @if (_showCatalogs)
     {
         <div class="settings">
-            <p class="hint">
-                <strong>Bring your own catalog.</strong> Add your team's banned words or a full custom rule-pack.
-                Catalogs are stored only in your browser and merge on top of the built-in packs — live.
-            </p>
+            <p class="hint">@L.M("home.byoc")</p>
 
             <div class="catalog-list">
-                <div class="catalog-row builtin"><span><Icon Name="check" /> English (built-in)</span></div>
-                <div class="catalog-row builtin"><span><Icon Name="check" /> Español (built-in)</span></div>
+                <div class="catalog-row builtin"><span><Icon Name="check" /> @L["home.builtin.en"]</span></div>
+                <div class="catalog-row builtin"><span><Icon Name="check" /> @L["home.builtin.es"]</span></div>
                 @foreach (var c in Catalogs.Catalogs)
                 {
                     <div class="catalog-row">
@@ -80,32 +73,32 @@
                             <input type="checkbox" checked="@c.Enabled" @onchange="@(() => ToggleCatalog(c))" />
                             <span>@c.Name</span>
                         </label>
-                        <span class="cat-meta">@c.RuleCount rule@(c.RuleCount == 1 ? "" : "s") · @(c.Language == "*" ? "any" : c.Language)</span>
-                        <button class="link danger" @onclick="@(() => RemoveCatalog(c))">remove</button>
+                        <span class="cat-meta">@L.P(c.RuleCount, "home.rules") · @(c.Language == "*" ? L["home.anylang"] : c.Language)</span>
+                        <button class="link danger" @onclick="@(() => RemoveCatalog(c))">@L["common.remove"]</button>
                     </div>
                 }
             </div>
 
             <div class="catalog-add">
                 <div class="add-tabs">
-                    <button class="filter @(_catMode == "words" ? "on" : "")" @onclick="@(() => _catMode = "words")">Quick: banned words</button>
-                    <button class="filter @(_catMode == "json" ? "on" : "")" @onclick="@(() => _catMode = "json")">Advanced: import JSON</button>
+                    <button class="filter @(_catMode == "words" ? "on" : "")" @onclick="@(() => _catMode = "words")">@L["home.cat.mode.words"]</button>
+                    <button class="filter @(_catMode == "json" ? "on" : "")" @onclick="@(() => _catMode = "json")">@L["home.cat.mode.json"]</button>
                 </div>
 
                 @if (_catMode == "words")
                 {
-                    <input placeholder="Catalog name — e.g. Company style guide" @bind="_newCatName" @bind:event="oninput" />
-                    <textarea class="cat-words" placeholder="Words or phrases to flag, separated by commas or new lines…&#10;synergy, circle back, low-hanging fruit" @bind="_newCatWords" @bind:event="oninput"></textarea>
-                    <button class="primary" @onclick="AddBannedWords" disabled="@string.IsNullOrWhiteSpace(_newCatWords)">Add catalog</button>
+                    <input placeholder="@L["home.cat.name.ph"]" @bind="_newCatName" @bind:event="oninput" />
+                    <textarea class="cat-words" placeholder="@L["home.cat.words.ph"]" @bind="_newCatWords" @bind:event="oninput"></textarea>
+                    <button class="primary" @onclick="AddBannedWords" disabled="@string.IsNullOrWhiteSpace(_newCatWords)">@L["home.cat.add"]</button>
                 }
                 else
                 {
-                    <input placeholder="Catalog name" @bind="_newCatName" @bind:event="oninput" />
+                    <input placeholder="@L["home.cat.name.ph2"]" @bind="_newCatName" @bind:event="oninput" />
                     <textarea class="cat-words mono" placeholder='{ "language": "*", "lexical": [ { "id": "x", "terms": ["foo"], "suggestion": "bar" } ], "patterns": [] }' @bind="_newCatJson" @bind:event="oninput"></textarea>
                     @if (_catError is not null) { <p class="hint danger-text">@_catError</p> }
                     <div class="key-row">
-                        <button class="primary" @onclick="AddJsonCatalog" disabled="@string.IsNullOrWhiteSpace(_newCatJson)">Import</button>
-                        <button class="ghost" @onclick="DownloadTemplate">Download English pack as a template</button>
+                        <button class="primary" @onclick="AddJsonCatalog" disabled="@string.IsNullOrWhiteSpace(_newCatJson)">@L["home.cat.import"]</button>
+                        <button class="ghost" @onclick="DownloadTemplate">@L["home.cat.template"]</button>
                     </div>
                 }
             </div>
@@ -115,18 +108,15 @@
     @if (_showSettings)
     {
         <div class="settings">
-            <p class="hint">
-                Optional: connect an AI provider to enable one-click “Humanize”. Credentials are stored
-                only in your browser and are sent directly to the provider — never to us.
-            </p>
+            <p class="hint">@L["home.settings.hint"]</p>
             <label class="field">
-                Provider
+                @L["home.provider.label"]
                 <select @bind="_settings.Provider">
                     <option value="@AiProvider.Anthropic">Anthropic (Claude)</option>
                     <option value="@AiProvider.OpenAI">OpenAI</option>
                     <option value="@AiProvider.AzureOpenAI">Azure OpenAI</option>
                     <option value="@AiProvider.DeepSeek">DeepSeek</option>
-                    <option value="@AiProvider.Ollama">Ollama (local)</option>
+                    <option value="@AiProvider.Ollama">@L["home.provider.local"]</option>
                 </select>
             </label>
 
@@ -136,54 +126,48 @@
                     <div class="key-row">
                         <input type="password" placeholder="sk-ant-…" @bind="_settings.ApiKey" @bind:event="oninput" />
                     </div>
-                    <p class="hint sub">Uses <code>claude-opus-4-8</code>. Works directly from the browser. Key from
-                        <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
+                    <p class="hint sub">@L.M("home.hint.anthropic")</p>
                     break;
 
                 case AiProvider.OpenAI:
                     <div class="azure-grid">
-                        <input placeholder="Model — e.g. gpt-4o" @bind="_settings.Model" @bind:event="oninput" />
-                        <input type="password" placeholder="API key — sk-…" @bind="_settings.ApiKey" @bind:event="oninput" />
+                        <input placeholder="@L["home.ph.model"]" @bind="_settings.Model" @bind:event="oninput" />
+                        <input type="password" placeholder="@L["home.ph.key"]" @bind="_settings.ApiKey" @bind:event="oninput" />
                     </div>
-                    <p class="hint sub">Key from
-                        <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a>.
-                        Called directly from the browser.</p>
+                    <p class="hint sub">@L.M("home.hint.openai")</p>
                     break;
 
                 case AiProvider.AzureOpenAI:
                     <div class="azure-grid">
-                        <input placeholder="Endpoint — https://your-resource.openai.azure.com" @bind="_settings.AzureEndpoint" @bind:event="oninput" />
-                        <input placeholder="Deployment name — e.g. gpt-4o" @bind="_settings.AzureDeployment" @bind:event="oninput" />
-                        <input placeholder="API version" @bind="_settings.AzureApiVersion" @bind:event="oninput" />
-                        <input type="password" placeholder="API key" @bind="_settings.ApiKey" @bind:event="oninput" />
+                        <input placeholder="@L["home.ph.azure.endpoint"]" @bind="_settings.AzureEndpoint" @bind:event="oninput" />
+                        <input placeholder="@L["home.ph.azure.deployment"]" @bind="_settings.AzureDeployment" @bind:event="oninput" />
+                        <input placeholder="@L["home.ph.azure.version"]" @bind="_settings.AzureApiVersion" @bind:event="oninput" />
+                        <input type="password" placeholder="@L["home.ph.key.plain"]" @bind="_settings.ApiKey" @bind:event="oninput" />
                     </div>
-                    <p class="hint sub">For your own <strong>Azure AI</strong> resource. Must allow this site's origin (CORS).</p>
+                    <p class="hint sub">@L.M("home.hint.azure")</p>
                     break;
 
                 case AiProvider.DeepSeek:
                     <div class="azure-grid">
-                        <input placeholder="Model — e.g. deepseek-chat" @bind="_settings.Model" @bind:event="oninput" />
-                        <input type="password" placeholder="API key — sk-…" @bind="_settings.ApiKey" @bind:event="oninput" />
+                        <input placeholder="@L["home.ph.model.deepseek"]" @bind="_settings.Model" @bind:event="oninput" />
+                        <input type="password" placeholder="@L["home.ph.key"]" @bind="_settings.ApiKey" @bind:event="oninput" />
                     </div>
-                    <p class="hint sub">Key from
-                        <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">platform.deepseek.com</a>.</p>
+                    <p class="hint sub">@L.M("home.hint.deepseek")</p>
                     break;
 
                 case AiProvider.Ollama:
                     <div class="azure-grid">
-                        <input placeholder="Base URL — http://localhost:11434" @bind="_settings.OllamaBaseUrl" @bind:event="oninput" />
-                        <input placeholder="Model — e.g. llama3.1" @bind="_settings.Model" @bind:event="oninput" />
+                        <input placeholder="@L["home.ph.ollama.base"]" @bind="_settings.OllamaBaseUrl" @bind:event="oninput" />
+                        <input placeholder="@L["home.ph.model.ollama"]" @bind="_settings.Model" @bind:event="oninput" />
                     </div>
-                    <p class="hint sub"><Icon Name="monitor" /> Run a model <strong>on your own machine</strong> — no cloud, no key. Best when you run
-                        SignsOfAI locally; start Ollama with <code>OLLAMA_ORIGINS=* ollama serve</code>. From this hosted
-                        HTTPS site the browser may block calls to <code>http://localhost</code>.</p>
+                    <p class="hint sub"><Icon Name="monitor" /> @L.M("home.hint.ollama")</p>
                     break;
             }
 
             <div class="key-row">
-                <button class="ghost" @onclick="SaveSettings">Save</button>
-                <button class="ghost" @onclick="ForgetSettings">Forget</button>
-                @if (_settingsSaved) { <span class="saved-note"><Icon Name="check" /> Saved in this browser</span> }
+                <button class="ghost" @onclick="SaveSettings">@L["common.save"]</button>
+                <button class="ghost" @onclick="ForgetSettings">@L["home.forget"]</button>
+                @if (_settingsSaved) { <span class="saved-note"><Icon Name="check" /> @L["home.saved"]</span> }
             </div>
         </div>
     }
@@ -202,23 +186,23 @@
                 </div>
             </div>
             <div class="verdict">
-                <h2 class="@ScoreClass(r.OverallScore)">@r.Verdict</h2>
-                <p>@r.Findings.Count signal@(r.Findings.Count == 1 ? "" : "s") found · analyzed as
-                    <strong>@(r.Language == "es" ? "Español" : "English")</strong></p>
+                <h2 class="@ScoreClass(r.OverallScore)">@L.Verdict(r.OverallScore)</h2>
+                <p>@L.P(r.Findings.Count, "home.signals") · @L["home.analyzedas"]
+                    <strong>@L.TextLanguageName(r.Language)</strong></p>
                 <div class="cat-chips">
                     @foreach (var c in r.CategoryScores.Where(c => c.FindingCount > 0))
                     {
                         <span class="chip chip-@Highlighter.CategoryClass(c.Category)">
-                            @Highlighter.CategoryLabel(c.Category) <b>@c.FindingCount</b>
+                            @L.Category(c.Category) <b>@c.FindingCount</b>
                         </span>
                     }
                 </div>
                 <div class="summary-actions">
                     <button class="primary humanize-btn" @onclick="Humanize" disabled="@_humanizing">
-                        @if (_humanizing) { <text>Humanizing…</text> }
-                        else { <Icon Name="sparkle" /> <span>Humanize with AI</span> }
+                        @if (_humanizing) { <text>@L["home.humanizing"]</text> }
+                        else { <Icon Name="sparkle" /> <span>@L["home.humanize"]</span> }
                     </button>
-                    <button class="ghost" @onclick="ShowCard"><Icon Name="image" /> Share card</button>
+                    <button class="ghost" @onclick="ShowCard"><Icon Name="image" /> @L["home.sharecard"]</button>
                 </div>
             </div>
         </div>
@@ -227,10 +211,10 @@
         {
             <div class="card share-preview">
                 <div class="humanized-head">
-                    <h3>Shareable card</h3>
+                    <h3>@L["home.sharecard.h"]</h3>
                     <div>
-                        <button class="primary" @onclick="DownloadCard"><Icon Name="download" /> Download PNG</button>
-                        <button class="ghost" @onclick="@(() => _showCard = false)">Close</button>
+                        <button class="primary" @onclick="DownloadCard"><Icon Name="download" /> @L["home.downloadpng"]</button>
+                        <button class="ghost" @onclick="@(() => _showCard = false)">@L["common.close"]</button>
                     </div>
                 </div>
                 <canvas @ref="_cardCanvas" class="share-canvas"></canvas>
@@ -238,21 +222,21 @@
         }
 
         <div class="stats card">
-            <div class="stat"><span class="stat-label">Words</span><span class="stat-val">@r.Statistics.WordCount</span></div>
-            <div class="stat"><span class="stat-label">Sentences</span><span class="stat-val">@r.Statistics.SentenceCount</span></div>
-            <div class="stat"><span class="stat-label">Avg length</span><span class="stat-val">@r.Statistics.MeanSentenceLength</span></div>
-            <div class="stat" title="Sentence-length variation. Low = machine-like uniformity.">
-                <span class="stat-label">Burstiness</span>
+            <div class="stat"><span class="stat-label">@L["home.stat.words"]</span><span class="stat-val">@r.Statistics.WordCount</span></div>
+            <div class="stat"><span class="stat-label">@L["home.stat.sentences"]</span><span class="stat-val">@r.Statistics.SentenceCount</span></div>
+            <div class="stat"><span class="stat-label">@L["home.stat.avglen"]</span><span class="stat-val">@r.Statistics.MeanSentenceLength</span></div>
+            <div class="stat" title="@L["home.stat.burstiness.title"]">
+                <span class="stat-label">@L["home.stat.burstiness"]</span>
                 <span class="stat-val @(r.Statistics.Burstiness < 0.45 && r.Statistics.SentenceCount >= 4 ? "warn" : "")">
                     @r.Statistics.Burstiness.ToString("0.00")
                 </span>
             </div>
-            <div class="stat"><span class="stat-label">Lexical diversity</span><span class="stat-val">@r.Statistics.LexicalDiversity.ToString("0.00")</span></div>
+            <div class="stat"><span class="stat-label">@L["home.stat.diversity"]</span><span class="stat-val">@r.Statistics.LexicalDiversity.ToString("0.00")</span></div>
         </div>
 
         <div class="rhythm card">
-            <h3>Sentence rhythm</h3>
-            <p class="hint">Each bar is one sentence; height is its length. Flat &amp; grey = machine cadence · tall/short &amp; green = human variance.</p>
+            <h3>@L["home.rhythm"]</h3>
+            <p class="hint">@L.M("home.rhythm.hint")</p>
             <RhythmChart Stats="r.Statistics" />
         </div>
 
@@ -260,13 +244,13 @@
 
         @if (_humanizeError is not null)
         {
-            <div class="card humanize-error"><Icon Name="alert" /> Humanize failed: @_humanizeError</div>
+            <div class="card humanize-error"><Icon Name="alert" /> @_humanizeError</div>
         }
         @if (_humanized is not null)
         {
             <div class="card humanized">
                 <div class="humanized-head">
-                    <h3><Icon Name="sparkle" /> Humanized</h3>
+                    <h3><Icon Name="sparkle" /> @L["home.humanized"]</h3>
                     <div>
                         @if (_humanizedResult is not null)
                         {
@@ -278,15 +262,15 @@
                                 @if (delta > 0.5) { <span class="sc-delta">−@Math.Round(delta)</span> }
                             </span>
                         }
-                        <button class="ghost" @onclick="CopyHumanized">Copy</button>
-                        <button class="ghost" @onclick="ReanalyzeHumanized">Use as input</button>
+                        <button class="ghost" @onclick="CopyHumanized">@L["common.copy"]</button>
+                        <button class="ghost" @onclick="ReanalyzeHumanized">@L["home.useasinput"]</button>
                     </div>
                 </div>
                 @if (_diff is not null)
                 {
                     <div class="diff-grid">
                         <div class="diff-col">
-                            <h4>Original</h4>
+                            <h4>@L["home.original"]</h4>
                             <div class="text-view diff-view">
                                 @foreach (var seg in _diff.Where(s => s.Kind != DiffKind.Added))
                                 {
@@ -295,7 +279,7 @@
                             </div>
                         </div>
                         <div class="diff-col">
-                            <h4>Humanized</h4>
+                            <h4>@L["home.humanized"]</h4>
                             <div class="text-view diff-view">
                                 @foreach (var seg in _diff.Where(s => s.Kind != DiffKind.Removed))
                                 {
@@ -310,8 +294,8 @@
 
         <div class="workspace">
             <div class="annotated card">
-                <h3>Your text, annotated</h3>
-                <p class="hint">Highlighted spans are AI tells — hover for the suggestion.</p>
+                <h3>@L["home.annotated"]</h3>
+                <p class="hint">@L["home.annotated.hint"]</p>
                 <div class="text-view">
                     @foreach (var seg in Highlighter.Build(_analyzedText, r.Findings))
                     {
@@ -329,10 +313,10 @@
             </div>
 
             <div class="findings card">
-                <h3>Recommendations (@r.Findings.Count)</h3>
+                <h3>@L.F("home.recommendations", r.Findings.Count)</h3>
                 @if (r.Findings.Count == 0)
                 {
-                    <p class="empty"><Icon Name="check-circle" /> No strong AI tells found. This reads mostly human — nice work.</p>
+                    <p class="empty"><Icon Name="check-circle" /> @L["home.nofindings"]</p>
                 }
                 else
                 {
@@ -341,9 +325,9 @@
                         {
                             <li class="finding sev-@f.Severity.ToString().ToLowerInvariant()">
                                 <div class="finding-head">
-                                    <span class="badge badge-@Highlighter.CategoryClass(f.Category)">@Highlighter.CategoryLabel(f.Category)</span>
+                                    <span class="badge badge-@Highlighter.CategoryClass(f.Category)">@L.Category(f.Category)</span>
                                     @if (!string.IsNullOrEmpty(f.MatchedText)) { <code>@f.MatchedText</code> }
-                                    <span class="sev-tag">@f.Severity</span>
+                                    <span class="sev-tag">@L.Sev(f.Severity)</span>
                                 </div>
                                 <p class="finding-msg">@f.Message</p>
                                 <p class="finding-fix"><Icon Name="lightbulb" /> @f.Suggestion</p>
@@ -358,7 +342,7 @@
 }
 else
 {
-    <p class="idle-hint">Start typing, paste, or upload a document — your AI-writing score appears here instantly.</p>
+    <p class="idle-hint">@L["home.idle"]</p>
 }
 
 @code {
@@ -473,7 +457,7 @@ else
         if (file is null) return;
         if (file.Size > MaxFileBytes)
         {
-            _fileNote = $"“{file.Name}” is too large (max 5 MB).";
+            _fileNote = L.F("file.toolarge", file.Name);
             return;
         }
         try
@@ -489,11 +473,11 @@ else
                 _text = await reader.ReadToEndAsync();
             }
             RunAnalysis();
-            _fileNote = $"Loaded “{file.Name}” ({file.Size / 1024} KB).";
+            _fileNote = L.F("file.loaded", file.Name, file.Size / 1024);
         }
         catch (Exception ex)
         {
-            _fileNote = $"Could not read the file: {ex.Message}";
+            _fileNote = L.F("file.error", ex.Message);
         }
     }
 
@@ -542,7 +526,7 @@ else
             _newCatName = _newCatJson = string.Empty;
             RunAnalysis();
         }
-        catch (Exception ex) { _catError = "Invalid rule-pack JSON: " + ex.Message; }
+        catch (Exception ex) { _catError = L.F("home.cat.invalid", ex.Message); }
     }
 
     private async Task ToggleCatalog(CustomCatalog c) { await Catalogs.ToggleAsync(c); RunAnalysis(); }
@@ -558,7 +542,7 @@ else
         if (!_settings.IsConfigured())
         {
             _showSettings = true;
-            _humanizeError = "Configure an AI provider to enable Humanize.";
+            _humanizeError = L["home.humanize.configure"];
             return;
         }
 
@@ -574,7 +558,7 @@ else
             _humanizedResult = Analyzer.Analyze(_humanized, _language, Catalogs.EnabledPacks());
             _diff = WordDiff.Compute(_analyzedText, _humanized);
         }
-        else _humanizeError = result.Error;
+        else _humanizeError = L.F("home.humanize.failed", result.Error ?? "");
     }
 
     private async Task CopyHumanized()
@@ -601,16 +585,17 @@ else
     private async Task DownloadCard() =>
         await JS.InvokeVoidAsync("signsofai.downloadCanvas", _cardCanvas, "signsofai-score.png");
 
-    private static string BuildCardJson(AnalysisResult r)
+    // Not static: the card is drawn in the reader's interface language, so it needs the localizer.
+    private string BuildCardJson(AnalysisResult r)
     {
         var data = new ShareCardData(
             Score: r.OverallScore,
             ScoreColor: ScoreHex(r.OverallScore),
-            Verdict: r.Verdict,
+            Verdict: L.Verdict(r.OverallScore),
             Signals: r.Findings.Count,
-            Language: r.Language == "es" ? "Español" : "English",
+            Language: L.TextLanguageName(r.Language),
             Categories: r.CategoryScores.Where(c => c.FindingCount > 0)
-                .Select(c => new CardCategory(Highlighter.CategoryLabel(c.Category), c.FindingCount, Highlighter.CategoryHex(c.Category)))
+                .Select(c => new CardCategory(L.Category(c.Category), c.FindingCount, Highlighter.CategoryHex(c.Category)))
                 .ToArray(),
             Words: r.Statistics.WordCount,
             Sentences: r.Statistics.SentenceCount,

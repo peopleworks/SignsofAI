@@ -1,31 +1,28 @@
 @page "/catalog"
 @using SignsOfAI.Core.Model
 @using SignsOfAI.Core.Rules
-@using SignsOfAI.Web.Services
+@inherits LocalizedComponent
 @inject CatalogSearch Search
 
-<PageTitle>Catalog of AI-writing signs</PageTitle>
+<PageTitle>@L["catalog.pagetitle"]</PageTitle>
 
 <header class="hero">
-    <h1>The catalog of AI-writing signs</h1>
-    <p class="tagline">
-        Every tell the analyzer looks for, in English and Spanish — with why it reads as AI and how to fix it.
-        A study aid for students and writers.
-    </p>
+    <h1>@L["catalog.h1"]</h1>
+    <p class="tagline">@L["catalog.tagline"]</p>
 </header>
 
 <section class="catalog-controls card">
-    <input class="search-box" type="search" placeholder="Search signs… (e.g. “hedging”, “delve”, “tapiz”)"
+    <input class="search-box" type="search" placeholder="@L["catalog.search.ph"]"
            @bind="_query" @bind:event="oninput" />
     <div class="filters">
-        <button class="filter @(_lang is null ? "on" : "")" @onclick="@(() => _lang = null)">All</button>
-        <button class="filter @(_lang == "en" ? "on" : "")" @onclick="@(() => _lang = "en")">English</button>
-        <button class="filter @(_lang == "es" ? "on" : "")" @onclick="@(() => _lang = "es")">Español</button>
+        <button class="filter @(_lang is null ? "on" : "")" @onclick="@(() => _lang = null)">@L["common.all"]</button>
+        <button class="filter @(_lang == "en" ? "on" : "")" @onclick="@(() => _lang = "en")">@L["lang.english"]</button>
+        <button class="filter @(_lang == "es" ? "on" : "")" @onclick="@(() => _lang = "es")">@L["lang.spanish"]</button>
         @foreach (var cat in Enum.GetValues<SignCategory>())
         {
             <button class="filter filter-@Highlighter.CategoryClass(cat) @(_category == cat ? "on" : "")"
                     @onclick="@(() => ToggleCategory(cat))">
-                @Highlighter.CategoryLabel(cat)
+                @L.Category(cat)
             </button>
         }
     </div>
@@ -34,16 +31,16 @@
 @{
     var results = Filtered().ToList();
 }
-<p class="result-count">@results.Count sign@(results.Count == 1 ? "" : "s")</p>
+<p class="result-count">@L.P(results.Count, "catalog.count")</p>
 
 <div class="catalog-grid">
     @foreach (var s in results)
     {
         <div class="sign card sev-@s.Severity.ToString().ToLowerInvariant()">
             <div class="sign-head">
-                <span class="badge badge-@Highlighter.CategoryClass(s.Category)">@Highlighter.CategoryLabel(s.Category)</span>
+                <span class="badge badge-@Highlighter.CategoryClass(s.Category)">@L.Category(s.Category)</span>
                 <span class="lang-tag">@(s.Language == "es" ? "ES" : "EN")</span>
-                <span class="sev-tag">@s.Severity</span>
+                <span class="sev-tag">@L.Sev(s.Severity)</span>
             </div>
             <h3 class="sign-title">@s.Title</h3>
             @if (s.Examples.Length > 0)

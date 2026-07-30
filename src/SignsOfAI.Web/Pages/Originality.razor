@@ -4,23 +4,19 @@
 @using SignsOfAI.Core.Model
 @using SignsOfAI.Core.Originality
 @using SignsOfAI.Core.Text
-@using SignsOfAI.Web.Services
+@inherits LocalizedComponent
 @inject OriginalityChecker Checker
 @inject PerplexityClient Perplexity
 @inject EmbeddingClient Embedding
 @inject WebCheckClient WebCheck
 @inject BrowserStorage Storage
 
-<PageTitle>Originality checker — find shared passages between documents</PageTitle>
+<PageTitle>@L["orig.pagetitle"]</PageTitle>
 
 <header class="hero">
-    <h1>Originality checker</h1>
-    <p class="tagline">
-        Did they write it — or copy it? Drop in two or more documents (essays, a thesis and its sources,
-        a batch of student submissions) and we surface the passages they <strong>share</strong>, highlighted
-        as evidence. Edits like changed capitalization or accents don't hide a copy. <strong>You judge.</strong>
-    </p>
-    <p class="privacy"><Icon Name="lock" /> Runs entirely in your browser. Your documents never leave your device — nothing is uploaded.</p>
+    <h1>@L["orig.h1"]</h1>
+    <p class="tagline">@L.M("orig.tagline")</p>
+    <p class="privacy"><Icon Name="lock" /> @L["orig.privacy"]</p>
 </header>
 
 <section class="orig-inputs">
@@ -29,44 +25,42 @@
         var d = doc;
         <div class="orig-doc card" @key="d.Id">
             <div class="orig-doc-head">
-                <input class="orig-title" placeholder="@($"Document {_docs.IndexOf(d) + 1} — name or author")"
+                <input class="orig-title" placeholder="@L.F("orig.doc.ph", _docs.IndexOf(d) + 1)"
                        @bind="d.Title" @bind:event="oninput" />
-                <label class="upload-btn sm" title="Upload a .docx, .txt or .md document">
-                    <Icon Name="upload" /> Upload
+                <label class="upload-btn sm" title="@L["common.upload.title"]">
+                    <Icon Name="upload" /> @L["common.upload"]
                     <InputFile OnChange="@(e => OnFileSelected(e, d))" accept=".docx,.txt,.md,.markdown,.text" />
                 </label>
-                <span class="orig-wc">@WordsOf(d.Text) words</span>
-                <button class="link orig-webbtn" title="Check the web for this document's distinctive passages"
+                <span class="orig-wc">@WordsOf(d.Text) @L["common.words"]</span>
+                <button class="link orig-webbtn" title="@L["orig.webcheck.title"]"
                         disabled="@string.IsNullOrWhiteSpace(d.Text)" @onclick="@(() => ToggleWeb(d))">
-                    <Icon Name="globe" /> Web check
+                    <Icon Name="globe" /> @L["orig.webcheck"]
                 </button>
                 @if (_docs.Count > 2)
                 {
-                    <button class="icon-btn" title="Remove this document" @onclick="@(() => RemoveDoc(d))"><Icon Name="close" /></button>
+                    <button class="icon-btn" title="@L["orig.doc.remove"]" @onclick="@(() => RemoveDoc(d))"><Icon Name="close" /></button>
                 }
             </div>
             @if (d.Note is not null) { <p class="file-note">@d.Note</p> }
-            <textarea class="orig-text" placeholder="Paste or type the document text here…"
+            <textarea class="orig-text" placeholder="@L["orig.text.ph"]"
                       spellcheck="false" @bind="d.Text" @bind:event="oninput"></textarea>
 
             @if (d.ShowWeb)
             {
                 <div class="orig-web">
                     <p class="hint">
-                        We can't index the whole web — so instead of guessing, here are this document's most
-                        <strong>distinctive passages</strong>. Search each one to see if it already appears online.
-                        Nothing is sent anywhere until <em>you</em> click a search. <strong>You judge.</strong>
+                        @L.M("orig.web.hint")
                         <button type="button" class="explain-trigger" @onclick="@(() => _showWebHelp = true)">
-                            <Icon Name="lock" /> What happens to your text?
+                            <Icon Name="lock" /> @L["orig.web.explain"]
                         </button>
                     </p>
 
                     @if (_webSearchReady)
                     {
                         <div class="orig-web-auto">
-                            <span class="orig-auto-badge"><Icon Name="globe" /> Auto web search: ON</span>
+                            <span class="orig-auto-badge"><Icon Name="globe" /> @L["orig.web.auto.on"]</span>
                             <button class="ghost sm" @onclick="@(() => RunAutoWebCheck(d))" disabled="@(d.WebSearching || d.WebPhrases is not { Count: > 0 })">
-                                @(d.WebSearching ? "Searching the web…" : d.WebHits is not null ? "Search again" : "Search the web automatically")
+                                @(d.WebSearching ? L["orig.web.searching"] : d.WebHits is not null ? L["orig.web.again"] : L["orig.web.auto.btn"])
                             </button>
                         </div>
                         @if (d.WebError is not null) { <p class="orig-para-status err">@d.WebError</p> }
@@ -78,7 +72,7 @@
                                     <q class="orig-web-q">@ph.Phrase</q>
                                     @if (ph.Hits.Length == 0)
                                     {
-                                        <p class="empty sm">No web pages found for this passage.</p>
+                                        <p class="empty sm">@L["orig.web.nohits"]</p>
                                     }
                                     else
                                     {
@@ -87,7 +81,7 @@
                                             {
                                                 <li>
                                                     <a href="@h.Url" target="_blank" rel="noopener">@(string.IsNullOrWhiteSpace(h.Title) ? h.Url : h.Title)</a>
-                                                    @if (h.Verbatim) { <span class="orig-verbatim">verbatim match</span> }
+                                                    @if (h.Verbatim) { <span class="orig-verbatim">@L["orig.web.verbatim"]</span> }
                                                     @if (!string.IsNullOrWhiteSpace(h.Snippet)) { <span class="orig-hit-snip">@h.Snippet</span> }
                                                 </li>
                                             }
@@ -100,7 +94,7 @@
 
                     @if (d.WebPhrases is { Count: > 0 })
                     {
-                        <p class="hint orig-manual-h">@(_webSearchReady ? "Or search manually:" : "")</p>
+                        <p class="hint orig-manual-h">@(_webSearchReady ? L["orig.web.manual"] : "")</p>
                         <ul class="orig-web-list">
                             @foreach (var ph in d.WebPhrases)
                             {
@@ -117,7 +111,7 @@
                     }
                     else
                     {
-                        <p class="empty">Not enough distinctive text here to spot-check.</p>
+                        <p class="empty">@L["orig.web.notenough"]</p>
                     }
                 </div>
             }
@@ -125,82 +119,67 @@
     }
 
     <div class="orig-actions">
-        <button class="ghost" @onclick="AddDoc"><Icon Name="plus" /> Add document</button>
-        <label class="upload-btn" title="Add many documents at once — a whole cohort">
-            <Icon Name="upload" /> Add files
+        <button class="ghost" @onclick="AddDoc"><Icon Name="plus" /> @L["orig.adddoc"]</button>
+        <label class="upload-btn" title="@L["orig.addfiles.title"]">
+            <Icon Name="upload" /> @L["orig.addfiles"]
             <InputFile OnChange="OnBatchFiles" multiple accept=".docx,.txt,.md,.markdown,.text" />
         </label>
-        <button class="ghost" @onclick="LoadExample">Load an example</button>
-        <button class="ghost" @onclick="ClearAll">Clear</button>
+        <button class="ghost" @onclick="LoadExample">@L["orig.example"]</button>
+        <button class="ghost" @onclick="ClearAll">@L["common.clear"]</button>
         @if (_batchNote is not null) { <span class="hint">@_batchNote</span> }
         <button class="primary" @onclick="Compare" disabled="@(ReadyCount < 2)">
-            <Icon Name="search" /> Compare @(ReadyCount >= 2 ? $"{ReadyCount} documents" : "")
+            <Icon Name="search" /> @(ReadyCount >= 2 ? L.F("orig.compare.n", ReadyCount) : L["orig.compare"])
         </button>
-        @if (ReadyCount < 2) { <span class="hint">Add text to at least two documents.</span> }
+        @if (ReadyCount < 2) { <span class="hint">@L["orig.needtwo"]</span> }
     </div>
 </section>
 
 <InfoDrawer Open="_showWebHelp" OpenChanged="@(v => _showWebHelp = v)"
-            Title="What happens to your text" Icon="lock">
-    <p class="explain-lead">
-        These web searches are the one place a piece of your document can leave your device. Here is
-        exactly <strong>when</strong> that happens and <strong>where</strong> the text goes — so you can
-        pick the way that fits what you're checking.
-    </p>
+            Title="@L["drawer.web.title"]" Icon="lock">
+    <p class="explain-lead">@L.M("drawer.web.lead")</p>
 
     <div class="explain-case">
         <div class="explain-h">
-            <span class="explain-badge good"><Icon Name="lock" /> Most private</span>
-            <h3>Manual search</h3>
+            <span class="explain-badge good"><Icon Name="lock" /> @L["drawer.web.private"]</span>
+            <h3>@L["drawer.web.manual.h"]</h3>
         </div>
-        <p>You click a <strong>Google</strong>, <strong>Bing</strong> or <strong>DuckDuckGo</strong> link
-           for one passage.</p>
+        <p>@L.M("drawer.web.manual.p")</p>
         <ul class="explain-list">
-            <li><strong>What leaves:</strong> only the passage you clicked, and only when you click it.</li>
-            <li><strong>Where it goes:</strong> straight from your browser to that search engine. It never
-                touches the SignsOfAI server.</li>
-            <li><strong>When it's over:</strong> close the tab and nothing lingers.</li>
+            <li>@L.M("drawer.web.manual.l1")</li>
+            <li>@L.M("drawer.web.manual.l2")</li>
+            <li>@L.M("drawer.web.manual.l3")</li>
         </ul>
-        <p class="explain-fit">Best for <strong>unpublished work</strong> — a thesis, a manuscript, a
-           draft you don't want sitting in anyone else's logs.</p>
+        <p class="explain-fit">@L.M("drawer.web.manual.fit")</p>
     </div>
 
     <div class="explain-case">
         <div class="explain-h">
             @if (_webSearchReady)
             {
-                <span class="explain-badge notice"><Icon Name="globe" /> Convenient · enabled here</span>
+                <span class="explain-badge notice"><Icon Name="globe" /> @L["drawer.web.auto.enabled"]</span>
             }
             else
             {
-                <span class="explain-badge muted"><Icon Name="globe" /> Not enabled on this server</span>
+                <span class="explain-badge muted"><Icon Name="globe" /> @L["drawer.web.auto.disabled"]</span>
             }
-            <h3>Automatic search</h3>
+            <h3>@L["drawer.web.auto.h"]</h3>
         </div>
-        <p>One button searches <em>every</em> distinctive passage for you and lists the matches in one place.</p>
+        <p>@L.M("drawer.web.auto.p")</p>
         <ul class="explain-list">
-            <li><strong>What leaves:</strong> all of the distinctive passages (up to 8), the moment you
-                press the button — no per-passage click.</li>
-            <li><strong>Where it goes:</strong> your browser → the SignsOfAI server → the
-                <strong>Brave Search</strong> API. Two hops off your machine instead of one.</li>
-            <li><strong>When:</strong> automatically, as one batch.</li>
+            <li>@L.M("drawer.web.auto.l1")</li>
+            <li>@L.M("drawer.web.auto.l2")</li>
+            <li>@L.M("drawer.web.auto.l3")</li>
         </ul>
-        <p class="explain-fit">Faster when you're checking many passages or presenting live. Because it
-           sends passages out for you, prefer the manual path for <strong>someone else's</strong>
-           unpublished writing unless they're fine with it.</p>
+        <p class="explain-fit">@L.M("drawer.web.auto.fit")</p>
         @if (!_webSearchReady)
         {
-            <p class="explain-note">
-                <Icon Name="alert" /> Automatic search isn't switched on for this server, so you'll only
-                see the manual links below — and they find exactly the same thing.
-            </p>
+            <p class="explain-note"><Icon Name="alert" /> @L["drawer.web.auto.note"]</p>
         }
     </div>
 
     <p class="explain-bottom">
         <Icon Name="check-circle" />
-        <span><strong>Both find the same thing</strong> — pages that contain your passage word-for-word.
-        The only difference is who does the clicking, and how much text leaves your device to get there.</span>
+        <span>@L.M("drawer.web.bottom")</span>
     </p>
 </InfoDrawer>
 
@@ -215,9 +194,8 @@
             <div class="card orig-summary b-var">
                 <div class="orig-big"><Icon Name="check-circle" /></div>
                 <div>
-                    <h2>No meaningful overlap found</h2>
-                    <p>Across @rep.DocumentCount documents, no shared passages of @rep.ShingleSize+ consecutive
-                        words turned up. These read as independently written.</p>
+                    <h2>@L["orig.nooverlap.h"]</h2>
+                    <p>@L.F("orig.nooverlap.p", rep.DocumentCount, rep.ShingleSize)</p>
                 </div>
             </div>
         }
@@ -228,10 +206,12 @@
                 <div>
                     <h2>@BandTitle(top.Overlap)</h2>
                     <p>
-                        The strongest match: <strong>@top.TitleA</strong> ↔ <strong>@top.TitleB</strong> —
-                        @($"{top.Overlap:P0}") of @(top.CoverageA >= top.CoverageB ? top.TitleA : top.TitleB)'s words
-                        appear verbatim in the other (@top.SharedWords words across @top.Passages.Count
-                        passage@(top.Passages.Count == 1 ? "" : "s")). We show the shared text below — the call is yours.
+                        @L["orig.strongest"] <strong>@top.TitleA</strong> ↔ <strong>@top.TitleB</strong> —
+                        @L.F("orig.strongest.detail",
+                             $"{top.Overlap:P0}",
+                             top.CoverageA >= top.CoverageB ? top.TitleA : top.TitleB,
+                             top.SharedWords,
+                             L.P(top.Passages.Count, "orig.passages"))
                     </p>
                 </div>
             </div>
@@ -240,8 +220,8 @@
         @if (rep.DocumentCount >= 3 && _overlap is not null)
         {
             <div class="card orig-matrix-card">
-                <h3>Cohort overlap matrix</h3>
-                <p class="hint">Every document against every other — darker means more shared text. Click a cell to inspect that pair.</p>
+                <h3>@L["orig.matrix.h"]</h3>
+                <p class="hint">@L["orig.matrix.hint"]</p>
                 <div class="orig-matrix-scroll">
                     <div class="orig-matrix" style="grid-template-columns: 1.7rem repeat(@rep.DocumentCount, minmax(1.7rem, 2.6rem));">
                         <div class="orig-mx-corner"></div>
@@ -286,11 +266,11 @@
             int hiddenPairs = rep.Pairs.Count - meaningful;
         }
         <div class="card orig-pairs">
-            <h3>Most similar pairs@(meaningful > 0 ? $" ({meaningful})" : "")</h3>
-            <p class="hint">Ranked by overlap — the share of the more-copied document that appears in the other. Click a row to inspect the shared passages.</p>
+            <h3>@L["orig.pairs.h"]@(meaningful > 0 ? $" ({meaningful})" : "")</h3>
+            <p class="hint">@L["orig.pairs.hint"]</p>
             @if (meaningful == 0)
             {
-                <p class="empty">No pair shares any passage of @rep.ShingleSize+ words.</p>
+                <p class="empty">@L.F("orig.pairs.none", rep.ShingleSize)</p>
             }
             else
             {
@@ -310,7 +290,7 @@
             }
             @if (hiddenPairs > 0)
             {
-                <p class="hint orig-hidden-note">@hiddenPairs pair@(hiddenPairs == 1 ? "" : "s") with no shared text @(hiddenPairs == 1 ? "is" : "are") not shown.</p>
+                <p class="hint orig-hidden-note">@L.P(hiddenPairs, "orig.pairs.hidden")</p>
             }
         </div>
 
@@ -321,18 +301,18 @@
             var textB = _docs[p.IndexB].Text;
             <div class="card orig-detail">
                 <div class="orig-detail-head">
-                    <h3><span class="@Band(p.Overlap)">@($"{p.Overlap:P0}")</span> overlap · @p.TitleA ↔ @p.TitleB</h3>
+                    <h3><span class="@Band(p.Overlap)">@($"{p.Overlap:P0}")</span> @L["orig.detail.overlap"] · @p.TitleA ↔ @p.TitleB</h3>
                     <div class="orig-stats">
-                        <span title="Fraction of each document's words inside a shared passage">
-                            coverage @($"{p.CoverageA:P0}") / @($"{p.CoverageB:P0}")</span>
-                        <span title="Jaccard similarity of the two shingle sets">jaccard @p.Jaccard.ToString("0.00")</span>
-                        <span title="Longest single shared run">longest run @p.LongestRunWords words</span>
+                        <span title="@L["orig.detail.coverage.title"]">
+                            @L["orig.detail.coverage"] @($"{p.CoverageA:P0}") / @($"{p.CoverageB:P0}")</span>
+                        <span title="@L["orig.detail.jaccard.title"]">@L["orig.detail.jaccard"] @p.Jaccard.ToString("0.00")</span>
+                        <span title="@L["orig.detail.longest.title"]">@L.F("orig.detail.longest", p.LongestRunWords)</span>
                     </div>
                 </div>
 
                 @if (p.Passages.Count == 0)
                 {
-                    <p class="empty">No shared passage of @rep.ShingleSize+ words — these two look independent.</p>
+                    <p class="empty">@L.F("orig.detail.nopassage", rep.ShingleSize)</p>
                 }
                 else
                 {
@@ -357,12 +337,12 @@
                         </div>
                     </div>
 
-                    <h4 class="orig-passages-h">Shared passages (@p.Passages.Count)</h4>
+                    <h4 class="orig-passages-h">@L.F("orig.shared.h", p.Passages.Count)</h4>
                     <ul class="orig-passages">
                         @foreach (var pass in p.Passages.OrderByDescending(x => x.WordLength))
                         {
                             <li>
-                                <span class="orig-pass-len">@pass.WordLength words</span>
+                                <span class="orig-pass-len">@L.F("orig.words.n", pass.WordLength)</span>
                                 <q>@pass.SpanA.Slice(textA)</q>
                             </li>
                         }
@@ -373,23 +353,19 @@
                 {
                     <div class="orig-para">
                         <div class="orig-para-head">
-                            <h4><Icon Name="beaker" /> Paraphrase check <span class="orig-beta">server · opt-in</span></h4>
+                            <h4><Icon Name="beaker" /> @L["orig.para.h"] <span class="orig-beta">@L["orig.para.badge"]</span></h4>
                             @if (_paraState != "running")
                             {
                                 <button class="ghost sm" @onclick="RunParaphraseCheck">
-                                    @(_paraState == "done" ? "Re-run" : "Run deep check")
+                                    @(_paraState == "done" ? L["orig.para.rerun"] : L["orig.para.run"])
                                 </button>
                             }
                         </div>
-                        <p class="hint">
-                            Catches <strong>reworded</strong> copies — same idea, different words — that the literal check can't see,
-                            and even across languages. This one is <strong>not</strong> on-device: it sends these two documents' sentences to the
-                            PeopleWorks server (EmbeddingGemma) to compare their meaning. Nothing is stored.
-                        </p>
+                        <p class="hint">@L.M("orig.para.hint")</p>
 
                         @if (_paraState == "running")
                         {
-                            <p class="orig-para-status">Embedding sentences on the server…</p>
+                            <p class="orig-para-status">@L["orig.para.running"]</p>
                         }
                         else if (_paraState == "error")
                         {
@@ -399,11 +375,19 @@
                         {
                             @if (_paraMatches.Count == 0)
                             {
-                                <p class="empty">No reworded matches above @($"{ParaThreshold:P0}") similarity@(_paraLiteralExcluded > 0 ? $" (beyond the {_paraLiteralExcluded} already shown as literal copies above)" : "").</p>
+                                <p class="empty">
+                                    @L.F("orig.para.none",
+                                         $"{ParaThreshold:P0}",
+                                         _paraLiteralExcluded > 0 ? L.F("orig.para.none.beyond", _paraLiteralExcluded) : "")
+                                </p>
                             }
                             else
                             {
-                                <p class="hint">@_paraMatches.Count reworded sentence pair@(_paraMatches.Count == 1 ? "" : "s") (semantically close but not a literal copy)@(_paraLiteralExcluded > 0 ? $"; {_paraLiteralExcluded} literal match{(_paraLiteralExcluded == 1 ? "" : "es")} shown above {(_paraLiteralExcluded == 1 ? "is" : "are")} omitted here" : "").</p>
+                                <p class="hint">
+                                    @L.P(_paraMatches.Count, "orig.para.found")@(_paraLiteralExcluded > 0
+                                        ? L.P(_paraLiteralExcluded, "orig.para.found.omitted")
+                                        : "").
+                                </p>
                                 <ul class="orig-para-list">
                                     @foreach (var m in _paraMatches)
                                     {
@@ -424,9 +408,7 @@
         }
 
         <p class="orig-disclaimer">
-            <Icon Name="scale" /> This finds text the documents literally share — it is <strong>not</strong> a whole-internet plagiarism
-            index, and shared phrasing can be legitimate (quotations, common definitions, a shared assignment prompt).
-            Treat the highlights as <strong>evidence to review</strong>, never as a verdict.
+            <Icon Name="scale" /> @L.M("orig.disclaimer")
         </p>
     </section>
 }
@@ -534,7 +516,7 @@
         if (sentsA.Count == 0 || sentsB.Count == 0)
         {
             _paraState = "error";
-            _paraError = "Need at least one full sentence (5+ words) in each document to compare meaning.";
+            _paraError = L["orig.para.needsentence"];
             return;
         }
 
@@ -619,7 +601,7 @@
         {
             if (string.IsNullOrWhiteSpace(d.Text)) continue;
             n++;
-            var title = string.IsNullOrWhiteSpace(d.Title) ? $"Document {n}" : d.Title.Trim();
+            var title = string.IsNullOrWhiteSpace(d.Title) ? L.F("orig.doc.default", n) : d.Title.Trim();
             inputs.Add(new OriginalityInput(d.Id, title, d.Text));
         }
         if (inputs.Count < 2) { _report = null; _selected = -1; return; }
@@ -680,7 +662,9 @@
         }
         // Drop the empty starter slots once real documents have arrived.
         if (added > 0) _docs.RemoveAll(d => string.IsNullOrWhiteSpace(d.Text));
-        _batchNote = $"Added {added} document{(added == 1 ? "" : "s")}" + (skipped > 0 ? $" ({skipped} skipped)" : "") + ".";
+        _batchNote = L.P(added, "orig.batch.added")
+            + (skipped > 0 ? L.F("orig.batch.skipped", skipped) : "")
+            + ".";
     }
 
     private async Task OnFileSelected(InputFileChangeEventArgs e, DocEntry d)
@@ -688,7 +672,7 @@
         var file = e.File;
         if (file is null) return;
         d.Note = null;
-        if (file.Size > MaxFileBytes) { d.Note = $"“{file.Name}” is too large (max 5 MB)."; return; }
+        if (file.Size > MaxFileBytes) { d.Note = L.F("file.toolarge", file.Name); return; }
         try
         {
             if (file.Name.EndsWith(".docx", StringComparison.OrdinalIgnoreCase))
@@ -703,9 +687,9 @@
             }
             if (string.IsNullOrWhiteSpace(d.Title))
                 d.Title = Path.GetFileNameWithoutExtension(file.Name);
-            d.Note = $"Loaded “{file.Name}” ({file.Size / 1024} KB).";
+            d.Note = L.F("file.loaded", file.Name, file.Size / 1024);
         }
-        catch (Exception ex) { d.Note = $"Could not read the file: {ex.Message}"; }
+        catch (Exception ex) { d.Note = L.F("file.error", ex.Message); }
     }
 
     private void LoadExample()
@@ -793,11 +777,11 @@
         _ => "b-var",          // green — little/none
     };
 
-    private static string BandTitle(double overlap) => overlap switch
+    private string BandTitle(double overlap) => overlap switch
     {
-        >= 0.60 => "High overlap — likely a shared source",
-        >= 0.30 => "Notable overlap — worth a closer look",
-        >= 0.10 => "Some shared phrasing",
-        _ => "Little to no overlap",
+        >= 0.60 => L["orig.band.high"],
+        >= 0.30 => L["orig.band.notable"],
+        >= 0.10 => L["orig.band.some"],
+        _ => L["orig.band.little"],
     };
 }

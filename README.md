@@ -33,8 +33,17 @@ for .NET — for the .NET and Microsoft developer community, *por y para la comu
 
 Repo: https://github.com/peopleworks/SignsofAI
 
-Both **English** and **Spanish** are supported throughout (auto-detected or selectable). The Spanish
-rule-pack is an original derivation of AI-writing markers for Spanish.
+English and Spanish are supported in two **independent** ways:
+
+- **The interface** switches EN ⇄ ES instantly from the toolbar — no page reload, remembered per
+  browser, and it follows your browser's language on a first visit. Translations are plain JSON files
+  anyone can contribute: see [*Translating the interface*](#translating-the-interface).
+- **The analysis** runs against a per-language rule-pack, auto-detected or selectable. The Spanish
+  rule-pack is an original derivation of AI-writing markers for Spanish.
+
+The two are separate on purpose, so findings stay in the language of the *text being analyzed*: advice
+about English prose is given in English even when the interface is in Spanish, because that's the
+language the advice is about.
 
 ---
 
@@ -168,13 +177,14 @@ SignsOfAI.slnx
 │  │  ├─ Text/                  # Tokenizer, sentence splitter, language detector, statistics
 │  │  └─ AiWritingAnalyzer      # Public facade: Analyze(text, language)
 │  ├─ SignsOfAI.Web             # Blazor WebAssembly front end (Analyze, Originality, Catalog)
+│  │  └─ wwwroot/i18n/          # UI translations: en.json, es.json + locales.json (community-extensible)
 │  ├─ SignsOfAI.Cli             # `dotnet tool` for CI pipelines
 │  ├─ SignsOfAI.Mcp             # MCP server (stdio): the engine as tools for Claude Desktop / any client
 │  └─ SignsOfAI.Perplexity.Api  # Optional ASP.NET Core server: predictability + embeddings
 │     ├─ Engine/                #   OnnxPerplexityEngine, OnnxEmbeddingEngine (lazy-load + idle-unload)
 │     └─ Config/                #   model profiles, calibration, embedding + web-search options
 └─ tests/
-   └─ SignsOfAI.Core.Tests      # xUnit (40+)
+   └─ SignsOfAI.Core.Tests      # xUnit (80+, incl. guards for the community locale files)
 ```
 
 The Core engines are decoupled from the UI and server — the CLI, the Blazor app, and the API all reuse them.
@@ -247,6 +257,26 @@ falls back to the manual one-click searches — it never breaks.
 
 Add entries to `src/SignsOfAI.Core/Rules/Packs/rules.<lang>.json` — **lexical** rules match single word
 tokens, **pattern** rules are regexes for multi-word tells. Each sets a `weight`, `severity`, and `suggestion`.
+
+## Translating the interface
+
+**If you speak a language this tool doesn't, you can add it — and you don't need to know C#.**
+
+The interface is plain JSON: one file per language in
+[`src/SignsOfAI.Web/wwwroot/i18n/`](src/SignsOfAI.Web/wwwroot/i18n), plus a `locales.json` manifest.
+Adding a language is *copy `en.json`, translate the values on the right, add one line to the manifest*.
+No build step, no code to read, and the language switch picks it up on its own.
+
+**You don't have to finish.** Any key you leave out falls back to English, so a partial translation
+ships as partly translated rather than as a page full of blanks — translate the navigation and the main
+page, open the pull request, come back for the rest whenever. Contributors are credited on the switch
+itself.
+
+Every pull request runs a set of locale tests that name the exact mistake — a mistyped key, a
+duplicated entry, a lost `{0}` placeholder — so a translation can be reviewed on evidence instead of by
+reading JSON side by side. They deliberately do *not* fail for an incomplete translation.
+
+**[Full guide → `Docs/TRANSLATING.md`](Docs/TRANSLATING.md)**
 
 ## Deploy
 
