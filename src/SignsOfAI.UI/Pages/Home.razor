@@ -11,6 +11,7 @@
 @inject BrowserStorage Storage
 @inject CatalogStore Catalogs
 @inject IDocumentReader Reader
+@inject HostCapabilities Host
 @inject IJSRuntime JS
 
 <PageTitle>@L["home.pagetitle"]</PageTitle>
@@ -159,9 +160,30 @@
                 case AiProvider.Ollama:
                     <div class="azure-grid">
                         <input placeholder="@L["home.ph.ollama.base"]" @bind="_settings.OllamaBaseUrl" @bind:event="oninput" />
-                        <input placeholder="@L["home.ph.model.ollama"]" @bind="_settings.Model" @bind:event="oninput" />
+                        @* A free-text model name is a guess the user only finds out was wrong when
+                           the rewrite fails. Ask Ollama what it has instead. *@
+                        <input list="ollama-models" placeholder="@L["home.ph.model.ollama"]"
+                               @bind="_settings.Model" @bind:event="oninput" />
+                        <datalist id="ollama-models">
+                            @foreach (var m in _ollamaModels)
+                            {
+                                <option value="@m"></option>
+                            }
+                        </datalist>
                     </div>
-                    <p class="hint sub"><Icon Name="monitor" /> @L.M("home.hint.ollama")</p>
+                    <div class="key-row">
+                        <button class="ghost" @onclick="DetectOllamaModels" disabled="@_ollamaBusy">
+                            <Icon Name="refresh" /> @L[_ollamaBusy ? "home.ollama.detecting" : "home.ollama.detect"]
+                        </button>
+                        @if (_ollamaNote is not null)
+                        {
+                            <span class="hint sub">@_ollamaNote</span>
+                        }
+                    </div>
+                    <p class="hint sub">
+                        <Icon Name="monitor" />
+                        @L.M(Host.ReachesLocalServices ? "home.hint.ollama.native" : "home.hint.ollama")
+                    </p>
                     break;
             }
 
@@ -463,6 +485,31 @@ else
         _humanizedResult = null;
         _diff = null;
         _humanizeError = null;
+    }
+
+    // ── Ollama model discovery ───────────────────────────────────────────────
+    private string[] _ollamaModels = [];
+    private string? _ollamaNote;
+    private bool _ollamaBusy;
+
+    private async Task DetectOllamaModels()
+    {
+        _ollamaBusy = true;
+        _ollamaNote = null;
+        try
+        {
+            var (models, error) = await Humanizer.ListOllamaModelsAsync(_settings.OllamaBaseUrl);
+            _ollamaModels = [.. models];
+            _ollamaNote = error ?? L.F("home.ollama.found", models.Count);
+
+            // One model installed is the common case; picking it saves a step and cannot be wrong.
+            if (models.Count == 1 && string.IsNullOrWhiteSpace(_settings.Model))
+                _settings.Model = models[0];
+        }
+        finally
+        {
+            _ollamaBusy = false;
+        }
     }
 
     private async Task OnFileSelected(InputFileChangeEventArgs e)

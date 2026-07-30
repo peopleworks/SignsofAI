@@ -26,6 +26,10 @@ public static class UiServices
         // Prebuilt BM25 index over the rule catalog for the /catalog page.
         services.AddSingleton(sp => new CatalogSearch(RuleCatalog.All()));
 
+        // What this host can do. Browser defaults; a host that can do more replaces both of these
+        // after calling this method — see SignsOfAI.Desktop.
+        services.AddSingleton(HostCapabilities.Browser);
+
         // Reading a picked file. This is the browser's answer — Word and plain text, no dependency.
         // A host that can do better registers its own IDocumentReader *after* calling this method;
         // the last registration is the one resolved. SignsOfAI.Desktop does exactly that.

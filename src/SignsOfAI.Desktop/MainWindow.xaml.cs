@@ -22,10 +22,14 @@ public partial class MainWindow : Window
         // can never be missing on the desktop.
         services.AddSignsOfAiUi();
 
-        // Registered after AddSignsOfAiUi so it wins over the browser's reader: on the desktop the
-        // PDF/ODT/EPUB/RTF extractors are already on disk, so there is no reason to tell the user to
-        // paste their PDF as text.
+        // Both registered after AddSignsOfAiUi so they win over the browser's defaults.
+
+        // The PDF/ODT/EPUB/RTF extractors are already on disk here, so there is no reason to tell
+        // the user to paste their PDF as text.
         services.AddScoped<IDocumentReader, DesktopDocumentReader>();
+
+        // Native HTTP: Ollama on localhost is simply reachable, with no CORS workaround to explain.
+        services.AddSingleton(HostCapabilities.Desktop);
 
         // The XAML binds Services="{DynamicResource services}", so the provider has to be in
         // Resources before InitializeComponent builds the visual tree.

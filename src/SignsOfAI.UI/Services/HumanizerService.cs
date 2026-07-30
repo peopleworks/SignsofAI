@@ -71,6 +71,42 @@ public sealed class HumanizerService(HttpClient http)
         };
     }
 
+    /// <summary>
+    /// The models Ollama actually has pulled, so the user can pick one instead of typing a name and
+    /// finding out it was wrong only when the rewrite fails.
+    ///
+    /// Returns an empty list with a reason rather than throwing, because "Ollama isn't running" is
+    /// an ordinary state worth saying out loud, not an error. In the browser this call is also the
+    /// one that trips over CORS, and the message is the same either way: we couldn't reach it.
+    /// </summary>
+    public async Task<(IReadOnlyList<string> Models, string? Error)> ListOllamaModelsAsync(
+        string baseUrl, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(baseUrl))
+            return ([], "Set the Ollama base URL first.");
+
+        try
+        {
+            var tags = await http.GetFromJsonAsync(
+                $"{baseUrl.TrimEnd('/')}/api/tags", LlmJsonContext.Default.OllamaTags, ct);
+
+            var names = tags?.Models?
+                .Select(m => m.Name)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Select(n => n!)
+                .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+                .ToArray() ?? [];
+
+            return names.Length > 0
+                ? (names, null)
+                : ([], "Ollama answered but has no models pulled yet — try `ollama pull llama3.1`.");
+        }
+        catch (Exception ex)
+        {
+            return ([], $"Could not reach Ollama at {baseUrl}: {ex.Message}");
+        }
+    }
+
     private async Task<HumanizeResult> AnthropicAsync(
         string system, string user, HumanizeSettings s, CancellationToken ct)
     {
@@ -282,10 +318,22 @@ internal sealed class LlmError
     [JsonPropertyName("message")] public string? Message { get; init; }
 }
 
+/// <summary>Reply from Ollama's <c>/api/tags</c> — the models it has pulled locally.</summary>
+internal sealed class OllamaTags
+{
+    [JsonPropertyName("models")] public OllamaTag[]? Models { get; init; }
+}
+
+internal sealed class OllamaTag
+{
+    [JsonPropertyName("name")] public string? Name { get; init; }
+}
+
 [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
 [JsonSerializable(typeof(AnthropicRequest))]
 [JsonSerializable(typeof(AnthropicResponse))]
 [JsonSerializable(typeof(ChatRequest))]
 [JsonSerializable(typeof(ChatResponse))]
 [JsonSerializable(typeof(HumanizeSettings))]
+[JsonSerializable(typeof(OllamaTags))]
 internal partial class LlmJsonContext : JsonSerializerContext;
