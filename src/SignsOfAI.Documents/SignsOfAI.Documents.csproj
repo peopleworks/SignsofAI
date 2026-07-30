@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+
+    <PackageId>SignsOfAI.Documents</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Pedro Hernández (PeopleWorks)</Authors>
+    <Company>PeopleWorks</Company>
+    <Description>Document text extraction for Signs of AI Writing. Reads PDF, DOCX, ODT, EPUB, RTF, TXT and Markdown files with zero native dependencies — everything is pure managed code. Extracted text carries page/paragraph structure so findings can be mapped back to where the user can see them.</Description>
+    <PackageTags>documents;text-extraction;pdf;docx;odt;epub;rtf;markdown</PackageTags>
+    <PackageProjectUrl>https://github.com/peopleworks/SignsofAI</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/peopleworks/SignsofAI</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SignsOfAI.Core\SignsOfAI.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- PdfPig: Apache-2.0, pure managed, MIT-compatible -->
+    <PackageReference Include="PdfPig" Version="0.1.15" />
+  </ItemGroup>
+
+</Project>
