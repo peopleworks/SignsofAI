@@ -39,6 +39,10 @@ public static class UiServices
         // offer and the interface hides the feature. The desktop replaces this.
         services.AddScoped<IFolderBatch, NoFolderBatch>();
 
+        // Predictability from a model inside the app. Not something to hand a web visitor — an ONNX
+        // runtime and a half-gigabyte of weights — so the browser keeps offering the optional server.
+        services.AddScoped<ILocalPerplexity, NoLocalPerplexity>();
+
         // Local persistence (localStorage in the browser, the WebView's own store on the desktop).
         services.AddScoped<BrowserStorage>();
         // User-defined catalogs (custom rule-packs), kept in that same local store.

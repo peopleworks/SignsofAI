@@ -1,15 +1,20 @@
 @inherits LocalizedComponent
 @inject PerplexityClient Perplexity
+@inject ILocalPerplexity Local
 @inject BrowserStorage Storage
 
 <div class="ppl card">
     <div class="ppl-head">
         <h3>@L["ppl.h"] <span class="badge-beta">@L["ppl.beta"]</span></h3>
-        <button class="ppl-gear icon-btn" title="@L["ppl.gear.title"]" @onclick="() => _showSettings = !_showSettings"><Icon Name="settings" /></button>
+        @* No endpoint to configure when the model runs in this process. *@
+        @if (!Local.IsAvailable)
+        {
+            <button class="ppl-gear icon-btn" title="@L["ppl.gear.title"]" @onclick="() => _showSettings = !_showSettings"><Icon Name="settings" /></button>
+        }
     </div>
     <p class="hint">@L.M("ppl.hint")</p>
 
-    @if (_showSettings || !_settings.IsConfigured)
+    @if (!Local.IsAvailable && (_showSettings || !_settings.IsConfigured))
     {
         <div class="ppl-settings">
             <label class="ppl-field">
@@ -29,7 +34,38 @@
         </div>
     }
 
-    @if (_settings.IsConfigured)
+    @if (Local.IsAvailable)
+    {
+        <p class="hint sub"><Icon Name="monitor" /> @L.M("ppl.local.note")</p>
+
+        @if (!_filesReady)
+        {
+            @* The weights are not in the download — they are hundreds of megabytes. Fetched once,
+               then this works with no network at all. *@
+            <button class="primary ppl-run" @onclick="Download" disabled="@_downloading">
+                <Icon Name="download" /> @(_downloading ? L["ppl.local.downloading"] : L["ppl.local.download"])
+            </button>
+
+            @if (_download is { } d)
+            {
+                <div class="ppl-progress">
+                    <div class="ppl-bar"><span style="width:@(d.Percent ?? 0)%"></span></div>
+                    <span class="hint sub">
+                        @L.F("ppl.local.progress", d.FileName, d.ReadMb.ToString("N0"),
+                             d.TotalMb?.ToString("N0") ?? "?", d.FileIndex, d.FileCount)
+                    </span>
+                </div>
+            }
+        }
+        else
+        {
+            <button class="primary ppl-run" @onclick="Measure"
+                    disabled="@(_loading || string.IsNullOrWhiteSpace(Text))">
+                @(_loading ? L["ppl.measuring"] : L["ppl.measure"])
+            </button>
+        }
+    }
+    else if (_settings.IsConfigured)
     {
         @if (_models.Length > 1)
         {
@@ -91,8 +127,49 @@
     private PerplexityModelInfo[] _models = [];
     private string? _selectedModel;
 
+    // ── in-process model (desktop) ───────────────────────────────────────────
+    private bool _filesReady;
+    private bool _downloading;
+    private ModelDownloadState? _download;
+
+    private async Task Download()
+    {
+        _downloading = true;
+        _error = null;
+        try
+        {
+            var progress = new Progress<ModelDownloadState>(p =>
+            {
+                _download = p;
+                // Progress arrives on a worker thread; hop back before touching the render tree.
+                InvokeAsync(StateHasChanged);
+            });
+
+            await Local.EnsureFilesAsync(progress);
+            _filesReady = Local.FilesReady;
+            if (!_filesReady) _error = L["ppl.local.failed"];
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _downloading = false;
+            _download = null;
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
+        if (Local.IsAvailable)
+        {
+            // Nothing to configure and no server to reach: the only question is whether the weights
+            // are already here.
+            _filesReady = Local.FilesReady;
+            return;
+        }
+
         _settings = await Perplexity.LoadSettingsAsync(Storage);
         _endpointEdit = _settings.Endpoint;
         if (_settings.IsConfigured)
@@ -125,13 +202,17 @@
 
     private async Task Measure()
     {
-        if (string.IsNullOrWhiteSpace(Text) || !_settings.IsConfigured) return;
+        if (string.IsNullOrWhiteSpace(Text)) return;
+        if (!Local.IsAvailable && !_settings.IsConfigured) return;
+
         _cts?.Cancel();
         _cts = new CancellationTokenSource();
         _loading = true; _error = null;
         try
         {
-            _result = await Perplexity.MeasureAsync(_settings.Endpoint, Text, Language, _selectedModel, _cts.Token);
+            _result = Local.IsAvailable
+                ? await Local.MeasureAsync(Text, Language, _cts.Token)
+                : await Perplexity.MeasureAsync(_settings.Endpoint, Text, Language, _selectedModel, _cts.Token);
         }
         catch (OperationCanceledException) { /* superseded */ }
         catch (Exception ex)

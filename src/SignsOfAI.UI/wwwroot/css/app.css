@@ -877,3 +877,9 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
 .score-pill.high   { background: color-mix(in srgb, var(--danger) 16%, transparent); color: var(--danger); }
 .score-pill.medium { background: color-mix(in srgb, var(--warn) 18%, transparent);   color: var(--warn); }
 .score-pill.low    { background: color-mix(in srgb, var(--ok) 16%, transparent);     color: var(--ok); }
+
+/* One-time model download (desktop). The bar only appears once a total is known; when the server
+   sends no Content-Length the megabytes counter carries the message on its own. */
+.ppl-progress { margin-top: .6rem; }
+.ppl-bar { height: 6px; border-radius: 999px; background: var(--border); overflow: hidden; }
+.ppl-bar > span { display: block; height: 100%; background: var(--accent, #2563eb); transition: width .25s ease; }

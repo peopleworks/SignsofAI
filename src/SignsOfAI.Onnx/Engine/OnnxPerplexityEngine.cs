@@ -58,14 +58,25 @@ public sealed class OnnxModelEngine : IPerplexityEngine, IDisposable
     /// <summary>Ensures the model files are on disk, awaiting the (single, detached) download. Used at
     /// startup for the default model. The download itself runs on an app-lifetime token, so a request that
     /// triggers it and then disconnects does NOT abort a multi-minute download.</summary>
-    public Task EnsureFilesAsync(CancellationToken ct = default) => GetOrStartDownload();
+    public Task EnsureFilesAsync(CancellationToken ct = default) => GetOrStartDownload(null);
 
-    private Task GetOrStartDownload()
+    /// <summary>
+    /// Same, reporting progress — for a host where someone is watching a window rather than a log.
+    /// If a download is already running, the caller joins it and the reporter already attached to it
+    /// stays; only the first caller's reporter is used.
+    /// </summary>
+    public Task EnsureFilesAsync(IProgress<ModelDownloadProgress>? progress, CancellationToken ct = default) =>
+        GetOrStartDownload(progress);
+
+    private IProgress<ModelDownloadProgress>? _progress;
+
+    private Task GetOrStartDownload(IProgress<ModelDownloadProgress>? progress = null)
     {
         if (RefreshAvailability()) return Task.CompletedTask;
         lock (_downloadLock)
         {
             if (RefreshAvailability()) return Task.CompletedTask;
+            if (_downloadTask is null) _progress = progress;
             return _downloadTask ??= Task.Run(DownloadAllAsync);
         }
     }
@@ -77,11 +88,15 @@ public sealed class OnnxModelEngine : IPerplexityEngine, IDisposable
             Directory.CreateDirectory(_dir);
             var modelPath = Path.Combine(_dir, profile.ModelFile);
             var tokPath = Path.Combine(_dir, profile.TokenizerFile);
+            var count = 2 + profile.AuxFileUrls.Length;
             // CancellationToken.None on purpose: a disconnecting client must not abort the download.
-            await EnsureFileAsync(modelPath, profile.ModelUrl, CancellationToken.None);
-            await EnsureFileAsync(tokPath, profile.TokenizerUrl, CancellationToken.None);
+            await EnsureFileAsync(modelPath, profile.ModelUrl, 1, count, CancellationToken.None);
+            await EnsureFileAsync(tokPath, profile.TokenizerUrl, 2, count, CancellationToken.None);
+            var index = 3;
             foreach (var url in profile.AuxFileUrls)
-                await EnsureFileAsync(Path.Combine(_dir, Path.GetFileName(new Uri(url).AbsolutePath)), url, CancellationToken.None);
+                await EnsureFileAsync(
+                    Path.Combine(_dir, Path.GetFileName(new Uri(url).AbsolutePath)), url, index++, count,
+                    CancellationToken.None);
 
             _filesReady = RequiredFilesExist();
             if (!_filesReady) log.LogError("[{Model}] model/tokenizer missing at {Dir} and no download URL configured.", profile.Id, _dir);
@@ -112,8 +127,10 @@ public sealed class OnnxModelEngine : IPerplexityEngine, IDisposable
     {
         if (!RefreshAvailability())
         {
-            _ = GetOrStartDownload(); // kick off (or continue) the detached download; don't block the request on it
-            throw new InvalidOperationException($"Model '{profile.Id}' is downloading on the server; retry shortly.");
+            _ = GetOrStartDownload(); // kick off (or continue) the detached download; don't block the caller on it
+            // Deliberately host-neutral wording: this library backs both the HTTP service and the
+            // desktop app now, and only one of those has a "server".
+            throw new InvalidOperationException($"Model '{profile.Id}' is still downloading; retry shortly.");
         }
 
         await _gate.WaitAsync(ct);
@@ -215,17 +232,48 @@ public sealed class OnnxModelEngine : IPerplexityEngine, IDisposable
         finally { foreach (var d in toDispose) d.Dispose(); }
     }
 
-    private async Task EnsureFileAsync(string path, string? url, CancellationToken ct)
+    private async Task EnsureFileAsync(
+        string path, string? url, int index, int count, CancellationToken ct)
     {
         if (File.Exists(path) || string.IsNullOrWhiteSpace(url)) return;
         log.LogInformation("[{Model}] downloading {Url} …", profile.Id, url);
+
+        var name = Path.GetFileName(path);
         using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(30) };
         using var resp = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct);
         resp.EnsureSuccessStatusCode();
+
+        var total = resp.Content.Headers.ContentLength;
         var tmp = path + ".part";
-        await using (var fs = File.Create(tmp)) await resp.Content.CopyToAsync(fs, ct);
+
+        // Copied by hand rather than with CopyToAsync so the bytes can be counted as they land.
+        // Hugging Face does send Content-Length, but a proxy may not, so a null total is a normal
+        // case the reporter has to cope with rather than an error.
+        await using (var source = await resp.Content.ReadAsStreamAsync(ct))
+        await using (var fs = File.Create(tmp))
+        {
+            var buffer = new byte[81920];
+            long read = 0;
+            var lastReport = 0L;
+            int n;
+            while ((n = await source.ReadAsync(buffer, ct)) > 0)
+            {
+                await fs.WriteAsync(buffer.AsMemory(0, n), ct);
+                read += n;
+
+                // Report about every megabyte: often enough to look alive, rarely enough not to
+                // spend the download re-rendering a progress bar.
+                if (read - lastReport >= 1_048_576)
+                {
+                    lastReport = read;
+                    _progress?.Report(new ModelDownloadProgress(name, read, total, index, count));
+                }
+            }
+            _progress?.Report(new ModelDownloadProgress(name, read, total ?? read, index, count));
+        }
+
         File.Move(tmp, path, overwrite: true);
-        log.LogInformation("[{Model}] downloaded {Path} ({Bytes:N0} bytes).", profile.Id, Path.GetFileName(path), new FileInfo(path).Length);
+        log.LogInformation("[{Model}] downloaded {Path} ({Bytes:N0} bytes).", profile.Id, name, new FileInfo(path).Length);
     }
 
     private bool RefreshAvailability() => _filesReady = RequiredFilesExist();

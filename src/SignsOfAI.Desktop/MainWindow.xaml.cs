@@ -31,6 +31,10 @@ public partial class MainWindow : Window
         // A real folder dialog and a real folder path — the thing a browser tab is never given.
         services.AddScoped<IFolderBatch, DesktopFolderBatch>();
 
+        // The model runs here, so the text never leaves the machine and no service has to be up.
+        // Singleton: loading the weights is expensive and the engine unloads itself when idle.
+        services.AddSingleton<ILocalPerplexity, DesktopPerplexity>();
+
         // Native HTTP: Ollama on localhost is simply reachable, with no CORS workaround to explain.
         services.AddSingleton(HostCapabilities.Desktop);
 
