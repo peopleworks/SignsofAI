@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using SignsOfAI.Core.Model;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 public enum AiProvider { Anthropic, OpenAI, AzureOpenAI, DeepSeek, Ollama }
 

@@ -6,7 +6,7 @@ using Xunit;
 namespace SignsOfAI.Core.Tests;
 
 /// <summary>
-/// Guards the community-contributed UI translations in <c>src/SignsOfAI.Web/wwwroot/i18n/</c>.
+/// Guards the community-contributed UI translations in <c>src/SignsOfAI.UI/wwwroot/i18n/</c>.
 ///
 /// These files are data, not code, so nothing stops a well-meaning pull request from mistyping a
 /// key, dropping a <c>{0}</c> placeholder or duplicating an entry — mistakes that surface only as
@@ -232,7 +232,7 @@ public class LocaleFileTests
             dir = dir.Parent;
 
         Assert.NotNull(dir);
-        var path = Path.Combine(dir.FullName, "src", "SignsOfAI.Web", "wwwroot", "i18n");
+        var path = Path.Combine(dir.FullName, "src", "SignsOfAI.UI", "wwwroot", "i18n");
         Assert.True(Directory.Exists(path), $"Expected the locale folder at {path}");
         return path;
     }

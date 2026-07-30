@@ -1,0 +1,21 @@
+<Solution>
+
+  <!--
+    The desktop app and what it needs, in its own solution.
+
+    Why not just add it to SignsOfAI.slnx: that solution is built on ubuntu-latest by three
+    workflows, and a WPF project cannot be built there. Keeping the Windows-only head in a solution
+    of its own is what lets the main build stay on Linux — which matters, because that is the build
+    that gives a translation contributor fast feedback on a pull request.
+  -->
+
+  <Folder Name="/src/">
+    <Project Path="src/SignsOfAI.Core/SignsOfAI.Core.csproj" />
+    <Project Path="src/SignsOfAI.Desktop/SignsOfAI.Desktop.csproj" />
+    <Project Path="src/SignsOfAI.UI/SignsOfAI.UI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SignsOfAI.Core.Tests/SignsOfAI.Core.Tests.csproj" />
+  </Folder>
+
+</Solution>

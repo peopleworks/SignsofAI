@@ -13,7 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SignsOfAI.Core\SignsOfAI.Core.csproj" />
+    <!-- This project is now only the *host*: index.html, the icons, the deployment config and the
+         WASM bootstrap. Every page, component and service lives in SignsOfAI.UI, which the desktop
+         app renders too; Core arrives through it. -->
+    <ProjectReference Include="..\SignsOfAI.UI\SignsOfAI.UI.csproj" />
   </ItemGroup>
 
 </Project>

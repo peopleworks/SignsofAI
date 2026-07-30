@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using SignsOfAI.Core.Rules;
 
-namespace SignsOfAI.Web.Services;
+namespace SignsOfAI.UI.Services;
 
 /// <summary>
 /// A compact in-browser BM25 ranker over the rule catalog — the client-side lexical-search
