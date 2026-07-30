@@ -413,6 +413,74 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .d-del { background: color-mix(in srgb, var(--danger) 16%, transparent); text-decoration: line-through; color: var(--text-muted); border-radius: 3px; }
 .d-add { background: color-mix(in srgb, var(--good) 20%, transparent); box-shadow: inset 0 -2px 0 var(--good); border-radius: 3px; }
 
+/* ---- live rewrite ---- */
+.rewrite-btn.on { box-shadow: inset 0 0 0 2px var(--brand-ink); }
+.rewrite-head { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: .7rem; }
+.rewrite-head h3 { margin: 0; font-size: 1.1rem; display: inline-flex; align-items: center; gap: .4rem; }
+.rw-badge {
+    display: inline-flex; align-items: center; gap: .3rem; font-size: .7rem; font-weight: 700;
+    color: var(--good); background: color-mix(in srgb, var(--good) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--good) 30%, transparent);
+    padding: .15rem .5rem; border-radius: 999px;
+}
+.rw-strength { display: flex; gap: .3rem; margin-left: auto; }
+
+.rw-summary { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; margin-bottom: .8rem; }
+.rw-count { font-size: .84rem; font-weight: 600; color: var(--text-muted); }
+.rw-pending {
+    font-size: .76rem; font-weight: 700; color: var(--notice); cursor: help;
+    background: color-mix(in srgb, var(--notice) 14%, transparent);
+    padding: .12rem .5rem; border-radius: 999px;
+}
+.rw-actions { margin-left: auto; display: flex; gap: .4rem; }
+
+.rw-panes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 760px) { .rw-panes { grid-template-columns: 1fr; } }
+.rw-pane h4 {
+    margin: 0 0 .4rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--text-muted); display: inline-flex; align-items: center; gap: .35rem;
+}
+.rw-body { max-height: 22rem; overflow-y: auto; font-size: .97rem; }
+.rw-out { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--good) 35%, transparent); }
+
+/* Applied edits read as resolved (green); skipped ones stay flagged as the tell they are. */
+.rw-hl { border-radius: 4px; padding: .05em .15em; cursor: help; }
+.rw-hl.on { background: color-mix(in srgb, var(--good) 20%, transparent); box-shadow: inset 0 -2px 0 var(--good); }
+.rw-hl.off { background: color-mix(in srgb, var(--lex) 20%, transparent); box-shadow: inset 0 -2px 0 var(--lex); }
+
+.rw-list { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .4rem; }
+.rw-item {
+    display: flex; gap: .6rem; align-items: flex-start;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: .5rem .6rem;
+}
+.rw-item.skipped { opacity: .62; }
+.rw-toggle {
+    flex: 0 0 auto; width: 1.65rem; height: 1.65rem; padding: 0; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text-muted);
+}
+.rw-toggle.on { background: var(--good); border-color: transparent; color: #fff; }
+.rw-item-body { min-width: 0; display: flex; flex-direction: column; gap: .35rem; }
+.rw-change { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; font-size: .92rem; }
+.rw-change del { color: var(--text-muted); }
+.rw-change ins { text-decoration: none; font-weight: 700; color: var(--good); }
+.rw-arrow { color: var(--text-muted); }
+.rw-deleted { color: var(--text-muted); font-size: .84rem; }
+.rw-needspick {
+    font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--notice); background: color-mix(in srgb, var(--notice) 14%, transparent);
+    padding: .1rem .4rem; border-radius: 4px; cursor: help;
+}
+.rw-alts { display: flex; gap: .3rem; flex-wrap: wrap; }
+.rw-alt {
+    font-size: .78rem; padding: .18rem .5rem; border-radius: 999px; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text-muted);
+}
+.rw-alt:hover { color: var(--text); }
+.rw-alt.on { background: var(--brand); border-color: transparent; color: var(--brand-ink); font-weight: 700; }
+.rw-structural { margin: .9rem 0 0; }
+
 /* ---- share card ---- */
 .share-canvas { width: 100%; max-width: 640px; height: auto; display: block; margin: .3rem auto 0; border: 1px solid var(--border); border-radius: 10px; }
 

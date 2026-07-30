@@ -198,7 +198,10 @@
                     }
                 </div>
                 <div class="summary-actions">
-                    <button class="primary humanize-btn" @onclick="Humanize" disabled="@_humanizing">
+                    <button class="primary rewrite-btn @(_showRewrite ? "on" : "")" @onclick="@(() => _showRewrite = !_showRewrite)">
+                        <Icon Name="wand" /> <span>@L[_showRewrite ? "home.rewrite.hide" : "home.rewrite.show"]</span>
+                    </button>
+                    <button class="ghost humanize-btn" @onclick="Humanize" disabled="@_humanizing">
                         @if (_humanizing) { <text>@L["home.humanizing"]</text> }
                         else { <Icon Name="sparkle" /> <span>@L["home.humanize"]</span> }
                     </button>
@@ -233,6 +236,12 @@
             </div>
             <div class="stat"><span class="stat-label">@L["home.stat.diversity"]</span><span class="stat-val">@r.Statistics.LexicalDiversity.ToString("0.00")</span></div>
         </div>
+
+        @if (_showRewrite)
+        {
+            <LiveRewritePanel Text="@_analyzedText" Result="r" ExtraPacks="Catalogs.EnabledPacks()"
+                              OnUseAsInput="UseRewritten" />
+        }
 
         <div class="rhythm card">
             <h3>@L["home.rhythm"]</h3>
@@ -360,6 +369,10 @@ else
     private bool _showSettings;
     private HumanizeSettings _settings = new();
     private bool _settingsSaved;
+
+    // Sticky across keystrokes: once the split view is open the user is working in it, so it must not
+    // collapse every time the analysis re-runs.
+    private bool _showRewrite;
 
     private bool _humanizing;
     private string? _humanized;
@@ -571,6 +584,15 @@ else
     {
         if (_humanized is null) return;
         _text = _humanized;
+        _fileNote = null;
+        RunAnalysis();
+    }
+
+    /// <summary>Pull the locally-rewritten text back into the editor and score it for real.</summary>
+    private void UseRewritten(string rewritten)
+    {
+        if (string.IsNullOrWhiteSpace(rewritten)) return;
+        _text = rewritten;
         _fileNote = null;
         RunAnalysis();
     }

@@ -62,6 +62,16 @@ statistics, and per-finding fixes update **as you write**.
 
 - **Sentence-rhythm visualization** — a per-sentence bar chart that makes *burstiness* visible.
 - **Per-finding recommendations** — every flagged tell carries a concrete fix and the research behind it.
+- **Live rewrite (on-device, no key)** — your text and a de-AI-ified version side by side, rebuilt on
+  every keystroke, with the score dropping as you go. It runs off the rule-pack — no model, no network,
+  no API key — so it is instant and free. Every change is listed with alternatives to pick from and a
+  one-click *leave this one alone*. Three strengths, from *only the strongest tells* to *delete the
+  empty intensifiers too*.
+
+  It only does what a word swap can honestly do, and **declines the edits it would get wrong**: it
+  won't turn "delve into" into "examine into", won't drop the "just" that a *"not just X, it's Y"*
+  construction depends on, and won't put "el" in front of a feminine noun. Rhythm and rhetorical
+  structure need real rewriting, so those stay in the recommendations — and the panel says how many.
 - **Humanize (optional, BYOK)** — connect an AI provider and rewrite the flagged text in one click.
   Anthropic (`claude-opus-4-8`, works from the browser), OpenAI / DeepSeek, Azure OpenAI, or **Ollama**
   (local, no key). Credentials live only in your browser and are sent **directly** to the provider.
@@ -173,6 +183,7 @@ SignsOfAI.slnx
 │  │  ├─ Analyzers/             # Lexical, Pattern, Burstiness (IAnalyzer)
 │  │  ├─ Originality/           # OriginalityChecker (shingles+tiling), ParaphraseFinder,
 │  │  │                         #   DistinctivePhraseExtractor
+│  │  ├─ Rewriting/             # LocalRewriter — on-device de-AI-ifying, no model or network
 │  │  ├─ Rules/Packs/           # rules.en.json, rules.es.json (embedded, community-extensible)
 │  │  ├─ Text/                  # Tokenizer, sentence splitter, language detector, statistics
 │  │  └─ AiWritingAnalyzer      # Public facade: Analyze(text, language)
@@ -184,7 +195,7 @@ SignsOfAI.slnx
 │     ├─ Engine/                #   OnnxPerplexityEngine, OnnxEmbeddingEngine (lazy-load + idle-unload)
 │     └─ Config/                #   model profiles, calibration, embedding + web-search options
 └─ tests/
-   └─ SignsOfAI.Core.Tests      # xUnit (80+, incl. guards for the community locale files)
+   └─ SignsOfAI.Core.Tests      # xUnit (120+, incl. guards for the community locale files)
 ```
 
 The Core engines are decoupled from the UI and server — the CLI, the Blazor app, and the API all reuse them.
@@ -257,6 +268,23 @@ falls back to the manual one-click searches — it never breaks.
 
 Add entries to `src/SignsOfAI.Core/Rules/Packs/rules.<lang>.json` — **lexical** rules match single word
 tokens, **pattern** rules are regexes for multi-word tells. Each sets a `weight`, `severity`, and `suggestion`.
+
+A lexical rule can also tell the **live rewriter** what to do, which `suggestion` cannot: that field is
+prose for a person ("mix, blend, range — or just name the thing"), and a program shouldn't be reading
+intent out of prose.
+
+```jsonc
+{ "id": "lex.utilize",  "terms": ["utilize", "utilizes"], "weight": 3.5, "severity": "Medium",
+  "suggestion": "use",  "replacements": ["use"] },              // what to substitute, best first
+{ "id": "lex.just",     "terms": ["just"],                "weight": 1.0, "severity": "Info",
+  "suggestion": "empty intensifier — usually deletable", "delete": true }   // remove the word instead
+```
+
+Both are optional. Without them the rewriter falls back to reading a comma-separated list off
+`suggestion`, and refuses to guess at anything else — a lone term could be a replacement ("use") or a
+description ("muletilla"), and telling them apart needs to know the language. So a rule with no explicit
+field is simply reported and never auto-edited, which is why every built-in rule states its fix outright
+(there's a test that keeps it that way).
 
 ## Translating the interface
 
