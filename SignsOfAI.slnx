@@ -10,11 +10,15 @@
   <Folder Name="/src/">
     <Project Path="src/SignsOfAI.Cli/SignsOfAI.Cli.csproj" />
     <Project Path="src/SignsOfAI.Core/SignsOfAI.Core.csproj" />
+    <Project Path="src/SignsOfAI.Documents/SignsOfAI.Documents.csproj" />
+    <Project Path="src/SignsOfAI.Onnx/SignsOfAI.Onnx.csproj" />
     <Project Path="src/SignsOfAI.Perplexity.Api/SignsOfAI.Perplexity.Api.csproj" />
     <Project Path="src/SignsOfAI.UI/SignsOfAI.UI.csproj" />
     <Project Path="src/SignsOfAI.Web/SignsOfAI.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/SignsOfAI.Core.Tests/SignsOfAI.Core.Tests.csproj" />
+    <Project Path="tests/SignsOfAI.Documents.Tests/SignsOfAI.Documents.Tests.csproj" />
+    <Project Path="tests/SignsOfAI.Onnx.Tests/SignsOfAI.Onnx.Tests.csproj" />
   </Folder>
 </Solution>
