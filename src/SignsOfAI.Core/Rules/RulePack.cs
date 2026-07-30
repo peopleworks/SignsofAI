@@ -19,8 +19,80 @@ public sealed class LexicalRule
     /// <summary>Comma-separated human-friendly alternatives.</summary>
     public required string Suggestion { get; init; }
 
+    /// <summary>
+    /// Machine-applicable replacements, best first, for the live rewriter. <see cref="Suggestion"/> is
+    /// prose written for a person ("mix, blend, range — or just name the thing"); this is the subset a
+    /// program can actually substitute. Optional: when omitted, the rewriter falls back to reading the
+    /// leading comma-separated terms out of <see cref="Suggestion"/>, so third-party catalogs written
+    /// before this field existed still work.
+    /// </summary>
+    public string[]? Replacements { get; init; }
+
+    /// <summary>
+    /// True when the fix is to delete the word rather than swap it — the empty intensifiers ("just",
+    /// "simply", "realmente"). Deliberately explicit rather than inferred from <see cref="Suggestion"/>,
+    /// whose wording is language-specific ("usually deletable" / "suele sobrar") and would silently
+    /// fail for any language the packs don't ship.
+    /// </summary>
+    public bool Delete { get; init; }
+
     /// <summary>Optional supporting evidence shown to the user.</summary>
     public string? Evidence { get; init; }
+
+    /// <summary>
+    /// What the live rewriter can substitute for a match, best first. Empty when this rule has no
+    /// mechanical fix (the writer has to make a judgement call), which the rewriter treats as
+    /// "highlight it, don't touch it".
+    /// </summary>
+    public IReadOnlyList<string> RewriteOptions() =>
+        Replacements is { Length: > 0 } explicitOnes
+            ? explicitOnes
+            : SuggestionParser.LeadingTerms(Suggestion);
+}
+
+/// <summary>
+/// Salvages machine-applicable replacements from a prose <c>suggestion</c>, for catalogs that predate
+/// <see cref="LexicalRule.Replacements"/> — including ones contributed by users.
+///
+/// Deliberately conservative and language-neutral: it takes the leading comma-separated terms and
+/// stops at the first aside, and it never infers a *deletion*. Guessing wrong here would silently
+/// change someone's prose in a way they didn't ask for, so anything ambiguous yields nothing and the
+/// rewriter leaves the word alone.
+/// </summary>
+public static class SuggestionParser
+{
+    // An aside begins at a dash ("mix, blend — or just name the thing") or at an "or"-clause
+    // ("complex, or specify the actual facets"). Everything from there on is advice, not a term.
+    private static readonly string[] AsideMarkers =
+        ["—", " – ", " -- ", ", or ", ", o ", " or just ", " o just "];
+
+    private const int MaxWordsPerTerm = 4; // "a lot of", "lo más avanzado" — beyond this it's prose
+
+    public static IReadOnlyList<string> LeadingTerms(string? suggestion)
+    {
+        if (string.IsNullOrWhiteSpace(suggestion)) return [];
+
+        var head = suggestion;
+        foreach (var marker in AsideMarkers)
+        {
+            var at = head.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
+            if (at >= 0) head = head[..at];
+        }
+
+        var terms = head
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .Where(term => term.Length > 0
+                           && term.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length <= MaxWordsPerTerm
+                           && !term.Contains('(') && !term.Contains(':'))
+            .ToList();
+
+        // Only a comma-separated list of alternatives is unmistakable. A single term is not: nothing
+        // short of knowing the language separates the replacement "use" from the description
+        // "muletilla" (Spanish for "filler word"), and substituting the latter into someone's sentence
+        // would be far worse than leaving the word alone. So a lone term is refused here, and any rule
+        // wanting a single replacement states it in `replacements` — which every built-in rule does.
+        return terms.Count >= 2 ? terms : [];
+    }
 }
 
 /// <summary>A regex rule for rhetorical/syntactic patterns spanning multiple words.</summary>

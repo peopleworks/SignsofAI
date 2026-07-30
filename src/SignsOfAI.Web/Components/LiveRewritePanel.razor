@@ -1,0 +1,279 @@
+@* The live rewrite: your text on the left, the de-AI-ified version on the right, rebuilt on every
+   keystroke. No model, no network, no API key — it runs off the rule-pack, which is what makes it
+   instant enough to keep up with typing.
+
+   Only substitutions the rules can make honestly appear here. Structural tells (negative
+   parallelisms, copula avoidance, robotic rhythm) need real rewriting and are left to the optional
+   AI pass; the footer says so rather than pretending they were handled. *@
+@using SignsOfAI.Core
+@using SignsOfAI.Core.Model
+@using SignsOfAI.Core.Rewriting
+@using SignsOfAI.Core.Rules
+@inherits LocalizedComponent
+@inject AiWritingAnalyzer Analyzer
+@inject IJSRuntime JS
+
+<div class="card rewrite">
+    <div class="rewrite-head">
+        <h3><Icon Name="wand" /> @L["rw.h"]</h3>
+        <span class="rw-badge"><Icon Name="lock" /> @L["rw.ondevice"]</span>
+        <div class="rw-strength" role="group" aria-label="@L["rw.strength"]">
+            @foreach (var level in new[] { RewriteStrength.Light, RewriteStrength.Standard, RewriteStrength.Thorough })
+            {
+                <button class="filter @(_strength == level ? "on" : "")" @onclick="@(() => SetStrength(level))">
+                    @L["rw.strength." + level.ToString().ToLowerInvariant()]
+                </button>
+            }
+        </div>
+    </div>
+
+    @if (_plan.Count == 0)
+    {
+        <p class="empty"><Icon Name="check-circle" /> @L["rw.nothing"]</p>
+    }
+    else
+    {
+        <div class="rw-summary">
+            <span class="score-compare">
+                <span class="sc-num @ScoreClass(BeforeScore)">@Math.Round(BeforeScore)</span>
+                <span class="sc-arrow">→</span>
+                <span class="sc-num @ScoreClass(_afterScore)">@Math.Round(_afterScore)</span>
+                @{ var delta = BeforeScore - _afterScore; }
+                @if (delta > 0.5) { <span class="sc-delta">−@Math.Round(delta)</span> }
+            </span>
+            <span class="rw-count">@L.P(AppliedCount, "rw.applied")</span>
+            @if (PendingCount > 0)
+            {
+                <span class="rw-pending" title="@L["rw.pending.why"]">@L.P(PendingCount, "rw.pending")</span>
+            }
+            <div class="rw-actions">
+                <button class="ghost sm" @onclick="Copy">
+                    <Icon Name="@(_copied ? "check" : "copy")" /> @(_copied ? L["rw.copied"] : L["common.copy"])
+                </button>
+                <button class="ghost sm" @onclick="@(() => OnUseAsInput.InvokeAsync(_rewritten))"
+                        disabled="@(AppliedCount == 0)">@L["home.useasinput"]</button>
+            </div>
+        </div>
+
+        <div class="rw-panes">
+            <div class="rw-pane">
+                <h4>@L["home.original"]</h4>
+                <div class="text-view rw-body">
+                    @foreach (var seg in OriginalSegments())
+                    {
+                        if (seg.Edit is { } edit)
+                        {
+                            <mark class="rw-hl @(IsApplied(edit) ? "on" : "off")"
+                                  title="@EditTitle(edit)">@seg.Text</mark>
+                        }
+                        else { @seg.Text }
+                    }
+                </div>
+            </div>
+            <div class="rw-pane">
+                <h4><Icon Name="wand" /> @L["rw.rewritten"]</h4>
+                <div class="text-view rw-body rw-out">@_rewritten</div>
+            </div>
+        </div>
+
+        <ul class="rw-list">
+            @foreach (var edit in _plan)
+            {
+                var key = KeyOf(edit);
+                var applied = IsApplied(edit);
+                <li class="rw-item @(applied ? "" : "skipped")">
+                    <button class="rw-toggle @(applied ? "on" : "")" @onclick="@(() => Toggle(edit))"
+                            title="@(applied ? L["rw.skip"] : L["rw.apply"])"
+                            aria-pressed="@(applied ? "true" : "false")">
+                        <Icon Name="@(applied ? "check" : "close")" />
+                    </button>
+                    <div class="rw-item-body">
+                        <div class="rw-change">
+                            <del>@edit.Original</del>
+                            <span class="rw-arrow">→</span>
+                            @if (edit.IsDeletion)
+                            {
+                                <em class="rw-deleted">@L["rw.deleted"]</em>
+                            }
+                            else
+                            {
+                                <ins>@Chosen(edit)</ins>
+                            }
+                            @if (!edit.AutoApply)
+                            {
+                                <span class="rw-needspick" title="@L["rw.pending.why"]">@L["rw.pick"]</span>
+                            }
+                        </div>
+                        @if (edit.Options.Count > 1)
+                        {
+                            <div class="rw-alts">
+                                @foreach (var option in edit.Options)
+                                {
+                                    <button class="rw-alt @(Chosen(edit) == option ? "on" : "")"
+                                            @onclick="@(() => Choose(edit, option))">@option</button>
+                                }
+                            </div>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+
+    @if (StructuralCount > 0)
+    {
+        <p class="hint rw-structural">
+            <Icon Name="alert" /> @L.P(StructuralCount, "rw.structural")
+        </p>
+    }
+</div>
+
+@code {
+    /// <summary>The text the findings were produced from.</summary>
+    [Parameter, EditorRequired] public string Text { get; set; } = "";
+
+    /// <summary>The analysis of <see cref="Text"/>.</summary>
+    [Parameter, EditorRequired] public AnalysisResult Result { get; set; } = default!;
+
+    /// <summary>Custom catalogs in play, so the rewriter reads the same merged rules as the analyzer.</summary>
+    [Parameter] public IReadOnlyList<RulePack> ExtraPacks { get; set; } = [];
+
+    [Parameter] public EventCallback<string> OnUseAsInput { get; set; }
+
+    // Decisions are keyed by rule + word rather than by position, so they survive the user typing
+    // somewhere else in the document: a position key would silently land on a different word.
+    private readonly HashSet<string> _skipped = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, string> _picked = new(StringComparer.Ordinal);
+
+    private RewriteStrength _strength = RewriteStrength.Standard;
+    private IReadOnlyList<RewriteEdit> _plan = [];
+    private string _rewritten = "";
+    private double _afterScore;
+    private bool _copied;
+    private string _lastText = "";
+
+    private double BeforeScore => Result?.OverallScore ?? 0;
+    private int AppliedCount => _plan.Count(IsApplied);
+    private int PendingCount => _plan.Count(e => !IsApplied(e));
+
+    /// <summary>Findings the rewriter deliberately doesn't touch, because substitution can't fix them.</summary>
+    private int StructuralCount => Result is null
+        ? 0
+        : Result.Findings.Count(f => f.Category is SignCategory.Rhetorical or SignCategory.Syntactic);
+
+    protected override void OnParametersSet() => Recompute();
+
+    private void SetStrength(RewriteStrength level)
+    {
+        if (_strength == level) return;
+        _strength = level;
+        Recompute();
+    }
+
+    private void Recompute()
+    {
+        if (Result is null || string.IsNullOrWhiteSpace(Text))
+        {
+            _plan = [];
+            _rewritten = "";
+            _afterScore = 0;
+            return;
+        }
+
+        if (Text != _lastText)
+        {
+            _lastText = Text;
+            _copied = false;
+        }
+
+        var pack = AiWritingAnalyzer.ResolvePack(Result.Language, ExtraPacks);
+        _plan = LocalRewriter.Plan(Text, Result.Findings, pack, _strength);
+
+        var rejected = _plan.Where(e => !IsApplied(e)).Select(e => e.Span.Start).ToHashSet();
+        var chosen = _plan
+            .Where(e => !e.IsDeletion && _picked.TryGetValue(KeyOf(e), out _))
+            .ToDictionary(e => e.Span.Start, e => _picked[KeyOf(e)]);
+
+        _rewritten = LocalRewriter.Apply(Text, _plan, chosen, rejected, Result.Language);
+        _afterScore = _rewritten == Text
+            ? BeforeScore
+            : Analyzer.Analyze(_rewritten, Result.Language, ExtraPacks).OverallScore;
+    }
+
+    /// <summary>Rule + word, lower-cased: every occurrence of the same tell behaves as one decision.</summary>
+    private static string KeyOf(RewriteEdit edit) => edit.RuleId + "|" + edit.Original.ToLowerInvariant();
+
+    /// <summary>
+    /// An edit counts as applied unless it was skipped, or it needs a decision the writer hasn't made.
+    /// Nothing that could mangle grammar is applied on our own initiative.
+    /// </summary>
+    private bool IsApplied(RewriteEdit edit)
+    {
+        var key = KeyOf(edit);
+        if (_skipped.Contains(key)) return false;
+        return edit.AutoApply || _picked.ContainsKey(key);
+    }
+
+    private string Chosen(RewriteEdit edit) =>
+        _picked.TryGetValue(KeyOf(edit), out var pick) ? pick : edit.Preferred;
+
+    private void Toggle(RewriteEdit edit)
+    {
+        var key = KeyOf(edit);
+        if (IsApplied(edit))
+        {
+            _skipped.Add(key);
+        }
+        else
+        {
+            _skipped.Remove(key);
+            // Accepting an edit that needed a decision means taking its default.
+            if (!edit.AutoApply && !edit.IsDeletion && !_picked.ContainsKey(key))
+                _picked[key] = edit.Preferred;
+        }
+        Recompute();
+    }
+
+    private void Choose(RewriteEdit edit, string option)
+    {
+        var key = KeyOf(edit);
+        _picked[key] = option;
+        _skipped.Remove(key); // picking an alternative is an acceptance
+        Recompute();
+    }
+
+    private string EditTitle(RewriteEdit edit) =>
+        edit.IsDeletion
+            ? L.F("rw.title.delete", edit.Original)
+            : L.F("rw.title.swap", edit.Original, Chosen(edit));
+
+    private async Task Copy()
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", _rewritten);
+        _copied = true;
+    }
+
+    // ── highlighting the original ────────────────────────────────────────────
+    private readonly record struct Seg(string Text, RewriteEdit? Edit);
+
+    private IEnumerable<Seg> OriginalSegments()
+    {
+        var cursor = 0;
+        foreach (var edit in _plan.OrderBy(e => e.Span.Start))
+        {
+            if (edit.Span.Start < cursor) continue;
+            if (edit.Span.Start > cursor) yield return new Seg(Text[cursor..edit.Span.Start], null);
+            yield return new Seg(edit.Span.Slice(Text), edit);
+            cursor = edit.Span.End;
+        }
+        if (cursor < Text.Length) yield return new Seg(Text[cursor..], null);
+    }
+
+    private static string ScoreClass(double score) => score switch
+    {
+        >= 70 => "danger",
+        >= 45 => "warn",
+        >= 20 => "notice",
+        _ => "good",
+    };
+}

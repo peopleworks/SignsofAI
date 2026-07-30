@@ -45,11 +45,7 @@ public sealed class AiWritingAnalyzer
         var document = new TextDocument(text);
         var statistics = StatisticsCalculator.Compute(document);
 
-        var builtIn = RulePackLoader.Load(lang);
-        var applicable = extraPacks?.Where(p => p.AppliesTo(lang)).ToList();
-        var rulePack = applicable is { Count: > 0 }
-            ? RulePack.Merge(lang, [builtIn, .. applicable])
-            : builtIn;
+        var rulePack = ResolvePack(lang, extraPacks);
 
         var context = new AnalysisContext
         {
@@ -75,5 +71,22 @@ public sealed class AiWritingAnalyzer
             OverallScore = overall,
             Statistics = statistics,
         };
+    }
+
+    /// <summary>
+    /// The rule-pack an analysis of <paramref name="language"/> actually runs against: the built-in
+    /// pack with any applicable custom catalogs merged over it.
+    ///
+    /// Public because a caller that wants to act on findings — the live rewriter needs each rule's
+    /// replacements — has to consult the very same merged pack. Re-deriving it at the call site is how
+    /// the two drift apart.
+    /// </summary>
+    public static RulePack ResolvePack(string language, IReadOnlyList<RulePack>? extraPacks = null)
+    {
+        var builtIn = RulePackLoader.Load(language);
+        var applicable = extraPacks?.Where(p => p.AppliesTo(language)).ToList();
+        return applicable is { Count: > 0 }
+            ? RulePack.Merge(language, [builtIn, .. applicable])
+            : builtIn;
     }
 }
