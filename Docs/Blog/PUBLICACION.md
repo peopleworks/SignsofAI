@@ -200,6 +200,17 @@ de los seis (video / voz / cola en segundos):
 | --- | --- |
 | `signsofai-maker-story.{en,es}.md` | dev.to · Hashnode · Medium (importa el Markdown) |
 | `signsofai-maker-story.{en,es}.html` | WordPress (bloque HTML) · Blogger (vista HTML) |
+| `signsofai-desktop-story.{en,es}.md` | dev.to · Hashnode · Medium — **segundo artículo**, sin publicar |
+
+**Segundo artículo — el port a escritorio.** Público distinto del primero: desarrolladores .NET
+sopesando un port a Blazor Híbrido, no docentes sopesando un detector. Por eso es una pieza aparte y
+no un capítulo añadido: lo añadido no lo ve quien ya leyó el original, y republicar en cinco sitios
+sale igual de caro que publicar uno nuevo. Enlaza al primero, no lo reemplaza.
+
+Puntajes declarados en su propio pie: **EN 5/100 · variabilidad 0.70 · 2 señales**, **ES 5/100 ·
+variabilidad 0.70 · 2 señales**. Las dos señales de cada uno son el mismo falso positivo (lee
+"PDF, ODT, EPUB y RTF" como regla de tres siendo cuatro) y se dejan a propósito, dicho en el pie.
+Falta el `.html` de los dos para WordPress/Blogger.
 
 Las imágenes van embebidas por URL de GitHub, así que **no hay que subir nada** en cada plataforma.
 
