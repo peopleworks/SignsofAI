@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+/* Delays matched to the measured narration (23.7s). See cue-times.mjs. */
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 78% 10%,rgba(109,124,255,.20),transparent 60%),
+   radial-gradient(700px 700px at 18% 58%,rgba(245,158,11,.14),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes flip{0%,100%{background:rgba(109,124,255,.28);color:#fff}50%{background:transparent;color:#7c8aa6}}
+@keyframes flop{0%,100%{background:transparent;color:#7c8aa6}50%{background:rgba(109,124,255,.28);color:#fff}}
+.brand{position:absolute;top:90px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.title{position:absolute;top:200px;width:100%;font-size:74px;font-weight:900;line-height:1.14;opacity:0;animation:rv .7s .3s forwards}
+.title b{color:#9aa8ff}
+.sw{position:absolute;top:400px;left:50%;transform:translateX(-50%);display:flex;border:4px solid rgba(255,255,255,.16);border-radius:22px;overflow:hidden;opacity:0;animation:rv .6s 1.1s forwards}
+.sw span{padding:20px 56px;font-size:60px;font-weight:900}
+.sw .a{animation:flip 3.4s 1.8s 3}
+.sw .b{animation:flop 3.4s 1.8s 3}
+.card{position:absolute;top:600px;left:80px;right:80px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.13);border-radius:24px;
+ padding:34px 38px;text-align:left;opacity:0;animation:rv .6s 5.7s forwards}
+.card .lab{font-size:34px;color:#7c8aa6;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.card .row{margin-top:18px;font-size:46px;font-weight:700}
+.card .es{color:#9aa8ff}
+.card .en{color:#ffd7e8;margin-top:14px}
+.card .en em{color:#f0556f;font-style:normal}
+.q{position:absolute;top:1010px;width:100%;font-size:80px;font-weight:900;color:#f59e0b;opacity:0;animation:pop .5s 10.9s forwards}
+.ans{position:absolute;top:1130px;width:100%;font-size:96px;font-weight:900;color:#2fd27a;opacity:0;animation:pop .6s 12.3s forwards}
+.two{position:absolute;top:1290px;left:80px;right:80px;display:flex;gap:26px;opacity:0;animation:rv .6s 18.9s forwards}
+.box{flex:1;border-radius:22px;padding:28px 22px;border:3px solid}
+.b1{background:rgba(109,124,255,.14);border-color:rgba(109,124,255,.5)}
+.b2{background:rgba(219,39,119,.14);border-color:rgba(219,39,119,.5)}
+.box .t{font-size:34px;color:#7c8aa6;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.box .v{font-size:52px;font-weight:900;margin-top:12px}
+.foot{position:absolute;bottom:180px;width:100%;opacity:0;animation:rv .8s 22.7s forwards}
+.foot .big{font-size:76px;font-weight:900}
+.foot .big b{background:linear-gradient(90deg,#f59e0b,#db2777);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">One click, and the<br><b>whole interface</b> changes</div>
+<div class="sw"><span class="a">EN</span><span class="b">ES</span></div>
+<div class="card">
+ <div class="lab">Interface in Spanish</div>
+ <div class="row es">Señales encontradas: 12</div>
+ <div class="row en">“delve” <em>is heavily overused in AI writing</em></div>
+</div>
+<div class="q">A bug?</div>
+<div class="ans">NO</div>
+<div class="two">
+ <div class="box b1"><div class="t">App language</div><div class="v">Spanish</div></div>
+ <div class="box b2"><div class="t">Text language</div><div class="v">English</div></div>
+</div>
+<div class="foot"><div class="big">Two languages, <b>on purpose</b></div></div>
+</body></html>

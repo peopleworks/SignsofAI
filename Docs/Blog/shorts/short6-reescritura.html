@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+/* Tiempos cuadrados con la narración medida (23.2s). Ver cue-times.mjs. */
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 80% 10%,rgba(47,210,122,.16),transparent 60%),
+   radial-gradient(700px 700px at 16% 56%,rgba(219,39,119,.18),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes strike{from{width:0}to{width:106%}}
+@keyframes halo{0%,100%{box-shadow:0 0 0 3px rgba(47,210,122,.5),0 0 60px rgba(47,210,122,.25)}50%{box-shadow:0 0 0 3px rgba(47,210,122,.9),0 0 90px rgba(47,210,122,.45)}}
+.brand{position:absolute;top:90px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.title{position:absolute;top:200px;width:100%;font-size:74px;font-weight:900;line-height:1.14;opacity:0;animation:rv .7s .3s forwards}
+.title b{color:#2fd27a}
+.score{position:absolute;top:400px;width:100%;font-size:150px;font-weight:900;line-height:1;letter-spacing:-.02em}
+.score span{opacity:0}
+.s1{color:#f0556f;animation:fade .01s 1.2s forwards,fade .01s 2.6s reverse forwards}
+.s2{position:absolute;left:0;right:0;color:#f59e0b;animation:fade .01s 2.6s forwards,fade .01s 4.0s reverse forwards}
+.s3{position:absolute;left:0;right:0;color:#2fd27a;animation:fade .01s 4.0s forwards}
+.slash{position:absolute;top:565px;width:100%;font-size:44px;color:#7c8aa6;font-weight:700;opacity:0;animation:fade .5s 1.2s forwards}
+.chips{position:absolute;top:660px;width:100%;display:flex;gap:20px;justify-content:center;opacity:0;animation:rv .6s 5.7s forwards}
+.chip{padding:18px 34px;border-radius:999px;font-size:42px;font-weight:800;background:rgba(47,210,122,.14);color:#2fd27a;border:2px solid rgba(47,210,122,.4)}
+.sent{position:absolute;top:830px;left:70px;right:70px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.13);border-radius:24px;
+ padding:34px 36px;text-align:left;font-size:48px;line-height:1.5;opacity:0;animation:rv .6s 8.5s forwards}
+.keep{background:rgba(47,210,122,.16);border-radius:12px;padding:2px 12px;opacity:.35;animation:fade .4s 10.9s forwards,halo 2s 11.3s infinite}
+.shield{position:absolute;top:1140px;width:100%;font-size:56px;font-weight:900;color:#2fd27a;opacity:0;animation:pop .5s 11.2s forwards}
+.bad{position:absolute;top:1270px;left:70px;right:70px;background:rgba(240,85,111,.10);border:2px solid rgba(240,85,111,.4);border-radius:20px;
+ padding:26px 32px;font-size:44px;color:#ffb9c6;opacity:0;animation:rv .5s 13.2s forwards;position:relative}
+.bad b{color:#f0556f;font-weight:900}
+.foot{position:absolute;bottom:180px;width:100%;opacity:0;animation:rv .8s 19.9s forwards}
+.foot .big{font-size:66px;font-weight:900;line-height:1.2}
+.foot .big b{background:linear-gradient(90deg,#2fd27a,#22b8cf);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">Escribe, y mira<br>el número <b>bajar</b></div>
+<div class="score"><span class="s1">94</span><span class="s2">71</span><span class="s3">38</span></div>
+<div class="slash">/100 · en vivo, mientras escribes</div>
+<div class="chips"><span class="chip">sin nube</span><span class="chip">sin clave</span><span class="chip">sin esperar</span></div>
+<div class="sent">…no es <span class="keep">solo</span> una herramienta, es un cambio de paradigma.</div>
+<div class="shield">esta no la toca</div>
+<div class="bad">Quitar “solo” <b>invierte el sentido</b></div>
+<div class="foot"><div class="big">Y cuando rompería la frase,<br><b>no la cambia</b></div></div>
+</body></html>

@@ -1,0 +1,8 @@
+{
+  "id": "short7-escritorio-en",
+  "html": "en/short7-escritorio.html",
+  "voice": "Rachel",
+  "minSeconds": 23,
+  "tailSeconds": 1.4,
+  "narration": "There's a desktop app now. Why, if the web one works? For this: it measures predictability with a model running inside the app. No server, offline, and your text never leaves the machine. And it reads a whole folder: two hundred submissions, sorted worst first. Free, for Windows."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "short4-traduccion-en",
+  "html": "en/short4-traduccion.html",
+  "voice": "Rachel",
+  "minSeconds": 29,
+  "tailSeconds": 1.4,
+  "narration": "SignsOfAI speaks English and Spanish. What about yours? The translations aren't compiled. They're a JSON file. Copy the English one, translate the phrases, open a pull request. No C sharp, no build step, no programming. Miss a key and it falls back to English, so a half-finished translation still ships. Your language, in one file."
+}

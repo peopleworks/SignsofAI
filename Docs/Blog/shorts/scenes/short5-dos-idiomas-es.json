@@ -1,0 +1,8 @@
+{
+  "id": "short5-dos-idiomas-es",
+  "html": "short5-dos-idiomas.html",
+  "voice": "Marcela",
+  "minSeconds": 25,
+  "tailSeconds": 1.4,
+  "narration": "Un clic, y toda la interfaz cambia. Sin recargar, y se acuerda. Pero mira esto: la interfaz en español, y el consejo sigue en inglés. ¿Un fallo? No. Estás analizando texto inglés, y el consejo habla de palabras inglesas. Son dos idiomas independientes: el de la aplicación, y el de tu texto. A propósito."
+}

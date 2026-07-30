@@ -1,0 +1,8 @@
+{
+  "id": "short7-escritorio-es",
+  "html": "short7-escritorio.html",
+  "voice": "Marcela",
+  "minSeconds": 25,
+  "tailSeconds": 1.4,
+  "narration": "Ya hay aplicación de escritorio. ¿Para qué, si la web funciona? Para esto: mide la previsibilidad con un modelo que corre dentro de la aplicación. Sin servidor, sin conexión, y tu texto no sale de la máquina. Y lee una carpeta entera: doscientas entregas, ordenadas de peor a mejor. Gratis, para Windows."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "short4-traduccion-es",
+  "html": "short4-traduccion.html",
+  "voice": "Marcela",
+  "minSeconds": 26,
+  "tailSeconds": 1.4,
+  "narration": "SignsOfAI habla inglés y español. ¿Y el tuyo? Las traducciones no están compiladas: son un archivo JSON. Copias el inglés, traduces las frases y mandas un pull request. Sin C sharp, sin compilar, sin saber programar. Si falta una clave, cae al inglés: una traducción a medias ya sirve. Tu idioma, en un archivo."
+}

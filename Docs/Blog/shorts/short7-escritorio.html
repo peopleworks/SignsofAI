@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+/* Tiempos cuadrados con la narración medida (23.1s). Ver cue-times.mjs. */
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 82% 8%,rgba(0,120,212,.22),transparent 60%),
+   radial-gradient(700px 700px at 14% 58%,rgba(109,124,255,.18),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes slide{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+@keyframes cut{from{opacity:1}to{opacity:.18}}
+.brand{position:absolute;top:90px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.title{position:absolute;top:200px;width:100%;font-size:78px;font-weight:900;line-height:1.14;opacity:0;animation:rv .7s .3s forwards}
+.title b{color:#4aa8ff}
+.ask{position:absolute;top:400px;width:100%;font-size:56px;font-weight:800;color:#7c8aa6;opacity:0;animation:rv .5s 2.2s forwards}
+.win{position:absolute;top:520px;left:70px;right:70px;border-radius:22px;overflow:hidden;border:2px solid rgba(255,255,255,.14);
+ background:rgba(10,18,35,.85);opacity:0;animation:rv .7s 9.3s forwards}
+.bar{display:flex;gap:12px;padding:18px 22px;background:rgba(255,255,255,.06)}
+.dot{width:20px;height:20px;border-radius:50%}
+.d1{background:#f0556f}.d2{background:#f59e0b}.d3{background:#2fd27a}
+.wbody{padding:34px 34px 40px}
+.metric{font-size:40px;color:#7c8aa6;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.val{font-size:112px;font-weight:900;color:#4aa8ff;line-height:1.05;margin-top:6px}
+.sub{font-size:38px;color:#9aa8ff;margin-top:10px}
+.offline{position:absolute;top:1010px;width:100%;display:flex;gap:20px;justify-content:center;opacity:0;animation:rv .6s 14.2s forwards}
+.o{padding:18px 32px;border-radius:999px;font-size:40px;font-weight:800;background:rgba(47,210,122,.14);color:#2fd27a;border:2px solid rgba(47,210,122,.4)}
+.cloud{background:rgba(240,85,111,.12);color:#ffb9c6;border-color:rgba(240,85,111,.45);animation:cut .5s 14.9s forwards}
+.files{position:absolute;top:1160px;left:80px;right:80px;text-align:left}
+.f{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);
+ border-radius:16px;padding:20px 28px;margin-bottom:14px;font-size:44px;font-weight:700;opacity:0}
+.f b{font-weight:900;font-variant-numeric:tabular-nums}
+.f1{animation:slide .4s 17.8s forwards}.f1 b{color:#f0556f}
+.f2{animation:slide .4s 18.3s forwards}.f2 b{color:#f59e0b}
+.f3{animation:slide .4s 18.8s forwards}.f3 b{color:#2fd27a}
+.more{font-size:38px;color:#7c8aa6;text-align:center;opacity:0;animation:rv .4s 19.3s forwards}
+.foot{position:absolute;bottom:160px;width:100%;opacity:0;animation:rv .8s 21.7s forwards}
+.foot .big{font-size:74px;font-weight:900}
+.foot .big b{background:linear-gradient(90deg,#4aa8ff,#6d7cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">Ya hay app<br>de <b>escritorio</b></div>
+<div class="ask">¿Para qué, si la web funciona?</div>
+<div class="win">
+ <div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span></div>
+ <div class="wbody">
+  <div class="metric">Previsibilidad</div>
+  <div class="val">86%</div>
+  <div class="sub">modelo corriendo dentro de la app · 122 ms</div>
+ </div>
+</div>
+<div class="offline"><span class="o">sin servidor</span><span class="o">sin conexión</span><span class="o cloud">sube tu texto</span></div>
+<div class="files">
+ <div class="f f1"><span>entrega-041.pdf</span><b>94</b></div>
+ <div class="f f2"><span>entrega-118.docx</span><b>71</b></div>
+ <div class="f f3"><span>entrega-007.odt</span><b>12</b></div>
+ <div class="more">…y 197 más, ordenadas de peor a mejor</div>
+</div>
+<div class="foot"><div class="big">Gratis, <b>para Windows</b></div></div>
+</body></html>

@@ -1,0 +1,8 @@
+{
+  "id": "short5-dos-idiomas-en",
+  "html": "en/short5-dos-idiomas.html",
+  "voice": "Rachel",
+  "minSeconds": 26,
+  "tailSeconds": 1.4,
+  "narration": "One click, and the whole interface changes. No reload, and it remembers. But look at this: the interface in Spanish, and the advice still in English. A bug? No. You're analysing English text, and the advice is about English words. Two independent languages: the app's, and your text's. On purpose."
+}

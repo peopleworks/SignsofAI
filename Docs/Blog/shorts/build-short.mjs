@@ -31,9 +31,20 @@ const tail = scene.tailSeconds ?? 1.3;
 const minSec = scene.minSeconds ?? 18;
 
 // ---------- 1) voz ----------
+// Se reutiliza el mp3 ya generado si existe. Cuadrar los tiempos de las animaciones con la
+// narración es, por naturaleza, iterativo: se renderiza, se mira, se ajustan los retardos y se
+// vuelve a renderizar. Sin esto, cada uno de esos ajustes vuelve a llamar a ElevenLabs y a pagar
+// por un audio idéntico. Con --revoice se fuerza a regenerarla (cambió el texto).
 let audio = null;
-if (getKey() && scene.narration) {
-  audio = await narrate(scene.narration, path.join(workDir, 'voz.mp3'), scene.voice || process.env.ELEVENLABS_VOICE || 'Marcela');
+const voicePath = path.join(workDir, 'voz.mp3');
+const revoice = process.argv.includes('--revoice');
+
+if (scene.narration && !revoice && fs.existsSync(voicePath)) {
+  const { probeDuration } = await import(`${KIT}/narrate.mjs`);
+  audio = { file: voicePath, seconds: probeDuration(voicePath) };
+  console.log(`  narración reutilizada: voz.mp3 (${audio.seconds.toFixed(1)}s) — usa --revoice si cambió el texto`);
+} else if (getKey() && scene.narration) {
+  audio = await narrate(scene.narration, voicePath, scene.voice || process.env.ELEVENLABS_VOICE || 'Marcela');
 } else {
   console.log('  (sin ELEVENLABS_API_KEY o sin narración) -> short SILENCIOSO');
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+/* Tiempos cuadrados con la narración medida (24.2s). Ver cue-times.mjs. */
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 80% 8%,rgba(34,184,207,.18),transparent 60%),
+   radial-gradient(700px 700px at 15% 55%,rgba(109,124,255,.20),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes slide{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes strike{from{width:0}to{width:112%}}
+.brand{position:absolute;top:90px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.title{position:absolute;top:210px;width:100%;font-size:76px;font-weight:900;line-height:1.12;opacity:0;animation:rv .7s .3s forwards}
+.title b{color:#22b8cf}
+.ask{position:absolute;top:430px;width:100%;font-size:86px;font-weight:900;color:#f59e0b;opacity:0;animation:pop .6s 2.2s forwards}
+.code{position:absolute;top:600px;left:90px;right:90px;text-align:left;background:#0a1223;border:2px solid rgba(255,255,255,.12);
+ border-radius:22px;padding:34px 40px;font-family:Consolas,'Cascadia Mono',monospace;font-size:40px;line-height:1.6;opacity:0;animation:rv .6s 5.8s forwards}
+.code .k{color:#9aa8ff}.code .v{color:#ffd7e8}.code .c{color:#7c8aa6}
+.nos{position:absolute;top:1010px;width:100%;display:flex;flex-direction:column;gap:20px;align-items:center}
+.no{position:relative;font-size:56px;font-weight:800;color:#7c8aa6;opacity:0;padding:0 12px}
+.no::after{content:"";position:absolute;left:-6%;top:52%;height:6px;background:#f0556f;width:0}
+.n1{animation:slide .4s 12.6s forwards}.n1::after{animation:strike .35s 13.0s forwards}
+.n2{animation:slide .4s 13.4s forwards}.n2::after{animation:strike .35s 13.8s forwards}
+.n3{animation:slide .4s 14.2s forwards}.n3::after{animation:strike .35s 14.6s forwards}
+.fall{position:absolute;top:1300px;left:90px;right:90px;background:rgba(47,210,122,.12);border:2px solid rgba(47,210,122,.42);
+ border-radius:20px;padding:28px 34px;font-size:44px;font-weight:700;color:#a9f0cb;opacity:0;animation:rv .6s 18s forwards}
+.foot{position:absolute;bottom:170px;width:100%;opacity:0;animation:rv .8s 22s forwards}
+.foot .big{font-size:74px;font-weight:900}
+.foot .big b{background:linear-gradient(90deg,#22b8cf,#6d7cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pills{display:flex;gap:24px;justify-content:center;margin-top:30px}
+.pill{padding:20px 40px;border-radius:999px;font-weight:800;font-size:44px;opacity:0}
+.p1{background:rgba(47,210,122,.16);color:#2fd27a;border:2px solid rgba(47,210,122,.4);animation:pop .5s 23.2s forwards}
+.p2{background:rgba(109,124,255,.16);color:#9aa8ff;border:2px solid rgba(109,124,255,.4);animation:pop .5s 23.6s forwards}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">Habla inglés<br>y <b>español</b></div>
+<div class="ask">¿Y el tuyo?</div>
+<div class="code">
+ <span class="c">// es.json</span><br>
+ <span class="k">"home.upload"</span>: <span class="v">"Subir documento"</span>,<br>
+ <span class="k">"home.live"</span>: <span class="v">"En vivo"</span>,<br>
+ <span class="k">"nav.catalog"</span>: <span class="v">"Catálogo"</span>
+</div>
+<div class="nos">
+ <div class="no n1">sin C#</div>
+ <div class="no n2">sin compilar</div>
+ <div class="no n3">sin saber programar</div>
+</div>
+<div class="fall">¿Falta una clave? Cae al inglés.<br>Una traducción a medias ya sirve.</div>
+<div class="foot">
+ <div class="big">Tu idioma, <b>en un archivo</b></div>
+ <div class="pills"><span class="pill p1">Gratis</span><span class="pill p2">Open Source</span></div>
+</div>
+</body></html>

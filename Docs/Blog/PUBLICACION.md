@@ -163,6 +163,104 @@ Almost every detector thinks in English and translates Spanish badly. SignsOfAI 
 
 ---
 
+---
+
+## 3c. SHORTS NUEVOS — Español  (tanda 2: traducción, dos idiomas, reescritura, escritorio)
+
+### Short 4 — Traducción de la comunidad  (`short4-traduccion-es.mp4` · 26s)
+**Título:** `Tu idioma, en un archivo JSON (sin saber programar) #Shorts`
+**Descripción:**
+```
+Las traducciones de SignsOfAI no están compiladas: son un JSON. Copias, traduces, mandas un pull request. Si falta una clave, cae al inglés — una traducción a medias ya sirve.
+▶ https://github.com/peopleworks/SignsofAI
+#OpenSource #Traducción #i18n #DotNet #Comunidad #Shorts
+```
+
+### Short 5 — Dos idiomas independientes  (`short5-dos-idiomas-es.mp4` · 25s)
+**Título:** `Interfaz en español, consejo en inglés: no es un fallo #Shorts`
+**Descripción:**
+```
+El idioma de la app y el del texto que analizas son independientes, a propósito: el consejo habla de palabras inglesas, así que se queda en inglés.
+▶ https://peopleworks.github.io/SignsofAI/
+#IA #DetectorDeIA #Español #UX #OpenSource #Shorts
+```
+
+### Short 6 — La reescritura que se niega  (`short6-reescritura-es.mp4` · 25s)
+**Título:** `Baja el score mientras escribes — y sabe cuándo NO tocar #Shorts`
+**Descripción:**
+```
+Reescribe las señales de IA en tu dispositivo: sin nube, sin clave, sin esperar. Y cuando cambiar una palabra rompería la frase, no la cambia.
+▶ https://peopleworks.github.io/SignsofAI/
+#IA #Escritura #Humanizar #OpenSource #DotNet #Shorts
+```
+
+### Short 7 — La app de escritorio  (`short7-escritorio-es.mp4` · 25s)
+**Título:** `Mide la previsibilidad SIN conexión y sin subir tu texto #Shorts`
+**Descripción:**
+```
+La app de escritorio corre el modelo dentro: sin servidor, sin conexión, y tu texto no sale de la máquina. Además lee una carpeta entera de documentos.
+▶ https://github.com/peopleworks/SignsofAI/releases
+#IA #Privacidad #Windows #OpenSource #DotNet #Shorts
+```
+
+## 3d. NEW SHORTS — English
+
+### Short 4 — Community translation  (`short4-traduccion-en.mp4` · 29s)
+**Title:** `Your language, in one JSON file (no coding) #Shorts`
+**Description:**
+```
+SignsOfAI's translations aren't compiled — they're a JSON file. Copy, translate, open a pull request. Miss a key and it falls back to English, so a half-finished translation still ships.
+▶ https://github.com/peopleworks/SignsofAI
+#OpenSource #Translation #i18n #dotnet #Community #Shorts
+```
+
+### Short 5 — Two independent languages  (`short5-dos-idiomas-en.mp4` · 26s)
+**Title:** `Spanish interface, English advice — and that's not a bug #Shorts`
+**Description:**
+```
+The app's language and your text's language are separate on purpose: the advice is about English words, so it stays in English.
+▶ https://peopleworks.github.io/SignsofAI/
+#AI #AIDetection #UX #OpenSource #Shorts
+```
+
+### Short 6 — The rewrite that refuses  (`short6-reescritura-en.mp4` · 23s)
+**Title:** `Watch the score fall as you type — and see it refuse #Shorts`
+**Description:**
+```
+It rewrites AI tells on your device: no cloud, no key, no waiting. And when changing a word would break the sentence, it doesn't change it.
+▶ https://peopleworks.github.io/SignsofAI/
+#AI #Writing #Humanizer #OpenSource #dotnet #Shorts
+```
+
+### Short 7 — The desktop app  (`short7-escritorio-en.mp4` · 23s)
+**Title:** `Measure predictability OFFLINE, with nothing uploaded #Shorts`
+**Description:**
+```
+The desktop app runs the model inside it: no server, offline, and your text never leaves the machine. It also reads a whole folder of documents.
+▶ https://github.com/peopleworks/SignsofAI/releases
+#AI #Privacy #Windows #OpenSource #dotnet #Shorts
+```
+
+**Cómo se hicieron.** Distinto del primer lote: la voz se genera **antes** que el HTML, porque los
+retardos de las animaciones son tiempos absolutos y hay que colocarlos donde la voz llega a lo que
+enseñan. El orden es:
+
+```
+node narrate-all.mjs                      # genera las 8 voces y mide su duración
+node cue-times.mjs <id> "un trozo" ...     # dice en qué segundo cae cada frase
+   … se escribe el HTML con esos retardos …
+node make-scenes.mjs                       # escribe los scenes/*.json desde los mismos guiones
+node build-short.mjs scenes/<id>.json      # renderiza
+```
+
+`build-short.mjs` ahora **reutiliza** el `voz.mp3` ya generado; cuadrar animaciones con narración es
+iterativo y sin eso cada ajuste volvía a llamar a ElevenLabs y a pagar por un audio idéntico. Con
+`--revoice` se fuerza a regenerarla, que es lo que hay que hacer **si cambia el texto del guion**.
+
+Los guiones viven sólo en `narrate-all.mjs`; `cue-times.mjs` y `make-scenes.mjs` los leen de ahí. El
+`.srt` se genera del texto de la escena, así que dos copias del guion terminan en subtítulos que no
+coinciden con la voz.
+
 ## 4. Miniaturas (thumbnails 1280×720) — LISTAS
 - **ES:** `video/thumb/thumb-es.png` — "¿IA o HUMANO?" + sello "87% IA" agrietado ("un número no es evidencia") → "Te muestra LA EVIDENCIA" con chips de colores + "Gratis · Explicable y bilingüe · En tu navegador".
 - **EN:** `video/thumb/thumb-en.png` — "AI or HUMAN?" + "87% AI" → "It shows you THE EVIDENCE" + "Free · Explainable & bilingual · In your browser".
