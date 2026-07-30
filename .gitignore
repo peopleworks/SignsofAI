@@ -32,3 +32,8 @@ models/
 
 # Render intermediates for the blog/video pipeline (webm/mp3 scratch)
 _work/
+
+# Working notes, session handoffs, screenshots, drafts. Local scratch, never the repository's
+# business — and one `git add -A` from the repository root is all it takes to publish it, which is
+# exactly how it got in once.
+temp/
