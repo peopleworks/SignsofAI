@@ -1,6 +1,7 @@
 # ✍︎ Signs of AI Writing
 
 [![Live demo](https://img.shields.io/badge/demo-live-brightgreen?logo=googlechrome&logoColor=white)](https://peopleworks.github.io/SignsofAI/)
+[![Windows app](https://img.shields.io/github/v/release/peopleworks/SignsofAI?filter=desktop-v*&label=Windows%20app&logo=windows&logoColor=white&color=0078D4)](https://github.com/peopleworks/SignsofAI/releases/tag/desktop-v0.1.0)
 [![License: MIT](https://img.shields.io/github/license/peopleworks/SignsofAI?color=blue)](LICENSE)
 [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![Blazor WebAssembly](https://img.shields.io/badge/Blazor-WASM-512BD4?logo=blazor&logoColor=white)](https://learn.microsoft.com/aspnet/core/blazor/)
@@ -12,6 +13,8 @@
 [![Available on CodeGuilds](https://img.shields.io/badge/Available_on-CodeGuilds-6366f1?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgN2wxMCA1IDEwLTV6TTIgMTdsMTAgNSAxMC01TTIgMTJsMTAgNSAxMC01Ii8+PC9zdmc+)](https://codeguilds.dev/packages/signsofai)
 
 **[Try the live demo &rarr;](https://peopleworks.github.io/SignsofAI/)** — English & Spanish, runs 100% in your browser. No signup, and nothing leaves your device.
+
+**[Download the Windows app &rarr;](https://github.com/peopleworks/SignsofAI/releases/tag/desktop-v0.1.0)** — the same tool in a window. Nothing to install alongside it: the .NET runtime is bundled.
 
 ![Signs of AI Writing analyzing text live: the score climbs as AI tells accumulate, then every tell is highlighted with a fix](Docs/screenshots/analyze-live.gif)
 
