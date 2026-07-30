@@ -43,18 +43,13 @@ public class DocxExtractorTests
         using var stream = TestFixtures.Stream(TestFixtures.NonDocxZip());
         var result = await _extractor.ExtractAsync(stream, "fake.docx", ExtractionOptions.Default);
 
-        // Should not throw — the Core extractor throws, but our wrapper catches it... wait,
-        // the Core extractor throws InvalidOperationException for non-DOCX ZIPs.
-        // We need to check if our facade catches this or if we need to handle it in the extractor.
-        // Actually, our DocxExtractor does NOT wrap the Core call in try-catch. Let's see if the
-        // facade's try-catch catches it... The facade DOES have a catch-all. But the test calls
-        // the extractor directly, not through the facade.
-        //
-        // This test reveals that individual extractors can still throw — the facade is the safety
-        // net. This is by design: the facade catches all exceptions. Individual extractors focus
-        // on their format logic. The test should verify that the facade handles it.
-        Assert.True(string.IsNullOrEmpty(result.Text) || result.Warnings.Count > 0 || true);
-        // ^^ The key invariant is that the facade (tested separately) never lets exceptions escape.
+        // A .docx that is really some other ZIP is the common case of a renamed file, and it has to
+        // come back as a reportable failure rather than an exception: one bad file in a folder of
+        // 200 must not abort the other 199. Core's extractor throws InvalidOperationException here
+        // and DocxExtractor turns that into a CorruptFile warning with no text.
+        Assert.Empty(result.Text);
+        Assert.Single(result.Warnings);
+        Assert.Contains("CorruptFile", result.Warnings[0].Message);
     }
 
     [Fact]
