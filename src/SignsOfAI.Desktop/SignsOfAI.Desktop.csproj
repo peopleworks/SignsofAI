@@ -30,6 +30,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>SignsOfAI.Desktop</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- The same pen-nib mark as the browser tab; appicon.ico is generated from
+         src/SignsOfAI.Web/wwwroot/favicon.svg, which stays the source of truth. WPF gives the
+         window and the taskbar this icon too, so setting it here covers all three. -->
+    <ApplicationIcon>appicon.ico</ApplicationIcon>
     <!-- Per-monitor DPI awareness comes from app.manifest; without it the WebView renders blurry
          on a scaled display, which is most laptops. -->
   </PropertyGroup>
