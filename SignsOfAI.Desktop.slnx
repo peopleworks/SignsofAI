@@ -17,6 +17,7 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/SignsOfAI.Core.Tests/SignsOfAI.Core.Tests.csproj" />
+    <Project Path="tests/SignsOfAI.Desktop.Tests/SignsOfAI.Desktop.Tests.csproj" />
   </Folder>
 
 </Solution>

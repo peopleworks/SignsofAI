@@ -1,6 +1,7 @@
 @inherits LayoutComponentBase
 @implements IDisposable
 @inject Loc L
+@inject IFolderBatch Folders
 
 <div class="app-shell">
     <nav class="app-nav">
@@ -12,6 +13,11 @@
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">@L["nav.analyze"]</NavLink>
             <NavLink class="nav-link" href="originality">@L["nav.originality"]</NavLink>
             <NavLink class="nav-link" href="catalog">@L["nav.catalog"]</NavLink>
+            @* Only where a folder can actually be opened, which is not a browser tab. *@
+            @if (Folders.IsAvailable)
+            {
+                <NavLink class="nav-link" href="batch">@L["nav.batch"]</NavLink>
+            }
             <a class="nav-link" href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">GitHub</a>
             <LanguageSwitch />
         </div>

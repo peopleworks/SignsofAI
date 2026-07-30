@@ -1,0 +1,33 @@
+<!--
+  Tests for the desktop host's own services. Windows-only, because the project under test is WPF —
+  so this lives in SignsOfAI.Desktop.slnx and never in SignsOfAI.slnx, which is built on Linux. The
+  windows-latest CI job runs it.
+
+  Only the parts that need no window are covered: listing and reading a folder. Putting a folder
+  dialog in front of an assertion would test Windows, not us.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SignsOfAI.Desktop\SignsOfAI.Desktop.csproj" />
+  </ItemGroup>
+
+</Project>

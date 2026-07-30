@@ -35,6 +35,10 @@ public static class UiServices
         // the last registration is the one resolved. SignsOfAI.Desktop does exactly that.
         services.AddScoped<IDocumentReader, BrowserDocumentReader>();
 
+        // Scanning a folder. The browser is handed files, never a folder, so it has nothing to
+        // offer and the interface hides the feature. The desktop replaces this.
+        services.AddScoped<IFolderBatch, NoFolderBatch>();
+
         // Local persistence (localStorage in the browser, the WebView's own store on the desktop).
         services.AddScoped<BrowserStorage>();
         // User-defined catalogs (custom rule-packs), kept in that same local store.

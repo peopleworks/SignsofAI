@@ -851,3 +851,29 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
     font-size: .9rem; line-height: 1.5; color: var(--text);
 }
 .explain-bottom svg { width: 1.1em; height: 1.1em; flex: 0 0 auto; margin-top: .15rem; color: var(--good); }
+
+/* ── Folder scan (desktop only) ─────────────────────────────────────────────
+   A results table rather than the single-document layout: the question here is
+   "which of these two hundred do I need to look at", so the answer has to be
+   scannable at a glance and sorted worst-first. */
+.batch-controls .row { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; }
+.batch-controls label.inline { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; }
+
+.batch-summary { display: flex; gap: 1.2rem; margin-bottom: .8rem; font-size: .88rem; }
+.batch-summary .warn { color: var(--warn); }
+
+.batch-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.batch-table th, .batch-table td { padding: .5rem .6rem; border-bottom: 1px solid var(--border); text-align: left; }
+.batch-table th { font-weight: 600; color: var(--text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .3px; }
+.batch-table th.num, .batch-table td.num { text-align: right; white-space: nowrap; }
+/* Long file names must not push the numbers off screen; the full path is in the title. */
+.batch-table td.file { max-width: 22rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.batch-table td.note { color: var(--text-muted); font-size: .82rem; }
+.batch-table tr.row-error td.file { color: var(--text-muted); }
+.batch-table td .muted { color: var(--text-muted); }
+
+.score-pill { display: inline-block; min-width: 2.4rem; padding: .1rem .45rem; border-radius: 999px;
+              font-weight: 700; font-variant-numeric: tabular-nums; text-align: center; }
+.score-pill.high   { background: color-mix(in srgb, var(--danger) 16%, transparent); color: var(--danger); }
+.score-pill.medium { background: color-mix(in srgb, var(--warn) 18%, transparent);   color: var(--warn); }
+.score-pill.low    { background: color-mix(in srgb, var(--ok) 16%, transparent);     color: var(--ok); }

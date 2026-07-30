@@ -1,0 +1,177 @@
+@page "/batch"
+@using SignsOfAI.Core
+@using SignsOfAI.Core.Model
+@inherits LocalizedComponent
+@inject IFolderBatch Folders
+@inject AiWritingAnalyzer Analyzer
+@inject NavigationManager Nav
+
+<PageTitle>@L["batch.pagetitle"]</PageTitle>
+
+<header class="hero">
+    <h1>@L["batch.h1"]</h1>
+    <p class="tagline">@L["batch.tagline"]</p>
+</header>
+
+@if (!Folders.IsAvailable)
+{
+    @* Reachable by typing the URL in a browser. Say why rather than showing a dead button. *@
+    <section class="card">
+        <p class="hint">@L.M("batch.unavailable")</p>
+    </section>
+}
+else
+{
+    <section class="card batch-controls">
+        <div class="row">
+            <button class="primary" @onclick="Pick" disabled="@_scanning">
+                <Icon Name="upload" /> @L["batch.choose"]
+            </button>
+            <label class="inline">
+                <input type="checkbox" @bind="_recursive" disabled="@_scanning" /> @L["batch.recursive"]
+            </label>
+            @if (_scanning)
+            {
+                <button class="ghost" @onclick="Cancel"><Icon Name="close" /> @L["common.cancel"]</button>
+            }
+        </div>
+
+        @if (_folder is not null)
+        {
+            <p class="hint sub"><code>@_folder</code></p>
+        }
+
+        @if (_total > 0)
+        {
+            <p class="hint">@L.F("batch.progress", _rows.Count, _total)</p>
+        }
+    </section>
+
+    @if (_rows.Count > 0)
+    {
+        <section class="card">
+            <div class="batch-summary">
+                <span>@L.P(_rows.Count, "batch.scanned")</span>
+                @if (_failed > 0)
+                {
+                    <span class="warn">@L.P(_failed, "batch.unreadable")</span>
+                }
+            </div>
+
+            <table class="batch-table">
+                <thead>
+                    <tr>
+                        <th>@L["batch.col.file"]</th>
+                        <th class="num">@L["common.words"]</th>
+                        <th class="num">@L["batch.col.score"]</th>
+                        <th class="num">@L["batch.col.findings"]</th>
+                        <th>@L["batch.col.note"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @* Worst first: the point of scanning a folder is finding which ones to look at. *@
+                    @foreach (var r in _rows.OrderByDescending(r => r.Score ?? -1).ThenBy(r => r.Name))
+                    {
+                        <tr class="@(r.Error is not null ? "row-error" : "")">
+                            <td class="file" title="@r.Path">@r.Name</td>
+                            <td class="num">@(r.Words?.ToString() ?? "—")</td>
+                            <td class="num">
+                                @if (r.Score is { } s)
+                                {
+                                    <span class="score-pill @BandClass(s)">@s</span>
+                                }
+                                else
+                                {
+                                    <span class="muted">—</span>
+                                }
+                            </td>
+                            <td class="num">@(r.Findings?.ToString() ?? "—")</td>
+                            <td class="note">@r.Error</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    }
+}
+
+@code {
+    private sealed record Row(string Name, string Path, int? Words, int? Score, int? Findings, string? Error);
+
+    private readonly List<Row> _rows = [];
+    private string? _folder;
+    private bool _recursive;
+    private bool _scanning;
+    private int _total;
+    private int _failed;
+    private CancellationTokenSource? _cts;
+
+    private async Task Pick()
+    {
+        var folder = await Folders.PickFolderAsync();
+        if (folder is null) return;
+
+        _folder = folder;
+        _rows.Clear();
+        _failed = 0;
+        _total = 0;
+
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        await Scan(_cts.Token);
+    }
+
+    private void Cancel() => _cts?.Cancel();
+
+    private async Task Scan(CancellationToken ct)
+    {
+        _scanning = true;
+        try
+        {
+            var files = await Folders.ListAsync(_folder!, _recursive, ct);
+            _total = files.Count;
+            StateHasChanged();
+
+            foreach (var file in files)
+            {
+                if (ct.IsCancellationRequested) break;
+
+                var read = await Folders.ReadAsync(file, ct);
+                if (read.Error is not null || read.Text is null)
+                {
+                    _failed++;
+                    _rows.Add(new Row(file.Name, file.Path, null, null, null, read.Error));
+                }
+                else
+                {
+                    var result = Analyzer.Analyze(read.Text);
+                    _rows.Add(new Row(
+                        file.Name, file.Path,
+                        result.Statistics.WordCount,
+                        (int)Math.Round(result.OverallScore),
+                        result.Findings.Count, null));
+                }
+
+                // Render each row as it lands. Two hundred files behind one silent await looks
+                // exactly like a hang, and the user cannot tell which one is slow.
+                StateHasChanged();
+                await Task.Yield();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Cancelling is a choice, not a failure — the rows already scanned stay on screen.
+        }
+        finally
+        {
+            _scanning = false;
+        }
+    }
+
+    private static string BandClass(int score) => score switch
+    {
+        >= 70 => "high",
+        >= 40 => "medium",
+        _ => "low",
+    };
+}

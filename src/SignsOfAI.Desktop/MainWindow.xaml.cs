@@ -28,6 +28,9 @@ public partial class MainWindow : Window
         // the user to paste their PDF as text.
         services.AddScoped<IDocumentReader, DesktopDocumentReader>();
 
+        // A real folder dialog and a real folder path — the thing a browser tab is never given.
+        services.AddScoped<IFolderBatch, DesktopFolderBatch>();
+
         // Native HTTP: Ollama on localhost is simply reachable, with no CORS workaround to explain.
         services.AddSingleton(HostCapabilities.Desktop);
 

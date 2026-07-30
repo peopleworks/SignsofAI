@@ -41,10 +41,9 @@ jobs:
 
   # The desktop app is WPF, so it needs a Windows runner and it is not in SignsOfAI.slnx — see the
   # comment at the top of that file. Its own job keeps the build above on Linux, where it stays fast
-  # for the translation PRs that are the reason this workflow exists. Build only: the interface is
-  # the shared SignsOfAI.UI library, and the tests over it already ran in the job above.
+  # for the translation PRs that are the reason this workflow exists.
   desktop:
-    name: Build desktop (Windows)
+    name: Build & test desktop (Windows)
     runs-on: windows-latest
     timeout-minutes: 20
 
@@ -58,3 +57,8 @@ jobs:
 
       - name: Build
         run: dotnet build SignsOfAI.Desktop.slnx -c Release --nologo
+
+      # Covers the desktop's own services — folder listing and reading. Nothing here opens a window,
+      # so it runs on a headless runner.
+      - name: Test
+        run: dotnet test SignsOfAI.Desktop.slnx -c Release --no-build --nologo
