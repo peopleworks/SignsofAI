@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Http.Json;
+using SignsOfAI.Onnx.Config;
+using SignsOfAI.Onnx.Engine;
+using SignsOfAI.Onnx.Scoring;
 using SignsOfAI.Perplexity.Api.Config;
-using SignsOfAI.Perplexity.Api.Engine;
 using SignsOfAI.Perplexity.Api.Model;
-using SignsOfAI.Perplexity.Api.Scoring;
 
 var builder = WebApplication.CreateBuilder(args);
+var modelBasePath = builder.Environment.ContentRootPath;
 
 // ── Options (models + calibration + idle policy in the "Perplexity" section) ──
 var options = builder.Configuration.GetSection("Perplexity").Get<PerplexityOptions>();
@@ -13,13 +15,15 @@ if (options is null || options.Models.Count == 0)
 builder.Services.AddSingleton(options);
 
 // One heavyweight engine per model (each lazy-loads + idle-unloads independently). Run is thread-safe.
-builder.Services.AddSingleton<PerplexityRegistry>();
+builder.Services.AddSingleton(sp => new PerplexityRegistry(
+    options, modelBasePath, sp.GetRequiredService<ILoggerFactory>()));
 builder.Services.AddHostedService<ModelLifecycleService>();
 
 // ── Embedding subsystem (optional paraphrase/semantic-similarity check) ──
 var embedOptions = builder.Configuration.GetSection("Embedding").Get<EmbeddingOptions>() ?? EmbeddingOptions.Defaults();
 builder.Services.AddSingleton(embedOptions);
-builder.Services.AddSingleton<EmbeddingRegistry>();
+builder.Services.AddSingleton(sp => new EmbeddingRegistry(
+    embedOptions, modelBasePath, sp.GetRequiredService<ILoggerFactory>()));
 builder.Services.AddHostedService<EmbeddingLifecycleService>();
 
 // ── Optional automatic web spot-check (Phase D+) — inert unless an operator configured a provider + key ──
@@ -83,7 +87,18 @@ app.MapPost("/api/perplexity", async (PerplexityRequest req, PerplexityRegistry 
     try
     {
         var raw = await engine.ScoreAsync(req.Text, ct);
-        return Results.Ok(PerplexityScorer.Score(raw, req.Lang, engine.Profile));
+        var score = PerplexityScorer.Score(raw, req.Lang, engine.Profile);
+        return Results.Ok(new PerplexityResponse
+        {
+            Ppl = score.Ppl,
+            AvgLogProb = score.AvgLogProb,
+            TokenCount = score.TokenCount,
+            Predictability = score.Predictability,
+            Band = score.Band,
+            Model = score.Model,
+            Lang = score.Lang,
+            ElapsedMs = score.ElapsedMs,
+        });
     }
     catch (InvalidOperationException)
     {

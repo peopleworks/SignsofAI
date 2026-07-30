@@ -1,8 +1,20 @@
-using SignsOfAI.Perplexity.Api.Config;
-using SignsOfAI.Perplexity.Api.Engine;
-using SignsOfAI.Perplexity.Api.Model;
+using SignsOfAI.Onnx.Config;
+using SignsOfAI.Onnx.Engine;
 
-namespace SignsOfAI.Perplexity.Api.Scoring;
+namespace SignsOfAI.Onnx.Scoring;
+
+/// <summary>A calibrated, transport-independent predictability reading.</summary>
+public sealed record PerplexityScore
+{
+    public double Ppl { get; init; }
+    public double AvgLogProb { get; init; }
+    public int TokenCount { get; init; }
+    public double Predictability { get; init; }
+    public string Band { get; init; } = "typical";
+    public string Model { get; init; } = "";
+    public string Lang { get; init; } = "en";
+    public long ElapsedMs { get; init; }
+}
 
 /// <summary>
 /// Turns a raw perplexity into a calibrated, language-aware <b>predictability</b> reading using the model's
@@ -11,7 +23,7 @@ namespace SignsOfAI.Perplexity.Api.Scoring;
 /// </summary>
 public static class PerplexityScorer
 {
-    public static PerplexityResponse Score(PerplexityRaw raw, string lang, ModelProfile profile)
+    public static PerplexityScore Score(PerplexityRaw raw, string lang, ModelProfile profile)
     {
         var cal = profile.Baseline(lang);
         var resolvedLang = ResolveLang(lang, profile);
@@ -25,7 +37,7 @@ public static class PerplexityScorer
                  : predictability <= profile.VariedBelow ? "varied"
                  : "typical";
 
-        return new PerplexityResponse
+        return new PerplexityScore
         {
             Ppl = Math.Round(raw.Perplexity, 2),
             AvgLogProb = Math.Round(raw.MeanLogProb, 4),

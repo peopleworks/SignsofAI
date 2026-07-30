@@ -1,4 +1,4 @@
-namespace SignsOfAI.Perplexity.Api.Config;
+namespace SignsOfAI.Onnx.Config;
 
 /// <summary>
 /// A single selectable sentence-embedding model (for the paraphrase / semantic-similarity check).
@@ -38,6 +38,18 @@ public sealed class EmbeddingProfile
 
     /// <summary>Task prompt prepended to every text. For symmetric similarity EmbeddingGemma wants the STS prompt.</summary>
     public string QueryPrefix { get; init; } = "task: sentence similarity | query: ";
+
+    internal IEnumerable<string> ValidationErrors()
+    {
+        if (string.IsNullOrWhiteSpace(Id)) yield return "Embedding model Id is required.";
+        if (string.IsNullOrWhiteSpace(ModelDir)) yield return $"Embedding model '{Id}' requires ModelDir.";
+        if (string.IsNullOrWhiteSpace(ModelFile)) yield return $"Embedding model '{Id}' requires ModelFile.";
+        if (string.IsNullOrWhiteSpace(TokenizerFile)) yield return $"Embedding model '{Id}' requires TokenizerFile.";
+        if (MaxTokens < 1) yield return $"Embedding model '{Id}' requires MaxTokens >= 1.";
+        if (OutputDim < 1) yield return $"Embedding model '{Id}' requires OutputDim >= 1.";
+        if (DefaultDims < 1 || DefaultDims > OutputDim)
+            yield return $"Embedding model '{Id}' requires DefaultDims in [1, OutputDim].";
+    }
 }
 
 /// <summary>
@@ -59,6 +71,32 @@ public sealed class EmbeddingOptions
 
     /// <summary>Load the default model into RAM at startup. Default false ⇒ lazy-load on first request.</summary>
     public bool PreloadModel { get; init; }
+
+    /// <summary>Returns configuration errors without reading files or loading a model.</summary>
+    public IReadOnlyList<string> Validate()
+    {
+        var errors = new List<string>();
+        if (!Enabled) return errors;
+        if (Models.Count == 0)
+        {
+            errors.Add("At least one embedding model must be configured when embeddings are enabled.");
+            return errors;
+        }
+
+        errors.AddRange(Models.SelectMany(model => model.ValidationErrors()));
+        var duplicateIds = Models
+            .Where(model => !string.IsNullOrWhiteSpace(model.Id))
+            .GroupBy(model => model.Id, StringComparer.OrdinalIgnoreCase)
+            .Where(group => group.Count() > 1)
+            .Select(group => group.Key);
+        errors.AddRange(duplicateIds.Select(id => $"Duplicate embedding model Id '{id}'."));
+
+        if (!string.IsNullOrWhiteSpace(DefaultModel) &&
+            !Models.Any(model => string.Equals(model.Id, DefaultModel, StringComparison.OrdinalIgnoreCase)))
+            errors.Add($"Default embedding model '{DefaultModel}' is not configured.");
+
+        return errors;
+    }
 
     /// <summary>Default: Google EmbeddingGemma-300M (int8 ONNX, multilingual, on-device sized).</summary>
     public static EmbeddingOptions Defaults() => new()

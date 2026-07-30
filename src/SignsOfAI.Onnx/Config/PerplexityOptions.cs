@@ -1,4 +1,4 @@
-namespace SignsOfAI.Perplexity.Api.Config;
+namespace SignsOfAI.Onnx.Config;
 
 /// <summary>
 /// Per-language calibration of the perplexity → <b>predictability</b> meter. Perplexity measures how
@@ -65,6 +65,30 @@ public sealed class ModelProfile
         if (Baselines.TryGetValue("en", out var en)) return en;
         return new LangBaseline { Center = 4.2 };
     }
+
+    internal IEnumerable<string> ValidationErrors()
+    {
+        if (string.IsNullOrWhiteSpace(Id)) yield return "Model Id is required.";
+        if (string.IsNullOrWhiteSpace(ModelDir)) yield return $"Model '{Id}' requires ModelDir.";
+        if (string.IsNullOrWhiteSpace(ModelFile)) yield return $"Model '{Id}' requires ModelFile.";
+        if (string.IsNullOrWhiteSpace(TokenizerFile)) yield return $"Model '{Id}' requires TokenizerFile.";
+        if (NumLayers <= 0) yield return $"Model '{Id}' requires NumLayers > 0.";
+        if (NumKvHeads <= 0) yield return $"Model '{Id}' requires NumKvHeads > 0.";
+        if (HeadDim <= 0) yield return $"Model '{Id}' requires HeadDim > 0.";
+        if (Vocab <= 0) yield return $"Model '{Id}' requires Vocab > 0.";
+        if (MaxTokens < 2) yield return $"Model '{Id}' requires MaxTokens >= 2.";
+        if (Baselines.Count == 0) yield return $"Model '{Id}' requires at least one language baseline.";
+        foreach (var (lang, baseline) in Baselines)
+        {
+            if (string.IsNullOrWhiteSpace(lang)) yield return $"Model '{Id}' has an empty baseline language.";
+            if (baseline.Spread <= 0) yield return $"Model '{Id}' baseline '{lang}' requires Spread > 0.";
+            if (baseline.Steepness <= 0) yield return $"Model '{Id}' baseline '{lang}' requires Steepness > 0.";
+        }
+        if (VariedBelow < 0 || VariedBelow > 1) yield return $"Model '{Id}' requires VariedBelow in [0, 1].";
+        if (PredictableAbove < 0 || PredictableAbove > 1) yield return $"Model '{Id}' requires PredictableAbove in [0, 1].";
+        if (VariedBelow > PredictableAbove)
+            yield return $"Model '{Id}' requires VariedBelow <= PredictableAbove.";
+    }
 }
 
 /// <summary>
@@ -87,6 +111,31 @@ public sealed class PerplexityOptions
 
     /// <summary>Load the default model into RAM at startup. Default false ⇒ lazy-load on first request.</summary>
     public bool PreloadModel { get; init; }
+
+    /// <summary>Returns configuration errors without reading files or loading a model.</summary>
+    public IReadOnlyList<string> Validate()
+    {
+        var errors = new List<string>();
+        if (Models.Count == 0)
+        {
+            errors.Add("At least one perplexity model must be configured.");
+            return errors;
+        }
+
+        errors.AddRange(Models.SelectMany(model => model.ValidationErrors()));
+        var duplicateIds = Models
+            .Where(model => !string.IsNullOrWhiteSpace(model.Id))
+            .GroupBy(model => model.Id, StringComparer.OrdinalIgnoreCase)
+            .Where(group => group.Count() > 1)
+            .Select(group => group.Key);
+        errors.AddRange(duplicateIds.Select(id => $"Duplicate model Id '{id}'."));
+
+        if (!string.IsNullOrWhiteSpace(DefaultModel) &&
+            !Models.Any(model => string.Equals(model.Id, DefaultModel, StringComparison.OrdinalIgnoreCase)))
+            errors.Add($"Default model '{DefaultModel}' is not configured.");
+
+        return errors;
+    }
 
     /// <summary>Defaults: Qwen2.5-0.5B-Instruct (fast default) + Phi-4-mini (Microsoft, heavier, optional).</summary>
     public static PerplexityOptions Defaults() => new()
