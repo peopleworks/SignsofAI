@@ -7,6 +7,10 @@ Enlaces fijos: **Demo** https://peopleworks.github.io/SignsofAI/ · **Repo** htt
 
 ## 1. VIDEO GRANDE — Español  (`signsofai-explainer-es.mp4` · 2:09 · 1280×720 · voz Marcela)
 
+> **PUBLICADO:** https://youtu.be/7Rp3dlX_iig — enlazado desde el README.
+> El enlace canónico es ese, sin el `?si=…` que YouTube añade al compartir: es un parámetro de
+> rastreo de la sesión de quien copió el link, no forma parte de la dirección del vídeo.
+
 **Título:**
 ```
 Detector de IA que MUESTRA la evidencia (y habla español) | SignsOfAI — gratis y en tu navegador
@@ -49,6 +53,8 @@ signsofai, detector de ia, detector de inteligencia artificial, texto generado p
 ---
 
 ## 2. BIG VIDEO — English  (`signsofai-explainer-en.mp4` · 2:07 · 1280×720 · voice Rachel)
+
+> **PUBLISHED:** https://youtu.be/pKkMRAku7ZQ — linked from the README.
 
 **Title:**
 ```

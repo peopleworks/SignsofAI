@@ -20,6 +20,9 @@
 
 <sub>Real recording of the live demo — the score updates as you type, and every highlight comes with a suggested fix.</sub>
 
+**Rather watch than read?** The two-minute explainer:
+[**English**](https://youtu.be/pKkMRAku7ZQ) · [**Español**](https://youtu.be/7Rp3dlX_iig)
+
 A free, privacy-first toolkit for **academic and writing integrity**. It does two things:
 
 1. **De-AI-ify linter** — flags the tells of AI-generated writing (overused vocabulary, rhetorical
