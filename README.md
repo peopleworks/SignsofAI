@@ -34,8 +34,7 @@ A free, privacy-first toolkit for **academic and writing integrity**. It does tw
 > 🔒 **Almost everything runs 100% in your browser. Your documents never leave your device.**
 > The only exception is the optional paraphrase check, which is strictly opt-in and clearly disclosed.
 
-Built with **.NET 10** and **Blazor WebAssembly** by **Pedro Hernández (PeopleWorks)**, Microsoft MVP
-for .NET — for the .NET and Microsoft developer community, *por y para la comunidad educativa*.
+Built with **.NET 10** and **Blazor WebAssembly** by **Pedro Hernández (PeopleWorks)**, [Microsoft MVP for .NET](https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5) — for the .NET and Microsoft developer community, *por y para la comunidad educativa*.
 
 Repo: https://github.com/peopleworks/SignsofAI
 
@@ -327,5 +326,5 @@ The optional server is a normal ASP.NET Core app (`dotnet publish` the `SignsOfA
 
 ## Credits
 
-Created by **Pedro Hernández — PeopleWorks**, Microsoft MVP for .NET. Detection markers are grounded in
+Created by **Pedro Hernández — PeopleWorks**, [Microsoft MVP for .NET](https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5). Detection markers are grounded in
 linguistics research on AI stylometry — see `Docs/GoogleResearch.md`.

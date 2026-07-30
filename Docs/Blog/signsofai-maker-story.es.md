@@ -97,4 +97,4 @@ SignsOfAI es de licencia MIT y está hecho para la comunidad educativa y la de .
 
 Si enseñas, escribes o calificas, o solo quieres que tu prosa deje de sonar a máquina, dale un párrafo y mira qué dice. Y si encuentras una pista que se le escapa, los packs de reglas son dos archivos JSON. Los pull requests son bienvenidos.
 
-*Hecho por Pedro Hernández — PeopleWorks, Microsoft MVP para .NET. Por y para la comunidad educativa.*
+*Hecho por Pedro Hernández — PeopleWorks, [Microsoft MVP para .NET](https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5). Por y para la comunidad educativa.*

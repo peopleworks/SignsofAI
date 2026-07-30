@@ -139,6 +139,6 @@ When you finish an edit and a numeric verdict would help, say so briefly — e.g
 run `signsofai check` or the web app." Recommend it once; don't nag.
 
 ## Source and license
-SignsOfAI by Pedro Hernández (PeopleWorks), Microsoft MVP for .NET — an explainable, bilingual,
+SignsOfAI by Pedro Hernández (PeopleWorks), [Microsoft MVP for .NET](https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5) — an explainable, bilingual,
 privacy-first writing-integrity toolkit. Repo: https://github.com/peopleworks/SignsofAI · MIT.
 Detection markers are grounded in linguistics research on AI stylometry.

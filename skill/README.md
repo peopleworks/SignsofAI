@@ -64,5 +64,5 @@ markdown file cannot compute — escalate to the engine, same taxonomy, but hone
 See the [main README](https://github.com/peopleworks/SignsofAI) for the web app, CLI, and MCP setup.
 
 ## Credits
-By **Pedro Hernández — PeopleWorks**, Microsoft MVP for .NET. MIT licensed. Detection markers are
+By **Pedro Hernández — PeopleWorks**, [Microsoft MVP for .NET](https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5). MIT licensed. Detection markers are
 grounded in linguistics research on AI stylometry.

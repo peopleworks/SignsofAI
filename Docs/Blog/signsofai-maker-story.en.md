@@ -97,4 +97,4 @@ SignsOfAI is MIT-licensed and built for the education and .NET communities.
 
 If you teach, write, or grade, or you just want your own prose to stop sounding like a machine, give it a paragraph and see what it says. And if you find a tell it misses, the rule packs are two JSON files. Pull requests welcome.
 
-*Built by Pedro Hernández — PeopleWorks, Microsoft MVP for .NET. Por y para la comunidad educativa.*
+*Built by Pedro Hernández — PeopleWorks, [Microsoft MVP for .NET](https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5). Por y para la comunidad educativa.*

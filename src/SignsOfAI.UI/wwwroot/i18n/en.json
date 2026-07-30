@@ -21,7 +21,7 @@
   "nav.catalog": "Catalog",
   "nav.builtwith": "Built with .NET 10 · Blazor",
   "nav.builtwith.title": "Built with .NET 10 and Blazor WebAssembly",
-  "footer.role": "Microsoft MVP for .NET",
+  "footer.role": "<a href=\"https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5\" target=\"_blank\" rel=\"noopener\">Microsoft MVP for .NET</a>",
   "footer.line": "built with .NET 10 &amp; Blazor WebAssembly · runs 100% in your browser",
   "footer.opensource": "open source",
   "lang.switch.aria": "Interface language",
