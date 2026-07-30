@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
-using SignsOfAI.Perplexity.Api.Config;
+using SignsOfAI.Onnx.Config;
 using Tokenizers.DotNet;
 
-namespace SignsOfAI.Perplexity.Api.Engine;
+namespace SignsOfAI.Onnx.Engine;
 
 /// <summary>
 /// One selectable sentence-embedding model. Produces L2-normalized (optionally Matryoshka-truncated) vectors
@@ -12,9 +14,11 @@ namespace SignsOfAI.Perplexity.Api.Engine;
 /// so the 300M model only costs memory while it's actually being used. This is deliberately a separate class
 /// from the perplexity engine so the live perplexity path is never at risk from embedding changes.
 /// </summary>
-public sealed class OnnxEmbeddingEngine(EmbeddingProfile profile, IHostEnvironment env, ILogger log) : IDisposable
+public sealed class OnnxEmbeddingEngine : IDisposable
 {
-    private readonly string _dir = Path.IsPathRooted(profile.ModelDir) ? profile.ModelDir : Path.Combine(env.ContentRootPath, profile.ModelDir);
+    private readonly EmbeddingProfile profile;
+    private readonly ILogger log;
+    private readonly string _dir;
     private readonly SemaphoreSlim _gate = new(1, 1);
     private readonly object _downloadLock = new();
     private Task? _downloadTask;
@@ -26,19 +30,41 @@ public sealed class OnnxEmbeddingEngine(EmbeddingProfile profile, IHostEnvironme
     private volatile bool _filesReady;
     private volatile bool _loaded;
 
+    public OnnxEmbeddingEngine(EmbeddingProfile profile, string modelBasePath, ILogger log)
+    {
+        ArgumentNullException.ThrowIfNull(profile);
+        ArgumentException.ThrowIfNullOrWhiteSpace(modelBasePath);
+        ArgumentNullException.ThrowIfNull(log);
+
+        this.profile = profile;
+        this.log = log;
+        _dir = Path.IsPathRooted(profile.ModelDir)
+            ? Path.GetFullPath(profile.ModelDir)
+            : Path.GetFullPath(profile.ModelDir, modelBasePath);
+    }
+
     public EmbeddingProfile Profile => profile;
     public string ModelId => profile.Id;
+    public string ModelDirectory => _dir;
     public bool IsLoaded => _loaded;
     public bool FilesReady => _filesReady;
+    public bool IsAvailable => RequiredFilesExist();
+
+    /// <summary>Checks the configured paths only; it does not load the model or start a download.</summary>
+    public Task<bool> ProbeAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult(RefreshAvailability());
+    }
 
     public Task EnsureFilesAsync(CancellationToken ct = default) => GetOrStartDownload();
 
     private Task GetOrStartDownload()
     {
-        if (_filesReady) return Task.CompletedTask;
+        if (RefreshAvailability()) return Task.CompletedTask;
         lock (_downloadLock)
         {
-            if (_filesReady) return Task.CompletedTask;
+            if (RefreshAvailability()) return Task.CompletedTask;
             return _downloadTask ??= Task.Run(DownloadAllAsync);
         }
     }
@@ -56,7 +82,7 @@ public sealed class OnnxEmbeddingEngine(EmbeddingProfile profile, IHostEnvironme
             foreach (var url in profile.AuxFileUrls)
                 await EnsureFileAsync(Path.Combine(_dir, Path.GetFileName(new Uri(url).AbsolutePath)), url, CancellationToken.None);
 
-            _filesReady = File.Exists(modelPath) && File.Exists(tokPath);
+            _filesReady = RequiredFilesExist();
             if (!_filesReady) log.LogError("[embed:{Model}] model/tokenizer missing at {Dir} and no download URL configured.", profile.Id, _dir);
             else log.LogInformation("[embed:{Model}] files ready.", profile.Id);
         }
@@ -96,7 +122,7 @@ public sealed class OnnxEmbeddingEngine(EmbeddingProfile profile, IHostEnvironme
 
     private async Task<(InferenceSession, Tokenizer, string)> AcquireAsync(CancellationToken ct)
     {
-        if (!_filesReady)
+        if (!RefreshAvailability())
         {
             _ = GetOrStartDownload();
             throw new InvalidOperationException($"Embedding model '{profile.Id}' is downloading on the server; retry shortly.");
@@ -203,6 +229,18 @@ public sealed class OnnxEmbeddingEngine(EmbeddingProfile profile, IHostEnvironme
         log.LogInformation("[embed:{Model}] downloaded {Path} ({Bytes:N0} bytes).", profile.Id, Path.GetFileName(path), new FileInfo(path).Length);
     }
 
+    private bool RefreshAvailability() => _filesReady = RequiredFilesExist();
+
+    private bool RequiredFilesExist()
+    {
+        if (!File.Exists(Path.Combine(_dir, profile.ModelFile)) ||
+            !File.Exists(Path.Combine(_dir, profile.TokenizerFile)))
+            return false;
+
+        return profile.AuxFileUrls.All(url =>
+            File.Exists(Path.Combine(_dir, Path.GetFileName(new Uri(url).AbsolutePath))));
+    }
+
     public void Dispose() { _session?.Dispose(); _tokenizer?.Dispose(); _gate.Dispose(); }
 }
 
@@ -214,12 +252,15 @@ public sealed class EmbeddingRegistry
     public OnnxEmbeddingEngine? Default { get; }
     public IReadOnlyCollection<OnnxEmbeddingEngine> Engines => _byId.Values;
 
-    public EmbeddingRegistry(EmbeddingOptions options, IHostEnvironment env, ILoggerFactory lf)
+    public EmbeddingRegistry(EmbeddingOptions options, string modelBasePath, ILoggerFactory lf)
     {
+        var errors = options.Validate();
+        if (errors.Count > 0)
+            throw new ArgumentException(string.Join(" ", errors), nameof(options));
         Enabled = options.Enabled && options.Models.Count > 0;
         if (!Enabled) return;
         foreach (var p in options.Models)
-            _byId[p.Id] = new OnnxEmbeddingEngine(p, env, lf.CreateLogger($"Embedding.{p.Id}"));
+            _byId[p.Id] = new OnnxEmbeddingEngine(p, modelBasePath, lf.CreateLogger($"Embedding.{p.Id}"));
         var defId = options.DefaultModel ?? options.Models.FirstOrDefault()?.Id;
         Default = (defId is not null && _byId.TryGetValue(defId, out var d)) ? d : _byId.Values.First();
     }
