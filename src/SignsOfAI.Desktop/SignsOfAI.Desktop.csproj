@@ -1,0 +1,45 @@
+<!--
+  The desktop host. It contains no interface of its own: it opens a window, hands the shared
+  SignsOfAI.UI components to a WebView2 and gets out of the way. Everything the user sees is the
+  same code the web app serves.
+
+  Why a desktop build exists at all, when the web app already runs entirely on the visitor's
+  machine: three things a browser tab cannot do. It can reach a local model server (Ollama on
+  localhost is a CORS wall from a page, an ordinary HTTP call from here), it can run the ONNX
+  perplexity model in-process instead of calling a server, and it can be pointed at a folder of
+  documents rather than one pasted passage.
+
+  The SDK is Microsoft.NET.Sdk.Razor, not the plain SDK: that is what brings in the static web
+  assets pipeline, so the class library's wwwroot lands under _content/SignsOfAI.UI/ where the page
+  expects it.
+-->
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!-- The platform version is load-bearing, not decoration. BlazorWebView hosts the page in
+         WebView2's composition control, which reaches for the Windows SDK WinRT projections
+         (Microsoft.Windows.SDK.NET); a bare net10.0-windows does not bring those in, and the app
+         builds cleanly and then dies at the first render with a FileNotFoundException. -->
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <!-- Compile against the 19041 surface but keep running on 1809, the oldest Windows 10 that
+         still gets WebView2 — no reason to lock out those machines. -->
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>SignsOfAI.Desktop</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Per-monitor DPI awareness comes from app.manifest; without it the WebView renders blurry
+         on a scaled display, which is most laptops. -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="10.0.90" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SignsOfAI.UI\SignsOfAI.UI.csproj" />
+  </ItemGroup>
+
+</Project>

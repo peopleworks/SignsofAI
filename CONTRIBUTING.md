@@ -27,7 +27,9 @@ dotnet run --project src/SignsOfAI.Cli -- check some-file.md
 | Project | What it is |
 | --- | --- |
 | `src/SignsOfAI.Core` | The engine. Pure .NET, no browser, no I/O. Everything else is a shell around it. |
-| `src/SignsOfAI.Web` | Blazor WebAssembly app. |
+| `src/SignsOfAI.UI` | The interface itself — pages, components, UI services. Both hosts below render it, so a fix reaches web and desktop together. |
+| `src/SignsOfAI.Web` | Host: the Blazor WebAssembly app in the browser. |
+| `src/SignsOfAI.Desktop` | Host: the WPF + WebView2 app. Windows-only, so it lives in `SignsOfAI.Desktop.slnx` rather than the main solution, which is built on Linux. |
 | `src/SignsOfAI.Cli` | `signsofai` — terminal reports and CI gating. |
 | `src/SignsOfAI.Mcp` | MCP server over stdio. |
 | `src/SignsOfAI.Perplexity.Api` | The optional server for perplexity and paraphrase. |

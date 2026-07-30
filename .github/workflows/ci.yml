@@ -2,7 +2,7 @@
 #
 # The NuGet workflow also runs the tests, but only when a release is published — too late to help a
 # contributor. This runs on the pull request itself, which matters most for the community-contributed
-# UI translations in src/SignsOfAI.Web/wwwroot/i18n: the locale tests report a mistyped key, a lost
+# UI translations in src/SignsOfAI.UI/wwwroot/i18n: the locale tests report a mistyped key, a lost
 # {0} placeholder or a duplicated entry by name, so a translation PR can be reviewed on evidence
 # rather than by reading JSON side by side. See Docs/TRANSLATING.md.
 name: CI
@@ -38,3 +38,23 @@ jobs:
 
       - name: Test
         run: dotnet test SignsOfAI.slnx -c Release --no-build --nologo
+
+  # The desktop app is WPF, so it needs a Windows runner and it is not in SignsOfAI.slnx — see the
+  # comment at the top of that file. Its own job keeps the build above on Linux, where it stays fast
+  # for the translation PRs that are the reason this workflow exists. Build only: the interface is
+  # the shared SignsOfAI.UI library, and the tests over it already ran in the job above.
+  desktop:
+    name: Build desktop (Windows)
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Build
+        run: dotnet build SignsOfAI.Desktop.slnx -c Release --nologo

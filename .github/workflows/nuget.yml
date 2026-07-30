@@ -31,8 +31,10 @@ jobs:
           dotnet-version: "10.0.x"
 
       # A broken build must never reach NuGet — published versions can't be deleted.
+      # Name the solution explicitly: the repository now has two (the second one carries the
+      # Windows-only desktop app), and left to discover one on its own dotnet stops with MSB1011.
       - name: Test
-        run: dotnet test -c Release --nologo
+        run: dotnet test SignsOfAI.slnx -c Release --nologo
 
       - name: Pack
         run: |

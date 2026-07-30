@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <!--
+    The entire interface — pages, components, layout and the UI-layer services — lives here rather
+    than in the Blazor WebAssembly project, so that more than one host can present it: the web app
+    (src/SignsOfAI.Web) and the desktop app (src/SignsOfAI.Desktop), which renders these very same
+    components inside a WebView.
+
+    Nothing in here may depend on a specific host. There is no WebAssembly package reference and no
+    use of HostEnvironment or the WASM HTTP extensions; static assets are read through a small JS
+    fetch helper (see wwwroot/js/lang.js) precisely because a native HttpClient cannot reach a
+    WebView's virtual host, which is the one thing that genuinely differs between the two.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Keeps the browser-compatibility analyzer honest: this assembly still has to run in WASM. -->
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SignsOfAI.Core\SignsOfAI.Core.csproj" />
+  </ItemGroup>
+
+</Project>

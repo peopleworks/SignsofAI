@@ -11,9 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.27.0" />
-    <PackageReference Include="Tokenizers.DotNet" Version="1.4.1" />
+    <!-- Tokenizers ships host-specific native binaries. Every host that consumes SignsOfAI.Onnx
+         must reference the runtime package for its own RID. This API host targets Windows x64. -->
     <PackageReference Include="Tokenizers.DotNet.runtime.win-x64" Version="1.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SignsOfAI.Onnx\SignsOfAI.Onnx.csproj" />
   </ItemGroup>
 
 </Project>
