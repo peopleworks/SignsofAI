@@ -26,6 +26,11 @@ public static class UiServices
         // Prebuilt BM25 index over the rule catalog for the /catalog page.
         services.AddSingleton(sp => new CatalogSearch(RuleCatalog.All()));
 
+        // Reading a picked file. This is the browser's answer — Word and plain text, no dependency.
+        // A host that can do better registers its own IDocumentReader *after* calling this method;
+        // the last registration is the one resolved. SignsOfAI.Desktop does exactly that.
+        services.AddScoped<IDocumentReader, BrowserDocumentReader>();
+
         // Local persistence (localStorage in the browser, the WebView's own store on the desktop).
         services.AddScoped<BrowserStorage>();
         // User-defined catalogs (custom rule-packs), kept in that same local store.

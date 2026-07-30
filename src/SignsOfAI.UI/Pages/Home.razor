@@ -10,6 +10,7 @@
 @inject HumanizerService Humanizer
 @inject BrowserStorage Storage
 @inject CatalogStore Catalogs
+@inject IDocumentReader Reader
 @inject IJSRuntime JS
 
 <PageTitle>@L["home.pagetitle"]</PageTitle>
@@ -31,7 +32,7 @@
         </label>
         <label class="upload-btn" title="@L["common.upload.title"]">
             <Icon Name="upload" /> @L["home.upload"]
-            <InputFile OnChange="OnFileSelected" accept=".docx,.txt,.md,.markdown,.text,.csv,.log" />
+            <InputFile OnChange="OnFileSelected" accept="@Reader.Accept" />
         </label>
         <div class="samples">
             <span>@L["home.samples"]</span>
@@ -48,7 +49,7 @@
     <textarea @bind="_text" @bind:event="oninput" @bind:after="OnTextChanged"
               placeholder="@L["home.editor.placeholder"]"
               spellcheck="false"></textarea>
-    <p class="hint doc-hint">@L.M("home.dochint")</p>
+    <p class="hint doc-hint">@L.M(Reader.HintKey)</p>
 
     <div class="actions">
         <button class="ghost" @onclick="Clear" disabled="@string.IsNullOrEmpty(_text)">@L["common.clear"]</button>
@@ -475,18 +476,16 @@ else
         }
         try
         {
-            if (file.Name.EndsWith(".docx", StringComparison.OrdinalIgnoreCase))
-            {
-                await using var docStream = file.OpenReadStream(MaxFileBytes);
-                _text = await DocxTextExtractor.ExtractTextAsync(docStream);
-            }
-            else
-            {
-                using var reader = new StreamReader(file.OpenReadStream(MaxFileBytes));
-                _text = await reader.ReadToEndAsync();
-            }
+            // Which formats are on offer is the host's call — the browser build reads Word and plain
+            // text, the desktop build also reads PDF, ODT, EPUB and RTF. See IDocumentReader.
+            await using var stream = file.OpenReadStream(MaxFileBytes);
+            var read = await Reader.ReadAsync(stream, file.Name, MaxFileBytes);
+            _text = read.Text;
+
             RunAnalysis();
-            _fileNote = L.F("file.loaded", file.Name, file.Size / 1024);
+            _fileNote = read.Warning is null
+                ? L.F("file.loaded", file.Name, file.Size / 1024)
+                : L.F("file.loaded.warned", file.Name, file.Size / 1024, read.Warning);
         }
         catch (Exception ex)
         {

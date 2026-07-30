@@ -44,6 +44,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SignsOfAI.UI\SignsOfAI.UI.csproj" />
+    <!-- PDF/ODT/EPUB/RTF reading. Referenced here and not from SignsOfAI.UI on purpose: UI is shared
+         with the WebAssembly host, and this would put a PDF parser in every visitor's download. -->
+    <ProjectReference Include="..\SignsOfAI.Documents\SignsOfAI.Documents.csproj" />
   </ItemGroup>
 
 </Project>

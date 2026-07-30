@@ -12,6 +12,7 @@
   <Folder Name="/src/">
     <Project Path="src/SignsOfAI.Core/SignsOfAI.Core.csproj" />
     <Project Path="src/SignsOfAI.Desktop/SignsOfAI.Desktop.csproj" />
+    <Project Path="src/SignsOfAI.Documents/SignsOfAI.Documents.csproj" />
     <Project Path="src/SignsOfAI.UI/SignsOfAI.UI.csproj" />
   </Folder>
   <Folder Name="/tests/">
