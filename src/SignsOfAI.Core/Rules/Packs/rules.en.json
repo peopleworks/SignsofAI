@@ -8,7 +8,8 @@
     "burstiness.evidence": "Human prose typically scores 0.6–0.8; default LLM output 0.0–0.2.",
     "emdash.message": "Em-dash overuse ({0} in {1} words, {2}/100). LLMs lean on the em-dash as a rhythm crutch.",
     "emdash.suggestion": "Replace most with a period, comma, or parentheses; keep em-dashes rare and deliberate.",
-    "emdash.evidence": "Human prose averages well under one em-dash per 100 words."
+    "emdash.evidence": "Human prose averages well under one em-dash per 100 words.",
+    "catalog.lexical": "Overused AI vocabulary."
   },
   "lexical": [
     {

@@ -8,7 +8,8 @@
     "burstiness.evidence": "La prosa humana suele puntuar entre 0.6 y 0.8; la salida por defecto de un LLM, entre 0.0 y 0.2.",
     "emdash.message": "Abuso de la raya ({0} en {1} palabras, {2} por cada 100). Los LLM se apoyan en la raya como muleta de ritmo.",
     "emdash.suggestion": "Cambia la mayoría por un punto, una coma o un paréntesis; deja la raya para cuando sea deliberada.",
-    "emdash.evidence": "La prosa humana promedia bastante menos de una raya por cada 100 palabras."
+    "emdash.evidence": "La prosa humana promedia bastante menos de una raya por cada 100 palabras.",
+    "catalog.lexical": "Vocabulario de IA sobreusado."
   },
   "lexical": [
     {

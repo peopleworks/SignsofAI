@@ -22,6 +22,9 @@ public static class PackMessages
     public const string EmDashSuggestion = "emdash.suggestion";
     public const string EmDashEvidence = "emdash.evidence";
 
+    /// <summary>The label every lexical rule gets on the catalog page, which has no message of its own.</summary>
+    public const string CatalogLexical = "catalog.lexical";
+
     /// <summary>How many <c>{n}</c> placeholders each template takes. Guarded by a test.</summary>
     public static IReadOnlyDictionary<string, int> Arity { get; } = new Dictionary<string, int>(StringComparer.Ordinal)
     {
@@ -33,6 +36,7 @@ public static class PackMessages
         [EmDashMessage] = 3,        // {0} dashes, {1} words, {2} per hundred
         [EmDashSuggestion] = 0,
         [EmDashEvidence] = 0,
+        [CatalogLexical] = 0,
     };
 
     /// <summary>English, and byte-identical to what these analyzers produced before.</summary>
@@ -49,5 +53,6 @@ public static class PackMessages
                           "LLMs lean on the em-dash as a rhythm crutch.",
         [EmDashSuggestion] = "Replace most with a period, comma, or parentheses; keep em-dashes rare and deliberate.",
         [EmDashEvidence] = "Human prose averages well under one em-dash per 100 words.",
+        [CatalogLexical] = "Overused AI vocabulary.",
     };
 }

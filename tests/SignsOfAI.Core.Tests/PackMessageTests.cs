@@ -85,6 +85,19 @@ public class PackMessageTests
     }
 
     [Fact]
+    public void The_downloadable_template_carries_the_messages()
+    {
+        // The Analyze page offers the English pack as a starting point for a custom catalog, built
+        // with ToJson(). If serialization drops the block, everyone who starts from that template
+        // gets a pack with no wording in it and no hint the field exists.
+        var round = RulePack.FromJson(RulePackLoader.Load("en").ToJson());
+
+        Assert.NotNull(round.Messages);
+        foreach (var key in PackMessages.Arity.Keys)
+            Assert.True(round.Messages!.ContainsKey(key), $"'{key}' did not survive the round trip.");
+    }
+
+    [Fact]
     public void A_broken_placeholder_costs_a_clumsy_sentence_not_an_exception()
     {
         var pack = new RulePack

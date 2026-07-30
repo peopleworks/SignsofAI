@@ -43,7 +43,10 @@ public static class RuleCatalog
                 Severity = rule.Severity,
                 Title = rule.Terms.FirstOrDefault() ?? rule.Id,
                 Examples = rule.Terms,
-                Message = "Overused AI vocabulary.",
+                // Lexical rules carry no message of their own, so the catalog gives them one. From
+                // the pack, not from here: the Spanish catalog listing Spanish words under an
+                // English label was the same bug the analyzers had.
+                Message = pack.Text(PackMessages.CatalogLexical),
                 Suggestion = rule.Suggestion,
                 Evidence = rule.Evidence,
             });
