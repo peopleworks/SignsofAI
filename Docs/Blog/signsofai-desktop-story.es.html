@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Un desconocido me pidió una app de escritorio y creí haber construido lo que no era · SignsOfAI</title>
+<meta name="description" content="Llevar una app Blazor WebAssembly al escritorio tomó un día, no una reescritura. Exactamente una cosa se rompió de verdad. Aquí está esa cosa, la decisión de hace meses que me salvó, y los dos errores que cometí en el camino.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · Microsoft MVP for .NET</span>
+  </div>
+
+  <div class="kicker">Historia de taller · Ingeniería</div>
+  <h1>Un desconocido me pidió una app de escritorio y creí haber construido lo que no era</h1>
+  <p class="lead">Llevar una app Blazor WebAssembly al escritorio tomó un día, no una reescritura. Exactamente una cosa se rompió de verdad. Aquí está esa cosa, la decisión de hace meses que me salvó, y los dos errores que cometí en el camino.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Descárgalo o pruébalo</b> — gratis, MIT, web y Windows.</a>
+
+  <hr>
+
+  <p>Alguien en Reddit andaba buscando una copia pirateada de un "humanizador de IA" de pago. Le contesté con el enlace al mío, que es gratis y de código abierto. Preguntó cómo se instalaba. Le dije que corre en el navegador y le pregunté si quería una versión de escritorio.</p>
+  <p>"Yes app."</p>
+  <p>Mi primera reacción no fue entusiasmo. Fue la sensación de haber elegido mal la arquitectura hace meses. SignsOfAI es Blazor WebAssembly. Vive en una pestaña. Convertir eso en algo que descargas y abres con doble clic sonaba a empezar de nuevo.</p>
+  <p>Estaba equivocado, y por qué lo estaba es lo único de todo esto que vale la pena escribir.</p>
+  <h2>El motor nunca fue la aplicación web</h2>
+  <p>Antes de tocar nada abrí el archivo de proyecto del motor de análisis. No tiene ni una referencia de paquete. Ninguna.</p>
+  <p>Eso no fue suerte. Fue una regla que puse temprano y que después olvidé haber puesto: el motor se queda en .NET puro, sin navegador, sin entrada/salida, sin dependencias. Los paquetes de reglas van embebidos como recursos. El tokenizador, el separador de oraciones, el calificador, el reescritor: C# corriente operando sobre cadenas.</p>
+  <p>Cuando llegó la pregunta de Reddit, ese motor ya alimentaba tres frentes distintos: la app web, una herramienta de línea de comandos y un servidor MCP. Un cuarto no era un cambio de arquitectura. Era otro consumidor.</p>
+  <p>Así que el port nunca iba a ser una reescritura. Era una extracción: sacar páginas, componentes y servicios de interfaz del proyecto WebAssembly hacia una biblioteca de clases Razor, y dejar que un segundo anfitrión los dibuje.</p>
+  <p>Si te llevas una sola cosa, llévate esa. La decisión que me salvó se tomó meses antes de que el problema existiera, y ese día no me dio ningún crédito porque nada se veía mejor.</p>
+  <h2>Exactamente una cosa se rompió</h2>
+  <p>Blazor Híbrido aloja tus componentes dentro de un WebView. Casi todo lo que hace una app Blazor pasa intacto. La interoperación con JavaScript funciona. El almacenamiento local funciona. Cada llamada HTTP a una API externa funciona, y mejor, porque no hay verificación previa de CORS estorbando.</p>
+  <p>Una cosa no.</p>
+  <p>Un <code>HttpClient</code> de .NET no alcanza el anfitrión virtual del WebView. En el navegador, leer tu propio <code>wwwroot</code> con un <code>HttpClient</code> atado a la dirección base de la app es lo normal. Dentro de un WebView, la app se sirve desde un origen virtual con el que solo la página misma puede hablar. El HTTP nativo sale a la red y no encuentra nada.</p>
+  <p>En mi caso eso era una sola línea: el cargador que lee las traducciones de la interfaz desde archivos JSON.</p>
+  <p>Mi primer instinto fue una interfaz con dos implementaciones, una por anfitrión. Después noté que el <code>fetch</code> del propio navegador sirve en los dos sitios. Así que el arreglo borró código en vez de agregarlo: el cargador ahora pasa por un ayudante de JavaScript, un solo camino, los dos anfitriones. El <code>HttpClient</code> atado a la dirección base desapareció entero, porque nadie más lo usaba.</p>
+  <p>La segunda sorpresa me costó más tiempo. La app de escritorio compiló limpia, arrancó, y murió en el primer dibujado:</p>
+  <pre><code>System.IO.FileNotFoundException: Could not load file or assembly
+'Microsoft.Windows.SDK.NET, Version=10.0.17763.10'</code></pre>
+  <p><code>BlazorWebView</code> aloja la página en el control de composición de WebView2, que va a buscar las proyecciones WinRT del SDK de Windows. Un marco de destino <code>net10.0-windows</code> no las trae. Hace falta una versión de plataforma: <code>net10.0-windows10.0.19041.0</code>. Compila de las dos formas, que es lo que lo vuelve molesto de diagnosticar.</p>
+  <h2>Tres agentes, un repositorio, cero conflictos</h2>
+  <p>Tenía otros dos agentes de programación ociosos en otras terminales, así que repartí el trabajo en tres: el port de escritorio, extraer el motor ONNX de perplejidad a una biblioteca reutilizable, y un lector de documentos para PDF, ODT, EPUB y RTF.</p>
+  <p>Dos cosas lo hicieron posible, y ninguna es ingeniosa.</p>
+  <p><strong>Un árbol de trabajo de git por agente.</strong> Las ramas comparten un solo árbol. Tres agentes en una carpeta significa que el <code>git checkout</code> del segundo le reescribe los archivos al primero a media edición, y parece un error tuyo. Con árboles separados, git también se niega a sacar una rama que ya tiene otro árbol, así que la protección deja de depender de que todos se porten bien.</p>
+  <p><strong>Repartir por archivo, no por tema.</strong> Cada instrucción nombraba las rutas que ese agente poseía y prohibía el resto por nombre. Un archivo compartido, la solución, quedó reservado y vedado para todos. Las tres ramas se fusionaron sin un conflicto.</p>
+  <p>Las instrucciones llevaban el motivo detrás de cada restricción, no solo la regla. Esta biblioteca no puede agregarle una dependencia al motor, porque el motor se publica a WebAssembly y a NuGet. Usa PdfPig y no iText, porque iText es AGPL y este repositorio es MIT. Los pesos del modelo están fuera de git, así que las pruebas que los necesitan tienen que saltarse en vez de fallar.</p>
+  <h2>Lo que salió mal</h2>
+  <p>Los dos agentes reportaron éxito. Los dos tenían pruebas en verde. Uno me estaba mintiendo, sin querer.</p>
+  <p>Enterrada entre 72 pruebas que pasaban estaba esta:</p>
+  <pre><code class="language-csharp">Assert.True(string.IsNullOrEmpty(result.Text) || result.Warnings.Count &gt; 0 || true);</code></pre>
+  <p>Esa afirmación no puede fallar. Sumaba a una suite verde y no protegía nada. Revisé si estaba tapando un defecto real, y no: el código manejaba bien el caso, la prueba nunca lo decía. Una prueba que pasa siempre es peor que una que falta, porque la que falta es honesta sobre el hueco.</p>
+  <p>Sobrevivió por una razón concreta. Ninguno de los dos proyectos nuevos estaba todavía en la solución, así que ninguna compilación integrada corrió esas pruebas. Agregarlos fue el arreglo de verdad.</p>
+  <p>Mi propio error fue peor. Limpiando, corrí <code>git add -A</code> desde la raíz del repositorio, y eso arrastró una carpeta de notas de trabajo y capturas. Llegó a la rama principal, pública. Lo noté, lo quité, hice un empujón forzado, y después comprobé si eso había borrado algo:</p>
+  <pre><code>$ gh api repos/.../commits/90ab44a
+90ab44a82f40441dd1222bebc04ebb1bea955e0c</code></pre>
+  <p>Ahí seguía. Un empujón forzado deja el commit huérfano; no lo borra. En un repositorio público, cualquiera con el hash lo sigue leyendo, y solo el soporte de GitHub puede purgarlo. En mi caso el contenido era inocuo. La lección no lo fue: el arreglo es <code>.gitignore</code>, y "voy a tener cuidado" no es un arreglo.</p>
+  <h2>La parte que lo hizo valer la pena</h2>
+  <p>Una versión de escritorio que solo hace lo que ya hacía una pestaña es una descarga más grande sin motivo. Lo que la justifica es lo que una pestaña estructuralmente no puede.</p>
+  <p>Lee PDF, ODT, EPUB y RTF. No porque un navegador no pudiera interpretar un PDF, sino porque mandarle un intérprete de PDF a cada visitante le cuesta megabytes antes de analizar una sola palabra. Aquí ya está en el disco.</p>
+  <p>Alcanza a Ollama en <code>localhost:11434</code>. Desde una página servida por HTTPS esa llamada se rechaza a menos que el usuario reconfigure Ollama. Desde aquí es una petición HTTP corriente.</p>
+  <p>Analiza una carpeta entera. A una pestaña se le entregan archivos; nunca se le da la ruta de una carpeta.</p>
+  <p>Y mide previsibilidad con un modelo de lenguaje corriendo dentro de la aplicación, en vez de llamar a un servicio. Esa última traía un número, y el número es la razón por la que confío en el port. Misma oración, mismo modelo:</p>
+  <table>
+    <thead><tr><th></th><th>Endpoint alojado</th><th>En proceso</th></tr></thead>
+    <tbody>
+      <tr><td>Perplejidad</td><td>27.33</td><td>27.3</td></tr>
+      <tr><td>Tokens</td><td>17</td><td>17</td></tr>
+      <tr><td>Previsibilidad</td><td>0.859</td><td>0.86</td></tr>
+      <tr><td>Tiempo</td><td>411 ms</td><td>122 ms</td></tr>
+    </tbody>
+  </table>
+  <p>La misma lectura, tres veces más rápida, con el texto sin salir nunca de la máquina y sin que ningún servidor tenga que estar levantado.</p>
+  <p>Esa paridad no es casualidad. El motor se <em>movió</em> de la API a una biblioteca compartida, no se reimplementó para el escritorio. Si lo hubiera reescrito, los dos habrían derivado, y una herramienta cuyo argumento entero es la honestidad estaría reportando números distintos para el mismo párrafo según dónde la abriste.</p>
+  <h2>Lo que me diría a mí mismo por la mañana</h2>
+  <p>El port tomó un día. Los primeros diez minutos me los pasé pidiéndome disculpas por una decisión de arquitectura que resultó ser el motivo de que el día fuera corto.</p>
+  <p>Mantén lo que hace el trabajo libre de lo que muestra el trabajo. Cuesta un poco de disciplina temprano, parece sobreingeniería mientras nada lo necesita, y una tarde cualquiera un desconocido te pide algo que nunca planeaste y la respuesta es una referencia de proyecto.</p>
+  <p>La app es gratis, MIT, y las dos versiones están aquí: <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>.</p>
+  <hr>
+  <p><em>Escrito por un humano y revisado con la herramienta que describe: <strong>5/100, se lee mayormente humano</strong>, variabilidad 0.70, unas 1.650 palabras. En la primera pasada me marcó una muletilla y le hice caso, que es para lo que sirve.</em></p>
+  <p><em>Quedan dos avisos y los dos están mal: lee "PDF, ODT, EPUB y RTF" como regla de tres, y esa lista tiene cuatro elementos. Dejé la frase como estaba en vez de reescribirla para mejorar mi propio número. Un detector cuyo autor edita en silencio alrededor de sus falsos positivos no es un detector en el que debas confiar.</em></p>
+  <p><em>Editar esta nota cambiaba el puntaje que la nota misma declara, lo cual tiene su propia lección pequeña sobre medir aquello sobre lo que estás parado.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, Microsoft MVP for .NET. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

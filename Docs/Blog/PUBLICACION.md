@@ -201,6 +201,22 @@ de los seis (video / voz / cola en segundos):
 | `signsofai-maker-story.{en,es}.md` | dev.to · Hashnode · Medium (importa el Markdown) |
 | `signsofai-maker-story.{en,es}.html` | WordPress (bloque HTML) · Blogger (vista HTML) |
 | `signsofai-desktop-story.{en,es}.md` | dev.to · Hashnode · Medium — **segundo artículo**, sin publicar |
+| `signsofai-desktop-story.{en,es}.html` | WordPress · Blogger — **generados**, no escritos a mano |
+
+**Generar el HTML.** Los dos primeros artículos se escribieron como HTML a mano. Transcribir 1.500
+palabras dos veces más, en dos idiomas, es la forma segura de corregir un párrafo en una copia y no
+en la otra:
+
+```
+cd Docs/Blog && node build-article.mjs signsofai-desktop-story.en.md
+```
+
+Escribe el `.html` al lado del `.md`. El estilo sale de `article.css`, extraído del primer artículo
+para que las páginas mantengan un solo aspecto; ahí se añadieron los estilos de tabla, que el primer
+artículo no necesitaba. El conversor cubre **solo** lo que estos artículos usan (encabezados,
+párrafos, listas, código, tablas, citas, imágenes) y no debe convertirse en un Markdown general: si
+un artículo nuevo trae algo que no entiende, mejor que se note al revisar la página que arrastrar un
+intérprete entero.
 
 **Segundo artículo — el port a escritorio.** Público distinto del primero: desarrolladores .NET
 sopesando un port a Blazor Híbrido, no docentes sopesando un detector. Por eso es una pieza aparte y
