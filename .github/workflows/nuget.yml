@@ -21,6 +21,11 @@ permissions:
 
 jobs:
   publish:
+    # A GitHub Release is also how the desktop app ships, tagged desktop-v<version>. Those releases
+    # carry no NuGet packages, and without this the job would read the tag as a package version,
+    # find nothing packed under that name and fail — a red X on a release that did nothing wrong.
+    # Only v<version> tags mean "publish to NuGet".
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref_name, 'v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
