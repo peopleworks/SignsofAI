@@ -1,0 +1,36 @@
+<Project>
+
+  <!--
+    Repo-wide build settings, imported before every .csproj (so any project can still
+    override a value by re-declaring it).
+
+    These exist to satisfy the .NET Foundation eligibility criteria for Code:
+    reproducible builds, Source Link, and symbols. See Docs/dotnet-foundation.md.
+  -->
+
+  <PropertyGroup>
+    <!-- Reproducible builds. Deterministic is already the SDK default; it is stated here
+         because it is part of the contract, not an accident of the toolchain.
+         ContinuousIntegrationBuild normalizes absolute paths into the PDB, which is what
+         makes two CI builds of the same commit byte-identical. It is deliberately OFF for
+         local builds: normalized paths break step-through debugging in the IDE. -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+
+    <!-- Source Link. Since the .NET 8 SDK the GitHub provider ships in-box, so this needs
+         no PackageReference: setting PublishRepositoryUrl is what turns it on.
+         EmbedUntrackedSources covers generated files that are not in git (e.g. the
+         AssemblyInfo the SDK writes), which would otherwise be unresolvable in a debugger. -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/peopleworks/SignsofAI</RepositoryUrl>
+
+    <!-- Symbols, as a .snupkg pushed alongside each .nupkg to the NuGet symbol server.
+         Portable PDBs are the format Source Link annotates. -->
+    <DebugType>portable</DebugType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+</Project>

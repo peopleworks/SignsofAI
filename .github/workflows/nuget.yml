@@ -61,6 +61,17 @@ jobs:
             exit 1
           fi
 
+          # Symbols are a .NET Foundation eligibility criterion, and a silent gap here would only
+          # surface months later when someone tries to step into the library. Every .nupkg must
+          # have its .snupkg beside it — that adjacency is also what makes the push pick it up.
+          for pkg in out/*."$want".nupkg; do
+            if [ ! -f "${pkg%.nupkg}.snupkg" ]; then
+              echo "::error::$pkg has no matching .snupkg — symbol publishing is broken."
+              echo "Check IncludeSymbols/SymbolPackageFormat in Directory.Build.props."
+              exit 1
+            fi
+          done
+
           # The MCP manifest carries its own version twice, and the MCP registry serves it to
           # clients. If it drifts, the registry advertises a version that doesn't exist.
           manifest="src/SignsOfAI.Mcp/.mcp/server.json"
@@ -79,6 +90,9 @@ jobs:
         with:
           user: peopleworksservices
 
+      # The glob deliberately names only *.nupkg: the NuGet client pushes the matching .snupkg
+      # to the symbol server on its own whenever one sits next to the package. Adding *.snupkg
+      # here would push each symbol package twice.
       - name: Push to NuGet
         run: |
           dotnet nuget push "out/*.nupkg" \
