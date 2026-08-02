@@ -1,5 +1,6 @@
 using System.Text.Json;
 using SignsOfAI.Core;
+using SignsOfAI.Core.Artifacts;
 using SignsOfAI.Core.Documents;
 using SignsOfAI.Core.Model;
 using SignsOfAI.Core.Rules;
@@ -32,7 +33,7 @@ if (argList[0] != "check")
 var positionals = new List<string>();
 var ruleFiles = new List<string>();
 string language = "auto";
-bool json = false, noColor = false;
+bool json = false, noColor = false, failOnArtifacts = false;
 double? maxScore = null;
 int top = 10;
 
@@ -46,6 +47,7 @@ for (int i = 1; i < argList.Count; i++)
         case "--no-color": noColor = true; break;
         case "--rules": ruleFiles.Add(Next()); break;
         case "--max-score": maxScore = double.Parse(Next(), System.Globalization.CultureInfo.InvariantCulture); break;
+        case "--fail-on-artifacts": failOnArtifacts = true; break;
         case "--top": top = int.Parse(Next()); break;
         default:
             if (a.StartsWith('-')) { Console.Error.WriteLine($"Unknown option '{a}'."); return 2; }
@@ -56,7 +58,7 @@ for (int i = 1; i < argList.Count; i++)
 
 if (positionals.Count == 0)
 {
-    Console.Error.WriteLine("Usage: signsofai check <path> [--lang auto|en|es] [--json] [--max-score N] [--top N]");
+    Console.Error.WriteLine("Usage: signsofai check <path> [--lang auto|en|es] [--json] [--max-score N] [--fail-on-artifacts] [--top N]");
     return 2;
 }
 
@@ -107,6 +109,27 @@ if (json)
             f.RuleId, category = f.Category.ToString(), severity = f.Severity.ToString(),
             f.MatchedText, f.Message, f.Suggestion, f.Evidence
         }),
+        // Kept in its own object rather than folded in with the findings: these are characters at
+        // offsets, not judgements about prose, and a consumer should not have to tell them apart.
+        artifacts = new
+        {
+            pattern = result.Artifacts.Pattern.ToString(),
+            count = result.Artifacts.Count,
+            strongCount = result.Artifacts.StrongCount,
+            sectionsAffected = result.Artifacts.SectionsAffected,
+            sectionCount = result.Artifacts.SectionCount,
+            summary = result.Artifacts.Summary,
+            advice = result.Artifacts.Advice,
+            groups = result.Artifacts.Groups.Select(g => new
+            {
+                kind = g.Kind.ToString(), g.CodePoint, g.CharacterName, g.LooksLike, g.Count, g.IsStrong
+            }),
+            occurrences = result.Artifacts.Occurrences.Select(o => new
+            {
+                kind = o.Kind.ToString(), o.CodePoint, o.CharacterName, o.LooksLike, o.Word,
+                o.Line, o.Column, offset = o.Span.Start, o.IsStrong, o.Message
+            }),
+        },
     }, new JsonSerializerOptions { WriteIndented = true }));
 }
 else
@@ -119,6 +142,15 @@ else
 if (maxScore is { } max && result.OverallScore > max)
 {
     Console.Error.WriteLine($"✗ Score {result.OverallScore:0} exceeds --max-score {max:0}.");
+    return 1;
+}
+
+// Gates on the strong artifacts only. Non-breaking spaces arrive with any copy-paste and failing a
+// build over them would train everyone to pass the flag and stop reading.
+if (failOnArtifacts && result.Artifacts.StrongCount > 0)
+{
+    Console.Error.WriteLine(
+        $"✗ {result.Artifacts.StrongCount} character artifact(s) that typing does not produce.");
     return 1;
 }
 return 0;
@@ -141,6 +173,8 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
     if (cats.Count > 0)
         Console.WriteLine("     " + string.Join("  ", cats.Select(c => $"{c.Category} {c.FindingCount}")));
 
+    PrintArtifacts(r.Artifacts, Col, Bold);
+
     Console.WriteLine();
     var shown = r.Findings.Take(top).ToList();
     foreach (var f in shown)
@@ -158,6 +192,37 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
     Console.WriteLine();
 }
 
+/// <summary>
+/// Prints the character-artifact report, and nothing at all when there is none — which is nearly
+/// every file. Kept above the findings and visibly apart from them: the findings are a reading of
+/// the prose, this is a list of characters at offsets that anyone can go and verify.
+/// </summary>
+static void PrintArtifacts(ArtifactReport report, Func<string, int, string> Col, Func<string, string> Bold)
+{
+    if (!report.Any) return;
+
+    bool systematic = report.Pattern == ArtifactPattern.Systematic;
+    Console.WriteLine();
+    Console.WriteLine("     " + Bold("Character artifacts") + "  " +
+                      Col(systematic ? "spread through the document" : "present, not spread",
+                          systematic ? 33 : 90));
+    Console.WriteLine(Col($"     {report.Summary}", 90));
+
+    foreach (var g in report.Groups)
+    {
+        var looks = g.LooksLike is null ? "" : $"  looks like \"{g.LooksLike}\"";
+        Console.WriteLine($"       {g.CodePoint,-8} {g.CharacterName}{looks}  ×{g.Count}");
+    }
+
+    var first = report.Occurrences.Where(o => o.IsStrong).Take(6).ToList();
+    if (first.Count > 0)
+        Console.WriteLine(Col("       at " +
+            string.Join(" · ", first.Select(o => $"line {o.Line}, col {o.Column}")) +
+            (report.StrongCount > first.Count ? $" · +{report.StrongCount - first.Count} more" : ""), 90));
+
+    Console.WriteLine(Col($"     {report.Advice}", 90));
+}
+
 static void PrintHelp()
 {
     Console.WriteLine(
@@ -172,6 +237,8 @@ static void PrintHelp()
           --rules <file.json>   Add a custom catalog (rule-pack). Repeatable.
           --json                Emit a JSON report instead of the pretty report
           --max-score <N>       Exit with code 1 if the overall score exceeds N (for CI gating)
+          --fail-on-artifacts   Exit with code 1 if the text holds characters typing cannot produce
+                                (invisible characters, letters impersonating Latin ones)
           --top <N>             Show at most N findings in the pretty report (default: 10)
           --no-color            Disable ANSI colors
           -h, --help            Show this help
@@ -182,5 +249,6 @@ static void PrintHelp()
           signsofai check article.docx --lang en
           signsofai check post.md --max-score 40      # fail CI if it reads too much like AI
           signsofai check post.md --json > report.json
+          signsofai check essay.docx --fail-on-artifacts   # reject text a rewriting tool has been through
         """);
 }

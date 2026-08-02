@@ -1,4 +1,5 @@
 using SignsOfAI.Core.Analyzers;
+using SignsOfAI.Core.Artifacts;
 using SignsOfAI.Core.Model;
 using SignsOfAI.Core.Rules;
 using SignsOfAI.Core.Scoring;
@@ -38,14 +39,25 @@ public sealed class AiWritingAnalyzer
     {
         text ??= string.Empty;
 
+        // Character artifacts are dealt with before anything else reads the text. A single Cyrillic
+        // letter inside "delve" makes every word-matching rule miss while the page looks untouched,
+        // so analysing the raw string would mean publishing a catalog anyone can switch off with a
+        // find-and-replace. The analyzers run on the cleaned copy; the report describes the original.
+        var probe = ArtifactScanner.Scan(text);
+        var normalized = TextNormalizer.Apply(text, probe);
+
         var lang = language is null or "auto" or ""
-            ? LanguageDetector.Detect(text)
+            ? LanguageDetector.Detect(normalized.Text)
             : language.ToLowerInvariant();
 
-        var document = new TextDocument(text);
+        var document = new TextDocument(normalized.Text);
         var statistics = StatisticsCalculator.Compute(document);
 
         var rulePack = ResolvePack(lang, extraPacks);
+
+        // Re-scanned only when there is something to report, this time with the pack that supplies
+        // the wording — the first pass runs before the language is known.
+        var artifacts = probe.Any ? ArtifactScanner.Scan(text, rulePack) : ArtifactReport.Empty;
 
         var context = new AnalysisContext
         {
@@ -57,6 +69,7 @@ public sealed class AiWritingAnalyzer
 
         var findings = _analyzers
             .SelectMany(a => a.Analyze(context))
+            .Select(f => normalized.Changed ? ToSource(f, normalized, text) : f)
             .OrderBy(f => f.Span.Start)
             .ThenBy(f => f.Span.Length)
             .ToList();
@@ -70,6 +83,25 @@ public sealed class AiWritingAnalyzer
             CategoryScores = byCategory,
             OverallScore = overall,
             Statistics = statistics,
+            Artifacts = artifacts,
+        };
+    }
+
+    /// <summary>
+    /// Re-expresses a finding against the text the reader has, rather than the cleaned copy the
+    /// analyzers saw. The matched text is re-sliced too: a word that was found as "delve" should be
+    /// shown the way it appears in the document, impostor letter included, because that is the thing
+    /// the reader has to be able to find.
+    /// </summary>
+    private static Finding ToSource(Finding finding, NormalizedText normalized, string source)
+    {
+        var span = normalized.ToSource(finding.Span);
+        return finding with
+        {
+            Span = span,
+            MatchedText = span.Length > 0 && span.End <= source.Length
+                ? span.Slice(source)
+                : finding.MatchedText,
         };
     }
 

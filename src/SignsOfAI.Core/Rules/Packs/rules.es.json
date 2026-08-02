@@ -9,7 +9,18 @@
     "emdash.message": "Abuso de la raya ({0} en {1} palabras, {2} por cada 100). Los LLM se apoyan en la raya como muleta de ritmo.",
     "emdash.suggestion": "Cambia la mayoría por un punto, una coma o un paréntesis; deja la raya para cuando sea deliberada.",
     "emdash.evidence": "La prosa humana promedia bastante menos de una raya por cada 100 palabras.",
-    "catalog.lexical": "Vocabulario de IA sobreusado."
+    "catalog.lexical": "Vocabulario de IA sobreusado.",
+    "artifact.invisible": "{1} ({0}): un carácter que no ocupa espacio cuando el texto se muestra.",
+    "artifact.bidi": "{1} ({0}): un carácter de control que puede hacer que lo que se ve no sea lo que está guardado.",
+    "artifact.lookalike": "«{3}» lleva {1} ({0}) donde corresponde la letra latina «{2}». En pantalla son idénticas.",
+    "artifact.space": "{1} ({0}) en lugar de un espacio normal.",
+    "artifact.soft-hyphen": "{1} ({0}): un punto de división de palabra invisible, habitual en texto copiado de un PDF.",
+    "artifact.variation-selector": "{1} ({0}): un modificador de representación pegado a algo que no es un emoji.",
+    "artifact.private-use": "{1} ({0}): un código sin significado fuera de la tipografía que lo definió.",
+    "artifact.tag": "{1} ({0}): un carácter invisible de los que se usan para llevar texto oculto junto al texto visible.",
+    "artifact.summary.incidental": "{0} caracteres inusuales, sin repartirse por el documento. Copiar de una página web o de un PDF los produce.",
+    "artifact.summary.systematic": "{0} caracteres que no se producen al escribir, repartidos por {1} de {2} secciones del documento. Ese reparto es lo que deja una herramienta cuando procesa un texto completo.",
+    "artifact.advice": "Esto no dice nada sobre quién escribió el texto, y no es prueba de deshonestidad. Es una pregunta sobre por dónde ha pasado el archivo: pídale a quien lo escribió que abra el documento y le cuente cómo lo produjo."
   },
   "lexical": [
     {

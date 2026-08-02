@@ -1,3 +1,5 @@
+using SignsOfAI.Core.Artifacts;
+
 namespace SignsOfAI.Core.Model;
 
 /// <summary>Per-category rollup shown in the score breakdown.</summary>
@@ -19,6 +21,17 @@ public sealed record AnalysisResult
     public required double OverallScore { get; init; }
 
     public required TextStatistics Statistics { get; init; }
+
+    /// <summary>
+    /// Characters found in the file that writing it does not produce — invisible characters, letters
+    /// borrowed from another script to impersonate Latin ones.
+    ///
+    /// Deliberately outside <see cref="Findings"/> and with no effect on <see cref="OverallScore"/>.
+    /// The score is a judgement about how the prose reads; this is a list of things that are either
+    /// present at a given offset or are not, and mixing the two would turn a checkable fact back into
+    /// an opinion. Empty for almost every document.
+    /// </summary>
+    public ArtifactReport Artifacts { get; init; } = ArtifactReport.Empty;
 
     /// <summary>Human-readable one-line verdict derived from <see cref="OverallScore"/>.</summary>
     public string Verdict => OverallScore switch

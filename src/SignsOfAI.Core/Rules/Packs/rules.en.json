@@ -9,7 +9,18 @@
     "emdash.message": "Em-dash overuse ({0} in {1} words, {2}/100). LLMs lean on the em-dash as a rhythm crutch.",
     "emdash.suggestion": "Replace most with a period, comma, or parentheses; keep em-dashes rare and deliberate.",
     "emdash.evidence": "Human prose averages well under one em-dash per 100 words.",
-    "catalog.lexical": "Overused AI vocabulary."
+    "catalog.lexical": "Overused AI vocabulary.",
+    "artifact.invisible": "{1} ({0}) — a character that occupies no space when the text is displayed.",
+    "artifact.bidi": "{1} ({0}) — a control character that can make the displayed text differ from the stored text.",
+    "artifact.lookalike": "“{3}” contains {1} ({0}) where the Latin letter “{2}” belongs. The two are indistinguishable on screen.",
+    "artifact.space": "{1} ({0}) in place of an ordinary space.",
+    "artifact.soft-hyphen": "{1} ({0}) — an invisible hyphenation point, routine in text copied out of a PDF.",
+    "artifact.variation-selector": "{1} ({0}) — a rendering modifier attached to something that is not an emoji.",
+    "artifact.private-use": "{1} ({0}) — a codepoint with no meaning outside the font that defined it.",
+    "artifact.tag": "{1} ({0}) — an invisible character of the kind used to carry hidden text alongside visible text.",
+    "artifact.summary.incidental": "{0} unusual characters, not spread through the document. Copying from a web page or a PDF produces these.",
+    "artifact.summary.systematic": "{0} characters that typing does not produce, spread across {1} of {2} sections of the document. That distribution is what a tool leaves behind when it processes a whole text.",
+    "artifact.advice": "This says nothing about who wrote the text, and it is not evidence of dishonesty. It is a question about where the file has been: ask the writer to open the document and describe how it was produced."
   },
   "lexical": [
     {

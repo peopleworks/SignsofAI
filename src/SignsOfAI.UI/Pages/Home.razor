@@ -247,6 +247,11 @@
             </div>
         }
 
+        @* Sits above the statistics and below the score on purpose: it is the one thing on this page
+           that is checkable rather than arguable, so it should be read before the numbers. Renders
+           nothing at all when the document is ordinary, which is nearly always. *@
+        <ArtifactPanel Report="r.Artifacts" />
+
         <div class="stats card">
             <div class="stat"><span class="stat-label">@L["home.stat.words"]</span><span class="stat-val">@r.Statistics.WordCount</span></div>
             <div class="stat"><span class="stat-label">@L["home.stat.sentences"]</span><span class="stat-val">@r.Statistics.SentenceCount</span></div>
