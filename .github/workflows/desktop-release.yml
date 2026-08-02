@@ -1,0 +1,108 @@
+# Build the Windows desktop app and attach it to a `desktop-v*` GitHub Release.
+#
+# Until this existed, the zip on desktop-v0.1.0 was produced on a developer machine. That is the
+# one thing the .NET Foundation "identical deployable artifacts" criterion does not tolerate: an
+# artifact nobody else can reproduce. Everything the release carries is now built here, from the
+# tagged commit, on a clean runner.
+#
+# To ship a desktop version: publish a GitHub Release tagged desktop-v<version> (e.g.
+# desktop-v0.2.0). This job builds it, attaches the zip and its checksum, and prints the checksum
+# in the run summary so it can go in the release notes.
+#
+# Releases tagged v<version> are the NuGet packages and are handled by nuget.yml; the two
+# workflows ignore each other's tags on purpose.
+name: Release desktop app
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: # dry run: builds and keeps the zip as a run artifact, uploads nothing
+
+permissions:
+  contents: write # required to attach assets to the release
+
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref_name, 'desktop-v')
+    runs-on: windows-latest # WPF and WebView2 — this cannot be built anywhere else
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Work out the version
+        id: version
+        shell: pwsh
+        run: |
+          # A dispatch run has no release tag, so it builds something deliberately unshippable.
+          if ($env:GITHUB_EVENT_NAME -eq 'release') {
+            $version = $env:GITHUB_REF_NAME -replace '^desktop-v', ''
+          } else {
+            $version = '0.0.0-dev'
+          }
+          $name = "SignsOfAI-Desktop-$version-win-x64"
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "name=$name"       >> $env:GITHUB_OUTPUT
+          Write-Host "Building $name"
+
+      # A release that crashes is worse than a release that never shipped, and a GitHub Release
+      # cannot be un-downloaded once people have it.
+      - name: Test
+        run: dotnet test SignsOfAI.Desktop.slnx -c Release --nologo
+
+      # Self-contained: no .NET install on the user's machine. Not single-file — the WebView needs
+      # wwwroot on disk next to the executable, which is why the release notes tell people to keep
+      # the folder together. Publishing into a folder already named for the release means unzipping
+      # produces that name rather than a bare `publish`.
+      - name: Publish
+        shell: pwsh
+        run: |
+          dotnet publish src/SignsOfAI.Desktop `
+            -c Release -r win-x64 --self-contained `
+            -p:Version=${{ steps.version.outputs.version }} `
+            -o "staging/${{ steps.version.outputs.name }}" `
+            --nologo
+
+      - name: Zip and checksum
+        id: package
+        shell: pwsh
+        run: |
+          $name = "${{ steps.version.outputs.name }}"
+          Compress-Archive -Path "staging/$name" -DestinationPath "$name.zip" -CompressionLevel Optimal
+          $hash = (Get-FileHash "$name.zip" -Algorithm SHA256).Hash.ToLower()
+          # The sidecar travels with the release; the summary is for pasting into the notes, which
+          # have carried the checksum inline since desktop-v0.1.0.
+          "sha256  $hash" | Set-Content "$name.zip.sha256" -NoNewline
+          "sha256=$hash" >> $env:GITHUB_OUTPUT
+
+          $mb = [math]::Round((Get-Item "$name.zip").Length / 1MB)
+          @(
+            "### $name.zip"
+            ""
+            "- **$mb MB**"
+            "- ``sha256  $hash``"
+            ""
+            "Paste the checksum line into the release notes."
+          ) | Add-Content $env:GITHUB_STEP_SUMMARY
+
+      - name: Attach to the release
+        if: github.event_name == 'release'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $name = "${{ steps.version.outputs.name }}"
+          gh release upload $env:GITHUB_REF_NAME "$name.zip" "$name.zip.sha256" --clobber
+
+      # Dispatch runs produce something to download and check by hand before tagging for real.
+      - name: Keep the build as a run artifact
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.version.outputs.name }}
+          path: ${{ steps.version.outputs.name }}.zip
+          retention-days: 7
