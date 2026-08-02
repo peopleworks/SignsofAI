@@ -4,7 +4,10 @@ A working record of the project against the [.NET Foundation eligibility
 criteria](https://github.com/dotnet-foundation/projects#eligibility-criteria), kept in the repo so
 the claims are checkable rather than asserted. Each row says where the evidence lives.
 
-Last reviewed: 2026-08-01, at version 0.2.1.
+Application filed 2026-08-01: [dotnet-foundation/projects#545](https://github.com/dotnet-foundation/projects/issues/545).
+Transfer model: **Contribution** — the copyright stays with PeopleWorks. Trademarks: **Licensed**.
+
+Last reviewed: 2026-08-01, at version 0.2.1 and desktop 0.2.0.
 
 ## Suitability
 
@@ -49,10 +52,11 @@ Last reviewed: 2026-08-01, at version 0.2.1.
 ## Known gaps
 
 **Code signing.** Nothing this project ships is signed. The NuGet packages are unsigned, and the
-self-contained desktop `.zip` on `desktop-v0.1.0` triggers a SmartScreen warning on first run —
+self-contained desktop `.zip` on `desktop-v0.2.0` triggers a SmartScreen warning on first run —
 documented in the release notes rather than hidden, but still the roughest edge a new user hits.
 An Authenticode certificate is the fix, and it is the single concrete resource the project would
-ask the Foundation for.
+ask the Foundation for. The release does publish a SHA-256 so the download can at least be
+verified against what this repository built, which is not a substitute for a signature.
 
 **One contributor.** 88 commits, all by the project lead, first commit 2026-07-05. The project can
 show that it is *built* for contribution — JSON rule packs, a translation guide, issue and PR
