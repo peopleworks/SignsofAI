@@ -42,7 +42,14 @@ public static class WritingTools
             r.Findings
                 .Select(f => new FindingItem(
                     f.Category.ToString(), f.Severity.ToString(), f.MatchedText, f.Message, f.Suggestion, f.Evidence))
-                .ToList());
+                .ToList(),
+            // A one-line pointer, not the report. Anything found here deserves the dedicated tool,
+            // which returns coordinates; folding those into the score's payload would invite an
+            // agent to treat a verifiable fact as one more contribution to a probability.
+            r.Artifacts.Any
+                ? new ArtifactNotice(r.Artifacts.Pattern.ToString(), r.Artifacts.Count,
+                    r.Artifacts.StrongCount, r.Artifacts.Summary)
+                : null);
     }
 }
 
@@ -53,7 +60,15 @@ public sealed record AnalysisReport(
     int SignalCount,
     IReadOnlyList<CategoryCount> Categories,
     DocStats Statistics,
-    IReadOnlyList<FindingItem> Findings);
+    IReadOnlyList<FindingItem> Findings,
+    /// <summary>Null unless the text holds characters typing does not produce. See "inspect_characters".</summary>
+    ArtifactNotice? CharacterArtifacts);
+
+/// <summary>
+/// A flag that the text carries character artifacts, and nothing more — the score above is unaffected
+/// by them, deliberately. Call "inspect_characters" for the codepoints and their positions.
+/// </summary>
+public sealed record ArtifactNotice(string Pattern, int Count, int StrongCount, string Summary);
 
 public sealed record CategoryCount(string Category, int Count, double Score);
 

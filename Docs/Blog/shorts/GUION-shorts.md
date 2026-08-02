@@ -22,6 +22,19 @@ Paleta SignsOfAI: `--bg:#0b1020` · léxico `#db2777` · retórico `#f59e0b` · 
 - **ES:** "Casi todos los detectores de IA piensan en inglés. Al español le dan una traducción tosca, y se pierden cómo suena la IA de verdad en nuestro idioma: sumérgete en el vasto mundo de, cabe destacar que, un rico tapiz de. SignsOfAI trae un pack de español derivado desde cero. Detecta la IA en tu idioma. Gratis y abierto."
 - **EN:** "Almost every A I detector thinks in English. Spanish gets a clumsy translation, and they miss how A I really sounds in Spanish. SignsOfAI ships a Spanish rule-pack derived from scratch. Detect A I in your language. Free and open source."
 
+## Short 8 — "Buscar y reemplazar apaga un detector" (el artefacto)
+**Visual:** la palabra `delve` grande; una letra gira y se vuelve cirílica con marca roja; el contador
+de señales cae 17 → 6; aparece el reporte de caracteres con `U+0435 · línea 37, col 64`; cierre con
+marca y la frase "un hecho, no un porcentaje".
+- **ES:** "Puedes apagar casi cualquier detector de inteligencia artificial con buscar y reemplazar. Cambia la e latina por la e cirílica: se ven idénticas, en pantalla no cambia nada, y la regla deja de encontrar la palabra. Siete detectores cayeron por debajo del azar con ese truco. Con el mío también funcionaba. Ahora SignsOfAI te da el código, la línea y la columna de cada carácter raro. Un porcentaje se discute; un carácter en la línea catorce está o no está."
+- **EN:** "You can switch off almost any A I detector with find and replace. Swap the Latin e for the Cyrillic e: identical on screen, nothing looks different, and the rule stops finding the word. Seven detectors dropped below chance with that trick. Mine did too. Now SignsOfAI gives you the codepoint, the line and the column of every one. A percentage is arguable; a character at line fourteen either is there or is not."
+
+> Los shorts 4 a 7 ya existen como HTML sin entrada aquí (traducción, dos idiomas, reescritura,
+> escritorio); su copy está en `PUBLICACION.md`. **Orden del pipeline:** narrar primero
+> (`narrate-all.mjs`), sacar los tiempos de cue (`cue-times.mjs`) y **después** escribir el HTML
+> alrededor de la duración medida, porque los retardos de animación son absolutos.
+
+
 ---
 
 ## Build (una vez existan los HTML de cada short)

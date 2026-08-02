@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Someone could switch off my AI detector with find-and-replace · SignsOfAI</title>
+<meta name="description" content="Swapping a few letters for identical-looking ones from another alphabet drops seven published AI detectors below chance. It worked on mine too. The fix took 200 lines, no model, and one decision I want to argue for: it does not touch the score.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Maker story · Engineering</div>
+  <h1>Someone could switch off my AI detector with find-and-replace</h1>
+  <p class="lead">Swapping a few letters for identical-looking ones from another alphabet drops seven published AI detectors below chance. It worked on mine too. The fix took 200 lines, no model, and one decision I want to argue for: it does not touch the score.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Download or try it</b> — free, MIT, web and Windows.</a>
+
+  <hr>
+
+  <p>A post went by on Reddit: <em>Best AI Humanizer for Students in 2026</em>. Seven tools, scored across five categories, a blind reviewer, fifty university drafts. It read like a study.</p>
+  <p>It is an advert. Two upvotes, one comment — the author, linking their own previous "studies". Fifty texts that were never published. Scores to one decimal place. The tool being sold wins every category.</p>
+  <p>But it sent me to the actual research, and the research had something to say that I did not enjoy hearing.</p>
+  <h2>The arms race is already over, and I lost it</h2>
+  <p>The numbers are not close.</p>
+  <p>Paraphrasing a text with DIPPER takes DetectGPT from 70.3% accuracy to 4.6%, at a fixed 1% false positive rate, without changing what the text means. A 2026 reinforcement-learning attack reaches near-zero detection on three of four detectors. Across six commercial detectors, average accuracy is 39.5%, and falls to 17.4% under light modification.</p>
+  <p>And then the one that should end the conversation. A COLING 2025 paper called SilverSpeak swaps characters for <strong>homoglyphs</strong> — letters from other alphabets that render identically. A Cyrillic "а" (U+0430) next to a Latin "a" (U+0061). Same shape, different codepoint.</p>
+  <p>Seven detectors went from a Matthews correlation of 0.64 to <strong>−0.01</strong>. Worse than a coin.</p>
+  <p>Meanwhile, detectors flag 61% of essays by non-native English speakers as AI-written. So the category has landed in the worst possible place: easy to defeat if you know the trick, and punishing if you happen to write in your second language.</p>
+  <p>I build one of these tools. I had to sit with that for a while.</p>
+  <h2>Then I checked whether it worked on me</h2>
+  <p>SignsOfAI does not use a classifier. It matches a catalog: overused vocabulary, rhetorical crutches, syntactic tells, sentence rhythm. Every rule points at a word or a pattern.</p>
+  <p>Which means every rule matches on text. And if the text says <code>dеlvе</code> — with two Cyrillic letters — the rule looking for <code>delve</code> sees a word it has never heard of.</p>
+  <p>I measured it on one AI-flavoured paragraph. Intact, the engine reports 17 signals and scores 94/100. With the vocabulary made unrecognisable, the same paragraph reports <strong>6 signals and 80/100</strong>. Eleven findings gone, and nothing visibly changed on screen.</p>
+  <p>That is not a subtle degradation. That is a published catalog anyone can switch off with find-and-replace.</p>
+  <h2>The thing about those characters</h2>
+  <p>Here is what turns this from a problem into the most useful feature I have shipped in months.</p>
+  <p>A Cyrillic "а" inside an English word is not a style. It is not a probability. It is not a reading of how someone writes.</p>
+  <p><strong>It is a physical artifact of a tool.</strong></p>
+  <p>Nobody types U+200B. A zero-width space does not come out of a keyboard. A Cyrillic letter does not land in the middle of "analysis" by accident. These characters get there because a program put them there.</p>
+  <p>So the check that defeats the attack is also the only check in the product that returns a <strong>fact</strong> instead of a judgement — and it is by far the cheapest thing on my roadmap. A character walk. No model, no dependencies, no network. It runs in the browser, it runs offline, and it works below the level of language, so it is bilingual for free.</p>
+  <h2>Normalize first, and never clean silently</h2>
+  <p>The fix is two pieces.</p>
+  <p>First, a scanner that walks the text by Unicode scalar and reports what it finds: zero-width and joining characters, direction controls, private-use codepoints, hidden tag characters, and letters standing in for Latin ones — with the codepoint, the line and the column of every single occurrence.</p>
+  <p>Second, the analyzers stop reading the raw string. They read a cleaned copy, with the impostor letters replaced by the letters they were impersonating, alongside a map back to the original so every finding still points at the reader's actual document.</p>
+  <pre><code>● [Lexical] dеlvе
+    "delve" is heavily overused in AI writing.</code></pre>
+  <p>The rule fires again. The word is shown the way it appears in the file, Cyrillic letters and all, because sending a reader to look for a word that is not there is its own kind of failure.</p>
+  <p>Two rules I would defend anywhere:</p>
+  <ul>
+    <li><strong>The cleaning never happens quietly.</strong> Anything the normalizer removes, the report names. A tool that silently corrects its input is a tool that hides evidence from the person it is supposed to be helping.</li>
+    <li><strong>The normalizer does not decide what an artifact is.</strong> It consumes the scanner's report and acts on it. One definition, one place. They cannot drift into disagreeing about the same document.</li>
+  </ul>
+  <p>That second one matters more than it looks. This same substitution is used to attack <strong>authorship attribution</strong> — there is a 2025 paper that targets Burrows's Delta specifically, using zero-width steganography. Per-author comparison is the most promising answer to the false-positive problem, because it asks "does this look like <em>this</em> writer" instead of "does this look like AI", and it is the answer that helps second-language writers most. Normalization is not a nice-to-have for that feature. It is a prerequisite. You cannot compare someone against their own baseline if the baseline can be poisoned.</p>
+  <h2>The decision I want to argue for: it does not touch the score</h2>
+  <p>The artifact report contributes exactly zero to the 0–100 score. There is a test whose entire job is to fail if that ever changes.</p>
+  <p>The temptation is obvious. Text has been through a rewriting tool, that is suspicious, the number should go up. It would take one line.</p>
+  <p>It would also destroy the only thing that makes the feature worth having.</p>
+  <p>A score is a judgement, and a judgement is arguable — as it should be, because it is a reading of prose and prose is arguable. A character at line 14, column 3 is not arguable. You can open the file in any editor and look. You do not have to trust me, my weights, my thresholds, or my opinion about the word "delve".</p>
+  <p>Fold one into the other and you have converted the only checkable thing in the product back into an opinion. So they are presented apart, they are stored apart, and the panel says so out loud:</p>
+  <blockquote>None of this affects the score above. A score is a judgement you can argue with; a character at a given line and column either is there or is not, and you can check it in any editor without trusting us.</blockquote>
+  <p>Turnitin ships something adjacent — a percentage of text that may have been through a "bypasser" tool. A percentage. My version gives you the codepoint and the coordinates of every occurrence. A number cannot be audited. A list of positions can.</p>
+  <h2>The tests that matter most are the ones about not firing</h2>
+  <p>Most of the test file is about what must <strong>never</strong> be flagged, because a false positive here is not a debatable opinion about someone's writing. It is a wrong statement about what is in their file.</p>
+  <ul>
+    <li><code>Spanish_is_never_flagged_for_being_Spanish</code> — "análisis", "señora", "pingüinera". Accented Latin letters are deliberately absent from the lookalike table. A tool that treated "á" as an impostor would be exactly the instrument this whole category is criticised for being.</li>
+    <li><code>A_real_Greek_word_is_left_alone</code> — "α-helix" is a Greek letter <em>beside</em> a Latin word, not one hiding <em>inside</em> one. The decision is made per run of letters: a lookalike only counts when Latin letters are the majority of the run it sits in. That is the shape of a substitution, and not the shape of a real word from another alphabet.</li>
+    <li><code>An_emoji_sequence_is_not_an_artifact</code> — a zero-width joiner is how a multi-person emoji is built.</li>
+    <li><code>Join_controls_are_left_alone_in_the_scripts_that_need_them</code> — in Persian, Arabic and the Indic scripts, that same character is ordinary orthography.</li>
+  </ul>
+  <h2>Count is not the measurement. Distribution is.</h2>
+  <p>Ordinary documents pick these up all the time. Copy from a web page and you carry non-breaking spaces. Extract from a PDF and you carry soft hyphens. Write in two languages and you carry two alphabets.</p>
+  <p>So the report separates <em>how many</em> from <em>how spread out</em>. Pasted text carries its artifacts where the paste landed. A tool that rewrote the whole document leaves them everywhere it touched. The document is divided into sections, and the report states how many contain one:</p>
+  <blockquote>47 characters that typing does not produce, spread across 8 of 10 sections of the document. That distribution is what a tool leaves behind when it processes a whole text.</blockquote>
+  <p>You can disagree with that reasoning. You can see the sections, the count, and every position, and reach your own conclusion. That is the point.</p>
+  <h2>What it does not mean</h2>
+  <p>Every report that says something also says what it does not mean, in the same panel, in the language of the text:</p>
+  <blockquote>This says nothing about who wrote the text, and it is not evidence of dishonesty. It is a question about where the file has been: ask the writer to open the document and describe how it was produced.</blockquote>
+  <p>Even Turnitin says its own score should not be the sole basis for action against a student, and declines to report anything in the 1–19% range because of false positives. The market leader is telling you not to use it as proof. That is worth repeating in a room full of teachers, right before you concede that your own tool has the same limitation.</p>
+  <h2>Where this leaves me</h2>
+  <p>I am not going to win an arms race against reinforcement-learning paraphrase attacks. Nobody is. Every hour spent making the statistical detector cleverer is an hour spent losing more slowly, and the collateral damage lands on the student who learned English second.</p>
+  <p>What survives is the stuff that is checkable: hallucinated citations that do not resolve, document metadata that says a 3,000-word essay took ninety seconds, a comparison against a writer's own earlier work — and now, characters that a keyboard cannot produce, at coordinates anyone can verify.</p>
+  <p>None of that is a percentage. All of it is something a person can take to a meeting and defend.</p>
+  <p>The engine, the rules and the tests are MIT on <a href="https://github.com/peopleworks/SignsofAI">GitHub</a>. If you find a document it gets wrong, that is the report I most want — the tool has no server and no telemetry, so a human telling me is the only way I ever find out.</p>
+  <hr>
+  <p><em>Written by a human and checked with the tool it describes: <strong>14/100, reads mostly human</strong>, burstiness 0.70, about 1,920 words.</em></p>
+  <p><em>It also trips its own new check, which is a better demonstration than anything I could have staged. Four Cyrillic "e" — the examples above, at line 37 and line 64. The report calls them <strong>present, not spread</strong>, which is exactly right: they sit in two places because I typed them there on purpose, and that is not the shape of a document a tool has been through.</em></p>
+  <p><em>I left them in. Editing my own examples away to get a cleaner report would be the same move as a detector author quietly rewording around a false positive — and I would rather you could see the thing working on me.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

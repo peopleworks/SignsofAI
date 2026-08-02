@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cualquiera podía apagar mi detector de IA con buscar y reemplazar · SignsOfAI</title>
+<meta name="description" content="Cambiar unas letras por otras idénticas de otro alfabeto hunde a siete detectores publicados por debajo del azar. Con el mío también funcionaba. El arreglo son 200 líneas, sin modelo, y una decisión que quiero defender: no toca la puntuación.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Historia de taller · Ingeniería</div>
+  <h1>Cualquiera podía apagar mi detector de IA con buscar y reemplazar</h1>
+  <p class="lead">Cambiar unas letras por otras idénticas de otro alfabeto hunde a siete detectores publicados por debajo del azar. Con el mío también funcionaba. El arreglo son 200 líneas, sin modelo, y una decisión que quiero defender: no toca la puntuación.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Descárgalo o pruébalo</b> — gratis, MIT, web y Windows.</a>
+
+  <hr>
+
+  <p>Pasó por Reddit un post: <em>Best AI Humanizer for Students in 2026</em>. Siete herramientas, cinco categorías, un revisor ciego, cincuenta borradores universitarios. Tenía toda la forma de un estudio.</p>
+  <p>Es publicidad. Dos votos, un comentario —del propio autor, enlazando sus "estudios" anteriores—, cincuenta textos que nunca publicó, notas con un decimal, y la herramienta que vende ganando todas las categorías.</p>
+  <p>Pero me mandó a la investigación de verdad, y la investigación tenía algo que decir que no me gustó nada.</p>
+  <h2>La carrera armamentista ya terminó, y la perdí</h2>
+  <p>Los números no están cerca.</p>
+  <p>Parafrasear un texto con DIPPER lleva la exactitud de DetectGPT de 70.3% a 4.6%, con una tasa fija de 1% de falsos positivos, sin cambiar lo que el texto significa. Un ataque de 2026 con aprendizaje por refuerzo llega a detección casi nula en tres de cuatro detectores. En seis detectores comerciales, la exactitud media es de 39.5%, y cae a 17.4% con modificaciones ligeras.</p>
+  <p>Y luego el que debería cerrar la discusión. Un paper de COLING 2025 llamado SilverSpeak cambia caracteres por <strong>homoglifos</strong>: letras de otros alfabetos que se dibujan igual. Una «а» cirílica (U+0430) junto a una «a» latina (U+0061). Misma forma, código distinto.</p>
+  <p>Siete detectores pasaron de una correlación de Matthews de 0.64 a <strong>−0.01</strong>. Peor que una moneda.</p>
+  <p>Mientras tanto, los detectores marcan como IA el 61% de los ensayos de quienes tienen el inglés como segunda lengua. Así que la categoría entera aterrizó en el peor sitio posible: fácil de burlar si conoces el truco, y castigadora si te toca escribir en tu segundo idioma.</p>
+  <p>Yo construyo una de estas herramientas. Me tomó un rato digerirlo.</p>
+  <h2>Después comprobé si conmigo también funcionaba</h2>
+  <p>SignsOfAI no usa un clasificador. Compara contra un catálogo: vocabulario sobreusado, muletillas retóricas, tics sintácticos, ritmo de las frases. Cada regla apunta a una palabra o a un patrón.</p>
+  <p>Lo que significa que <strong>cada regla busca sobre el texto</strong>. Y si el texto dice <code>sumеrgirse</code> —con una letra cirílica dentro—, la regla que busca <code>sumergirse</code> ve una palabra que no conoce.</p>
+  <p>Lo medí sobre un párrafo con sabor a IA. Intacto, el motor reporta 17 señales y puntúa 94/100. Con el vocabulario vuelto irreconocible, el mismo párrafo reporta <strong>6 señales y 80/100</strong>. Once hallazgos desaparecidos, y en pantalla no cambió nada.</p>
+  <p>Eso no es una degradación sutil. Es un catálogo público que cualquiera apaga con buscar y reemplazar.</p>
+  <h2>Lo que pasa con esos caracteres</h2>
+  <p>Y aquí es donde el problema se convierte en la función más útil que he publicado en meses.</p>
+  <p>Una «а» cirílica dentro de una palabra en español no es un estilo. No es una probabilidad. No es una lectura de cómo escribe alguien.</p>
+  <p><strong>Es un artefacto físico de una herramienta.</strong></p>
+  <p>Nadie teclea un U+200B. De un teclado no sale un espacio de ancho cero. Una letra cirílica no cae en medio de «análisis» por accidente. Esos caracteres están ahí porque un programa los puso.</p>
+  <p>Así que la comprobación que derrota al ataque es además la única del producto que devuelve un <strong>hecho</strong> en vez de un juicio — y de lejos la más barata de toda mi hoja de ruta. Un recorrido de caracteres. Sin modelo, sin dependencias, sin red. Corre en el navegador, corre sin conexión, y trabaja por debajo del idioma, así que es bilingüe sin trabajo extra.</p>
+  <h2>Normalizar primero, y no limpiar nunca en silencio</h2>
+  <p>El arreglo tiene dos piezas.</p>
+  <p>Primero, un escáner que recorre el texto por escalar Unicode y reporta lo que encuentra: caracteres de ancho cero y de unión, controles de dirección, códigos de uso privado, caracteres de etiqueta ocultos, y letras que suplantan a las latinas — con el código, la línea y la columna de cada aparición.</p>
+  <p>Segundo, los analizadores dejan de leer la cadena cruda. Leen una copia limpia, con las letras impostoras sustituidas por las que fingían ser, junto a un mapa de vuelta al original para que cada hallazgo siga apuntando al documento real de quien lo lee.</p>
+  <pre><code>● [Lexical] dеlvе
+    "delve" is heavily overused in AI writing.</code></pre>
+  <p>La regla vuelve a dispararse. Y la palabra se muestra tal como está en el archivo, con sus letras cirílicas incluidas, porque mandar a alguien a buscar una palabra que no está ahí es otra forma de fallar.</p>
+  <p>Dos reglas que defendería en cualquier parte:</p>
+  <ul>
+    <li><strong>La limpieza nunca ocurre a escondidas.</strong> Todo lo que el normalizador quita, el reporte lo nombra. Una herramienta que corrige su entrada en silencio es una herramienta que le esconde evidencia a la persona a la que dice ayudar.</li>
+    <li><strong>El normalizador no decide qué es un artefacto.</strong> Consume el reporte del escáner y actúa sobre él. Una definición, un solo sitio. No pueden acabar describiendo documentos distintos.</li>
+  </ul>
+  <p>Lo segundo importa más de lo que parece. Esta misma sustitución se usa para atacar la <strong>atribución de autoría</strong>: hay un paper de 2025 que apunta a la Delta de Burrows en concreto, con esteganografía de ancho cero. La comparación contra el propio autor es la respuesta más prometedora al problema de los falsos positivos, porque pregunta «¿se parece a <em>esta persona</em>?» en vez de «¿se parece a una IA?», y es la que más ayuda a quien escribe en segunda lengua. Para esa función la normalización no es un extra: es un prerrequisito. No se puede comparar a alguien contra su propia línea base si la línea base se puede envenenar.</p>
+  <h2>La decisión que quiero defender: no toca la puntuación</h2>
+  <p>El reporte de artefactos aporta exactamente cero a la puntuación de 0 a 100. Hay una prueba cuyo único trabajo es fallar si eso cambia algún día.</p>
+  <p>La tentación es evidente. El texto pasó por una herramienta de reescritura, eso es sospechoso, el número debería subir. Sería una línea.</p>
+  <p>Y destruiría lo único que hace que la función valga la pena.</p>
+  <p>Una puntuación es un juicio, y un juicio es discutible — como debe ser, porque es una lectura de la prosa y la prosa se discute. Un carácter en la línea 14, columna 3 no se discute. Usted abre el archivo en cualquier editor y mira. No tiene que creerme a mí, ni a mis pesos, ni a mis umbrales, ni a mi opinión sobre la palabra «profundizar».</p>
+  <p>Si mezcla lo uno con lo otro, convirtió lo único comprobable del producto otra vez en una opinión. Por eso van separados, se guardan separados, y el panel lo dice en voz alta:</p>
+  <blockquote>Nada de esto afecta a la puntuación de arriba. Una puntuación es un juicio discutible; un carácter en una línea y una columna está o no está, y usted puede comprobarlo en cualquier editor sin creernos nada.</blockquote>
+  <p>Turnitin publica algo parecido: un porcentaje del texto que pudo haber pasado por una herramienta de evasión. Un porcentaje. Mi versión le da el código y las coordenadas de cada aparición. Un número no se puede auditar. Una lista de posiciones sí.</p>
+  <h2>Las pruebas que más importan son las de no dispararse</h2>
+  <p>Casi todo el archivo de pruebas trata de lo que <strong>nunca</strong> debe marcarse, porque un falso positivo aquí no es una opinión discutible sobre cómo escribe alguien. Es una afirmación falsa sobre lo que hay en su archivo.</p>
+  <ul>
+    <li><code>Spanish_is_never_flagged_for_being_Spanish</code> — «análisis», «señora», «pingüinera». Las letras latinas con tilde están deliberadamente ausentes de la tabla de sosias. Una herramienta que tratara la «á» como impostora sería exactamente el instrumento del que se acusa a toda esta categoría.</li>
+    <li><code>A_real_Greek_word_is_left_alone</code> — «α-helix» es una letra griega <em>al lado</em> de una palabra latina, no una escondida <em>dentro</em> de ella. La decisión se toma por racha de letras: una sosia solo cuenta cuando las latinas son mayoría en la racha donde está. Esa es la forma de una sustitución, y no la de una palabra real de otro alfabeto.</li>
+    <li><code>An_emoji_sequence_is_not_an_artifact</code> — un unidor de ancho cero es como se construye un emoji de varias personas.</li>
+    <li><code>Join_controls_are_left_alone_in_the_scripts_that_need_them</code> — en persa, árabe y las escrituras índicas ese mismo carácter es ortografía normal.</li>
+  </ul>
+  <h2>La medida no es cuántos. Es cómo están repartidos.</h2>
+  <p>Los documentos normales recogen estas cosas todo el tiempo. Copie de una página web y se lleva espacios duros. Extraiga de un PDF y se lleva guiones blandos. Escriba en dos idiomas y se lleva dos alfabetos.</p>
+  <p>Por eso el reporte separa <em>cuántos hay</em> de <em>cuán repartidos están</em>. El texto pegado lleva sus artefactos donde cayó el pegado. Una herramienta que reescribió el documento entero los deja por todas partes donde tocó. El documento se divide en secciones y el reporte dice cuántas contienen alguno:</p>
+  <blockquote>47 caracteres que no se producen al escribir, repartidos por 8 de 10 secciones del documento. Ese reparto es lo que deja una herramienta cuando procesa un texto completo.</blockquote>
+  <p>Usted puede no estar de acuerdo con ese razonamiento. Ve las secciones, el conteo y cada posición, y saca su propia conclusión. De eso se trata.</p>
+  <h2>Lo que no significa</h2>
+  <p>Cada reporte que dice algo dice también lo que no significa, en el mismo panel y en el idioma del texto:</p>
+  <blockquote>Esto no dice nada sobre quién escribió el texto, y no es prueba de deshonestidad. Es una pregunta sobre por dónde ha pasado el archivo: pídale a quien lo escribió que abra el documento y le cuente cómo lo produjo.</blockquote>
+  <p>Hasta Turnitin dice que su propia puntuación no debe ser la única base de una acción contra un estudiante, y se niega a reportar nada entre el 1% y el 19% por riesgo de falsos positivos. El líder del mercado le está diciendo que no lo use como prueba. Vale la pena repetirlo en una sala llena de profesores, justo antes de admitir que la herramienta propia tiene la misma limitación.</p>
+  <h2>Dónde me deja esto</h2>
+  <p>No voy a ganar una carrera armamentista contra ataques de paráfrasis con aprendizaje por refuerzo. Nadie va a ganarla. Cada hora invertida en hacer más listo al detector estadístico es una hora invertida en perder más despacio, y el daño colateral le cae a quien aprendió el idioma después.</p>
+  <p>Lo que sobrevive es lo comprobable: citas alucinadas que no existen, metadatos que dicen que un ensayo de 3.000 palabras tomó noventa segundos, una comparación contra el trabajo anterior de la misma persona — y ahora, caracteres que un teclado no puede producir, en coordenadas que cualquiera verifica.</p>
+  <p>Nada de eso es un porcentaje. Todo eso es algo que una persona puede llevar a una reunión y defender.</p>
+  <p>El motor, las reglas y las pruebas están en <a href="https://github.com/peopleworks/SignsofAI">GitHub</a> bajo licencia MIT. Si encuentra un documento donde se equivoque, ese es el reporte que más quiero — la herramienta no tiene servidor ni telemetría, así que un humano contándomelo es la única forma en que llego a enterarme.</p>
+  <hr>
+  <p><em>Escrito por un humano y revisado con la herramienta que describe: <strong>11/100, mayormente humano</strong>, variabilidad 0.68, unas 1.990 palabras.</em></p>
+  <p><em>Además dispara su propia comprobación nueva, que es mejor demostración que cualquiera que yo pudiera montar. Tres letras cirílicas —los ejemplos de arriba, en la línea 37 y la línea 64—. El reporte las llama <strong>presentes, sin repartirse</strong>, que es exactamente lo correcto: están en dos sitios porque las escribí ahí a propósito, y esa no es la forma de un documento por el que ha pasado una herramienta.</em></p>
+  <p><em>Las dejé. Borrar mis propios ejemplos para sacar un reporte más limpio sería la misma jugada que un autor de detectores reescribiendo en silencio alrededor de un falso positivo — y prefiero que usted pueda ver la cosa funcionando conmigo.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

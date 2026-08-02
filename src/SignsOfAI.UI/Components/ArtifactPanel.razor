@@ -1,0 +1,103 @@
+@* The character-artifact report.
+
+   Deliberately separate from the score card and visually unlike it. Everything else on this page is
+   a judgement about how the prose reads, expressed as a number someone can argue with. This is a
+   list of characters at offsets, which is either right or wrong and which the reader can check in
+   any editor without trusting us. Presenting the two the same way would flatten that difference,
+   and the difference is the point.
+
+   Nothing here is phrased as an accusation, and the panel never appears at all for a document with
+   nothing unusual in it — which is almost every document. *@
+
+@using SignsOfAI.Core.Artifacts
+@inherits LocalizedComponent
+
+@if (Report.Any)
+{
+    <div class="card artifacts @(Systematic ? "artifacts-strong" : "")">
+        <div class="artifacts-head">
+            <h3><Icon Name="hidden" /> @L["artifacts.title"]</h3>
+            <span class="chip @(Systematic ? "chip-strong" : "")">
+                @L[Systematic ? "artifacts.pattern.systematic" : "artifacts.pattern.incidental"]
+            </span>
+            <button class="ghost small" @onclick="@(() => _explain = true)">
+                <Icon Name="lightbulb" /> @L["artifacts.explain"]
+            </button>
+        </div>
+
+        @* Summary, advice and per-character messages come from the rule pack, so they are written in
+           the language of the analyzed text — the same split the findings already follow. *@
+        <p class="artifacts-summary">@Report.Summary</p>
+
+        <table class="artifacts-table">
+            <thead>
+                <tr>
+                    <th>@L["artifacts.col.code"]</th>
+                    <th>@L["artifacts.col.name"]</th>
+                    <th class="num">@L["artifacts.col.count"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var g in Report.Groups)
+                {
+                    <tr class="@(g.IsStrong ? "strong" : "weak")">
+                        <td><code>@g.CodePoint</code></td>
+                        <td>
+                            @g.CharacterName
+                            @if (g.LooksLike is not null)
+                            {
+                                <span class="lookslike">@L.F("artifacts.lookslike", g.LooksLike)</span>
+                            }
+                        </td>
+                        <td class="num">@g.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button class="ghost small" @onclick="@(() => _positions = !_positions)">
+            <Icon Name="search" /> @L[_positions ? "artifacts.positions.hide" : "artifacts.positions.show"]
+        </button>
+
+        @if (_positions)
+        {
+            @* The auditable part: exact coordinates, so the claim can be checked rather than believed. *@
+            <ul class="artifacts-positions">
+                @foreach (var o in Report.Occurrences.Take(MaxListed))
+                {
+                    <li>
+                        <code class="at">@L.F("artifacts.at", o.Line, o.Column)</code>
+                        <span>@o.Message</span>
+                    </li>
+                }
+            </ul>
+            @if (Report.Count > MaxListed)
+            {
+                <p class="hint">@L.F("artifacts.more", Report.Count - MaxListed)</p>
+            }
+        }
+
+        <p class="artifacts-advice"><Icon Name="scale" /> <span>@Report.Advice</span></p>
+    </div>
+
+    <InfoDrawer Open="_explain" OpenChanged="@(v => _explain = v)"
+                Title="@L["artifacts.explain.title"]" Icon="hidden">
+        <p>@L["artifacts.explain.what"]</p>
+        <p>@L["artifacts.explain.why"]</p>
+        <p>@L["artifacts.explain.innocent"]</p>
+        <p><strong>@L["artifacts.explain.notproof"]</strong></p>
+        <p>@L["artifacts.explain.noscore"]</p>
+    </InfoDrawer>
+}
+
+@code {
+    [Parameter, EditorRequired] public ArtifactReport Report { get; set; } = ArtifactReport.Empty;
+
+    /// <summary>Long lists stop being evidence and start being noise; the count is always stated.</summary>
+    private const int MaxListed = 60;
+
+    private bool _positions;
+    private bool _explain;
+
+    private bool Systematic => Report.Pattern == ArtifactPattern.Systematic;
+}

@@ -300,6 +300,8 @@ de los seis (video / voz / cola en segundos):
 | `signsofai-maker-story.{en,es}.html` | WordPress (bloque HTML) · Blogger (vista HTML) |
 | `signsofai-desktop-story.{en,es}.md` | dev.to · Hashnode · Medium — **segundo artículo**, sin publicar |
 | `signsofai-desktop-story.{en,es}.html` | WordPress · Blogger — **generados**, no escritos a mano |
+| `signsofai-artifacts-story.{en,es}.md` | dev.to · Hashnode · Medium — **tercer artículo**, sin publicar |
+| `signsofai-artifacts-story.{en,es}.html` | WordPress · Blogger — **generados** |
 
 **Generar el HTML.** Los dos primeros artículos se escribieron como HTML a mano. Transcribir 1.500
 palabras dos veces más, en dos idiomas, es la forma segura de corregir un párrafo en una copia y no
@@ -327,6 +329,19 @@ variabilidad 0.70 · 2 señales**. Las dos señales de cada uno son el mismo fal
 Falta el `.html` de los dos para WordPress/Blogger.
 
 Las imágenes van embebidas por URL de GitHub, así que **no hay que subir nada** en cada plataforma.
+
+**Tercer artículo — los artefactos de caracteres.** Público mixto: desarrolladores por el lado
+Unicode y docentes por el lado del argumento. El gancho es una confesión — el ataque que hunde a
+siete detectores publicados **también funcionaba con el mío** — y el cierre es la decisión de
+diseño: el reporte de artefactos **no toca la puntuación**, porque un porcentaje se discute y un
+carácter en una línea y una columna no.
+
+Puntajes en su propio pie: **EN 14/100 · variabilidad 0.70 · 13 señales**, **ES 11/100 ·
+variabilidad 0.68 · 13 señales**. Y hay un detalle que no se podía planear: **los dos artículos
+disparan su propia comprobación nueva**, porque llevan letras cirílicas de verdad en los ejemplos
+(EN 4, ES 3, agrupadas en dos sitios → *presentes, sin repartirse*). Está dicho en el pie y
+**no hay que quitarlas**: borrarlas para sacar un reporte limpio sería justo la jugada que el
+artículo critica.
 
 > **Ojo con `canonical_url`.** En el front-matter apunta al demo. Eso está bien si el artículo solo
 > vive en dev.to/Medium, pero si lo publicas **primero en tu blog**, cambia `canonical_url` a la URL
@@ -419,6 +434,97 @@ Es un linter heurístico, no una máquina de veredictos. Es a propósito: prefie
 forma que puedas ver, a acertar de una forma que no puedas revisar.
 
 #IA #IntegridadAcadémica #EdTech #DotNet #Blazor #OpenSource
+```
+
+
+### X / Twitter — tercer artículo (EN)
+```
+You can switch off almost any AI detector with find-and-replace.
+
+Swap the Latin "e" for the Cyrillic "e". Identical on screen. The rule that was looking for the word
+no longer finds it. A COLING 2025 paper does this to seven detectors and takes them from MCC 0.64 to
+-0.01 — worse than a coin.
+
+It worked on mine too. On one paragraph: 17 signals → 6.
+
+The fix is ~200 lines and no model, and it does something I want to argue for: it reports the
+codepoint, line and column of every character — and it contributes ZERO to the score.
+
+A score is a judgement you can argue with. A character at line 14, column 3 is not.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — tercer artículo (ES)
+```
+Cualquiera podía apagar mi detector de IA con buscar y reemplazar.
+
+Cambias la "e" latina por la "e" cirílica. Idénticas en pantalla. La regla que buscaba esa palabra
+ya no la encuentra. Un paper de COLING 2025 hunde así a siete detectores: de MCC 0.64 a -0.01, peor
+que una moneda.
+
+Con el mío también funcionaba. En un párrafo: 17 señales → 6.
+
+El arreglo son ~200 líneas sin modelo, y hace algo que quiero defender: te da el código, la línea
+y la columna de cada carácter — y aporta CERO a la puntuación.
+
+Una puntuación se discute. Un carácter en la línea 14, columna 3, no.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — tercer artículo (EN)
+```
+I found out this week that anyone could switch off my AI detector with find-and-replace.
+
+Swap the Latin "e" in a flagged word for the Cyrillic "e" (U+0435). They render identically. Nothing
+changes on screen. But the rule looking for that word sees a word it has never heard of.
+
+This is published, not theoretical: a COLING 2025 paper takes seven detectors from a Matthews
+correlation of 0.64 to -0.01 this way — worse than a coin. On one paragraph, mine went from 17
+signals to 6.
+
+The fix is about 200 lines, no model, no dependencies, no network. It walks the text by Unicode
+scalar, normalizes the impostor letters back before analysing, and reports the codepoint, line and
+column of everything it found. It never cleans silently.
+
+And it makes one decision I would defend anywhere: the artifact report contributes ZERO to the
+0-100 score. There is a test whose only job is to fail if that ever changes.
+
+A score is a judgement, and a judgement is arguable — as it should be. A character at line 14,
+column 3 is not. You can open the file in any editor and look. Fold one into the other and you have
+turned the only checkable thing in the product back into an opinion.
+
+Free and MIT: https://github.com/peopleworks/SignsofAI
+
+#AI #Unicode #AcademicIntegrity #dotnet #OpenSource
+```
+
+### LinkedIn — tercer artículo (ES)
+```
+Esta semana descubrí que cualquiera podía apagar mi detector de IA con buscar y reemplazar.
+
+Cambia la "e" latina de una palabra marcada por la "e" cirílica (U+0435). Se dibujan igual. En
+pantalla no cambia nada. Pero la regla que buscaba esa palabra ve una palabra que no conoce.
+
+No es teórico, está publicado: un paper de COLING 2025 lleva así a siete detectores de una
+correlación de Matthews de 0.64 a -0.01, peor que lanzar una moneda. En un párrafo, el mío pasó de
+17 señales a 6.
+
+El arreglo son unas 200 líneas: sin modelo, sin dependencias, sin red. Recorre el texto por escalar
+Unicode, normaliza las letras impostoras antes de analizar, y reporta el código, la línea y la
+columna de todo lo que encontró. Nunca limpia en silencio.
+
+Y toma una decisión que defiendo en cualquier parte: el reporte de artefactos aporta CERO a la
+puntuación de 0 a 100. Hay una prueba cuyo único trabajo es fallar si eso cambia.
+
+Una puntuación es un juicio, y un juicio se discute — como debe ser. Un carácter en la línea 14,
+columna 3, no. Usted abre el archivo en cualquier editor y mira. Si mezcla lo uno con lo otro,
+convirtió lo único comprobable del producto otra vez en una opinión.
+
+Gratis y MIT: https://github.com/peopleworks/SignsofAI
+
+#IA #Unicode #IntegridadAcadémica #DotNet #OpenSource
 ```
 
 ## 8. Notas de publicación
