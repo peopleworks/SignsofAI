@@ -134,6 +134,17 @@ public sealed class RulePack
     public Dictionary<string, string>? Messages { get; init; }
 
     /// <summary>
+    /// The function words this language's stylometry measures — articles, prepositions, pronouns,
+    /// auxiliaries. Deliberately a JSON list rather than a compiled table: these are the words a
+    /// speaker of the language knows and a .NET developer may not, so adding a language should cost a
+    /// pull request and no compiler, exactly like the detection rules.
+    ///
+    /// Function words are what author attribution uses because they do not follow the topic: "the",
+    /// "however", "de", "aunque" appear at a person's own rate whatever the essay is about.
+    /// </summary>
+    public string[]? FunctionWords { get; init; }
+
+    /// <summary>
     /// A template from this pack, filled in. Falls back to the built-in English when the pack does
     /// not carry the key.
     ///
@@ -169,8 +180,12 @@ public sealed class RulePack
         var lexical = new Dictionary<string, LexicalRule>(StringComparer.Ordinal);
         var patterns = new Dictionary<string, PatternRule>(StringComparer.Ordinal);
         var messages = new Dictionary<string, string>(StringComparer.Ordinal);
+        string[]? functionWords = null;
         foreach (var pack in packs)
         {
+            // Replaced rather than merged: a function-word list is a considered set for one language,
+            // and a pack that supplies one means to use it instead of, not on top of, the built-in.
+            if (pack.FunctionWords is { Length: > 0 }) functionWords = pack.FunctionWords;
             // A custom pack parsed from JSON may omit a section, leaving the array null under source-gen.
             foreach (var rule in pack.Lexical ?? []) lexical[rule.Id] = rule;
             foreach (var rule in pack.Patterns ?? []) patterns[rule.Id] = rule;
@@ -183,6 +198,7 @@ public sealed class RulePack
             Lexical = [.. lexical.Values],
             Patterns = [.. patterns.Values],
             Messages = messages.Count > 0 ? messages : null,
+            FunctionWords = functionWords,
         };
     }
 

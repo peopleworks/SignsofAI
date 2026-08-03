@@ -1,0 +1,260 @@
+@* Compare a piece of writing against earlier work by the same person.
+
+   This page exists to answer the strongest objection to every tool in this category. "Does this look
+   like a machine" punishes anyone whose ordinary register is formal, which is most people writing in
+   a second language — detectors flag 61% of non-native English essays as AI-written. "Does this look
+   like the person who wrote the other things" does not, because a formal writer's own baseline is
+   already formal.
+
+   The interface is built around one rule: a distance never appears without the writer's own spread
+   beside it. On its own the number has no scale, and a number with no scale is exactly what gets
+   quoted in a meeting. *@
+
+@page "/baseline"
+@using Microsoft.AspNetCore.Components.Forms
+@using SignsOfAI.Core.Documents
+@using SignsOfAI.Core.Rules
+@using SignsOfAI.Core.Stylometry
+@using SignsOfAI.Core.Text
+@inherits LocalizedComponent
+@inject IDocumentReader Reader
+
+<PageTitle>@L["base.pagetitle"]</PageTitle>
+
+<header class="hero">
+    <h1>@L["base.h1"]</h1>
+    <p class="tagline">@L.M("base.tagline")</p>
+    <p class="privacy"><Icon Name="lock" /> @L["base.privacy"]</p>
+</header>
+
+<section class="base-inputs">
+    <div class="card base-questioned">
+        <div class="orig-doc-head">
+            <h3><Icon Name="pen" /> @L["base.questioned"]</h3>
+            <label class="upload-btn sm" title="@L["common.upload.title"]">
+                <Icon Name="upload" /> @L["common.upload"]
+                <InputFile OnChange="@(e => Load(e, _questioned))" accept="@Reader.Accept" />
+            </label>
+            <span class="orig-wc @(Words(_questioned.Text) < MinQuestioned ? "short" : "")">
+                @Words(_questioned.Text) @L["common.words"]
+            </span>
+        </div>
+        @if (_questioned.Note is not null) { <p class="file-note">@_questioned.Note</p> }
+        <textarea class="orig-text" placeholder="@L["base.questioned.ph"]"
+                  spellcheck="false" @bind="_questioned.Text" @bind:event="oninput"></textarea>
+    </div>
+
+    <div class="base-earlier-head">
+        <h3><Icon Name="layers" /> @L["base.earlier"]</h3>
+        <span class="hint">@L.F("base.earlier.hint", MinBaselineWords)</span>
+        <span class="orig-wc @(EarlierWords < MinBaselineWords ? "short" : "")">
+            @EarlierWords / @MinBaselineWords @L["common.words"]
+        </span>
+    </div>
+
+    @foreach (var doc in _earlier)
+    {
+        var d = doc;
+        <div class="orig-doc card" @key="d.Id">
+            <div class="orig-doc-head">
+                <input class="orig-title" placeholder="@L.F("base.doc.ph", _earlier.IndexOf(d) + 1)"
+                       @bind="d.Title" @bind:event="oninput" />
+                <label class="upload-btn sm" title="@L["common.upload.title"]">
+                    <Icon Name="upload" /> @L["common.upload"]
+                    <InputFile OnChange="@(e => Load(e, d))" accept="@Reader.Accept" />
+                </label>
+                <span class="orig-wc">@Words(d.Text) @L["common.words"]</span>
+                @if (_earlier.Count > 1)
+                {
+                    <button class="icon-btn" title="@L["base.doc.remove"]" @onclick="@(() => _earlier.Remove(d))">
+                        <Icon Name="close" />
+                    </button>
+                }
+            </div>
+            @if (d.Note is not null) { <p class="file-note">@d.Note</p> }
+            <textarea class="orig-text" placeholder="@L["base.earlier.ph"]"
+                      spellcheck="false" @bind="d.Text" @bind:event="oninput"></textarea>
+        </div>
+    }
+
+    <div class="base-actions">
+        <button class="ghost" @onclick="AddEarlier"><Icon Name="plus" /> @L["base.add"]</button>
+        <label class="base-lang">
+            @L["home.textlang"]
+            <select @bind="_language">
+                <option value="auto">@L["home.textlang.auto"]</option>
+                <option value="en">@L["lang.english"]</option>
+                <option value="es">@L["lang.spanish"]</option>
+            </select>
+        </label>
+        <button class="primary" @onclick="Run" disabled="@(!CanRun)">
+            <Icon Name="scale" /> @L["base.compare"]
+        </button>
+        <button class="ghost" @onclick="@(() => _explain = true)">
+            <Icon Name="lightbulb" /> @L["base.explain"]
+        </button>
+    </div>
+</section>
+
+@if (_report is { } r)
+{
+    <section class="results">
+        <div class="card base-result @PlacementClass(r.Placement)">
+            @if (!r.HasResult)
+            {
+                <h2 class="base-verdict"><Icon Name="alert" /> @L["base.undetermined"]</h2>
+                <p class="base-summary">@r.Unavailable</p>
+            }
+            else
+            {
+                <h2 class="base-verdict">@L[PlacementKey(r.Placement)]</h2>
+                <p class="base-summary">@r.Summary</p>
+
+                @* The distance and the writer's own spread on one line, always together. *@
+                <div class="base-scale" role="img" aria-label="@r.Summary">
+                    @foreach (var own in r.WithinAuthorDistances)
+                    {
+                        <span class="base-tick own" style="left:@Percent(own, r)%" title="@L.F("base.tick.own", own.ToString("0.00"))"></span>
+                    }
+                    <span class="base-tick questioned" style="left:@Percent(r.Distance, r)%"
+                          title="@L.F("base.tick.questioned", r.Distance.ToString("0.00"))"></span>
+                    <span class="base-scale-label left">@L["base.scale.centre"]</span>
+                    <span class="base-scale-label right">@L.F("base.scale.max", r.WithinAuthorMax.ToString("0.00"))</span>
+                </div>
+
+                <div class="citations-counts">
+                    <span><b>@r.SampleCount</b> @L["base.stat.samples"]</span>
+                    <span><b>@r.BaselineWordCount</b> @L["base.stat.baselinewords"]</span>
+                    <span><b>@r.FeatureCount</b> @L["base.stat.words"]</span>
+                    <span class="@(r.WordsOutsideOwnRange > 0 ? "notable" : "")">
+                        <b>@r.WordsOutsideOwnRange</b> @L["base.stat.outside"]
+                    </span>
+                </div>
+
+                @if (r.Drivers.Count > 0)
+                {
+                    <table class="base-drivers">
+                        <thead>
+                            <tr>
+                                <th>@L["base.col.word"]</th>
+                                <th class="num">@L["base.col.this"]</th>
+                                <th class="num">@L["base.col.usual"]</th>
+                                <th class="num">@L["base.col.range"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var d in r.Drivers)
+                            {
+                                <tr class="@(d.OutsideOwnRange ? "outside" : "")">
+                                    <td><code>@d.Word</code></td>
+                                    <td class="num">@d.QuestionedRate.ToString("0.0")</td>
+                                    <td class="num">@d.BaselineRate.ToString("0.0")</td>
+                                    <td class="num">@d.BaselineLowest.ToString("0.0")–@d.BaselineHighest.ToString("0.0")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p class="hint">@L["base.col.note"]</p>
+                }
+            }
+
+            <p class="citations-advice"><Icon Name="scale" /> <span>@r.Advice</span></p>
+        </div>
+    </section>
+}
+
+<InfoDrawer Open="_explain" OpenChanged="@(v => _explain = v)" Title="@L["base.explain.title"]" Icon="scale">
+    <p>@L["base.explain.what"]</p>
+    <p>@L["base.explain.why"]</p>
+    <p>@L["base.explain.scale"]</p>
+    <p><strong>@L["base.explain.cannot"]</strong></p>
+    <p>@L["base.explain.useful"]</p>
+    <p>@L["base.explain.needs"]</p>
+</InfoDrawer>
+
+@code {
+    private const int MinQuestioned = 300;
+    private const int MinBaselineWords = 1_400;
+    private const long MaxFileBytes = 8 * 1024 * 1024;
+
+    private sealed class Entry
+    {
+        public string Id { get; } = Guid.NewGuid().ToString("N");
+        public string Title { get; set; } = "";
+        public string Text { get; set; } = "";
+        public string? Note { get; set; }
+    }
+
+    private readonly Entry _questioned = new();
+    private readonly List<Entry> _earlier = [new(), new(), new()];
+    private string _language = "auto";
+    private BaselineReport? _report;
+    private bool _explain;
+
+    private int EarlierWords => _earlier.Sum(d => Words(d.Text));
+
+    private bool CanRun => Words(_questioned.Text) >= MinQuestioned && EarlierWords >= MinBaselineWords;
+
+    private void AddEarlier() => _earlier.Add(new Entry());
+
+    private void Run()
+    {
+        var language = _language is "auto" or "" ? LanguageDetector.Detect(_questioned.Text) : _language;
+        var samples = _earlier
+            .Where(d => !string.IsNullOrWhiteSpace(d.Text))
+            .Select((d, i) => new AuthorSample(d.Id, string.IsNullOrWhiteSpace(d.Title) ? $"#{i + 1}" : d.Title, d.Text))
+            .ToList();
+
+        _report = StyleBaseline.Compare(
+            samples,
+            new AuthorSample(_questioned.Id, _questioned.Title, _questioned.Text),
+            language,
+            RulePackLoader.Load(language));
+    }
+
+    private static int Words(string? text) =>
+        string.IsNullOrWhiteSpace(text) ? 0 : new TextDocument(text).Words.Count;
+
+    /// <summary>Where a distance sits on the bar, with the writer's own widest gap as the reference point.</summary>
+    private static string Percent(double distance, BaselineReport r)
+    {
+        double reference = Math.Max(r.WithinAuthorMax, r.Distance) * 1.15;
+        double pct = reference <= 0 ? 0 : Math.Clamp(distance / reference * 100, 0, 100);
+        return pct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    private static string PlacementKey(BaselinePlacement p) => p switch
+    {
+        BaselinePlacement.WithinRange => "base.placement.within",
+        BaselinePlacement.AtTheEdge => "base.placement.edge",
+        _ => "base.placement.beyond",
+    };
+
+    private static string PlacementClass(BaselinePlacement p) => p switch
+    {
+        BaselinePlacement.WithinRange => "within",
+        BaselinePlacement.AtTheEdge => "edge",
+        BaselinePlacement.BeyondRange => "beyond",
+        _ => "undetermined",
+    };
+
+    private async Task Load(InputFileChangeEventArgs e, Entry target)
+    {
+        var file = e.File;
+        if (file is null) return;
+        target.Note = null;
+
+        if (file.Size > MaxFileBytes) { target.Note = L.F("file.toolarge", file.Name); return; }
+
+        try
+        {
+            await using var stream = file.OpenReadStream(MaxFileBytes);
+            var read = await Reader.ReadAsync(stream, file.Name, MaxFileBytes);
+            target.Text = read.Text;
+            if (string.IsNullOrWhiteSpace(target.Title))
+                target.Title = Path.GetFileNameWithoutExtension(file.Name);
+            target.Note = read.Warning ?? L.F("file.loaded", file.Name, file.Size / 1024);
+        }
+        catch (Exception ex) { target.Note = L.F("file.error", ex.Message); }
+    }
+}

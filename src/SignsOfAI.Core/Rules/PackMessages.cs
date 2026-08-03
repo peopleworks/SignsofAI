@@ -55,6 +55,21 @@ public static class PackMessages
     public const string CitationSummaryNoList = "citation.summary.nolist";
     public const string CitationAdvice = "citation.advice";
 
+    // The per-writer baseline. The most consequential wording in the product: it is the one report
+    // that could be read as naming a culprit, and it must never read that way. Every string here
+    // describes a distance and its scale, and says out loud what a distance cannot settle.
+    public const string StyleSummaryWithin = "style.summary.within";
+    public const string StyleSummaryEdge = "style.summary.edge";
+    public const string StyleSummaryBeyond = "style.summary.beyond";
+    public const string StyleNoteOutside = "style.note.outside";
+    public const string StyleNoteBroad = "style.note.broad";
+    public const string StyleAdvice = "style.advice";
+    public const string StyleNeedBaseline = "style.need.baseline";
+    public const string StyleNeedQuestioned = "style.need.questioned";
+    public const string StyleNeedSamples = "style.need.samples";
+    public const string StyleNeedLanguage = "style.need.language";
+    public const string StyleAdviceInsufficient = "style.advice.insufficient";
+
     /// <summary>How many <c>{n}</c> placeholders each template takes. Guarded by a test.</summary>
     public static IReadOnlyDictionary<string, int> Arity { get; } = new Dictionary<string, int>(StringComparer.Ordinal)
     {
@@ -89,6 +104,17 @@ public static class PackMessages
         [CitationSummaryIssues] = 2,        // {0} contradictions, {1} references
         [CitationSummaryNoList] = 1,        // {0} citations found
         [CitationAdvice] = 0,
+        [StyleSummaryWithin] = 2,           // {0} the distance, {1} the writer's own widest gap
+        [StyleSummaryEdge] = 2,
+        [StyleSummaryBeyond] = 2,
+        [StyleNoteOutside] = 2,             // {0} words outside, {1} words measured
+        [StyleNoteBroad] = 0,
+        [StyleAdvice] = 0,
+        [StyleNeedBaseline] = 2,            // {0} words available, {1} words needed
+        [StyleNeedQuestioned] = 2,
+        [StyleNeedSamples] = 2,             // {0} usable pieces, {1} needed
+        [StyleNeedLanguage] = 0,
+        [StyleAdviceInsufficient] = 0,
     };
 
     /// <summary>English, and byte-identical to what these analyzers produced before.</summary>
@@ -139,5 +165,28 @@ public static class PackMessages
         [CitationAdvice] = "A source missing from its own bibliography is usually a slip, and it is always " +
                            "the writer’s to explain. Ask for the source itself: a real one can be produced " +
                            "in seconds, and an invented one cannot.",
+        [StyleSummaryWithin] = "Distance {0}. This writer’s own pieces sit up to {1} from their centre, " +
+                               "so this one is inside the range they already cover.",
+        [StyleSummaryEdge] = "Distance {0}, a little past the {1} that this writer’s own pieces cover " +
+                             "between themselves.",
+        [StyleSummaryBeyond] = "Distance {0}, against {1} for the widest gap between this writer’s own " +
+                               "pieces. This one sits outside the range they cover.",
+        [StyleNoteOutside] = "{0} of the {1} words measured are used at a rate this writer has never " +
+                             "used them at in any of their own pieces.",
+        [StyleNoteBroad] = "Those samples also disagree with each other a lot, which makes any comparison " +
+                           "weak — check that they are all by the same person and of a similar kind.",
+        [StyleAdvice] = "Style moves with the assignment, the genre, the deadline, and with a person simply " +
+                        "getting better. A text outside the range is a reason to ask what changed, never a " +
+                        "conclusion about who wrote it — and a text inside the range is the more useful " +
+                        "result, because it is the one that settles a suspicion.",
+        [StyleNeedBaseline] = "Not enough of this writer’s own work to measure against: {0} words, and this " +
+                              "needs at least {1}.",
+        [StyleNeedQuestioned] = "The text being checked is too short: {0} words, and this needs at least {1}.",
+        [StyleNeedSamples] = "Not enough separate pieces to measure the writer’s own variation: {0} usable, " +
+                             "and this needs at least {1}.",
+        [StyleNeedLanguage] = "Too few of this language’s function words appear in these texts to " +
+                              "measure anything. Check that the language selected matches what was written.",
+        [StyleAdviceInsufficient] = "A distance computed from too little writing would be noise wearing a " +
+                                    "decimal point. Add more of this writer’s earlier work and try again.",
     };
 }

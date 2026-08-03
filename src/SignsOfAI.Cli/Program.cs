@@ -2,6 +2,8 @@ using System.Text.Json;
 using SignsOfAI.Core;
 using SignsOfAI.Core.Artifacts;
 using SignsOfAI.Core.Citations;
+using SignsOfAI.Core.Stylometry;
+using SignsOfAI.Core.Text;
 using SignsOfAI.Core.Documents;
 using SignsOfAI.Core.Model;
 using SignsOfAI.Core.Rules;
@@ -24,10 +26,98 @@ if (argList[0] is "--version" or "-v")
     Console.WriteLine(Version);
     return 0;
 }
-if (argList[0] != "check")
+if (argList[0] is not ("check" or "baseline"))
 {
     Console.Error.WriteLine($"Unknown command '{argList[0]}'. Run 'signsofai --help'.");
     return 2;
+}
+
+// ── `baseline <path> --against <path> …` ─────────────────────────────────────
+// Compares a submission against earlier work by the same person. Separate from `check` because it
+// answers a different question: not "does this read like AI" but "does this read like the person who
+// wrote the others", which is the question that does not punish someone for writing formally in a
+// second language.
+if (argList[0] == "baseline")
+{
+    var against = new List<string>();
+    var rest = new List<string>();
+    string baseLang = "auto";
+    bool baseJson = false, baseNoColor = false;
+
+    for (int i = 1; i < argList.Count; i++)
+    {
+        var a = argList[i];
+        switch (a)
+        {
+            case "--against": against.Add(NextOf(argList, ref i, a)); break;
+            case "--lang": baseLang = NextOf(argList, ref i, a); break;
+            case "--json": baseJson = true; break;
+            case "--no-color": baseNoColor = true; break;
+            default:
+                if (a.StartsWith('-')) { Console.Error.WriteLine($"Unknown option '{a}'."); return 2; }
+                rest.Add(a); break;
+        }
+    }
+
+    if (rest.Count == 0 || against.Count == 0)
+    {
+        Console.Error.WriteLine("Usage: signsofai baseline <path> --against <path> [--against <path> …] [--lang en|es] [--json]");
+        return 2;
+    }
+
+    var questionedText = await ReadDocument(rest[0]);
+    if (questionedText is null) return 2;
+
+    var samples = new List<AuthorSample>();
+    foreach (var file in against)
+    {
+        var body = await ReadDocument(file);
+        if (body is null) return 2;
+        samples.Add(new AuthorSample(file, Path.GetFileName(file), body));
+    }
+
+    var lang = baseLang is "auto" or "" ? LanguageDetector.Detect(questionedText) : baseLang.ToLowerInvariant();
+    var baseReport = StyleBaseline.Compare(
+        samples, new AuthorSample(rest[0], Path.GetFileName(rest[0]), questionedText),
+        lang, RulePackLoader.Load(lang));
+
+    if (baseJson)
+    {
+        Console.WriteLine(JsonSerializer.Serialize(new
+        {
+            questioned = rest[0],
+            against,
+            language = lang,
+            placement = baseReport.Placement.ToString(),
+            hasResult = baseReport.HasResult,
+            unavailable = baseReport.Unavailable,
+            distance = baseReport.Distance,
+            withinAuthorMax = baseReport.WithinAuthorMax,
+            withinAuthorMedian = baseReport.WithinAuthorMedian,
+            withinAuthorDistances = baseReport.WithinAuthorDistances,
+            wordsOutsideOwnRange = baseReport.WordsOutsideOwnRange,
+            wordsMeasured = baseReport.FeatureCount,
+            baselineWords = baseReport.BaselineWordCount,
+            questionedWords = baseReport.QuestionedWordCount,
+            baselineIsBroad = baseReport.BaselineIsBroad,
+            summary = baseReport.Summary,
+            advice = baseReport.Advice,
+            drivers = baseReport.Drivers.Select(d => new
+            {
+                d.Word, d.ZScore, d.QuestionedRate, d.BaselineRate,
+                d.BaselineLowest, d.BaselineHighest, d.UsedMore, d.OutsideOwnRange
+            }),
+        }, new JsonSerializerOptions { WriteIndented = true }));
+    }
+    else
+    {
+        PrintBaseline(rest[0], baseReport, useColor: !baseNoColor && !Console.IsOutputRedirected
+            && Environment.GetEnvironmentVariable("NO_COLOR") is null);
+    }
+
+    // Always zero. There is no failure to gate on here: this command reports a distance and its
+    // scale, and a non-zero exit would turn that into a verdict for a script to act on.
+    return 0;
 }
 
 // ── parse `check <path> [options]` ───────────────────────────────────────────
@@ -64,25 +154,10 @@ if (positionals.Count == 0)
 }
 
 var path = positionals[0];
-if (!File.Exists(path))
-{
-    Console.Error.WriteLine($"File not found: {path}");
-    return 2;
-}
 
 // ── read (supports .docx) & analyze ──────────────────────────────────────────
-string text;
-try
-{
-    text = path.EndsWith(".docx", StringComparison.OrdinalIgnoreCase)
-        ? await DocxTextExtractor.ExtractTextAsync(File.OpenRead(path))
-        : await File.ReadAllTextAsync(path);
-}
-catch (Exception ex)
-{
-    Console.Error.WriteLine($"Could not read '{path}': {ex.Message}");
-    return 2;
-}
+var text = await ReadDocument(path);
+if (text is null) return 2;
 
 // Load any custom catalogs (--rules file.json, repeatable).
 var extraPacks = new List<RulePack>();
@@ -173,6 +248,82 @@ if (failOnArtifacts && result.Artifacts.StrongCount > 0)
 return 0;
 
 // ── helpers ──────────────────────────────────────────────────────────────────
+static async Task<string?> ReadDocument(string path)
+{
+    if (!File.Exists(path)) { Console.Error.WriteLine($"File not found: {path}"); return null; }
+    try
+    {
+        return path.EndsWith(".docx", StringComparison.OrdinalIgnoreCase)
+            ? await DocxTextExtractor.ExtractTextAsync(File.OpenRead(path))
+            : await File.ReadAllTextAsync(path);
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($"Could not read '{path}': {ex.Message}");
+        return null;
+    }
+}
+
+static string NextOf(List<string> args, ref int i, string option) =>
+    ++i < args.Count ? args[i] : throw new ArgumentException($"Missing value for {option}");
+
+/// <summary>
+/// Prints the baseline comparison. The distance never appears without the writer's own spread beside
+/// it, because on its own it is a number with no scale — and a number with no scale is exactly what
+/// people quote in meetings.
+/// </summary>
+static void PrintBaseline(string path, BaselineReport r, bool useColor)
+{
+    string Col(string s, int code) => useColor ? $"\u001b[{code}m{s}\u001b[0m" : s;
+    string Bold(string s) => useColor ? $"\u001b[1m{s}\u001b[0m" : s;
+
+    Console.WriteLine();
+    Console.WriteLine(Bold($"  Compared with earlier work \u2014 {Path.GetFileName(path)}"));
+
+    if (!r.HasResult)
+    {
+        Console.WriteLine(Col($"     {r.Unavailable}", 33));
+        Console.WriteLine(Col($"     {r.Advice}", 90));
+        Console.WriteLine();
+        return;
+    }
+
+    int colour = r.Placement switch
+    {
+        BaselinePlacement.WithinRange => 32,
+        BaselinePlacement.AtTheEdge => 33,
+        _ => 31,
+    };
+    var label = r.Placement switch
+    {
+        BaselinePlacement.WithinRange => "inside this writer's own range",
+        BaselinePlacement.AtTheEdge => "at the edge of this writer's own range",
+        _ => "outside this writer's own range",
+    };
+
+    Console.WriteLine($"     {Col(r.Distance.ToString("0.000"), colour)}  {Bold(label)}");
+    Console.WriteLine(Col($"     {r.Summary}", 90));
+    Console.WriteLine(Col(
+        $"     their own pieces: {string.Join(" \u00b7 ", r.WithinAuthorDistances.Select(d => d.ToString("0.00")))}" +
+        $"   ({r.SampleCount} samples, {r.BaselineWordCount} words)", 90));
+
+    if (r.Drivers.Count > 0)
+    {
+        Console.WriteLine();
+        Console.WriteLine(Col("     word          this text    usually    their range", 90));
+        foreach (var d in r.Drivers)
+        {
+            var mark = d.OutsideOwnRange ? Col("!", 33) : " ";
+            Console.WriteLine($"     {mark} {d.Word,-11} {d.QuestionedRate,7:0.0}    {d.BaselineRate,7:0.0}    " +
+                              $"{d.BaselineLowest:0.0}\u2013{d.BaselineHighest:0.0} per 1k");
+        }
+    }
+
+    Console.WriteLine();
+    Console.WriteLine(Col($"     {r.Advice}", 90));
+    Console.WriteLine();
+}
+
 static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
 {
     string Col(string s, int code) => useColor ? $"[{code}m{s}[0m" : s;
@@ -277,6 +428,7 @@ static void PrintHelp()
 
         USAGE
           signsofai check <path> [options]
+          signsofai baseline <path> --against <path> [--against <path> …] [options]
 
         OPTIONS
           --lang <auto|en|es>   Language of the text (default: auto-detect)
@@ -290,11 +442,20 @@ static void PrintHelp()
           -h, --help            Show this help
           --version             Show the version
 
+        BASELINE
+          Compares a piece against earlier work by the SAME person, using function-word frequencies.
+          It reports how far the text sits from that writer's centre next to how far their own pieces
+          sit from it, so the scale is their variation and not a threshold invented here. It cannot
+          tell you who wrote something, and there is no result meaning "someone else did".
+          Needs roughly 1,400 words of earlier work and 300 in the piece being checked; below that it
+          says so instead of producing a number.
+
         EXAMPLES
           signsofai check README.md
           signsofai check article.docx --lang en
           signsofai check post.md --max-score 40      # fail CI if it reads too much like AI
           signsofai check post.md --json > report.json
           signsofai check essay.docx --fail-on-artifacts   # reject text a rewriting tool has been through
+          signsofai baseline essay4.docx --against essay1.docx --against essay2.docx --against essay3.docx
         """);
 }

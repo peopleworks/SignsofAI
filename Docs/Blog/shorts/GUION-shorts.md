@@ -43,6 +43,15 @@ hacia arriba y debajo aparece el bloque de fuentes con cinco `!` en ámbar, uno 
 - **EN:** "My own detector scored this essay zero out of a hundred. Zero signals. Good vocabulary, human rhythm. And the bibliography was invented. Two authors cited that are nowhere in its own reference list. The same D O I on two different papers. A source published in twenty twenty-seven. None of that needs the internet: the document contradicts itself. And that is not an accusation, it is a question you answer in one sentence: can you send me the paper?"
 
 
+## Short 10 — "61%" (la línea base del estudiante)
+**Visual:** el número **61%** enorme, en rojo, con la leyenda «de los ensayos de quienes escriben en
+segunda lengua, marcados como IA»; se rompe; aparecen dos preguntas enfrentadas — «¿se parece a una
+máquina?» tachada, «¿se parece a quien escribió los otros?» resaltada; cierre con la barra de rango
+y una marca cayendo dentro, en verde.
+- **ES:** "Sesenta y uno por ciento. Esa es la proporción de ensayos de estudiantes que escriben en su segunda lengua que los detectores marcan como inteligencia artificial. No de los tramposos: de los ensayos. Porque escribir formal y cuidado se parece a una máquina, y así es como escribes en un idioma que aprendiste después. Eso no se arregla con mejor detector. Se arregla con otra pregunta: no si se parece a una máquina, sino si se parece a quien escribió los otros trabajos. Y si escribes formal, tu propia línea base ya es formal."
+- **EN:** "Sixty-one percent. That is the share of essays by students writing in their second language that AI detectors flag as machine-written. Not of the cheats: of the essays. Because formal, careful writing looks like a machine, and that is how you write in a language you learned second. You do not fix that with a better detector. You fix it with a different question: not does this look like a machine, but does this look like the person who wrote the others. And if you write formally, your own baseline is already formal."
+
+
 ---
 
 ## Build (una vez existan los HTML de cada short)
