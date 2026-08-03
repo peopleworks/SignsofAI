@@ -17,10 +17,11 @@ Built on the official [`ModelContextProtocol`](https://www.nuget.org/packages/Mo
 | `extract_distinctive_phrases` | Distinctive phrases + ready-made exact-phrase web-search links | 🖥️ offline |
 | `inspect_characters` | Characters typing cannot produce — zero-width, homoglyphs, hidden tag characters — with the exact line and column of each | 🖥️ offline |
 | `check_citations` | Where a document contradicts its **own** reference list: a source cited but never listed, one DOI on two works, a year that has not happened | 🖥️ offline |
+| `compare_to_baseline` | How a piece sits against the same person's earlier work (Burrows's Delta) — measured on **their** variation, never a verdict about who wrote it | 🖥️ offline |
 | `measure_predictability` | Perplexity — how predictable/generic a model finds the phrasing | ☁️ server |
 | `check_paraphrase` | Reworded/translated copies via sentence embeddings (EmbeddingGemma) | ☁️ server |
 
-The first six run **entirely on the machine** — the text never leaves it. The last two **send the text**
+The first seven run **entirely on the machine** — the text never leaves it. The last two **send the text**
 to the SignsOfAI server (their descriptions disclose this); see [Server tools](#server-tools-optional).
 
 ## Install

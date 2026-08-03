@@ -304,6 +304,8 @@ de los seis (video / voz / cola en segundos):
 | `signsofai-artifacts-story.{en,es}.html` | WordPress · Blogger — **generados** |
 | `signsofai-citations-story.{en,es}.md` | dev.to · Hashnode · Medium — **cuarto artículo**, sin publicar |
 | `signsofai-citations-story.{en,es}.html` | WordPress · Blogger — **generados** |
+| `signsofai-baseline-story.{en,es}.md` | dev.to · Hashnode · Medium — **quinto artículo**, sin publicar |
+| `signsofai-baseline-story.{en,es}.html` | WordPress · Blogger — **generados** |
 
 **Generar el HTML.** Los dos primeros artículos se escribieron como HTML a mano. Transcribir 1.500
 palabras dos veces más, en dos idiomas, es la forma segura de corregir un párrafo en una copia y no
@@ -358,6 +360,21 @@ conviene que siga siendo verdad si se edita el artículo.
 Media sección va dedicada a los **falsos positivos que hubo que arreglar** (acentos, bibliografías
 envueltas por un PDF, años escondidos dentro de un DOI). Eso es deliberado: en esta categoría, contar
 los errores propios es la única credibilidad disponible.
+
+**Quinto artículo — la línea base del estudiante.** El más argumentativo de los cinco y el que mejor
+defiende el proyecto entero. Abre con **61%** —la proporción de ensayos de escritores en segunda
+lengua que los detectores marcan como IA— y sostiene que eso no se arregla con mejor clasificador
+sino con otra pregunta.
+
+Dos secciones cuentan errores propios, a propósito: el **sesgo que hubo que quitar** (medir cada
+trabajo contra estadísticas que lo incluían, lo que estrechaba el rango de la persona y perjudicaba
+siempre a quien se pregunta) y el **umbral que se borró** (un número elegido mirando cinco documentos;
+en un proyecto que se niega a inventar umbrales, inventar uno aquí habría sido lo peor posible).
+Ese segundo apartado es el corazón del texto y no conviene suavizarlo al editarlo.
+
+Puntajes en su propio pie: **EN 8/100 · variabilidad 0.63 · 9 señales**, **ES 7/100 · variabilidad
+0.67 · 7 señales**. La comparación citada dentro del artículo es real: son los propios artículos de
+este blog medidos unos contra otros, y el 0.654 es el primer artículo del proyecto.
 
 > **Ojo con `canonical_url`.** En el front-matter apunta al demo. Eso está bien si el artículo solo
 > vive en dev.to/Medium, pero si lo publicas **primero en tu blog**, cambia `canonical_url` a la URL
@@ -648,6 +665,123 @@ Y aporta cero a la puntuación, con una prueba cuyo único trabajo es fallar si 
 MIT y gratis: https://github.com/peopleworks/SignsofAI
 
 #IntegridadAcadémica #IA #EdTech #DotNet #OpenSource
+```
+
+
+### X / Twitter — quinto artículo (EN)
+```
+AI detectors flag 61% of essays by non-native English speakers as machine-written.
+
+Not 61% of the cheats. 61% of the essays.
+
+They learned that formal, careful prose looks like a language model. That is also exactly how you
+write in a language you learned second. The tool is detecting a second language and reporting it
+as dishonesty.
+
+You cannot fix that with a better classifier. You fix it with a different question:
+
+not "does this look like a machine"
+but "does this look like the person who wrote the others"
+
+If you write formally, your own baseline is already formal.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — quinto artículo (ES)
+```
+Los detectores de IA marcan como escritos por máquina el 61% de los ensayos de quienes no tienen
+el inglés como lengua materna.
+
+No el 61% de los tramposos. El 61% de los ensayos.
+
+Aprendieron que la prosa formal y cuidada se parece a un modelo. Y así es exactamente como se
+escribe en un idioma que aprendiste después. La herramienta detecta una segunda lengua y la
+reporta como deshonestidad.
+
+Eso no se arregla con mejor clasificador. Se arregla con otra pregunta:
+
+no «¿se parece a una máquina?»
+sino «¿se parece a quien escribió los otros?»
+
+Si escribes formal, tu propia línea base ya es formal.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — quinto artículo (EN)
+```
+61% of essays by non-native English speakers get flagged as AI-written.
+
+Not 61% of the ones that were. 61% of the essays.
+
+The mechanism is not mysterious: these tools learned that formal, careful, slightly stiff prose
+looks like a language model, and formal, careful, slightly stiff prose is exactly what you write in
+a language you learned second. The tool is not detecting AI. It is detecting a second language, and
+reporting it as dishonesty.
+
+You cannot fix that with a better classifier, because the classifier is answering the question it
+was asked. So I asked a different one: not "does this look like a machine" but "does this look like
+the person who wrote the others". A student whose ordinary register is formal has a formal
+baseline. Measured against themselves, formal is not a red flag.
+
+Two things I want to be honest about, because both are in the article:
+
+The first version measured each of a writer's pieces against statistics that included that piece.
+That pulls it toward the centre, makes their range look tighter than it is, and pushes the
+questioned text further outside it — a bias running against the person being asked about, in every
+case, silently. Leave-one-out fixes it and costs a loop.
+
+And I wrote a threshold, then deleted it. A count separated my own writing from a radically
+different voice cleanly, and I wanted to wire it into the verdict at "a quarter of the words". But
+that quarter came from me looking at five documents and picking a number. That is not calibration.
+It is exactly the move this project refuses everywhere else. The count is reported; a person reads
+it; the verdict stays on one rule anyone can restate.
+
+There is no result meaning "someone else wrote this". The enumeration has four values and none of
+them is that one, and a test asserts the list.
+
+MIT and free: https://github.com/peopleworks/SignsofAI
+
+#AcademicIntegrity #AI #Stylometry #EdTech #dotnet
+```
+
+### LinkedIn — quinto artículo (ES)
+```
+El 61% de los ensayos de quienes no tienen el inglés como lengua materna se marcan como escritos
+por IA.
+
+No el 61% de los que sí lo estaban. El 61% de los ensayos.
+
+El mecanismo no tiene misterio: estas herramientas aprendieron que la prosa formal, cuidada y un
+poco rígida se parece a un modelo de lenguaje, y la prosa formal, cuidada y un poco rígida es
+exactamente lo que uno escribe en un idioma que aprendió después. La herramienta no detecta IA.
+Detecta una segunda lengua, y la reporta como deshonestidad.
+
+Eso no se arregla con un clasificador mejor, porque el clasificador contesta la pregunta que le
+hicieron. Así que hice otra: no «¿se parece a una máquina?» sino «¿se parece a quien escribió los
+otros?». Un estudiante cuyo registro habitual es formal tiene una línea base formal. Medido contra
+sí mismo, lo formal no es una alarma.
+
+Dos cosas sobre las que quiero ser honesto, porque las dos están en el artículo:
+
+La primera versión medía cada trabajo de una persona contra estadísticas que incluían ese trabajo.
+Eso lo arrastra al centro, estrecha artificialmente su rango y empuja el texto revisado más afuera
+— un sesgo que va contra la persona por la que se pregunta, siempre, en silencio. Dejar uno fuera
+lo arregla y cuesta un bucle.
+
+Y escribí un umbral, y lo borré. Un conteo separaba limpiamente mi propia escritura de una voz
+radicalmente distinta, y quise meterlo en el veredicto con «un cuarto de las palabras». Pero ese
+cuarto salió de mí mirando cinco documentos y eligiendo un número. Eso no es calibrar. Es justo la
+jugada que este proyecto se niega a hacer en todo lo demás. El conteo se reporta, lo lee una
+persona, y el veredicto se queda en una sola regla que cualquiera puede repetir.
+
+No hay ningún resultado que signifique «lo escribió otra persona». La enumeración tiene cuatro
+valores y ninguno es ese, y hay una prueba que verifica la lista.
+
+MIT y gratis: https://github.com/peopleworks/SignsofAI
+
+#IntegridadAcadémica #IA #Estilometría #EdTech #DotNet
 ```
 
 ## 8. Notas de publicación

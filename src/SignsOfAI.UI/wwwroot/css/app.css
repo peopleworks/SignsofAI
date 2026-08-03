@@ -269,6 +269,61 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     font-size: .85rem; color: var(--text-muted);
 }
 
+
+/* ---- baseline (comparison with the writer's own earlier work) ----
+   Built so a distance never appears without the writer's own spread beside it: the bar shows both,
+   on one axis, at the same scale. */
+.base-inputs { display: flex; flex-direction: column; gap: .9rem; margin-bottom: 1.25rem; }
+.base-questioned { border-left: 3px solid var(--brand); }
+.base-questioned h3, .base-earlier-head h3 {
+    margin: 0; font-size: 1rem; display: inline-flex; align-items: center; gap: .4rem;
+}
+.base-earlier-head { display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
+.base-earlier-head .hint { margin: 0; }
+.base-earlier-head .orig-wc { margin-left: auto; }
+.orig-wc.short { color: var(--warn); }
+
+.base-actions { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
+.base-lang { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; color: var(--text-muted); }
+.base-actions .primary { margin-left: auto; }
+
+.base-result { border-left: 3px solid var(--text-muted); }
+.base-result.within { border-left-color: var(--good); }
+.base-result.edge { border-left-color: var(--notice); }
+.base-result.beyond { border-left-color: var(--warn); }
+.base-verdict { margin: 0 0 .35rem; font-size: 1.25rem; display: flex; align-items: center; gap: .45rem; }
+.base-result.within .base-verdict { color: var(--good); }
+.base-result.edge .base-verdict { color: var(--notice); }
+.base-result.beyond .base-verdict { color: var(--warn); }
+.base-summary { margin: 0 0 1.1rem; font-size: .92rem; }
+
+.base-scale {
+    position: relative; height: 2.6rem; margin: 0 0 1rem;
+    border-bottom: 2px solid var(--border);
+}
+.base-tick { position: absolute; bottom: 0; width: 2px; transform: translateX(-1px); border-radius: 1px; }
+.base-tick.own { height: 12px; background: var(--text-muted); opacity: .55; }
+.base-tick.questioned { height: 26px; width: 3px; background: var(--brand); }
+.base-scale-label {
+    position: absolute; top: 0; font-size: .7rem; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: .04em;
+}
+.base-scale-label.left { left: 0; }
+.base-scale-label.right { right: 0; }
+
+.citations-counts .notable b { color: var(--warn); }
+
+.base-drivers { width: 100%; border-collapse: collapse; font-size: .85rem; margin: .4rem 0 .5rem; }
+.base-drivers th {
+    text-align: left; font-size: .7rem; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--text-muted); font-weight: 600; padding: .25rem .5rem .25rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.base-drivers td { padding: .3rem .5rem .3rem 0; border-bottom: 1px solid var(--border); }
+.base-drivers th.num, .base-drivers td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.base-drivers code { font-size: .84rem; background: var(--surface-2); padding: .1rem .35rem; border-radius: 5px; }
+.base-drivers tr.outside td { background: color-mix(in srgb, var(--warn) 9%, transparent); }
+
 /* ---- highlighted text ---- */
 .highlighted h3, .findings h3 { margin: 0 0 .3rem; font-size: 1.1rem; }
 .hint { margin: 0 0 .8rem; font-size: .82rem; color: var(--text-muted); }

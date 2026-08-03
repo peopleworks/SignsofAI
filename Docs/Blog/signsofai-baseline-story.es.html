@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Construí el detector de IA que hace otra pregunta · SignsOfAI</title>
+<meta name="description" content="Los detectores marcan el 61% de los ensayos de quienes no tienen el inglés como lengua materna. El arreglo no es un clasificador mejor: es una pregunta mejor. No «¿se parece a una máquina?» sino «¿se parece a quien escribió los otros?». Esto es lo que costó, y el umbral que borré.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Historia de taller · Ingeniería</div>
+  <h1>Construí el detector de IA que hace otra pregunta</h1>
+  <p class="lead">Los detectores marcan el 61% de los ensayos de quienes no tienen el inglés como lengua materna. El arreglo no es un clasificador mejor: es una pregunta mejor. No «¿se parece a una máquina?» sino «¿se parece a quien escribió los otros?». Esto es lo que costó, y el umbral que borré.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Descárgalo o pruébalo</b> — gratis, MIT, web y Windows.</a>
+
+  <hr>
+
+  <p>Sesenta y uno por ciento.</p>
+  <p>Esa es la proporción de ensayos de quienes no tienen el inglés como lengua materna que los detectores de IA marcan como escritos por máquina. No el sesenta y uno por ciento de los tramposos. El sesenta y uno por ciento de los ensayos.</p>
+  <p>El mecanismo no tiene misterio. Estas herramientas aprendieron que la prosa formal, cuidada y un poco rígida se parece a un modelo de lenguaje. Y la prosa formal, cuidada y un poco rígida es exactamente lo que uno escribe en un idioma que aprendió después. La herramienta no está detectando IA. Está detectando una segunda lengua, y reportándola como deshonestidad.</p>
+  <p>Eso no se arregla con un clasificador mejor, porque el clasificador está contestando la pregunta que le hicieron. Se arregla haciendo otra pregunta.</p>
+  <h2>La pregunta</h2>
+  <p>No: <em>¿se parece esto a una máquina?</em></p>
+  <p>Sino: <em>¿se parece a la persona que escribió los otros?</em></p>
+  <p>Esa inversión lo cambia todo. Un estudiante cuyo registro habitual es formal tiene una <strong>línea base formal</strong>. Medido contra sí mismo, lo formal no es una señal de alarma: es un martes. El mismo rasgo que lo condena bajo la primera pregunta lo exonera bajo la segunda.</p>
+  <p>El método no es nuevo. La Delta de Burrows, publicada en 2002, cuenta con qué frecuencia alguien echa mano de palabras pequeñas y corrientes —«de», «que», «aunque»— y compara esas tasas entre textos. La lingüística forense usa las palabras función precisamente porque ignoran el tema: una persona las emplea a su propio ritmo esté escribiendo sobre hidrología o sobre ópera.</p>
+  <p>Lo distinto es qué hice con el resultado.</p>
+  <h2>La Delta clásica hace una pregunta que yo no tengo autoridad para contestar</h2>
+  <p>El montaje de manual le da a la Delta un conjunto de autores candidatos y pregunta a cuál se parece un texto. Llevado a un aula, eso se convierte en «¿es el estudiante, u otra persona?», y contestarlo exige un umbral: una raya pasada la cual el software dice <em>no es él</em>.</p>
+  <p>Alguien tiene que inventar esa raya. Sería yo. Y un número elegido por mí acabaría citado en una reunión disciplinaria como si hubiera bajado de una montaña.</p>
+  <p>Así que el reporte no fija ningún umbral. Pone dos cosas una al lado de la otra:</p>
+  <ul>
+    <li>cuánto se separa del centro el texto en cuestión;</li>
+    <li>cuánto se separa de ese mismo centro <strong>cada uno de los propios trabajos</strong> de la persona, medido igual.</li>
+  </ul>
+  <p>La escala es suya. Nadie tiene que aceptar mi idea de «demasiado lejos», porque no hay ninguna: solo está su propia variación, y dónde cae este trabajo dentro de ella.</p>
+  <p>Esta es salida real, uno de mis propios artículos apartado y comparado contra otros tres:</p>
+  <pre><code>  0.654  dentro del propio rango de esta persona
+  Distancia 0.654. Sus propios trabajos se separan hasta 1.18 de su centro,
+  así que este queda dentro del rango que ya cubren.
+  sus propios trabajos: 0.66 · 0.78 · 0.84 · 0.85 · 0.86 · 0.96 · 0.98 · 1.03 · 1.18</code></pre>
+  <p>Eso se lee sin saber qué es una Delta.</p>
+  <h2>El sesgo que tuve que volver a quitar</h2>
+  <p>La primera versión calculaba la dispersión propia midiendo cada trabajo contra las estadísticas de todos los trabajos, <strong>incluido él mismo</strong>.</p>
+  <p>Eso está mal, y mal en una dirección que importa. Una pieza incluida en las estadísticas contra las que luego se puntúa queda arrastrada hacia el centro. El rango de la persona sale artificialmente estrecho. Y un rango estrecho hace que el texto en cuestión parezca más fuera de lo que está.</p>
+  <p>El sesgo va contra la persona por la que se pregunta. Dejar uno fuera lo arregla: cada trabajo se mide contra los <em>otros</em>, exactamente como el texto revisado. Cuesta un bucle.</p>
+  <p>Lo cuento porque es la clase de error que nunca se anuncia. No se rompe nada. Los números parecen razonables. Simplemente alguien recibe un trato un poco peor del que la evidencia justifica, siempre, para siempre.</p>
+  <h2>El umbral que borré</h2>
+  <p>Aquí viene la parte que no esperaba escribir.</p>
+  <p>La Delta es un promedio sobre todas las palabras medidas, y eso diluye. Lo probé contra un caso deliberadamente extremo —la Constitución de EE.UU. contra mis propios artículos— y quedó <em>en el borde</em> de mi rango en vez de fuera. Y sin embargo los rasgos de debajo estaban gritando: ese texto usa «of» <strong>92 veces por cada mil palabras</strong> donde yo la uso 13. Siete veces mi tasa. Un rasgo en z = 10.7, promediado hasta la invisibilidad por ochenta rasgos que casualmente coincidían.</p>
+  <p>Así que añadí una segunda medida que no promedia nada: <strong>cuántas palabras usa el texto a un ritmo al que la persona nunca las ha usado</strong>, en ninguno de sus trabajos. No una estadística. Un rango y un número, comprobables contando.</p>
+  <p>La separación fue limpia. Mis propios artículos, apartados de uno en uno: 0, 1, 1 y 3 palabras fuera de mi rango, sobre unas 80. La Constitución: 14 de 93.</p>
+  <p>Y entonces quise meterlo en el veredicto. Un cuarto de las palabras fuera del rango, digamos, y el promedio deja de tener la última palabra.</p>
+  <p>Lo borré.</p>
+  <p>Porque ¿de dónde salía «un cuarto»? De mí, mirando cinco documentos y eligiendo un número que los separaba. Eso no es calibrar. Es exactamente la jugada que este proyecto se niega a hacer en todo lo demás — y habría quedado enterrada en una constante arriba de un archivo, haciendo daño en silencio en casos que nunca probé.</p>
+  <p>El conteo se reporta. Se dice en el resumen con palabras normales. Una persona lo lee. La colocación la decide una sola regla que cualquiera puede repetir en voz alta: <em>¿está esto más lejos del centro de la persona que sus propios trabajos?</em></p>
+  <p>Hay un comentario en el código diciéndolo, y una prueba llamada <code>That_count_does_not_decide_the_placement</code> para que nadie lo cablee más adelante como mejora. Calibrarlo con honestidad exigiría un corpus de textos con autoría conocida, que es un trabajo aparte y no algo que se finja con cinco archivos y una tarde.</p>
+  <h2>Se niega a contestar más veces de las que contesta</h2>
+  <p>Unas 1.400 palabras de trabajo anterior repartidas en piezas suficientes, y 300 en la entrega. Por debajo de eso lo dice y no devuelve nada.</p>
+  <p>Es una limitación de verdad y será el resultado más frecuente en la práctica. Un profesor con un solo trabajo previo de un estudiante no puede usar esto.</p>
+  <p>Lo prefiero a la alternativa. Una distancia calculada sobre cuatrocientas palabras es ruido, y el ruido con un decimal puesto es justo lo que la gente se cree.</p>
+  <h2>Lo que el código no le deja decir</h2>
+  <p>No hay ningún resultado que signifique <em>lo escribió otra persona</em>. Ni desactivado, ni escondido tras un flag: la enumeración tiene cuatro valores y ninguno es ese, y hay una prueba que verifica la lista.</p>
+  <pre><code class="language-csharp">Assert.Equal(["Undetermined", "WithinRange", "AtTheEdge", "BeyondRange"], names);</code></pre>
+  <p>El estilo cambia con la tarea. Con el género. Con el plazo, un coautor, un corrector, una buena noche de sueño, y con que alguien simplemente mejore escribiendo, que se supone que es el objetivo del ejercicio. Un texto fuera del rango es una razón para preguntar qué cambió. No es prueba, y de un tipo que no puede expresar la acusación no se puede leer la acusación por error.</p>
+  <p>El consejo que se imprime debajo de cada resultado dice lo mismo, en el idioma en que se escribió el texto:</p>
+  <blockquote>El estilo cambia con la tarea, con el género, con el plazo y con que una persona simplemente mejore. Un texto fuera del rango es una razón para preguntar qué cambió, nunca una conclusión sobre quién lo escribió — y un texto dentro del rango es el resultado más útil, porque es el que zanja una sospecha.</blockquote>
+  <h2>El resultado por el que construí esto de verdad</h2>
+  <p>Todo lo anterior va sobre la dirección acusatoria, porque ahí es donde vive el daño. Pero la dirección útil es la otra.</p>
+  <p>Hay un estudiante bajo sospecha. El profesor tiene tres ensayos suyos anteriores. El nuevo cae dentro del rango que esos tres cubren entre sí, y el reporte lo dice con los números al lado.</p>
+  <p>Eso no es una detección. Es una sospecha que termina en silencio, sobre evidencia, antes de convertirse en una reunión — y nadie tuvo que discutir de estadística.</p>
+  <p>Zanjar sospechas es la mayor parte de lo que debería hacer un proceso de integridad, y es lo único que casi ninguna herramienta de esta categoría está construida para hacer. Todas están optimizadas para encontrar algo. Esta da lo mejor de sí cuando no encuentra nada, y lo dice con claridad suficiente para que un profesor cierre la pestaña y se vaya a casa.</p>
+  <p>Las listas de palabras función viven en los packs de reglas como JSON, así que añadir un idioma es un pull request y ningún compilador. MIT, motor y pruebas incluidos, en <a href="https://github.com/peopleworks/SignsofAI">GitHub</a>.</p>
+  <hr>
+  <p><em>Escrito por un humano y revisado con la herramienta que describe: <strong>7/100, mayormente humano</strong>, variabilidad 0.67, unas 1.600 palabras. La comparación citada arriba es la propia familia de artículos de este blog, medida de verdad — y el que salió en 0.654 es el primer artículo que escribí sobre este proyecto.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

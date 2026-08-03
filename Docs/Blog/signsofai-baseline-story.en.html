@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I built the AI detector that answers a different question · SignsOfAI</title>
+<meta name="description" content="Detectors flag 61% of essays by non-native English speakers. The fix is not a better classifier — it is a better question: not \"does this look like a machine\" but \"does this look like the person who wrote the others\". Here is what that took, and the threshold I deleted.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Maker story · Engineering</div>
+  <h1>I built the AI detector that answers a different question</h1>
+  <p class="lead">Detectors flag 61% of essays by non-native English speakers. The fix is not a better classifier — it is a better question: not \"does this look like a machine\" but \"does this look like the person who wrote the others\". Here is what that took, and the threshold I deleted.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Download or try it</b> — free, MIT, web and Windows.</a>
+
+  <hr>
+
+  <p>Sixty-one percent.</p>
+  <p>That is the share of essays by non-native English speakers that AI detectors flag as machine-written. Not sixty-one percent of the cheats. Sixty-one percent of the essays.</p>
+  <p>The mechanism is not mysterious. These tools learned that formal, careful, slightly stiff prose looks like a language model. And formal, careful, slightly stiff prose is exactly what you write in a language you learned second. The tool is not detecting AI. It is detecting a second language, and reporting it as dishonesty.</p>
+  <p>You cannot fix that with a better classifier, because the classifier is answering the question it was asked. You fix it by asking a different question.</p>
+  <h2>The question</h2>
+  <p>Not: <em>does this look like a machine?</em></p>
+  <p>But: <em>does this look like the person who wrote the others?</em></p>
+  <p>That inversion does everything. A student whose ordinary register is formal has a <strong>formal baseline</strong>. Measured against themselves, formal is not a red flag — it is Tuesday. The very trait that condemns them under the first question exonerates them under the second.</p>
+  <p>The method is not new. Burrows's Delta, published in 2002, counts how often a writer reaches for small ordinary words — "the", "of", "however" — and compares those rates between texts. Function words are what forensic linguistics uses precisely because they ignore the topic: a person uses them at their own rate whether they are writing about hydrology or opera.</p>
+  <p>What is different is what I did with the output.</p>
+  <h2>Classical Delta asks a question I do not have the standing to answer</h2>
+  <p>The textbook setup gives Delta a set of candidate authors and asks which one a text resembles. Applied to a classroom, that becomes "is this the student, or someone else", and answering it requires a threshold — a line past which the software says <em>not them</em>.</p>
+  <p>Somebody has to invent that line. It would be me. And a number I picked would end up quoted in a disciplinary meeting as though it came down from a mountain.</p>
+  <p>So the report never states a threshold. It states two things side by side:</p>
+  <ul>
+    <li>how far the questioned text sits from the writer's centre;</li>
+    <li>how far <strong>each of the writer's own pieces</strong> sits from that same centre, measured identically.</li>
+  </ul>
+  <p>The scale belongs to the writer. Nobody has to accept my idea of "too far", because there isn't one — there is only their own variation, and where this piece falls against it.</p>
+  <p>Here is real output, one of my own articles held out and compared against three others:</p>
+  <pre><code>  0.654  inside this writer's own range
+  Distance 0.654. This writer's own pieces sit up to 1.18 from their centre,
+  so this one is inside the range they already cover.
+  their own pieces: 0.66 · 0.78 · 0.84 · 0.85 · 0.86 · 0.96 · 0.98 · 1.03 · 1.18</code></pre>
+  <p>You can read that without knowing what Delta is.</p>
+  <h2>The bias I had to go back and remove</h2>
+  <p>The first version computed the writer's own spread by measuring each of their pieces against the statistics of all their pieces — including itself.</p>
+  <p>That is wrong, and wrong in a direction that matters. A piece included in the statistics it is then scored against gets pulled toward the centre. The writer's range comes out artificially tight. And a tight range makes the questioned text look further outside it than it is.</p>
+  <p>The bias runs against the person being asked about. Leave-one-out fixes it: each of the writer's pieces is measured against the <em>others</em>, exactly as the questioned text is. It costs a loop.</p>
+  <p>I mention it because it is the kind of error that never announces itself. Nothing crashes. The numbers look plausible. Someone just gets treated slightly worse than the evidence warrants, every single time, forever.</p>
+  <h2>The threshold I deleted</h2>
+  <p>Here is the part I did not expect to write.</p>
+  <p>Delta is a mean across every measured word, and that dilutes. I tested against a deliberately extreme case — the US Constitution, against my own articles — and it landed at <em>the edge</em> of my range rather than beyond it. Yet the underlying features were screaming: that text uses "of" at <strong>92 per thousand words</strong> where I use it at 13. Seven times my rate. One feature at z = 10.7, averaged into invisibility by eighty features that happened to match.</p>
+  <p>So I added a second measurement that does not average anything: <strong>how many words the questioned text uses at a rate the writer has never used them at</strong>, in any of their pieces. Not a statistic. A range and a number, checkable by counting.</p>
+  <p>The separation was clean. My own articles, held out one at a time: 0, 1, 1 and 3 words outside my range, out of roughly 80. The Constitution: 14 out of 93.</p>
+  <p>And then I wanted to wire it into the verdict. A quarter of the words outside the writer's range, say, and the aggregate stops having the last word.</p>
+  <p>I deleted it.</p>
+  <p>Because where did "a quarter" come from? From me, looking at five documents, picking a number that separated them. That is not calibration. That is the exact move this entire project refuses to make everywhere else — and it would have been buried in a constant near the top of a file, doing quiet damage in cases I never tested.</p>
+  <p>The count is reported. It is stated in the summary in plain words. A person reads it. The placement is decided by one rule anyone can restate out loud: <em>is this further from the writer's centre than their own pieces are</em>.</p>
+  <p>There is a comment in the source saying so, and a test named <code>That_count_does_not_decide_the_placement</code> so nobody wires it in later as an improvement. Calibrating it honestly would need a corpus of texts with known authorship, which is its own piece of work and not one I can fake with five files and an afternoon.</p>
+  <h2>It refuses to answer more often than it answers</h2>
+  <p>Roughly 1,400 words of earlier work, spread across enough separate pieces, and 300 in the submission. Below that it says so and returns nothing.</p>
+  <p>That is a real limitation and it will be the most common outcome in practice. A teacher who has one prior assignment from a student cannot use this at all.</p>
+  <p>I would rather that than the alternative. A distance computed from four hundred words is noise, and noise with a decimal point on it is exactly what people believe.</p>
+  <h2>What the code will not let you say</h2>
+  <p>There is no result meaning <em>someone else wrote this</em>. Not disabled, not hidden behind a flag — the enumeration has four values and none of them is that one, and there is a test asserting the list.</p>
+  <pre><code class="language-csharp">Assert.Equal(["Undetermined", "WithinRange", "AtTheEdge", "BeyondRange"], names);</code></pre>
+  <p>Style moves with the assignment. With the genre. With the deadline, a co-author, an editor, a good night's sleep, and with a person simply getting better at writing, which is supposedly the point of the exercise. A text outside the range is a reason to ask what changed. It is not evidence, and a type that cannot express the accusation cannot have the accusation read out of it by mistake.</p>
+  <p>The advice printed under every single result says the same thing, in whichever language the text was written in:</p>
+  <blockquote>Style moves with the assignment, the genre, the deadline, and with a person simply getting better. A text outside the range is a reason to ask what changed, never a conclusion about who wrote it — and a text inside the range is the more useful result, because it is the one that settles a suspicion.</blockquote>
+  <h2>The result I actually built this for</h2>
+  <p>Everything above is about the accusatory direction, because that is where the harm lives. But the useful direction is the other one.</p>
+  <p>A student is suspected. The teacher has three of their earlier essays. The new one lands inside the range those three cover between themselves, and the report says so with the numbers beside it.</p>
+  <p>That is not a detection. That is a suspicion ending quietly, on evidence, before it becomes a meeting — and nobody had to argue about statistics.</p>
+  <p>Settling suspicions is most of what an integrity process should be doing, and it is the one thing almost no tool in this category is built to do. Every one of them is optimised to find something. This one is at its best when it finds nothing, and says so clearly enough that a teacher can close the tab and go home.</p>
+  <p>Function-word lists live in the rule packs as JSON, so adding a language is a pull request and no compiler. MIT, engine and tests included, on <a href="https://github.com/peopleworks/SignsofAI">GitHub</a>.</p>
+  <hr>
+  <p><em>Written by a human and checked with the tool it describes: <strong>8/100, reads mostly human</strong>, burstiness 0.63, about 1,570 words. The held-out comparison quoted above is this article's own family of posts, measured for real — and the one that came out at 0.654 is the first article I ever wrote about this project.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>
