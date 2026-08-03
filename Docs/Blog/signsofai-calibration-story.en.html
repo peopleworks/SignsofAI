@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I measured how often my own AI detector is wrong, and published it · SignsOfAI</title>
+<meta name="description" content="Ninety texts written before generative models existed. Zero flagged at the recommended threshold — with a 95% interval reaching 4.1%, because ninety texts cannot promise more. And one rule of mine fires on half of all human academic writing.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Maker story · Engineering</div>
+  <h1>I measured how often my own AI detector is wrong, and published it</h1>
+  <p class="lead">Ninety texts written before generative models existed. Zero flagged at the recommended threshold — with a 95% interval reaching 4.1%, because ninety texts cannot promise more. And one rule of mine fires on half of all human academic writing.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Download or try it</b> — free, MIT, web and Windows.</a>
+
+  <hr>
+
+  <p>Every teacher who picks up an AI detector asks the same question within about a minute: <em>how often are you wrong?</em></p>
+  <p>Nobody answers it. Not Turnitin, not GPTZero, not Originality.ai, not any of the tools that will happily tell you a student's essay is 87% AI. The number that would let you judge them is the one number none of them publish.</p>
+  <p>So I measured mine, and the result is in the repository: <code>Docs/CALIBRATION.md</code>, regenerated by a command anyone can run.</p>
+  <h2>What I did not measure, and why</h2>
+  <p>I did not measure accuracy.</p>
+  <p>Accuracy needs a pile of machine-written text to compare against, and any pile I assemble is a sample of whichever models were convenient in whichever month. That number ages badly, and it flatters whoever assembled it — I choose the prompts, I choose the models, I choose when to stop collecting.</p>
+  <p>Worse, it is the wrong number. A detector that is 95% accurate and gets there by flagging everyone who writes formally has done more damage than one that catches less and accuses nobody.</p>
+  <p>What I measured is the <strong>false-positive rate</strong>: how often the tool flags writing that no machine produced. That needs only human text, which does not go stale. And it measures the harm this category actually causes — detectors flag 61% of essays by non-native English speakers, and not one of them publishes that figure about itself.</p>
+  <h2>How you know the text is human</h2>
+  <p>Not by reading it. Reading it is the thing being measured; it cannot also be the thing doing the measuring.</p>
+  <p>By its date. Every text in the corpus was published before generative models could have written it: open-access research articles from 2018–2020, and Wikipedia revisions as they stood in 2020 and 2021, pulled from the revision history. A paper with a 2019 DOI was not written by something that did not exist yet.</p>
+  <p>That is a stronger guarantee than any classifier offers about anything, and it is available to anyone with an internet connection.</p>
+  <h2>The number</h2>
+  <p>Ninety texts, about 380,000 words.</p>
+  <p><strong>At a threshold of 25 out of 100, it flagged none of them.</strong></p>
+  <pre><code> Score at or above   Human texts flagged   Rate    95% interval
+ 10                  18 / 90               20%     13%   – 29.4%
+ 15                   7 / 90               7.8%    3.8%  – 15.2%
+ 20                   1 / 90               1.1%    0.2%  – 6%
+ 25                   0 / 90               0%      0%    – 4.1%</code></pre>
+  <p>Read the last column, not the third. Zero out of ninety is not a 0% false-positive rate; it is a rate somewhere between 0% and 4.1%, and ninety texts cannot say anything narrower.</p>
+  <p>So the recommendation is made from the <strong>upper</strong> end. That is the whole discipline: with a small corpus the bound is wide and the recommended threshold comes out cautious, and it tightens on its own as the corpus grows. Reading the point estimate instead would let me claim a 0% false-positive rate from ninety documents, which would be false and is exactly the kind of thing people quote.</p>
+  <p>A fact worth internalising if you ever do this: <strong>with nothing flagged at all, it still takes about seventy-five texts before the interval alone gets under 5%.</strong> That is what "enough corpus" actually means, and it is far more than anybody assembles by accident.</p>
+  <h2>The result I was most nervous about</h2>
+  <p>The whole argument of this project is that asking "does this look like a machine" punishes people who write formally, and that most of those people learned the language second. If my own tool did that, I would have built the thing I spend articles criticising.</p>
+  <p>So the corpus is split. PLOS articles with at least one author affiliated in an anglophone country, against articles with none. English Wikipedia against Spanish Wikipedia — same source, same register, so a language effect can be told apart from a genre effect.</p>
+  <pre><code> Group                       Texts   Median   90th pct   Highest
+ en-anglophone-affiliation   21      7.0       9.8       15.4
+ en-other-affiliation        19      6.4      14.1       18.3
+ en-wikipedia                25      5.2      10.4       23.4
+ es-wikipedia                25      7.7      15.4       18.9</code></pre>
+  <p>The medians run from 5.2 to 7.7 — a spread of 2.5 points on a scale of a hundred. The Spanish group is not punished for being Spanish. The non-anglophone group is not punished for being non-anglophone, though its tail is longer, and that longer tail is worth watching as the corpus grows.</p>
+  <p>A tool with the defect I keep writing about would show one group sitting well above the rest. None does.</p>
+  <p>I want to be precise about what that is and is not. It is a <strong>first indication</strong>, on tens of texts rather than hundreds, and on published articles rather than student essays. It is not a finding. It could move when the corpus grows, and it will move in whichever direction it moves — which is the point of publishing the method alongside the number.</p>
+  <p>The affiliation split is also a crude proxy. Nobody's first language is recorded in a DOI, and plenty of people at a London university learned English second. It errs deliberately in one direction: any anglophone affiliation at all counts as anglophone, which shrinks the second-language group and makes any gap an understatement rather than an exaggeration.</p>
+  <h2>The part that stung</h2>
+  <p>The report also lists which of my rules fired on that human writing. Every hit is a false positive by construction — no machine wrote any of it, so there is no judgement call to make.</p>
+  <pre><code> Rule                  Texts it fired on   Share    Total hits
+ rhet.rule-of-three    45                  50%      100
+ stat.burstiness       25                  27.8%     25
+ lex.moreover          23                  25.6%     67
+ lex.furthermore       23                  25.6%     55
+ rhet.in-order-to      22                  24.4%     60</code></pre>
+  <p><strong>My rule-of-three detector fires on half of all human academic writing.</strong> A hundred times across forty-five papers that predate the models entirely.</p>
+  <p>And "moreover" and "furthermore", flagged in a quarter of the texts. Those are ordinary academic connectives. Scholars have been writing "furthermore" since long before anyone trained a transformer.</p>
+  <p>A rule near the top of that list is not automatically wrong; some tells genuinely do appear in human prose, and the catalog says so. But a rule that fires on half of everything is measuring the genre, not the machine. I would not have known which ones without doing this, and I would have gone on quietly shipping them.</p>
+  <p>That list is the most useful thing the whole exercise produced, and it is the reason to publish rather than to check privately and move on.</p>
+  <h2>What it does not tell you</h2>
+  <p>Four things, and they are in the report itself rather than in a footnote somewhere.</p>
+  <p><strong>Nothing about how much AI writing it catches.</strong> That is the other half of the picture and it is deliberately absent. A tool that flags nothing has a perfect false-positive rate.</p>
+  <p><strong>Nothing about text unlike this corpus.</strong> These are published articles — long, heavily edited, written by people who write for a living. A first-year essay is a different animal. The honest fix is for a school to calibrate on its own students' pre-2022 coursework, which the same tool does, and get a rate for its own population instead of somebody else's.</p>
+  <p><strong>The grouping is a proxy</strong>, argued above.</p>
+  <p><strong>The hashes prove what this run measured</strong>, not that you re-extracting the same articles would get identical text. You would not: PDF and HTML extraction differ.</p>
+  <h2>Why it is a JSON file and not a claim</h2>
+  <p>The corpus is a manifest anyone can extend — source, licence, year, hash, and the reasoning behind each grouping. The texts themselves are not in the repository, because licences differ per source and the bulk would dwarf the code, but everything needed to reassemble and check them is.</p>
+  <p>Add texts, and the published number changes. That is the point. <strong>A number that can go up when the corpus grows is a working measurement. One that could only ever go down would be marketing.</strong></p>
+  <p>What I most want is Spanish academic writing. SciELO and Redalyc are the obvious sources and neither was reachable from where I assembled this, so the Spanish side currently rests on encyclopedia prose alone — and Spanish is the half of this problem nobody else measures at all.</p>
+  <p>MIT, engine, corpus manifest and the measuring tool: <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>.</p>
+  <hr>
+  <p><em>Written by a human and checked with the tool it describes: <strong>10/100, reads mostly human</strong>, burstiness 0.56, about 1,470 words. Every figure quoted above is copied from the generated report rather than from memory. I had written that the rule firing on half of human academic writing had fired here too; I checked before publishing and it had not. Two others from that list did — <code>lex.moreover</code> and <code>lex.furthermore</code>, the ordinary academic connectives I complain about four paragraphs up. Which is either evidence for the point or against my prose.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

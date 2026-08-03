@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medí cuántas veces se equivoca mi propio detector de IA, y lo publiqué · SignsOfAI</title>
+<meta name="description" content="Noventa textos escritos antes de que existieran los modelos generativos. Cero marcados al umbral recomendado — con un intervalo del 95% que llega al 4,1%, porque noventa textos no pueden prometer más. Y una regla mía se dispara en la mitad de toda la escritura académica humana.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Historia de taller · Ingeniería</div>
+  <h1>Medí cuántas veces se equivoca mi propio detector de IA, y lo publiqué</h1>
+  <p class="lead">Noventa textos escritos antes de que existieran los modelos generativos. Cero marcados al umbral recomendado — con un intervalo del 95% que llega al 4,1%, porque noventa textos no pueden prometer más. Y una regla mía se dispara en la mitad de toda la escritura académica humana.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Descárgalo o pruébalo</b> — gratis, MIT, web y Windows.</a>
+
+  <hr>
+
+  <p>Todo profesor que agarra un detector de IA hace la misma pregunta al minuto: <em>¿cuántas veces te equivocas?</em></p>
+  <p>Nadie la contesta. Ni Turnitin, ni GPTZero, ni Originality.ai, ni ninguna de las herramientas que le dirán tan campantes que el ensayo de un estudiante es 87% IA. El número que permitiría juzgarlas es justo el que ninguna publica.</p>
+  <p>Así que medí el mío, y el resultado está en el repositorio: <code>Docs/CALIBRATION.md</code>, regenerado por un comando que cualquiera puede correr.</p>
+  <h2>Lo que no medí, y por qué</h2>
+  <p>No medí exactitud.</p>
+  <p>La exactitud necesita un montón de texto escrito por máquina contra el cual comparar, y cualquier montón que yo arme es una muestra de los modelos que me vinieran bien ese mes. Ese número envejece mal, y favorece a quien lo armó: yo elijo los prompts, yo elijo los modelos, yo elijo cuándo dejar de recolectar.</p>
+  <p>Peor aún, es el número equivocado. Un detector con 95% de exactitud que lo consigue marcando a todo el que escribe formal ha hecho más daño que uno que caza menos y no acusa a nadie.</p>
+  <p>Lo que medí es la <strong>tasa de falsos positivos</strong>: cuántas veces la herramienta marca escritura que ninguna máquina produjo. Eso solo necesita texto humano, que no caduca. Y mide el daño que esta categoría causa de verdad: los detectores marcan el 61% de los ensayos de quienes no tienen el inglés como lengua materna, y ninguno publica esa cifra sobre sí mismo.</p>
+  <h2>Cómo se sabe que el texto es humano</h2>
+  <p>No leyéndolo. Leerlo es lo que se está midiendo; no puede ser además lo que mide.</p>
+  <p>Por su fecha. Cada texto del corpus se publicó antes de que los modelos generativos pudieran haberlo escrito: artículos de acceso abierto de 2018 a 2020, y revisiones de Wikipedia tal como estaban en 2020 y 2021, sacadas del historial. Un artículo con un DOI de 2019 no lo escribió algo que todavía no existía.</p>
+  <p>Esa es una garantía más fuerte que la que ofrece cualquier clasificador sobre cualquier cosa, y está al alcance de cualquiera con conexión a internet.</p>
+  <h2>El número</h2>
+  <p>Noventa textos, unas 380.000 palabras.</p>
+  <p><strong>A un umbral de 25 sobre 100, no marcó ninguno.</strong></p>
+  <pre><code> Puntuación desde   Textos humanos marcados   Tasa    Intervalo 95%
+ 10                 18 / 90                   20%     13%   – 29,4%
+ 15                  7 / 90                   7,8%    3,8%  – 15,2%
+ 20                  1 / 90                   1,1%    0,2%  – 6%
+ 25                  0 / 90                   0%      0%    – 4,1%</code></pre>
+  <p>Lea la última columna, no la tercera. Cero de noventa no es una tasa de falsos positivos del 0%; es una tasa entre 0% y 4,1%, y noventa textos no pueden decir nada más estrecho.</p>
+  <p>Por eso la recomendación se hace desde el extremo <strong>superior</strong>. Esa es la disciplina entera: con un corpus pequeño el límite es ancho y el umbral recomendado sale prudente, y se estrecha solo a medida que el corpus crece. Leer la estimación puntual me dejaría afirmar una tasa del 0% a partir de noventa documentos, lo cual sería falso y es exactamente la clase de cosa que la gente cita.</p>
+  <p>Un dato que conviene interiorizar si alguna vez hace esto: <strong>sin marcar absolutamente nada, todavía hacen falta unos setenta y cinco textos para que el intervalo por sí solo baje del 5%.</strong> Eso es lo que significa «corpus suficiente», y es bastante más de lo que nadie reúne por accidente.</p>
+  <h2>El resultado que más me inquietaba</h2>
+  <p>El argumento entero de este proyecto es que preguntar «¿se parece a una máquina?» castiga a quien escribe formal, y que la mayoría de esa gente aprendió el idioma después. Si mi propia herramienta hiciera eso, habría construido justo aquello que critico en cada artículo.</p>
+  <p>Así que el corpus va partido. Artículos de PLOS con al menos un autor afiliado en un país anglófono, contra artículos sin ninguno. Wikipedia en inglés contra Wikipedia en español — misma fuente, mismo registro, para poder distinguir un efecto de idioma de un efecto de género textual.</p>
+  <pre><code> Grupo                       Textos   Mediana   Percentil 90   Máximo
+ en-anglophone-affiliation   21       7,0        9,8           15,4
+ en-other-affiliation        19       6,4       14,1           18,3
+ en-wikipedia                25       5,2       10,4           23,4
+ es-wikipedia                25       7,7       15,4           18,9</code></pre>
+  <p>Las medianas van de 5,2 a 7,7 — una dispersión de 2,5 puntos en una escala de cien. Al grupo en español no se le castiga por estar en español. Al grupo no anglófono no se le castiga por no ser anglófono, aunque su cola es más larga, y esa cola merece vigilancia según crezca el corpus.</p>
+  <p>Una herramienta con el defecto sobre el que llevo escribiendo mostraría un grupo claramente por encima del resto. Ninguno lo está.</p>
+  <p>Quiero ser preciso sobre qué es y qué no es esto. Es un <strong>primer indicio</strong>, sobre decenas de textos y no cientos, y sobre artículos publicados y no ensayos de estudiantes. No es un hallazgo. Puede moverse cuando el corpus crezca, y se moverá en la dirección en que se mueva — que es precisamente el motivo de publicar el método junto al número.</p>
+  <p>La división por afiliación es además un sustituto tosco. La lengua materna de nadie consta en un DOI, y mucha gente en una universidad de Londres aprendió inglés después. Se equivoca a propósito en una dirección: cualquier afiliación anglófona cuenta como anglófona, lo que encoge el grupo de segunda lengua y hace que cualquier brecha sea una subestimación y no una exageración.</p>
+  <h2>La parte que escoció</h2>
+  <p>El reporte lista además cuáles de mis reglas se dispararon sobre esa escritura humana. Cada acierto es un falso positivo por construcción: ninguna máquina escribió nada de eso, así que no hay juicio que hacer.</p>
+  <pre><code> Regla                 Textos donde disparó   Proporción   Aciertos
+ rhet.rule-of-three    45                     50%          100
+ stat.burstiness       25                     27,8%         25
+ lex.moreover          23                     25,6%         67
+ lex.furthermore       23                     25,6%         55
+ rhet.in-order-to      22                     24,4%         60</code></pre>
+  <p><strong>Mi detector de regla de tres se dispara en la mitad de toda la escritura académica humana.</strong> Cien veces a lo largo de cuarenta y cinco artículos que son anteriores a los modelos por completo.</p>
+  <p>Y «moreover» y «furthermore», marcados en la cuarta parte de los textos. Son conectores académicos normales. Los investigadores llevan escribiendo «furthermore» desde mucho antes de que nadie entrenara un transformer.</p>
+  <p>Una regla en lo alto de esa lista no está automáticamente mal; algunas pistas sí aparecen de verdad en prosa humana, y el catálogo lo dice. Pero una regla que dispara en la mitad de todo está midiendo el género, no la máquina. Sin hacer esto no habría sabido cuáles, y habría seguido publicándolas tan tranquilo.</p>
+  <p>Esa lista es lo más útil que produjo el ejercicio entero, y es la razón para publicarlo en vez de comprobarlo en privado y seguir adelante.</p>
+  <h2>Lo que no le dice</h2>
+  <p>Cuatro cosas, y están en el propio reporte y no en una nota al pie.</p>
+  <p><strong>Nada sobre cuánta escritura de IA caza.</strong> Esa es la otra mitad del cuadro y está deliberadamente ausente. Una herramienta que no marca nada tiene una tasa de falsos positivos perfecta.</p>
+  <p><strong>Nada sobre texto distinto a este corpus.</strong> Son artículos publicados: largos, muy editados, escritos por gente que escribe para vivir. Un ensayo de primer año es otro animal. El arreglo honesto es que un centro calibre sobre los trabajos pre-2022 de sus propios estudiantes, cosa que la misma herramienta hace, y obtenga una tasa para <em>su</em> población en vez de la de otro.</p>
+  <p><strong>La agrupación es un sustituto</strong>, discutido arriba.</p>
+  <p><strong>Los hashes prueban qué midió esta ejecución</strong>, no que usted extrayendo los mismos artículos obtenga texto idéntico. No lo obtendría: la extracción de PDF y la de HTML difieren.</p>
+  <h2>Por qué es un archivo JSON y no una afirmación</h2>
+  <p>El corpus es un manifiesto que cualquiera puede ampliar — fuente, licencia, año, hash y el razonamiento detrás de cada agrupación. Los textos en sí no están en el repositorio, porque las licencias difieren por fuente y el volumen aplastaría al código, pero sí está todo lo necesario para rearmarlos y comprobarlos.</p>
+  <p>Añada textos y el número publicado cambia. De eso se trata. <strong>Un número que puede subir cuando el corpus crece es una medición que funciona. Uno que solo pudiera bajar sería publicidad.</strong></p>
+  <p>Lo que más quiero es escritura académica en español. SciELO y Redalyc son las fuentes obvias y ninguna era alcanzable desde donde armé esto, así que el lado español descansa hoy solo en prosa enciclopédica — y el español es la mitad de este problema que nadie más mide.</p>
+  <p>MIT, motor, manifiesto del corpus y la herramienta de medición: <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>.</p>
+  <hr>
+  <p><em>Escrito por un humano y revisado con la herramienta que describe: <strong>8/100, mayormente humano</strong>, variabilidad 0.58, unas 1.530 palabras. Cada cifra citada arriba está copiada del reporte generado y no de memoria. Había escrito que la regla que dispara en la mitad de la escritura académica humana había disparado también aquí; lo comprobé antes de publicar y no era cierto. Sí dispararon otras dos de esa lista — <code>lex.moreover</code> y <code>lex.furthermore</code>, los conectores académicos normales de los que me quejo cuatro párrafos más arriba. Lo cual es evidencia a favor del argumento, o en contra de mi prosa.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -52,6 +52,32 @@ language the advice is about.
 
 ---
 
+## How often is it wrong about a human?
+
+Every AI detector gets asked this and none of them answer. **[`Docs/CALIBRATION.md`](Docs/CALIBRATION.md)
+is the answer**, measured against 90 texts published before generative models existed — open-access
+research articles and pre-2022 encyclopedia revisions in both languages.
+
+At a threshold of **25/100 it flags none of them**: an observed 0%, with a 95% interval reaching 4.1%
+because ninety texts cannot promise more than that. The recommendation is made from the uncertain end
+of the interval rather than the flattering one, so it stays cautious while the corpus is small and
+tightens on its own as it grows.
+
+It is deliberately **not an accuracy figure**. Accuracy needs a collection of machine-written text,
+which is a sample of whichever models were around that month; a false-positive rate needs only human
+writing, and it measures the harm this category actually causes — detectors flag 61% of essays by
+non-native English speakers, and none of them publish that about themselves.
+
+The report also names **which rules misfire**, ranked. That list is uncomfortable and it is the most
+useful thing the exercise produces.
+
+The corpus is a JSON manifest anyone can extend, the tool that builds and measures it is in
+`tools/SignsOfAI.Calibration`, and the whole thing re-runs in one command. See
+[`Docs/Calibration/README.md`](Docs/Calibration/README.md) — Spanish academic writing is the most
+wanted contribution.
+
+---
+
 ## 1. The AI-writing linter ("Analyze")
 
 Unlike black-box detectors that only spit out a score, this is an **explainable, actionable, educational**

@@ -37,3 +37,6 @@ _work/
 # business — and one `git add -A` from the repository root is all it takes to publish it, which is
 # exactly how it got in once.
 temp/
+
+# Calibration texts are fetched, not redistributed: the manifest is the repo artefact.
+Docs/Calibration/texts/
