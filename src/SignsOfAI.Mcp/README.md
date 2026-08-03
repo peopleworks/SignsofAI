@@ -16,10 +16,11 @@ Built on the official [`ModelContextProtocol`](https://www.nuget.org/packages/Mo
 | `search_catalog` | Searches the catalog of AI-writing signs (EN/ES), filter by keyword / language / category | 🖥️ offline |
 | `extract_distinctive_phrases` | Distinctive phrases + ready-made exact-phrase web-search links | 🖥️ offline |
 | `inspect_characters` | Characters typing cannot produce — zero-width, homoglyphs, hidden tag characters — with the exact line and column of each | 🖥️ offline |
+| `check_citations` | Where a document contradicts its **own** reference list: a source cited but never listed, one DOI on two works, a year that has not happened | 🖥️ offline |
 | `measure_predictability` | Perplexity — how predictable/generic a model finds the phrasing | ☁️ server |
 | `check_paraphrase` | Reworded/translated copies via sentence embeddings (EmbeddingGemma) | ☁️ server |
 
-The first five run **entirely on the machine** — the text never leaves it. The last two **send the text**
+The first six run **entirely on the machine** — the text never leaves it. The last two **send the text**
 to the SignsOfAI server (their descriptions disclose this); see [Server tools](#server-tools-optional).
 
 ## Install

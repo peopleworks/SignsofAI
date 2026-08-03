@@ -1,6 +1,7 @@
 using System.Text.Json;
 using SignsOfAI.Core;
 using SignsOfAI.Core.Artifacts;
+using SignsOfAI.Core.Citations;
 using SignsOfAI.Core.Documents;
 using SignsOfAI.Core.Model;
 using SignsOfAI.Core.Rules;
@@ -130,6 +131,22 @@ if (json)
                 o.Line, o.Column, offset = o.Span.Start, o.IsStrong, o.Message
             }),
         },
+        // Also its own object: what the document says about its own sources is a statement about the
+        // file, not a reading of the prose, and a consumer should not have to separate them.
+        citations = new
+        {
+            style = result.Citations.Style.ToString(),
+            hasReferenceList = result.Citations.HasReferenceList,
+            referenceCount = result.Citations.References.Count,
+            citationCount = result.Citations.Citations.Count,
+            contradictionCount = result.Citations.ContradictionCount,
+            summary = result.Citations.Summary,
+            advice = result.Citations.Advice,
+            issues = result.Citations.Issues.Select(i => new
+            {
+                kind = i.Kind.ToString(), i.Line, i.Subject, i.Message, i.IsContradiction
+            }),
+        },
     }, new JsonSerializerOptions { WriteIndented = true }));
 }
 else
@@ -174,6 +191,7 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
         Console.WriteLine("     " + string.Join("  ", cats.Select(c => $"{c.Category} {c.FindingCount}")));
 
     PrintArtifacts(r.Artifacts, Col, Bold);
+    PrintCitations(r.Citations, Col, Bold);
 
     Console.WriteLine();
     var shown = r.Findings.Take(top).ToList();
@@ -190,6 +208,34 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
     if (r.Findings.Count == 0)
         Console.WriteLine(Col("  ✓ No strong AI tells found — reads mostly human.", 32));
     Console.WriteLine();
+}
+
+/// <summary>
+/// Prints what the document says about its own sources, and nothing at all when it has none.
+/// Contradictions are listed first and marked; the untidy ones follow, uncoloured, because listing a
+/// source you never cited is a housekeeping note and should not read like an accusation.
+/// </summary>
+static void PrintCitations(CitationReport report, Func<string, int, string> Col, Func<string, string> Bold)
+{
+    if (!report.Any) return;
+
+    Console.WriteLine();
+    Console.WriteLine("     " + Bold("Sources") + "  " +
+                      Col(report.ContradictionCount > 0
+                          ? $"{report.ContradictionCount} contradiction(s)"
+                          : report.HasReferenceList ? "text and bibliography agree" : "no reference list",
+                          report.ContradictionCount > 0 ? 33 : 90));
+    Console.WriteLine(Col($"     {report.Summary}", 90));
+
+    foreach (var issue in report.Issues.OrderByDescending(i => i.IsContradiction).ThenBy(i => i.Line))
+    {
+        var mark = issue.IsContradiction ? Col("!", 33) : Col("·", 90);
+        var line = $"       {mark} line {issue.Line}: {issue.Message}";
+        Console.WriteLine(issue.IsContradiction ? line : Col(line, 90));
+    }
+
+    if (report.Issues.Count > 0)
+        Console.WriteLine(Col($"     {report.Advice}", 90));
 }
 
 /// <summary>

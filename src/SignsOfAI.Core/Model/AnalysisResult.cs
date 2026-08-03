@@ -1,4 +1,5 @@
 using SignsOfAI.Core.Artifacts;
+using SignsOfAI.Core.Citations;
 
 namespace SignsOfAI.Core.Model;
 
@@ -32,6 +33,17 @@ public sealed record AnalysisResult
     /// an opinion. Empty for almost every document.
     /// </summary>
     public ArtifactReport Artifacts { get; init; } = ArtifactReport.Empty;
+
+    /// <summary>
+    /// What the document says about its own sources, and where it disagrees with itself — a citation
+    /// with no matching entry, a DOI on two different works, a year that has not happened.
+    ///
+    /// Outside <see cref="Findings"/> and with no effect on <see cref="OverallScore"/>, for the same
+    /// reason as <see cref="Artifacts"/>: a teacher cannot take a percentage to an integrity
+    /// committee, but "this source is missing from its own bibliography" settles itself in one
+    /// question. Empty for any document without references.
+    /// </summary>
+    public CitationReport Citations { get; init; } = CitationReport.Empty;
 
     /// <summary>Human-readable one-line verdict derived from <see cref="OverallScore"/>.</summary>
     public string Verdict => OverallScore switch

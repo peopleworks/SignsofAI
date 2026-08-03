@@ -224,6 +224,51 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     font-size: .85rem; color: var(--text-muted);
 }
 
+
+/* ---- sources (citation cross-check) ----
+   Reads as a table of statements about the file, like the artifact panel and unlike the score. */
+.citations { border-left: 3px solid var(--text-muted); }
+.citations.citations-strong { border-left-color: var(--warn); }
+
+.citations-head { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: .5rem; }
+.citations-head h3 { margin: 0; font-size: 1.05rem; display: inline-flex; align-items: center; gap: .4rem; }
+.citations-head button { margin-left: auto; }
+
+.citations-summary { margin: 0 0 .6rem; font-size: .92rem; }
+.citations-counts { display: flex; gap: 1.2rem; font-size: .8rem; color: var(--text-muted); margin-bottom: .7rem; }
+.citations-counts b { color: var(--text); font-size: 1rem; }
+
+.citations-issues { list-style: none; margin: 0 0 .7rem; padding: 0; display: flex; flex-direction: column; gap: .45rem; }
+.citations-issues li {
+    display: flex; gap: .5rem; align-items: baseline; flex-wrap: wrap;
+    font-size: .86rem; padding-left: .6rem; border-left: 2px solid var(--border);
+}
+.citations-issues li.contradiction { border-left-color: var(--warn); }
+.citations-issues li.untidy { color: var(--text-muted); }
+.issue-kind {
+    font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; font-weight: 600;
+    padding: .1rem .4rem; border-radius: 999px; background: var(--surface-2); white-space: nowrap;
+}
+.citations-issues li.contradiction .issue-kind { color: var(--warn); }
+.issue-message { flex: 1 1 16rem; min-width: 0; }
+
+.citations-list {
+    margin: .6rem 0 .3rem; padding-left: 1.4rem; font-size: .82rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    max-height: 20rem; overflow-y: auto;
+}
+.citations-list li { display: flex; gap: .5rem; align-items: baseline; }
+.citations .at {
+    background: var(--surface-2); padding: .05rem .35rem; border-radius: 5px;
+    font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--text-muted); font-size: .78rem;
+}
+
+.citations-advice {
+    display: flex; gap: .5rem; align-items: flex-start;
+    margin: .8rem 0 0; padding-top: .7rem; border-top: 1px solid var(--border);
+    font-size: .85rem; color: var(--text-muted);
+}
+
 /* ---- highlighted text ---- */
 .highlighted h3, .findings h3 { margin: 0 0 .3rem; font-size: 1.1rem; }
 .hint { margin: 0 0 .8rem; font-size: .82rem; color: var(--text-muted); }

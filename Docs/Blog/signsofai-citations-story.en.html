@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My AI detector scored this essay 0/100. Its bibliography was invented. · SignsOfAI</title>
+<meta name="description" content="The stylometric score found nothing. Comparing the document against its own reference list found five contradictions in half a millisecond, offline, with nothing sent anywhere — and one of them was a DOI that appeared on two different papers.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Maker story · Engineering</div>
+  <h1>My AI detector scored this essay 0/100. Its bibliography was invented.</h1>
+  <p class="lead">The stylometric score found nothing. Comparing the document against its own reference list found five contradictions in half a millisecond, offline, with nothing sent anywhere — and one of them was a DOI that appeared on two different papers.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Download or try it</b> — free, MIT, web and Windows.</a>
+
+  <hr>
+
+  <p>Here is the top of a report my own tool produced last week.</p>
+  <pre><code>  0/100  Reads mostly human   (0 signals, English)
+  words 157 · sentences 21 · burstiness 0.75 · lexical diversity 0.66</code></pre>
+  <p>Zero signals. The vocabulary was fine. The sentence rhythm was varied and human. By every measure the detector has, that essay was written by a person.</p>
+  <p>Here is the rest of the same report.</p>
+  <pre><code>  Sources  5 contradiction(s)
+    ! line 5:  "Adeyemi, 2023" is cited in the text but appears nowhere in the reference list.
+    ! line 10: "Delacroix-Barrios, 2025" is cited in the text but appears nowhere in the reference list.
+    ! line 19: 2 references carry the DOI 10.1080/aie.2022.4471. A DOI identifies one work,
+               so at most one of them is right.
+    ! line 23: "10.55/pending" cannot be a DOI.
+    ! line 23: Dated 2027, which has not happened yet (2026).</code></pre>
+  <p>Two authors cited who are nowhere in the document's own bibliography. One DOI on two different papers. A malformed identifier. A source published next year.</p>
+  <p>The score said nothing. The sources said everything.</p>
+  <h2>Why a percentage is useless to a teacher</h2>
+  <p>I have written before about why I refuse to hand anyone a confidence number. The short version: detectors flag 61% of essays by non-native English speakers as AI-written, a paraphrase attack drops one published detector from 70.3% accuracy to 4.6%, and even Turnitin tells you its own score should not be the sole basis for action against a student.</p>
+  <p>But there is a plainer problem, and it has nothing to do with accuracy. <strong>A teacher cannot act on a percentage.</strong> Imagine the meeting. "The software said 87%." Said what, exactly? Based on what? Show me the part that is AI. You cannot. You have a number and a bad feeling, and the student has a career.</p>
+  <p>Now imagine the other meeting. "You cite Adeyemi 2023 three times. There is no Adeyemi in your reference list. Can you send me the paper?"</p>
+  <p>That is not an accusation. It is a question, and it takes one sentence to answer. If the paper exists, the student forwards a PDF and everyone moves on with their afternoon. If it does not, nobody had to argue about statistics.</p>
+  <p>That difference is the whole reason this feature exists.</p>
+  <h2>The part I did not expect: you do not need the internet</h2>
+  <p>My first design sent every reference to Crossref to check whether it resolved. That is the obvious approach and I was uneasy about it, because this tool's entire promise is that nothing leaves your machine, and "except your students' bibliographies" is a real asterisk.</p>
+  <p>Then I looked at what actually happens when a bibliography is invented, and the internet turned out to be mostly unnecessary. <strong>An invented reference list contradicts itself before anyone gets round to asking whether the papers exist.</strong></p>
+  <p>The failures are structural, not factual:</p>
+  <ul>
+    <li>A name appears in the prose and nowhere in the list. This is by far the most common. Text and bibliography get produced in separate passes, and they drift.</li>
+    <li>The same DOI turns up on two different works. A DOI identifies one thing; two entries carrying the same one cannot both be right. This is <em>very</em> common in generated bibliographies, which reuse identifier patterns the way they reuse phrasing.</li>
+    <li>A DOI that is not shaped like a DOI. The standard is strict: <code>10.</code>, a four-to-nine digit registrant, a slash, a non-empty suffix. <code>10.55/pending</code> fails on the registrant.</li>
+    <li>A publication year that has not happened yet.</li>
+    <li>The text cites <code>[7]</code> and the list has five entries.</li>
+  </ul>
+  <p>None of that requires a lookup. All of it is decidable from the document alone, in the browser, offline, with nothing sent anywhere. It is the same shape as the character-artifact check I shipped before it: <strong>not a probability, a contradiction.</strong></p>
+  <p>Verifying that a well-formed, internally consistent reference is a <em>real</em> paper still needs a lookup. That is a separate, opt-in step, and by then there is a citation string to send instead of somebody's essay. I would rather ship the free half first and be honest about where it stops.</p>
+  <h2>Most of the work was in not accusing people</h2>
+  <p>The engine is not the hard part. Cross-referencing two lists is undergraduate stuff. The hard part is that <strong>a false "your reference is missing" is much worse than a missed one.</strong> It sends someone hunting for something that is sitting right in front of them, and it only has to happen once before they stop believing anything the tool says.</p>
+  <p>Three cases cost me most of the day, and two of them were bugs I found by running the thing on realistic input rather than on my own tidy fixtures.</p>
+  <p><strong>Accents.</strong> A student writes <code>(Martinez, 2020)</code> and the bibliography says <code>Martínez</code>. If that reports as a missing source, I have built a tool that singles out exactly the writers this project exists to stop singling out. Comparison is accent-folded, and there is a test named after it.</p>
+  <p><strong>Wrapped bibliographies.</strong> Pull a reference list out of a PDF and the hanging indent is gone, so entries arrive across several lines. My first splitter treated any line starting with a capital and containing a comma as a new entry — which promoted <code>Journal of Educational Measurement, 59(4), 512-538.</code> to a reference in its own right, and then complained that nobody had cited it. A complaint about a line the author never wrote. The fix is to require a line to open with something shaped like an <em>author</em> before it can start an entry.</p>
+  <p><strong>Years hiding inside identifiers.</strong> This one was nastier. The DOI <code>10.1080/aie.2022.4471</code> contains <code>2022</code>, which is not a publication year and has nothing to do with anything. That stray number split wrapped entries in the wrong place — and on a DOI ending <code>.2027.</code> it would have reported a perfectly ordinary reference as published in the future. An accusation assembled entirely out of an identifier. Links and DOIs are now stripped before any year is read, and the regression test says so.</p>
+  <p>There is also a stoplist for words that sit in front of a year without being anybody's name: Table, Figure, Section, March, Tabla, Figura, Capítulo. Without it, <code>(Figure 2019)</code> becomes a citation of someone called Figure, who is then reported as missing from the bibliography. Manufacturing an accusation out of a caption is not a bug I wanted to ship.</p>
+  <p>And the whole thing refuses to run when it cannot find a reference list. Guessing where a bibliography starts would produce complaints out of formatting, so a document that does not announce one gets its citations counted and no cross-checks at all.</p>
+  <h2>It does not touch the score</h2>
+  <p>Same rule as the artifact check, and a test whose only job is to fail if it ever changes.</p>
+  <p>The temptation is obvious: an invented bibliography is damning, the number should go up. But a score is a judgement, and a judgement is arguable — as it should be, since it is a reading of prose. Whether the name "Adeyemi" appears in a list is not arguable. You look, and it is there or it is not.</p>
+  <p>Fold the second into the first and you have converted the only actionable thing on the page back into a percentage nobody can take to a meeting. So they sit in separate panels, they are stored separately, and the report says what it is not:</p>
+  <blockquote>A source missing from its own bibliography is usually a slip, and it is always the writer's to explain. Ask for the source itself: a real one can be produced in seconds, and an invented one cannot.</blockquote>
+  <h2>Where I have landed</h2>
+  <p>I no longer think the interesting question is "did a machine write this". I do not think that question can be answered reliably, I am fairly sure it cannot be answered fairly, and I am certain that answering it with a percentage helps nobody in the room.</p>
+  <p>The useful question is narrower and much easier: <strong>does this document hold together?</strong> Do its sources exist in its own pages. Do its characters come from a keyboard. Does its own bibliography agree with its own prose.</p>
+  <p>Those have answers. The answers are checkable by the person being asked about them. And they turn a confrontation into a conversation, which is what every academic integrity office has been asking for since 2023 and what almost no tool in this category actually delivers.</p>
+  <p>MIT and free, engine and rules and tests, on <a href="https://github.com/peopleworks/SignsofAI">GitHub</a>. If it reports a missing reference that is not missing, that is the bug report I want most — there is no server and no telemetry here, so a human telling me is the only way I find out.</p>
+  <hr>
+  <p><em>Written by a human and checked with the tool it describes: <strong>5/100, reads mostly human</strong>, burstiness 0.69, about 1,550 words. The example report in this article is real output, not a mock-up; the essay behind it is one I wrote to be wrong on purpose.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

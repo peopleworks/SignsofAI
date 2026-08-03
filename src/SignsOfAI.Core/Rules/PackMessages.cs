@@ -40,6 +40,21 @@ public static class PackMessages
     public const string ArtifactSummarySystematic = "artifact.summary.systematic";
     public const string ArtifactAdvice = "artifact.advice";
 
+    // The citation report. Same standard as the artifact wording: it describes what the document says
+    // about its own sources and stops there. "Missing from the bibliography" is a fact; "invented" is
+    // a conclusion that belongs to the person holding the meeting, not to us.
+    public const string CitationNotListed = "citation.not-listed";
+    public const string CitationNumberNotListed = "citation.number-not-listed";
+    public const string CitationNotCited = "citation.not-cited";
+    public const string CitationMalformedDoi = "citation.malformed-doi";
+    public const string CitationRepeatedDoi = "citation.repeated-doi";
+    public const string CitationImpossibleYear = "citation.impossible-year";
+    public const string CitationDuplicate = "citation.duplicate";
+    public const string CitationSummaryClean = "citation.summary.clean";
+    public const string CitationSummaryIssues = "citation.summary.issues";
+    public const string CitationSummaryNoList = "citation.summary.nolist";
+    public const string CitationAdvice = "citation.advice";
+
     /// <summary>How many <c>{n}</c> placeholders each template takes. Guarded by a test.</summary>
     public static IReadOnlyDictionary<string, int> Arity { get; } = new Dictionary<string, int>(StringComparer.Ordinal)
     {
@@ -63,6 +78,17 @@ public static class PackMessages
         [ArtifactSummaryIncidental] = 1,    // {0} how many
         [ArtifactSummarySystematic] = 3,    // {0} how many, {1} sections affected, {2} sections total
         [ArtifactAdvice] = 0,
+        [CitationNotListed] = 1,            // {0} the citation
+        [CitationNumberNotListed] = 2,      // {0} the number cited, {1} how many entries exist
+        [CitationNotCited] = 1,             // {0} the entry
+        [CitationMalformedDoi] = 1,         // {0} the DOI as written
+        [CitationRepeatedDoi] = 2,          // {0} the DOI, {1} how many references carry it
+        [CitationImpossibleYear] = 2,       // {0} the year given, {1} the current year
+        [CitationDuplicate] = 1,            // {0} the entry
+        [CitationSummaryClean] = 2,         // {0} references, {1} citations
+        [CitationSummaryIssues] = 2,        // {0} contradictions, {1} references
+        [CitationSummaryNoList] = 1,        // {0} citations found
+        [CitationAdvice] = 0,
     };
 
     /// <summary>English, and byte-identical to what these analyzers produced before.</summary>
@@ -97,5 +123,21 @@ public static class PackMessages
         [ArtifactAdvice] = "This says nothing about who wrote the text, and it is not evidence of dishonesty. " +
                            "It is a question about where the file has been: ask the writer to open the document " +
                            "and describe how it was produced.",
+        [CitationNotListed] = "“{0}” is cited in the text but appears nowhere in the reference list.",
+        [CitationNumberNotListed] = "The text cites [{0}], and the reference list has {1} numbered entries.",
+        [CitationNotCited] = "Listed but never cited: “{0}”",
+        [CitationMalformedDoi] = "“{0}” cannot be a DOI: a DOI is 10, a four-to-nine digit " +
+                                 "registrant, a slash, and a non-empty suffix.",
+        [CitationRepeatedDoi] = "{1} references carry the DOI {0}. A DOI identifies one work, so at most " +
+                                "one of them is right.",
+        [CitationImpossibleYear] = "Dated {0}, which has not happened yet ({1}).",
+        [CitationDuplicate] = "The same reference is listed twice: “{0}”",
+        [CitationSummaryClean] = "{0} references and {1} citations, and the two agree with each other.",
+        [CitationSummaryIssues] = "{0} citation(s) contradict the document’s own reference list of {1} entries.",
+        [CitationSummaryNoList] = "{0} citations in the text, and no reference list this could identify. " +
+                                  "The cross-checks were not run.",
+        [CitationAdvice] = "A source missing from its own bibliography is usually a slip, and it is always " +
+                           "the writer’s to explain. Ask for the source itself: a real one can be produced " +
+                           "in seconds, and an invented one cannot.",
     };
 }

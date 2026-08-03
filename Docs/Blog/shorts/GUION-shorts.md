@@ -35,6 +35,14 @@ marca y la frase "un hecho, no un porcentaje".
 > alrededor de la duración medida, porque los retardos de animación son absolutos.
 
 
+## Short 9 — "0/100, y la bibliografía inventada" (las fuentes)
+**Visual:** el marcador grande `0/100 · 0 señales` en verde, con aire de "todo bien"; se desliza
+hacia arriba y debajo aparece el bloque de fuentes con cinco `!` en ámbar, uno a uno; se resalta
+`2 referencias llevan el mismo DOI`; cierre con marca y "no un porcentaje: una pregunta".
+- **ES:** "Mi propio detector le puso cero sobre cien a este ensayo. Cero señales. Vocabulario bien, ritmo humano. Y la bibliografía era inventada. Dos autores citados que no están en su propia lista de referencias. El mismo DOI en dos artículos distintos. Una fuente publicada en dos mil veintisiete. Nada de eso necesita internet: el documento se contradice a sí mismo. Y eso no es una acusación, es una pregunta que se contesta en una frase: ¿me manda el artículo?"
+- **EN:** "My own detector scored this essay zero out of a hundred. Zero signals. Good vocabulary, human rhythm. And the bibliography was invented. Two authors cited that are nowhere in its own reference list. The same D O I on two different papers. A source published in twenty twenty-seven. None of that needs the internet: the document contradicts itself. And that is not an accusation, it is a question you answer in one sentence: can you send me the paper?"
+
+
 ---
 
 ## Build (una vez existan los HTML de cada short)

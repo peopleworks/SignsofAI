@@ -252,6 +252,10 @@
            nothing at all when the document is ordinary, which is nearly always. *@
         <ArtifactPanel Report="r.Artifacts" />
 
+        @* Same reasoning, the other kind of fact: what the document says about its own
+           sources. Renders nothing unless there are references or citations. *@
+        <CitationPanel Report="r.Citations" />
+
         <div class="stats card">
             <div class="stat"><span class="stat-label">@L["home.stat.words"]</span><span class="stat-val">@r.Statistics.WordCount</span></div>
             <div class="stat"><span class="stat-label">@L["home.stat.sentences"]</span><span class="stat-val">@r.Statistics.SentenceCount</span></div>

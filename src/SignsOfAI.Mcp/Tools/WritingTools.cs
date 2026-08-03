@@ -49,6 +49,12 @@ public static class WritingTools
             r.Artifacts.Any
                 ? new ArtifactNotice(r.Artifacts.Pattern.ToString(), r.Artifacts.Count,
                     r.Artifacts.StrongCount, r.Artifacts.Summary)
+                : null,
+            // Same treatment as the artifacts: a pointer, never the report. "check_citations" returns
+            // the lines.
+            r.Citations.ContradictionCount > 0
+                ? new CitationNotice(r.Citations.ContradictionCount, r.Citations.References.Count,
+                    r.Citations.Summary)
                 : null);
     }
 }
@@ -62,13 +68,21 @@ public sealed record AnalysisReport(
     DocStats Statistics,
     IReadOnlyList<FindingItem> Findings,
     /// <summary>Null unless the text holds characters typing does not produce. See "inspect_characters".</summary>
-    ArtifactNotice? CharacterArtifacts);
+    ArtifactNotice? CharacterArtifacts,
+    /// <summary>Null unless the document contradicts its own reference list. See "check_citations".</summary>
+    CitationNotice? SourceProblems);
 
 /// <summary>
 /// A flag that the text carries character artifacts, and nothing more — the score above is unaffected
 /// by them, deliberately. Call "inspect_characters" for the codepoints and their positions.
 /// </summary>
 public sealed record ArtifactNotice(string Pattern, int Count, int StrongCount, string Summary);
+
+/// <summary>
+/// A flag that the document disagrees with its own bibliography. The score above is unaffected by it.
+/// Call "check_citations" for the problems and their lines.
+/// </summary>
+public sealed record CitationNotice(int ContradictionCount, int ReferenceCount, string Summary);
 
 public sealed record CategoryCount(string Category, int Count, double Score);
 
