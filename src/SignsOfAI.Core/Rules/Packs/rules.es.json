@@ -20,7 +20,18 @@
     "artifact.tag": "{1} ({0}): un carácter invisible de los que se usan para llevar texto oculto junto al texto visible.",
     "artifact.summary.incidental": "{0} caracteres inusuales, sin repartirse por el documento. Copiar de una página web o de un PDF los produce.",
     "artifact.summary.systematic": "{0} caracteres que no se producen al escribir, repartidos por {1} de {2} secciones del documento. Ese reparto es lo que deja una herramienta cuando procesa un texto completo.",
-    "artifact.advice": "Esto no dice nada sobre quién escribió el texto, y no es prueba de deshonestidad. Es una pregunta sobre por dónde ha pasado el archivo: pídale a quien lo escribió que abra el documento y le cuente cómo lo produjo."
+    "artifact.advice": "Esto no dice nada sobre quién escribió el texto, y no es prueba de deshonestidad. Es una pregunta sobre por dónde ha pasado el archivo: pídale a quien lo escribió que abra el documento y le cuente cómo lo produjo.",
+    "citation.not-listed": "«{0}» se cita en el texto pero no aparece en ninguna parte de la lista de referencias.",
+    "citation.number-not-listed": "El texto cita [{0}], y la lista de referencias tiene {1} entradas numeradas.",
+    "citation.not-cited": "En la lista pero nunca citada: «{0}»",
+    "citation.malformed-doi": "«{0}» no puede ser un DOI: un DOI es 10, un registrante de cuatro a nueve dígitos, una barra y un sufijo no vacío.",
+    "citation.repeated-doi": "{1} referencias llevan el DOI {0}. Un DOI identifica una sola obra, así que como mucho una de ellas está bien.",
+    "citation.impossible-year": "Fechada en {0}, que todavía no ha ocurrido ({1}).",
+    "citation.duplicate": "La misma referencia está dos veces en la lista: «{0}»",
+    "citation.summary.clean": "{0} referencias y {1} citas, y las dos cosas concuerdan entre sí.",
+    "citation.summary.issues": "{0} cita(s) contradicen la propia lista de referencias del documento, de {1} entradas.",
+    "citation.summary.nolist": "{0} citas en el texto, y ninguna lista de referencias que se haya podido identificar. Las comprobaciones cruzadas no se ejecutaron.",
+    "citation.advice": "Una fuente que falta en su propia bibliografía suele ser un descuido, y siempre le toca explicarla a quien escribió. Pida la fuente en sí: una real se consigue en segundos, y una inventada no."
   },
   "lexical": [
     {

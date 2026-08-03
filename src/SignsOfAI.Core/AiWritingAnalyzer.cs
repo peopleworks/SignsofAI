@@ -1,5 +1,6 @@
 using SignsOfAI.Core.Analyzers;
 using SignsOfAI.Core.Artifacts;
+using SignsOfAI.Core.Citations;
 using SignsOfAI.Core.Model;
 using SignsOfAI.Core.Rules;
 using SignsOfAI.Core.Scoring;
@@ -59,6 +60,10 @@ public sealed class AiWritingAnalyzer
         // the wording — the first pass runs before the language is known.
         var artifacts = probe.Any ? ArtifactScanner.Scan(text, rulePack) : ArtifactReport.Empty;
 
+        // Sources are read from the cleaned copy too, so a substituted letter cannot hide a citation
+        // from its own bibliography any more than it can hide a word from the catalog.
+        var citations = ToSource(CitationChecker.Check(normalized.Text, rulePack), normalized);
+
         var context = new AnalysisContext
         {
             Document = document,
@@ -84,6 +89,23 @@ public sealed class AiWritingAnalyzer
             OverallScore = overall,
             Statistics = statistics,
             Artifacts = artifacts,
+            Citations = citations,
+        };
+    }
+
+    /// <summary>
+    /// The same report, with its spans expressed against the original text. Line numbers need no
+    /// adjustment: cleaning removes characters and swaps letters, and neither adds or drops a newline.
+    /// </summary>
+    private static CitationReport ToSource(CitationReport report, NormalizedText normalized)
+    {
+        if (!normalized.Changed || !report.Any) return report;
+
+        return report with
+        {
+            References = [.. report.References.Select(r => r with { Span = normalized.ToSource(r.Span) })],
+            Citations = [.. report.Citations.Select(c => c with { Span = normalized.ToSource(c.Span) })],
+            Issues = [.. report.Issues.Select(i => i with { Span = normalized.ToSource(i.Span) })],
         };
     }
 

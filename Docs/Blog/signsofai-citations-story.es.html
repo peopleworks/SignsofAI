@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi detector de IA le puso 0/100 a este ensayo. La bibliografía era inventada. · SignsOfAI</title>
+<meta name="description" content="La puntuación estilométrica no encontró nada. Comparar el documento contra su propia lista de referencias encontró cinco contradicciones en medio milisegundo, sin conexión y sin enviar nada a ninguna parte — y una de ellas era un DOI que aparecía en dos artículos distintos.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Historia de taller · Ingeniería</div>
+  <h1>Mi detector de IA le puso 0/100 a este ensayo. La bibliografía era inventada.</h1>
+  <p class="lead">La puntuación estilométrica no encontró nada. Comparar el documento contra su propia lista de referencias encontró cinco contradicciones en medio milisegundo, sin conexión y sin enviar nada a ninguna parte — y una de ellas era un DOI que aparecía en dos artículos distintos.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Descárgalo o pruébalo</b> — gratis, MIT, web y Windows.</a>
+
+  <hr>
+
+  <p>Este es el encabezado de un reporte que produjo mi propia herramienta la semana pasada.</p>
+  <pre><code>  0/100  Reads mostly human   (0 signals, English)
+  words 157 · sentences 21 · burstiness 0.75 · lexical diversity 0.66</code></pre>
+  <p>Cero señales. El vocabulario estaba bien. El ritmo de las frases era variado y humano. Según todas las medidas que tiene el detector, ese ensayo lo escribió una persona.</p>
+  <p>Este es el resto del mismo reporte.</p>
+  <pre><code>  Sources  5 contradiction(s)
+    ! línea 5:  "Adeyemi, 2023" se cita en el texto pero no aparece en la lista de referencias.
+    ! línea 10: "Delacroix-Barrios, 2025" se cita en el texto pero no aparece en la lista.
+    ! línea 19: 2 referencias llevan el DOI 10.1080/aie.2022.4471. Un DOI identifica una sola
+                obra, así que como mucho una de ellas está bien.
+    ! línea 23: "10.55/pending" no puede ser un DOI.
+    ! línea 23: Fechada en 2027, que todavía no ha ocurrido (2026).</code></pre>
+  <p>Dos autores citados que no están en ninguna parte de la bibliografía del propio documento. Un DOI en dos artículos distintos. Un identificador mal formado. Una fuente publicada el año que viene.</p>
+  <p>La puntuación no dijo nada. Las fuentes lo dijeron todo.</p>
+  <h2>Por qué un porcentaje no le sirve a un profesor</h2>
+  <p>Ya he escrito antes sobre por qué me niego a entregarle a nadie un número de confianza. La versión corta: los detectores marcan como IA el 61% de los ensayos de quienes no tienen el inglés como lengua materna, un ataque de paráfrasis baja un detector publicado de 70.3% de exactitud a 4.6%, y hasta Turnitin dice que su propia puntuación no debe ser la única base de una acción contra un estudiante.</p>
+  <p>Pero hay un problema más simple, y no tiene nada que ver con la exactitud. <strong>Un profesor no puede actuar sobre un porcentaje.</strong> Imagine la reunión. «El software dijo 87%.» ¿Dijo qué, exactamente? ¿Basándose en qué? Enséñeme la parte que es IA. No puede. Usted tiene un número y una mala sensación, y el estudiante tiene una carrera.</p>
+  <p>Ahora imagine la otra reunión. «Usted cita a Adeyemi 2023 tres veces. En su lista de referencias no hay ningún Adeyemi. ¿Me manda el artículo?»</p>
+  <p>Eso no es una acusación. Es una pregunta, y se contesta en una frase. Si el artículo existe, el estudiante reenvía un PDF y todos siguen con su tarde. Si no existe, nadie tuvo que discutir de estadística.</p>
+  <p>Esa diferencia es la razón entera de que esta función exista.</p>
+  <h2>Lo que no esperaba: no hace falta internet</h2>
+  <p>Mi primer diseño mandaba cada referencia a Crossref para comprobar si resolvía. Es el enfoque obvio y me incomodaba, porque la promesa entera de esta herramienta es que nada sale de su equipo, y «salvo las bibliografías de sus estudiantes» es un asterisco de verdad.</p>
+  <p>Después miré lo que pasa de verdad cuando una bibliografía es inventada, y resultó que internet sobraba casi siempre. <strong>Una lista de referencias inventada se contradice a sí misma antes de que a nadie le dé tiempo de preguntar si los artículos existen.</strong></p>
+  <p>Los fallos son estructurales, no factuales:</p>
+  <ul>
+    <li>Un apellido aparece en la prosa y en ninguna parte de la lista. Este es con diferencia el más frecuente. El texto y la bibliografía se producen en pasadas distintas, y se separan.</li>
+    <li>El mismo DOI aparece en dos obras. Un DOI identifica una cosa; dos entradas con el mismo no pueden estar bien las dos. Esto es <strong>muy</strong> habitual en bibliografías generadas, que reutilizan patrones de identificador igual que reutilizan giros.</li>
+    <li>Un DOI que no tiene forma de DOI. El estándar es estricto: <code>10.</code>, un registrante de cuatro a nueve dígitos, una barra, un sufijo no vacío. <code>10.55/pending</code> falla en el registrante.</li>
+    <li>Un año de publicación que todavía no ha ocurrido.</li>
+    <li>El texto cita <code>[7]</code> y la lista tiene cinco entradas.</li>
+  </ul>
+  <p>Nada de eso requiere una búsqueda. Todo se decide desde el documento solo, en el navegador, sin conexión, sin que nada salga a ninguna parte. Es la misma forma que la comprobación de artefactos de caracteres que publiqué antes: <strong>no una probabilidad, una contradicción.</strong></p>
+  <p>Comprobar que una referencia bien formada y coherente corresponde a un artículo <em>real</em> sí necesita una búsqueda. Ese es un paso aparte y opcional, y para entonces hay una cadena de cita que enviar en lugar del ensayo de alguien. Prefiero publicar la mitad gratis primero y ser honesto sobre dónde se detiene.</p>
+  <h2>Casi todo el trabajo fue en no acusar a nadie</h2>
+  <p>El motor no es lo difícil. Cruzar dos listas es cosa de primer año. Lo difícil es que <strong>un falso «le falta esta referencia» es mucho peor que uno que se escapa.</strong> Manda a alguien a buscar algo que tiene delante, y basta con que ocurra una vez para que deje de creerle a la herramienta.</p>
+  <p>Tres casos me costaron casi el día, y dos de ellos eran fallos que encontré ejecutando la cosa sobre entrada realista y no sobre mis propios ejemplos ordenaditos.</p>
+  <p><strong>Los acentos.</strong> Un estudiante escribe <code>(Martinez, 2020)</code> y la bibliografía dice <code>Martínez</code>. Si eso se reporta como fuente faltante, he construido una herramienta que señala justo a los escritores que este proyecto existe para dejar de señalar. La comparación ignora los acentos, y hay una prueba que se llama así.</p>
+  <p><strong>Bibliografías envueltas.</strong> Saque una lista de referencias de un PDF y la sangría francesa desaparece, así que las entradas llegan repartidas en varias líneas. Mi primer separador trataba cualquier línea que empezara con mayúscula y llevara una coma como entrada nueva — lo que ascendió <code>Journal of Educational Measurement, 59(4), 512-538.</code> a referencia por derecho propio, y luego se quejó de que nadie la había citado. Una queja sobre una línea que el autor nunca escribió. El arreglo es exigir que una línea abra con algo con forma de <em>autor</em> antes de poder empezar una entrada.</p>
+  <p><strong>Años escondidos dentro de identificadores.</strong> Este fue peor. El DOI <code>10.1080/aie.2022.4471</code> contiene <code>2022</code>, que no es un año de publicación ni tiene que ver con nada. Ese número suelto partía las entradas envueltas en el sitio equivocado — y con un DOI terminado en <code>.2027.</code> habría reportado una referencia perfectamente normal como publicada en el futuro. Una acusación montada enteramente a partir de un identificador. Ahora los enlaces y los DOI se quitan antes de leer cualquier año, y la prueba de regresión lo dice.</p>
+  <p>Hay además una lista de palabras que se ponen delante de un año sin ser el apellido de nadie: Table, Figure, Section, March, Tabla, Figura, Capítulo. Sin ella, <code>(Figura 2019)</code> se convierte en una cita de alguien llamado Figura, a quien luego se reporta como ausente de la bibliografía. Fabricar una acusación a partir de un pie de foto no es un fallo que quisiera publicar.</p>
+  <p>Y todo esto se niega a ejecutarse cuando no encuentra una lista de referencias. Adivinar dónde empieza una bibliografía produciría quejas sacadas del formato, así que un documento que no anuncia una recibe el conteo de sus citas y ninguna comprobación cruzada.</p>
+  <h2>No toca la puntuación</h2>
+  <p>La misma regla que la comprobación de artefactos, y una prueba cuyo único trabajo es fallar si eso cambia.</p>
+  <p>La tentación es evidente: una bibliografía inventada es demoledora, el número debería subir. Pero una puntuación es un juicio, y un juicio se discute — como debe ser, porque es una lectura de la prosa. Que el apellido «Adeyemi» esté o no en una lista no se discute. Usted mira, y está o no está.</p>
+  <p>Si mete lo segundo dentro de lo primero, convirtió lo único accionable de la página en un porcentaje que nadie puede llevar a una reunión. Por eso van en paneles separados, se guardan separados, y el reporte dice lo que no es:</p>
+  <blockquote>Una fuente que falta en su propia bibliografía suele ser un descuido, y siempre le toca explicarla a quien escribió. Pida la fuente en sí: una real se consigue en segundos, y una inventada no.</blockquote>
+  <h2>Dónde he aterrizado</h2>
+  <p>Ya no creo que la pregunta interesante sea «¿escribió esto una máquina?». No creo que esa pregunta se pueda contestar de forma fiable, estoy bastante seguro de que no se puede contestar de forma justa, y estoy seguro del todo de que contestarla con un porcentaje no ayuda a nadie en la sala.</p>
+  <p>La pregunta útil es más estrecha y mucho más fácil: <strong>¿este documento se sostiene?</strong> ¿Sus fuentes existen en sus propias páginas? ¿Sus caracteres salen de un teclado? ¿Su bibliografía concuerda con su prosa?</p>
+  <p>Esas tienen respuesta. La respuesta la puede comprobar la persona a quien se le pregunta. Y convierten una confrontación en una conversación, que es lo que toda oficina de integridad académica lleva pidiendo desde 2023 y lo que casi ninguna herramienta de esta categoría entrega de verdad.</p>
+  <p>MIT y gratis, motor, reglas y pruebas, en <a href="https://github.com/peopleworks/SignsofAI">GitHub</a>. Si reporta una referencia faltante que no falta, ese es el reporte de fallo que más quiero — aquí no hay servidor ni telemetría, así que un humano contándomelo es la única forma en que me entero.</p>
+  <hr>
+  <p><em>Escrito por un humano y revisado con la herramienta que describe: <strong>5/100, mayormente humano</strong>, variabilidad 0.69, unas 1.610 palabras. El reporte de ejemplo de este artículo es salida real, no una maqueta; el ensayo detrás lo escribí yo para que estuviera mal a propósito.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

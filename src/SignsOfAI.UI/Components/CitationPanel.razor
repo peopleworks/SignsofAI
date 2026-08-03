@@ -1,0 +1,104 @@
+@* What the document says about its own sources.
+
+   Sits beside the character-artifact panel and away from the score, for the same reason: these are
+   statements about the file that a reader can settle by looking, not readings of the prose that a
+   reader can only agree or disagree with. A teacher cannot take a percentage to an integrity
+   committee. "This source is missing from its own bibliography" is a question the writer answers in
+   one sentence, which is the whole point.
+
+   Contradictions and untidiness are shown apart on purpose. A cited source that is nowhere in the
+   list is a contradiction; an entry nobody cited is not, because people list further reading. *@
+
+@using SignsOfAI.Core.Citations
+@inherits LocalizedComponent
+
+@if (Report.Any)
+{
+    <div class="card citations @(Report.ContradictionCount > 0 ? "citations-strong" : "")">
+        <div class="citations-head">
+            <h3><Icon Name="book" /> @L["citations.title"]</h3>
+            @if (Report.ContradictionCount > 0)
+            {
+                <span class="chip chip-strong">@L.P(Report.ContradictionCount, "citations.contradictions")</span>
+            }
+            else if (Report.HasReferenceList)
+            {
+                <span class="chip">@L["citations.consistent"]</span>
+            }
+            <button class="ghost small" @onclick="@(() => _explain = true)">
+                <Icon Name="lightbulb" /> @L["citations.explain"]
+            </button>
+        </div>
+
+        @* The summary and every message come from the rule pack, so they are written in the language
+           of the analyzed text — the same split the findings follow. *@
+        <p class="citations-summary">@Report.Summary</p>
+
+        <div class="citations-counts">
+            <span><b>@Report.References.Count</b> @L["citations.stat.references"]</span>
+            <span><b>@Report.Citations.Count</b> @L["citations.stat.citations"]</span>
+        </div>
+
+        @if (Report.Issues.Count > 0)
+        {
+            <ul class="citations-issues">
+                @foreach (var issue in Report.Issues.OrderByDescending(i => i.IsContradiction).ThenBy(i => i.Line))
+                {
+                    <li class="@(issue.IsContradiction ? "contradiction" : "untidy")">
+                        <span class="issue-kind">@L[KindKey(issue.Kind)]</span>
+                        <code class="at">@L.F("citations.line", issue.Line)</code>
+                        <span class="issue-message">@issue.Message</span>
+                    </li>
+                }
+            </ul>
+        }
+
+        @if (Report.References.Count > 0)
+        {
+            <button class="ghost small" @onclick="@(() => _showList = !_showList)">
+                <Icon Name="search" /> @L[_showList ? "citations.list.hide" : "citations.list.show"]
+            </button>
+
+            @if (_showList)
+            {
+                <ol class="citations-list">
+                    @foreach (var reference in Report.References)
+                    {
+                        <li>
+                            <code class="at">@L.F("citations.line", reference.Line)</code>
+                            <span>@reference.Raw</span>
+                        </li>
+                    }
+                </ol>
+            }
+        }
+
+        <p class="citations-advice"><Icon Name="scale" /> <span>@Report.Advice</span></p>
+    </div>
+
+    <InfoDrawer Open="_explain" OpenChanged="@(v => _explain = v)"
+                Title="@L["citations.explain.title"]" Icon="book">
+        <p>@L["citations.explain.what"]</p>
+        <p>@L["citations.explain.why"]</p>
+        <p>@L["citations.explain.limits"]</p>
+        <p><strong>@L["citations.explain.notproof"]</strong></p>
+        <p>@L["citations.explain.noscore"]</p>
+    </InfoDrawer>
+}
+
+@code {
+    [Parameter, EditorRequired] public CitationReport Report { get; set; } = CitationReport.Empty;
+
+    private bool _showList;
+    private bool _explain;
+
+    private static string KindKey(CitationIssueKind kind) => kind switch
+    {
+        CitationIssueKind.CitedButNotListed => "citations.kind.not-listed",
+        CitationIssueKind.ListedButNotCited => "citations.kind.not-cited",
+        CitationIssueKind.MalformedDoi => "citations.kind.malformed-doi",
+        CitationIssueKind.RepeatedDoi => "citations.kind.repeated-doi",
+        CitationIssueKind.ImpossibleYear => "citations.kind.impossible-year",
+        _ => "citations.kind.duplicate",
+    };
+}

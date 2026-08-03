@@ -137,10 +137,11 @@ the engine lives in `SignsOfAI.Core` — pure .NET, no browser — the server ju
 | `search_catalog` | search the catalog of AI-writing signs (EN/ES) | 🔒 on-device |
 | `extract_distinctive_phrases` | distinctive phrases + ready-made web-search links | 🔒 on-device |
 | `inspect_characters` | invisible characters & letters impersonating Latin ones, with line/column | 🔒 on-device |
+| `check_citations` | where a document contradicts its own bibliography, with the line of each | 🔒 on-device |
 | `measure_predictability` | perplexity via the optional server | 🌐 server (**opt-in**) |
 | `check_paraphrase` | reworded/translated matches via EmbeddingGemma | 🌐 server (**opt-in**) |
 
-The first five run entirely on the machine; the last two disclose that they send text to the server
+The first six run entirely on the machine; the last two disclose that they send text to the server
 (endpoint via the `SIGNSOFAI_API_ENDPOINT` environment variable).
 
 It ships on NuGet as [`SignsOfAI.Mcp`](https://www.nuget.org/packages/SignsOfAI.Mcp), so nothing needs

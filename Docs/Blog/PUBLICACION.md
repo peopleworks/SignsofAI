@@ -302,6 +302,8 @@ de los seis (video / voz / cola en segundos):
 | `signsofai-desktop-story.{en,es}.html` | WordPress · Blogger — **generados**, no escritos a mano |
 | `signsofai-artifacts-story.{en,es}.md` | dev.to · Hashnode · Medium — **tercer artículo**, sin publicar |
 | `signsofai-artifacts-story.{en,es}.html` | WordPress · Blogger — **generados** |
+| `signsofai-citations-story.{en,es}.md` | dev.to · Hashnode · Medium — **cuarto artículo**, sin publicar |
+| `signsofai-citations-story.{en,es}.html` | WordPress · Blogger — **generados** |
 
 **Generar el HTML.** Los dos primeros artículos se escribieron como HTML a mano. Transcribir 1.500
 palabras dos veces más, en dos idiomas, es la forma segura de corregir un párrafo en una copia y no
@@ -342,6 +344,20 @@ disparan su propia comprobación nueva**, porque llevan letras cirílicas de ver
 (EN 4, ES 3, agrupadas en dos sitios → *presentes, sin repartirse*). Está dicho en el pie y
 **no hay que quitarlas**: borrarlas para sacar un reporte limpio sería justo la jugada que el
 artículo critica.
+
+**Cuarto artículo — las fuentes.** El de público más docente de los cuatro, y el que mejor funciona
+en una sala: abre con salida real de la herramienta diciendo **0/100, cero señales**, y sigue con las
+cinco contradicciones que ese mismo reporte encontró en la bibliografía del mismo ensayo. El argumento
+no es "mi detector es mejor" sino **"un profesor no puede actuar sobre un porcentaje, y sí puede
+preguntar por un artículo que no está en su propia lista de referencias"**.
+
+Puntajes en su propio pie: **EN 5/100 · variabilidad 0.69 · 3 señales**, **ES 5/100 · variabilidad
+0.69 · 3 señales**. El reporte de ejemplo es salida real, no una maqueta — está dicho en el pie, y
+conviene que siga siendo verdad si se edita el artículo.
+
+Media sección va dedicada a los **falsos positivos que hubo que arreglar** (acentos, bibliografías
+envueltas por un PDF, años escondidos dentro de un DOI). Eso es deliberado: en esta categoría, contar
+los errores propios es la única credibilidad disponible.
 
 > **Ojo con `canonical_url`.** En el front-matter apunta al demo. Eso está bien si el artículo solo
 > vive en dev.to/Medium, pero si lo publicas **primero en tu blog**, cambia `canonical_url` a la URL
@@ -525,6 +541,113 @@ convirtió lo único comprobable del producto otra vez en una opinión.
 Gratis y MIT: https://github.com/peopleworks/SignsofAI
 
 #IA #Unicode #IntegridadAcadémica #DotNet #OpenSource
+```
+
+
+### X / Twitter — cuarto artículo (EN)
+```
+My AI detector scored this essay 0/100. Zero signals. Good vocabulary, human sentence rhythm.
+
+Its bibliography was invented.
+
+Two authors cited that appear nowhere in its own reference list. The same DOI on two different
+papers. A source published in 2027.
+
+None of that needs the internet. An invented bibliography contradicts itself before anyone gets
+round to asking whether the papers exist.
+
+And it turns a confrontation into a question: "can you send me the paper?"
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — cuarto artículo (ES)
+```
+Mi detector de IA le puso 0/100 a este ensayo. Cero señales. Vocabulario bien, ritmo humano.
+
+La bibliografía era inventada.
+
+Dos autores citados que no aparecen en su propia lista de referencias. El mismo DOI en dos
+artículos distintos. Una fuente publicada en 2027.
+
+Nada de eso necesita internet. Una bibliografía inventada se contradice a sí misma antes de que a
+nadie le dé tiempo de preguntar si los artículos existen.
+
+Y convierte una confrontación en una pregunta: «¿me manda el artículo?»
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — cuarto artículo (EN)
+```
+A teacher cannot act on a percentage.
+
+Picture the meeting. "The software said 87%." Said what, exactly? Based on what? Show me the part
+that is AI. You cannot. You have a number and a bad feeling, and the student has a career.
+
+Now picture the other meeting. "You cite Adeyemi 2023 three times. There is no Adeyemi in your
+reference list. Can you send me the paper?"
+
+That is not an accusation. It is a question, and it takes one sentence to answer.
+
+I shipped that check this week. On a test essay my own stylometric score rated 0/100 — zero
+signals, good vocabulary, human sentence rhythm — it found five contradictions: two cited authors
+missing from the document's own bibliography, one DOI on two different papers, a malformed
+identifier, and a source published in 2027.
+
+The surprise was that it needs no internet at all. I had assumed I would have to send every
+reference to Crossref, which sits badly with a tool whose whole promise is that nothing leaves your
+machine. But an invented bibliography contradicts *itself* long before you get to whether the
+papers are real. Offline, in the browser, nothing sent anywhere.
+
+Most of the work went into not accusing anyone. Accented surnames cited without their accents.
+Bibliographies wrapped by a PDF, where my first splitter promoted a journal name to a reference and
+then complained nobody had cited it. Years hiding inside DOIs — "10.1080/aie.2022.4471" carries a
+2022 that means nothing, and on a DOI ending .2027. it would have reported an ordinary reference as
+published in the future. An accusation assembled entirely out of an identifier.
+
+And it contributes zero to the score, with a test whose only job is to fail if that changes.
+
+MIT and free: https://github.com/peopleworks/SignsofAI
+
+#AcademicIntegrity #AI #EdTech #dotnet #OpenSource
+```
+
+### LinkedIn — cuarto artículo (ES)
+```
+Un profesor no puede actuar sobre un porcentaje.
+
+Imagine la reunión. «El software dijo 87%.» ¿Dijo qué, exactamente? ¿Basándose en qué? Enséñeme la
+parte que es IA. No puede. Usted tiene un número y una mala sensación, y el estudiante tiene una
+carrera.
+
+Ahora imagine la otra reunión. «Usted cita a Adeyemi 2023 tres veces. En su lista de referencias no
+hay ningún Adeyemi. ¿Me manda el artículo?»
+
+Eso no es una acusación. Es una pregunta, y se contesta en una frase.
+
+Esta semana publiqué esa comprobación. Sobre un ensayo de prueba al que mi propia puntuación
+estilométrica le dio 0/100 —cero señales, vocabulario correcto, ritmo humano— encontró cinco
+contradicciones: dos autores citados que faltaban en la bibliografía del propio documento, un DOI en
+dos artículos distintos, un identificador mal formado y una fuente publicada en 2027.
+
+La sorpresa fue que no necesita internet. Yo daba por hecho que tendría que mandar cada referencia a
+Crossref, lo que encaja mal con una herramienta cuya promesa entera es que nada sale de su equipo.
+Pero una bibliografía inventada se contradice a sí misma mucho antes de que uno llegue a si los
+artículos son reales. Sin conexión, en el navegador, sin enviar nada.
+
+Casi todo el trabajo fue en no acusar a nadie. Apellidos con tilde citados sin ella. Bibliografías
+envueltas por un PDF, donde mi primer separador ascendió el nombre de una revista a referencia y
+luego se quejó de que nadie la citaba. Años escondidos dentro de un DOI — «10.1080/aie.2022.4471»
+lleva un 2022 que no significa nada, y con un DOI terminado en .2027. habría reportado una
+referencia normal como publicada en el futuro. Una acusación montada enteramente a partir de un
+identificador.
+
+Y aporta cero a la puntuación, con una prueba cuyo único trabajo es fallar si eso cambia.
+
+MIT y gratis: https://github.com/peopleworks/SignsofAI
+
+#IntegridadAcadémica #IA #EdTech #DotNet #OpenSource
 ```
 
 ## 8. Notas de publicación

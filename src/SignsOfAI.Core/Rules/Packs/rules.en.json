@@ -20,7 +20,18 @@
     "artifact.tag": "{1} ({0}) — an invisible character of the kind used to carry hidden text alongside visible text.",
     "artifact.summary.incidental": "{0} unusual characters, not spread through the document. Copying from a web page or a PDF produces these.",
     "artifact.summary.systematic": "{0} characters that typing does not produce, spread across {1} of {2} sections of the document. That distribution is what a tool leaves behind when it processes a whole text.",
-    "artifact.advice": "This says nothing about who wrote the text, and it is not evidence of dishonesty. It is a question about where the file has been: ask the writer to open the document and describe how it was produced."
+    "artifact.advice": "This says nothing about who wrote the text, and it is not evidence of dishonesty. It is a question about where the file has been: ask the writer to open the document and describe how it was produced.",
+    "citation.not-listed": "“{0}” is cited in the text but appears nowhere in the reference list.",
+    "citation.number-not-listed": "The text cites [{0}], and the reference list has {1} numbered entries.",
+    "citation.not-cited": "Listed but never cited: “{0}”",
+    "citation.malformed-doi": "“{0}” cannot be a DOI: a DOI is 10, a four-to-nine digit registrant, a slash, and a non-empty suffix.",
+    "citation.repeated-doi": "{1} references carry the DOI {0}. A DOI identifies one work, so at most one of them is right.",
+    "citation.impossible-year": "Dated {0}, which has not happened yet ({1}).",
+    "citation.duplicate": "The same reference is listed twice: “{0}”",
+    "citation.summary.clean": "{0} references and {1} citations, and the two agree with each other.",
+    "citation.summary.issues": "{0} citation(s) contradict the document’s own reference list of {1} entries.",
+    "citation.summary.nolist": "{0} citations in the text, and no reference list this could identify. The cross-checks were not run.",
+    "citation.advice": "A source missing from its own bibliography is usually a slip, and it is always the writer’s to explain. Ask for the source itself: a real one can be produced in seconds, and an invented one cannot."
   },
   "lexical": [
     {
