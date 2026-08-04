@@ -331,11 +331,11 @@ static void PrintBaseline(string path, BaselineReport r, bool useColor)
 // The headline counts evidence, so it agrees with the category tallies and with the score. What
 // matched at a human rate is named beside it rather than folded in: a reader who sees eleven
 // highlights under a headline of three deserves to know why, on the same line.
-static int Counted(AnalysisResult r) => r.Findings.Count(f => !f.AtHumanRate);
+static int Counted(AnalysisResult r) => r.Signals.Count;
 
 static string AtRate(AnalysisResult r)
 {
-    var n = r.Findings.Count(f => f.AtHumanRate);
+    var n = r.Observations.Count;
     return n == 0 ? "" : $" + {n} at a human rate";
 }
 

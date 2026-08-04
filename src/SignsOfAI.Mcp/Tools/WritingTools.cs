@@ -28,7 +28,7 @@ public static class WritingTools
             Math.Round(r.OverallScore, 1),
             r.Verdict,
             r.Language,
-            r.Findings.Count,
+            r.Signals.Count,
             r.CategoryScores
                 .Where(c => c.FindingCount > 0)
                 .Select(c => new CategoryCount(c.Category.ToString(), c.FindingCount, Math.Round(c.Score, 1)))
@@ -41,7 +41,8 @@ public static class WritingTools
                 Math.Round(r.Statistics.LexicalDiversity, 3)),
             r.Findings
                 .Select(f => new FindingItem(
-                    f.Category.ToString(), f.Severity.ToString(), f.MatchedText, f.Message, f.Suggestion, f.Evidence))
+                    f.RuleId, f.Category.ToString(), f.Severity.ToString(), f.MatchedText, f.Message,
+                    f.Suggestion, f.Evidence, f.AtHumanRate))
                 .ToList(),
             // A one-line pointer, not the report. Anything found here deserves the dedicated tool,
             // which returns coordinates; folding those into the score's payload would invite an
@@ -88,4 +89,15 @@ public sealed record CategoryCount(string Category, int Count, double Score);
 
 public sealed record DocStats(int Words, int Sentences, double MeanSentenceLength, double Burstiness, double LexicalDiversity);
 
-public sealed record FindingItem(string Category, string Severity, string MatchedText, string Message, string Suggestion, string? Evidence);
+public sealed record FindingItem(
+    string RuleId,
+    string Category,
+    string Severity,
+    string MatchedText,
+    string Message,
+    string Suggestion,
+    string? Evidence,
+    // An agent reading this list has no other way to tell the two apart, and the difference is the
+    // whole point: true here means the engine found the phrase and decided it is not evidence,
+    // because the text uses it about as often as people do.
+    bool AtHumanRate);

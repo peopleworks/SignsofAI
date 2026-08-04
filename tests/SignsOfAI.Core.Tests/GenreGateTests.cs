@@ -168,4 +168,23 @@ public class GenreGateTests
         Assert.NotEmpty(AiWritingAnalyzer.ResolvePack("en").HumanRates);
         Assert.NotEmpty(AiWritingAnalyzer.ResolvePack("es").HumanRates);
     }
+
+    [Fact]
+    public void The_result_partitions_its_own_findings_so_no_host_has_to()
+    {
+        // The regression this guards against actually happened: the flag went onto Finding and within
+        // a day the web headline counted every match while its category chips counted only the scoring
+        // ones, and the MCP server handed an agent, as evidence, matches the engine had ruled out.
+        var analyzer = new AiWritingAnalyzer();
+        var body = string.Join(" ", Enumerable.Repeat("The study examined the data carefully and reported what it found.", 160));
+
+        var r = analyzer.Analyze(body + " Furthermore, the result held.", "en");
+
+        Assert.Equal(r.Findings.Count, r.Signals.Count + r.Observations.Count);
+        Assert.All(r.Signals, f => Assert.False(f.AtHumanRate));
+        Assert.All(r.Observations, f => Assert.True(f.AtHumanRate));
+
+        // The headline number and the category tallies have to be the same number.
+        Assert.Equal(r.Signals.Count, r.CategoryScores.Sum(c => c.FindingCount));
+    }
 }
