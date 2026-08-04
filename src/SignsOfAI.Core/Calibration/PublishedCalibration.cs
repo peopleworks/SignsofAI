@@ -58,28 +58,49 @@ public sealed record PublishedCalibration
     public IReadOnlyList<PublishedRuleRate> NoisiestRules { get; init; } = [];
 
     private static PublishedCalibration? _current;
+    private static bool _loaded;
 
     /// <summary>
-    /// The calibration shipped with this build, or null if none was embedded — which is a legitimate
-    /// state for a fork that has not measured itself, and callers must handle it by saying so rather
-    /// than by omitting the caveat.
+    /// The calibration shipped with this build, or null if none was embedded or it could not be read —
+    /// a legitimate state for a fork that has not measured itself, which callers must handle by saying
+    /// so rather than by omitting the caveat.
+    ///
+    /// It never throws. A malformed resource — a fork's hand edit, a merge conflict marker, an
+    /// encoding slip — would otherwise take down every report, every CLI run and every button in the
+    /// interface, from a property getter, over a caveat. Failing to a page that admits it has no
+    /// measured error rate is strictly better than failing to no page at all.
+    ///
+    /// The result is cached including the null, so a missing resource does not rescan the manifest on
+    /// every analysis. The race is benign: two threads may both read the resource and one assignment
+    /// wins, and the value is immutable either way.
     /// </summary>
     public static PublishedCalibration? Current
     {
         get
         {
-            if (_current is not null) return _current;
+            if (_loaded) return _current;
 
-            var assembly = typeof(PublishedCalibration).Assembly;
-            var name = assembly.GetManifestResourceNames()
-                .FirstOrDefault(n => n.EndsWith("published-calibration.json", StringComparison.Ordinal));
-            if (name is null) return null;
+            try
+            {
+                var assembly = typeof(PublishedCalibration).Assembly;
+                var name = assembly.GetManifestResourceNames()
+                    .FirstOrDefault(n => n.EndsWith("published-calibration.json", StringComparison.Ordinal));
 
-            using var stream = assembly.GetManifestResourceStream(name);
-            if (stream is null) return null;
+                if (name is not null)
+                {
+                    using var stream = assembly.GetManifestResourceStream(name);
+                    if (stream is not null)
+                        _current = JsonSerializer.Deserialize(
+                            stream, PublishedCalibrationJsonContext.Default.PublishedCalibration);
+                }
+            }
+            catch (Exception e) when (e is JsonException or NotSupportedException or IOException)
+            {
+                _current = null;
+            }
 
-            return _current = JsonSerializer.Deserialize(
-                stream, PublishedCalibrationJsonContext.Default.PublishedCalibration);
+            _loaded = true;
+            return _current;
         }
     }
 }

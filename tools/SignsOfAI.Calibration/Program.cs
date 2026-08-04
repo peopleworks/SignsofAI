@@ -232,7 +232,13 @@ var published = new PublishedCalibration
         .Select(r => new PublishedRuleRate { RuleId = r.RuleId, TextShare = r.TextShare })],
 };
 
-var embedPath = Path.Combine("src", "SignsOfAI.Core", "Calibration", "published-calibration.json");
+// Anchored to the manifest rather than the working directory. Run from anywhere but the repository
+// root, the old version silently created a second copy under the current folder while
+// Docs/CALIBRATION.md updated correctly — leaving the real embedded snapshot stale, and the build
+// happily embedding last month's threshold under this build's name.
+var repoRoot = Path.GetFullPath(Path.Combine(
+    Path.GetDirectoryName(Path.GetFullPath(manifestPath))!, "..", ".."));
+var embedPath = Path.Combine(repoRoot, "src", "SignsOfAI.Core", "Calibration", "published-calibration.json");
 Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(embedPath))!);
 var publishedJson = JsonSerializer.Serialize(
     published, PublishedCalibrationJsonContext.Default.PublishedCalibration);

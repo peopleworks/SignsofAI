@@ -118,7 +118,11 @@ else
         if (_rows.Count == 0) return;
 
         var entries = _rows
-            .Select(r => new FolderEntry(r.Name, r.Words, r.Score, r.Findings, r.Error))
+            // The path relative to the scanned folder, not the bare name. A recursive scan of a
+            // folder laid out one directory per student produces ana/essay.docx and luis/essay.docx,
+            // and a document whose one job is saying which file to open first cannot call them both
+            // "essay.docx".
+            .Select(r => new FolderEntry(Relative(r.Path, r.Name), r.Words, r.Score, r.Findings, r.Error))
             .ToList();
 
         var options = new ReportOptions { Title = L["batch.report.title"] };
@@ -128,6 +132,15 @@ else
             $"signsofai-folder-{stamp}.html",
             EvidenceReport.FolderToHtml(_folder ?? "", entries, options));
     }
+    /// <summary>The file as the teacher would find it: its path under the folder they picked.</summary>
+    private string Relative(string path, string fallback)
+    {
+        if (string.IsNullOrEmpty(_folder) || !path.StartsWith(_folder, StringComparison.OrdinalIgnoreCase))
+            return fallback;
+
+        return path[_folder.Length..].TrimStart('/', '\\') is { Length: > 0 } trimmed ? trimmed : fallback;
+    }
+
     private string? _folder;
     private bool _recursive;
     private bool _scanning;

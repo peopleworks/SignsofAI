@@ -48,7 +48,7 @@ public static class EvidenceReport
         sb.Append("# ").Append(o.Title).AppendLine();
         sb.AppendLine();
         if (!string.IsNullOrWhiteSpace(o.DocumentName))
-            sb.Append("**Document:** ").AppendLine(o.DocumentName);
+            sb.Append("**Document:** ").AppendLine(Cell(o.DocumentName));
         sb.Append("**Generated:** ").Append(o.GeneratedOn).Append(" · **Engine:** SignsOfAI ")
           .AppendLine(o.EngineVersion);
         sb.AppendLine();
@@ -84,14 +84,25 @@ public static class EvidenceReport
 
             if (result.Artifacts.Any)
             {
-                sb.AppendLine("### Characters that writing does not produce");
+                sb.AppendLine("### Characters found in the file");
                 sb.AppendLine();
                 sb.AppendLine(result.Artifacts.Summary);
+                sb.AppendLine();
+                // The heading used to say "characters writing does not produce", which is false for
+                // half of what this table lists: Word makes soft hyphens on its own and a stray
+                // non-breaking space arrives with any copy-paste from a web page. Only the invisible
+                // and impostor-letter kinds are hard to arrive at innocently, and even they can be
+                // pasted in. Saying so here is the difference between a fact and an insinuation.
+                sb.AppendLine("Several of these have ordinary explanations — word processors insert " +
+                              "soft hyphens and unusual spaces on their own, and any copy-paste can " +
+                              "carry them. Invisible characters and letters borrowed from another " +
+                              "alphabet are harder to arrive at by accident, though pasting text can " +
+                              "do it. This table says what is in the file, not how it got there.");
                 sb.AppendLine();
                 sb.AppendLine("| Character | Codepoint | Line | Column |");
                 sb.AppendLine("|---|---|---:|---:|");
                 foreach (var occurrence in result.Artifacts.Occurrences.Take(o.MaxRows))
-                    sb.Append("| ").Append(Describe(occurrence.Kind)).Append(" | `")
+                    sb.Append("| ").Append(Cell(Describe(occurrence.Kind))).Append(" | `")
                       .Append(occurrence.CodePoint).Append("` | ").Append(occurrence.Line)
                       .Append(" | ").Append(occurrence.Column).AppendLine(" |");
                 if (result.Artifacts.Occurrences.Count > o.MaxRows)
@@ -107,10 +118,18 @@ public static class EvidenceReport
                 sb.AppendLine(result.Citations.Summary);
                 sb.AppendLine();
                 foreach (var issue in result.Citations.Issues.Take(o.MaxRows))
-                    sb.Append("- ").AppendLine(issue.Message);
+                    sb.Append("- ").AppendLine(Cell(issue.Message));
                 sb.AppendLine();
-                sb.AppendLine("> None of this needed the internet: the document contradicts itself. " +
-                              "It is a question to ask, not a conclusion — the answer is usually one sentence.");
+                // Only claimed when something actually contradicts. The first version printed it
+                // whenever there was anything to say about sources at all — including "no reference
+                // list was found, so the cross-checks were not run", where the page then asserted, in
+                // its own voice, a self-contradiction it had explicitly not looked for. In a document
+                // that goes to a committee about a nineteen-year-old, that is the precise harm this
+                // project exists to argue against.
+                sb.AppendLine(result.Citations.Issues.Count > 0
+                    ? "> None of this needed the internet: the document disagrees with itself. It is a " +
+                      "question to ask, not a conclusion — the answer is usually one sentence."
+                    : "> Nothing here is a finding. It describes what could and could not be checked.");
                 sb.AppendLine();
             }
         }
@@ -128,8 +147,8 @@ public static class EvidenceReport
             {
                 sb.Append("- **").Append(f.Category).Append("** — ");
                 if (!string.IsNullOrWhiteSpace(f.MatchedText))
-                    sb.Append('“').Append(f.MatchedText.Trim()).Append("” — ");
-                sb.Append(f.Message).Append(' ').Append("*→ ").Append(f.Suggestion).AppendLine("*");
+                    sb.Append('“').Append(Cell(f.MatchedText)).Append("” — ");
+                sb.Append(Cell(f.Message)).Append(' ').Append("*→ ").Append(Cell(f.Suggestion)).AppendLine("*");
             }
             if (result.Signals.Count > o.MaxRows)
                 sb.Append("\n… and ").Append(result.Signals.Count - o.MaxRows).AppendLine(" more.");
@@ -201,12 +220,14 @@ public static class EvidenceReport
     {
         var o = options ?? ReportOptions.Default;
         var sb = new StringBuilder();
-        var scored = entries.Where(e => e.Score is not null).ToList();
+        // An error wins over a score: a file that failed to read has no business in the reading order,
+        // and nothing on the public FolderEntry stops a caller supplying both.
         var unreadable = entries.Where(e => e.Error is not null).ToList();
+        var scored = entries.Where(e => e.Error is null && e.Score is not null).ToList();
 
         sb.Append("# ").AppendLine(o.Title);
         sb.AppendLine();
-        sb.Append("**Folder:** ").AppendLine(folderName);
+        sb.Append("**Folder:** ").AppendLine(Cell(folderName));
         sb.Append("**Generated:** ").Append(o.GeneratedOn).Append(" · **Engine:** SignsOfAI ")
           .AppendLine(o.EngineVersion);
         sb.AppendLine();
@@ -222,21 +243,23 @@ public static class EvidenceReport
 
         sb.AppendLine("| File | Score | Signals | Words |");
         sb.AppendLine("|---|---:|---:|---:|");
-        foreach (var e in scored.OrderByDescending(e => e.Score).ThenBy(e => e.Name).Take(o.MaxRows))
-            sb.Append("| ").Append(e.Name).Append(" | ").Append(Num(e.Score ?? 0, 0))
+        // Every file, deliberately unlike the findings lists. This is the document a teacher keeps
+        // after closing the app, and a scan of two hundred essays that silently omitted a hundred and
+        // sixty of them — including every low scorer, which is the result that settles a suspicion —
+        // would be worse than no document.
+        foreach (var e in scored.OrderByDescending(e => e.Score).ThenBy(e => e.Name))
+            sb.Append("| ").Append(Cell(e.Name)).Append(" | ").Append(Num(e.Score ?? 0, 0))
               .Append(" | ").Append(e.Signals?.ToString(CultureInfo.InvariantCulture) ?? "—")
               .Append(" | ").Append(e.Words?.ToString(CultureInfo.InvariantCulture) ?? "—")
               .AppendLine(" |");
-        if (scored.Count > o.MaxRows)
-            sb.AppendLine().Append("… and ").Append(scored.Count - o.MaxRows).AppendLine(" more.");
         sb.AppendLine();
 
         if (unreadable.Count > 0)
         {
             sb.AppendLine("## Could not be read");
             sb.AppendLine();
-            foreach (var e in unreadable.Take(o.MaxRows))
-                sb.Append("- ").Append(e.Name).Append(" — ").AppendLine(e.Error);
+            foreach (var e in unreadable)
+                sb.Append("- ").Append(Cell(e.Name)).Append(" — ").AppendLine(Cell(e.Error));
             sb.AppendLine();
         }
 
@@ -279,13 +302,26 @@ public static class EvidenceReport
     private static string Caveat()
     {
         var c = PublishedCalibration.Current;
-        if (c?.RecommendedThreshold is not { } threshold)
+
+        if (c is null)
             return "> **This build has not been calibrated.** No false-positive rate has been measured " +
                    "for it, so the score above should not be used to support a decision about a person.";
 
-        return $"> **A score is not proof.** This build flags at most {Pct(c.RateHigh)} of writing known " +
-               $"to be human at a threshold of {Num(threshold)}/100 — the upper bound of a 95% interval, " +
-               $"not the observed rate. Below that threshold, treat the score as saying nothing.";
+        // Measured, but on too little text to support any threshold. Saying "not calibrated" here
+        // would contradict the section further down, which goes on to name the corpus and the date.
+        if (c.RecommendedThreshold is not { } threshold)
+            return $"> **No threshold is supported yet.** This build was measured against {c.Texts} " +
+                   "texts, too few to bound its false-positive rate, so no score on this page should " +
+                   "be used to support a decision about a person.";
+
+        // "at most" was a guarantee, and a 95% interval does not give one. The corpus is also one
+        // genre of writing, so generalising from it to "human writing" is the caller's inference and
+        // not this sentence's claim.
+        return $"> **A score is not proof.** On {c.Texts} texts published before generative models " +
+               $"existed, this build's false-positive rate at a threshold of {Num(threshold)}/100 was " +
+               $"under {Pct(c.RateHigh)} — the upper end of a 95% interval, not a guarantee, and " +
+               $"measured on published articles rather than student work. Below that threshold, treat " +
+               $"the score as saying nothing.";
     }
 
     private static string HowOftenWrong()
@@ -310,8 +346,9 @@ public static class EvidenceReport
               .Append(", with a 95% interval of ").Append(Pct(c.RateLow)).Append(" – ")
               .Append(Pct(c.RateHigh)).AppendLine(".");
             sb.AppendLine();
-            sb.AppendLine("Read the interval, not the observed rate. Nought out of ninety is not a " +
-                          "false-positive rate of zero.");
+            sb.Append("Read the interval, not the observed rate. ").Append(c.FlaggedAtThreshold)
+              .Append(" out of ").Append(c.Texts)
+              .AppendLine(" is not a false-positive rate you can round down.");
         }
 
         if (c.NoisiestRules.Count > 0)
@@ -377,6 +414,21 @@ public static class EvidenceReport
         (fraction * 100).ToString(fraction is > 0 and < 0.1 ? "0.0" : "0.#",
                                   CultureInfo.InvariantCulture) + "%";
 
+    /// <summary>
+    /// User content on its way into a Markdown line. Two things it must survive being given: a pipe,
+    /// which would open an extra table cell and shift every number one column to the right in a table
+    /// a teacher reads scores from; and a newline, which would end the list item and let whatever
+    /// followed become report prose — a line beginning "## " arrived as a heading, in the report's own
+    /// voice, from a filename or an extractor's error message.
+    ///
+    /// Matched text is user content by definition, and so is anything a community rule pack matches,
+    /// which is JSON anybody can contribute.
+    /// </summary>
+    private static string Cell(string? text) =>
+        string.IsNullOrEmpty(text)
+            ? ""
+            : text.ReplaceLineEndings(" ").Replace("|", "\\|").Trim();
+
     private static string Escape(string s) =>
         s.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
 
@@ -403,7 +455,10 @@ public static class EvidenceReport
 
             if (line.StartsWith("| ", StringComparison.Ordinal))
             {
-                var cells = line.Trim('|').Split('|').Select(c => Inline(c.Trim())).ToList();
+                // Split on unescaped pipes only. Cell() writes a literal pipe from user content as
+                // \| precisely so a filename containing one cannot open an extra column and shift
+                // every number in the row one place to the right.
+                var cells = SplitRow(line);
                 if (!inTable)
                 {
                     // The row after the header is the alignment row; it carries no content.
@@ -453,6 +508,28 @@ public static class EvidenceReport
 
         CloseBlocks();
         return html.ToString();
+    }
+
+
+    /// <summary>Table cells of one Markdown row, honouring <c>\|</c> as a literal pipe.</summary>
+    private static List<string> SplitRow(string line)
+    {
+        var cells = new List<string>();
+        var cell = new StringBuilder();
+
+        for (int i = 0; i < line.Length; i++)
+        {
+            if (line[i] == '\\' && i + 1 < line.Length && line[i + 1] == '|') { cell.Append('|'); i++; }
+            else if (line[i] == '|') { cells.Add(cell.ToString()); cell.Clear(); }
+            else cell.Append(line[i]);
+        }
+        cells.Add(cell.ToString());
+
+        // A row is "| a | b |": the split leaves an empty cell at each end.
+        if (cells.Count > 0 && cells[0].Trim().Length == 0) cells.RemoveAt(0);
+        if (cells.Count > 0 && cells[^1].Trim().Length == 0) cells.RemoveAt(cells.Count - 1);
+
+        return [.. cells.Select(c => Inline(c.Trim()))];
     }
 
     /// <summary>Bold, italic and code, applied after escaping so a document cannot inject markup.</summary>

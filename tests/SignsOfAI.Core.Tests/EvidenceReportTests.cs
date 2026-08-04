@@ -45,12 +45,20 @@ public class EvidenceReportTests
         // be making the overclaim this project criticises in everyone else.
         var report = Report();
 
-        Assert.Contains("upper bound", report);
+        Assert.Contains("upper end of a 95% interval", report);
+        Assert.Contains("not a guarantee", report);
         Assert.Contains("Read the interval, not the observed rate", report);
 
-        var published = PublishedCalibration.Current;
-        Assert.NotNull(published);
-        Assert.Contains($"{published.Texts} texts published before generative models existed", report);
+        // Never the bare rate dressed as a promise. Scoped to the claim about this tool: "at most"
+        // is fine elsewhere on the page — a DOI issue legitimately says at most one of two entries
+        // can be right — and a blanket ban would be a test about wording rather than about honesty.
+        Assert.DoesNotContain("flags at most", report);
+
+        // Skipped rather than asserted when no snapshot is embedded: a fork that has never measured
+        // itself is a state the design blesses, and a test suite that fails for it would push people
+        // toward shipping somebody else's number.
+        if (PublishedCalibration.Current is { } published)
+            Assert.Contains($"{published.Texts} texts published before generative models existed", report);
     }
 
     [Fact]
@@ -79,11 +87,8 @@ public class EvidenceReportTests
     public void Names_the_rules_known_to_misfire_so_the_reader_can_weigh_the_evidence()
     {
         var report = Report();
-        var published = PublishedCalibration.Current;
-
-        Assert.NotNull(published);
-        Assert.NotEmpty(published.NoisiestRules);
-        Assert.Contains(published.NoisiestRules[0].RuleId, report);
+        if (PublishedCalibration.Current is { NoisiestRules.Count: > 0 } published)
+            Assert.Contains(published.NoisiestRules[0].RuleId, report);
     }
 
     [Fact]
@@ -156,5 +161,72 @@ public class EvidenceReportTests
                     < report.IndexOf("low.docx", StringComparison.Ordinal));
         Assert.Contains("Could not be read", report);
         Assert.Contains("broken.pdf — Encrypted", report);
+    }
+
+    [Fact]
+    public void A_pipe_in_a_filename_cannot_shift_the_columns()
+    {
+        // Legal in a filename on Linux and macOS, and the folder table is where a teacher reads scores
+        // against student names. An extra cell moves every number one column right.
+        var html = EvidenceReport.FolderToHtml("Essays",
+            [new FolderEntry("weird|name.txt", 10, 50, 2, null)]);
+
+        var row = html.Split('\n').First(l => l.Contains("weird"));
+        Assert.Equal(4, row.Split("<td>").Length - 1);
+        Assert.Contains("weird|name.txt", row);
+    }
+
+    [Fact]
+    public void A_newline_in_user_content_cannot_forge_a_heading()
+    {
+        // Extractor errors and rule-pack matches are user content, and MarkdownToHtml dispatches on
+        // the first characters of a line. A forged heading in the report's own voice, in a document
+        // that goes to a committee, is worse than a broken layout.
+        var html = EvidenceReport.FolderToHtml("Essays",
+            [new FolderEntry("b.txt", null, null, null, "Line one\n## Forged heading")]);
+
+        Assert.DoesNotContain("<h2>Forged heading</h2>", html);
+        Assert.Contains("Forged heading", html);
+    }
+
+    [Fact]
+    public void Says_nothing_about_contradictions_when_the_cross_checks_did_not_run()
+    {
+        // A document with citations and no reference list. The first version announced that it
+        // "contradicts itself" directly under a line saying the checks had not been run.
+        const string noBibliography = """
+            Formative assessment improves retention. Delgado and Ruiz (2021) report gains across two
+            cohorts, and Whitfield (2020) finds a similar effect in a larger sample.
+            """;
+
+        var report = EvidenceReport.ToMarkdown(new AiWritingAnalyzer().Analyze(noBibliography, "en"));
+
+        Assert.DoesNotContain("contradicts itself", report);
+        Assert.DoesNotContain("disagrees with itself", report);
+    }
+
+    [Fact]
+    public void The_folder_report_lists_every_file_rather_than_the_first_forty()
+    {
+        // The document a teacher keeps after closing the app. Dropping a hundred and sixty of two
+        // hundred — every low scorer among them — would be worse than not writing it.
+        var entries = Enumerable.Range(1, 200)
+            .Select(i => new FolderEntry($"essay-{i:000}.docx", 900, i % 70, 1, null))
+            .ToList();
+
+        var report = EvidenceReport.FolderToMarkdown("Essays", entries);
+
+        Assert.Contains("essay-200.docx", report);
+        Assert.Contains("essay-001.docx", report);
+    }
+
+    [Fact]
+    public void A_file_that_failed_to_read_is_not_also_in_the_reading_order()
+    {
+        var report = EvidenceReport.FolderToMarkdown("Essays",
+            [new FolderEntry("odd.docx", 10, 90, 3, "Encrypted")]);
+
+        Assert.Contains("Could not be read", report);
+        Assert.DoesNotContain("| odd.docx |", report);
     }
 }
