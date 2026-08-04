@@ -407,8 +407,18 @@ enciclopédica.
 | 1º — maker story (ES) | Blog propio | https://peopleworks.com.do/2026/07/24/detector-de-escritura-con-ia/ |
 | 1º — maker story (EN) | Blog propio | https://peopleworksgpt.com/i-built-an-ai-writing-detector-that-shows-its-work/ |
 | 1º — maker story (EN) | Medium | https://medium.com/@peopleworks/i-built-an-ai-writing-detector-that-shows-its-work-and-speaks-spanish-2d7d5ae71b1a |
+| 2º — desktop story (ES) | Blog propio | https://peopleworks.com.do/2026/08/04/un-desconocido-me-pidio-una-app-de-escritorio-y-crei-haber-construido-lo-que-no-era/ |
+| 2º — desktop story (EN) | Blog propio | https://peopleworksgpt.com/a-stranger-asked-for-a-desktop-app-and-i-thought-id-built-the-wrong-thing/ |
 
-El `canonical_url` del primer artículo ya apunta al blog en los dos idiomas, no al demo.
+El `canonical_url` de los dos primeros artículos ya apunta al blog en los dos idiomas, no al demo.
+
+> **`peopleworksgpt.com` no emite etiquetas Open Graph.** Comprobado el 4/08/2026 en el HTML del
+> segundo artículo: ni `og:image`, ni `og:title`, ni `og:description`, ni las de Twitter. La imagen
+> está en el cuerpo, pero **al compartir ese enlace en X, LinkedIn o Slack no sale tarjeta** — solo
+> una URL pelada, que en un lanzamiento es la diferencia entre que alguien haga clic y que no.
+> `peopleworks.com.do` sí las emite (tiene plugin de SEO), y su `og:image` apunta a la portada.
+> Arreglo: instalar Yoast o Rank Math en el sitio en inglés, o añadir las etiquetas a la cabecera
+> del tema. **Hágalo antes de publicar el copy de redes en inglés.**
 
 > **La copia de Medium se pegó, no se importó — y hay que arreglarlo.** Comprobado en el HTML de la
 > página: su `<link rel="canonical">` apunta a sí misma. Eso le dice a Google que el original es

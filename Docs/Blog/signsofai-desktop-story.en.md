@@ -1,7 +1,7 @@
 ---
 title: "A stranger asked for a desktop app, and I thought I'd built the wrong thing"
 description: "Porting a Blazor WebAssembly app to the desktop took a day, not a rewrite. Exactly one thing genuinely broke. Here's that thing, the decision months earlier that saved me, and the two mistakes I made along the way."
-canonical_url: "https://github.com/peopleworks/SignsofAI"
+canonical_url: "https://peopleworksgpt.com/a-stranger-asked-for-a-desktop-app-and-i-thought-id-built-the-wrong-thing/"
 cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/desktop-story-cover.png"
 tags: [dotnet, blazor, webassembly, desktop]
 author: "Pedro Hernández (PeopleWorks)"
