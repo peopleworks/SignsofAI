@@ -2,7 +2,7 @@
 title: "Construí el detector de IA que hace otra pregunta"
 description: "Los detectores marcan el 61% de los ensayos de quienes no tienen el inglés como lengua materna. El arreglo no es un clasificador mejor: es una pregunta mejor. No «¿se parece a una máquina?» sino «¿se parece a quien escribió los otros?». Esto es lo que costó, y el umbral que borré."
 canonical_url: "https://github.com/peopleworks/SignsofAI"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/baseline-story-cover.png"
 tags: [ia, estilometria, integridadacademica, dotnet]
 author: "Pedro Hernández (PeopleWorks)"
 lang: es

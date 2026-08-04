@@ -2,7 +2,7 @@
 title: "I measured how often my own AI detector is wrong, and published it"
 description: "Ninety texts written before generative models existed. Zero flagged at the recommended threshold — with a 95% interval reaching 4.1%, because ninety texts cannot promise more. And one rule of mine fires on half of all human academic writing."
 canonical_url: "https://github.com/peopleworks/SignsofAI"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/calibration-story-cover.png"
 tags: [ai, statistics, academicintegrity, dotnet]
 author: "Pedro Hernández (PeopleWorks)"
 lang: en

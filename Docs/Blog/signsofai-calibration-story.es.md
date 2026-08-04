@@ -2,7 +2,7 @@
 title: "Medí cuántas veces se equivoca mi propio detector de IA, y lo publiqué"
 description: "Noventa textos escritos antes de que existieran los modelos generativos. Cero marcados al umbral recomendado — con un intervalo del 95% que llega al 4,1%, porque noventa textos no pueden prometer más. Y una regla mía se dispara en la mitad de toda la escritura académica humana."
 canonical_url: "https://github.com/peopleworks/SignsofAI"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/calibration-story-cover.png"
 tags: [ia, estadistica, integridadacademica, dotnet]
 author: "Pedro Hernández (PeopleWorks)"
 lang: es

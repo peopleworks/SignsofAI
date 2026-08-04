@@ -2,7 +2,7 @@
 title: "I built the AI detector that answers a different question"
 description: "Detectors flag 61% of essays by non-native English speakers. The fix is not a better classifier — it is a better question: not \"does this look like a machine\" but \"does this look like the person who wrote the others\". Here is what that took, and the threshold I deleted."
 canonical_url: "https://github.com/peopleworks/SignsofAI"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/baseline-story-cover.png"
 tags: [ai, stylometry, academicintegrity, dotnet]
 author: "Pedro Hernández (PeopleWorks)"
 lang: en
