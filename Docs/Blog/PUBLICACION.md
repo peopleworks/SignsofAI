@@ -400,6 +400,24 @@ Y trae una petición concreta que conviene repetir en cada plataforma: **escritu
 español**. SciELO y Redalyc no eran alcanzables, así que el lado español descansa hoy solo en prosa
 enciclopédica.
 
+### Publicado hasta ahora
+
+| Artículo | Dónde | URL |
+| --- | --- | --- |
+| 1º — maker story (ES) | Blog propio | https://peopleworks.com.do/2026/07/24/detector-de-escritura-con-ia/ |
+| 1º — maker story (EN) | Blog propio | https://peopleworksgpt.com/i-built-an-ai-writing-detector-that-shows-its-work/ |
+| 1º — maker story (EN) | Medium | https://medium.com/@peopleworks/i-built-an-ai-writing-detector-that-shows-its-work-and-speaks-spanish-2d7d5ae71b1a |
+
+El `canonical_url` del primer artículo ya apunta al blog en los dos idiomas, no al demo.
+
+> **La copia de Medium se pegó, no se importó — y hay que arreglarlo.** Comprobado en el HTML de la
+> página: su `<link rel="canonical">` apunta a sí misma. Eso le dice a Google que el original es
+> Medium, así que **peopleworksgpt.com compite contra usted por su propio texto**, y Medium suele
+> ganar por autoridad de dominio. Medium **no permite cambiar el canonical de una historia ya
+> publicada**: la única vía es borrar esa historia y volver a meterla con *Import a story* pegando
+> la URL del blog, que fija el canonical al importar. Cuanto antes, menos tráfico e historial se
+> pierde. De aquí en adelante, **cualquier artículo va primero al blog y a Medium solo por importación.**
+
 > **Ojo con `canonical_url`.** En el front-matter apunta al demo. Eso está bien si el artículo solo
 > vive en dev.to/Medium, pero si lo publicas **primero en tu blog**, cambia `canonical_url` a la URL
 > de tu blog en las copias de dev.to / Hashnode / Medium. Si no, le estás diciendo a Google que la
