@@ -25,8 +25,22 @@ public sealed record CalibrationSample
 
     public required int WordCount { get; init; }
 
-    /// <summary>Every rule that fired on this human text — each one a false positive by construction.</summary>
+    /// <summary>
+    /// The rules that produced <em>evidence</em> on this human text — each one a false positive by
+    /// construction, since no machine wrote any of it.
+    ///
+    /// This excludes rules the text used at a rate people write at, which are shown to a reader but
+    /// score nothing. Reporting those here would make the published misfire table look unchanged
+    /// while the scores moved, which is the opposite of informative.
+    /// </summary>
     public required IReadOnlyList<string> RuleIds { get; init; }
+
+    /// <summary>
+    /// Everything that matched, including what was found at a human rate. Two things need it: the
+    /// derivation of the rates themselves, which must see all usage or it would measure the effect of
+    /// its own previous output, and the published count of how much the rates are absorbing.
+    /// </summary>
+    public IReadOnlyList<string> MatchedRuleIds { get; init; } = [];
 }
 
 /// <summary>
