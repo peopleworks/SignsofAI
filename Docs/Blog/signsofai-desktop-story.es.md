@@ -2,7 +2,7 @@
 title: "Un desconocido me pidió una app de escritorio y creí haber construido lo que no era"
 description: "Llevar una app Blazor WebAssembly al escritorio tomó un día, no una reescritura. Exactamente una cosa se rompió de verdad. Aquí está esa cosa, la decisión de hace meses que me salvó, y los dos errores que cometí en el camino."
 canonical_url: "https://github.com/peopleworks/SignsofAI"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/desktop-story-cover.png"
 tags: [dotnet, blazor, webassembly, escritorio]
 author: "Pedro Hernández (PeopleWorks)"
 lang: es

@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6d7cff" stop-opacity=".55"/>
+      <stop offset="45%" stop-color="#6d7cff" stop-opacity=".16"/>
+      <stop offset="100%" stop-color="#6d7cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="coreFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#98a4ff"/>
+      <stop offset="100%" stop-color="#5563e8"/>
+    </linearGradient>
+    <radialGradient id="vignette" cx="50%" cy="45%" r="75%">
+      <stop offset="0%" stop-color="#111a2e" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#0b1020" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <rect width="1280" height="720" fill="url(#vignette)"/>
+
+  <!-- Connecting lines: the engine feeding four hosts. Drawn before the frames so
+       they tuck under the outlines. -->
+  <g fill="none" stroke-width="2" stroke-linecap="round">
+    <path d="M590 335 L410 250" stroke="#db2777" stroke-opacity=".75"/>
+    <path d="M690 335 L870 250" stroke="#f59e0b" stroke-opacity=".75"/>
+    <path d="M590 385 L410 470" stroke="#22b8cf" stroke-opacity=".75"/>
+    <path d="M690 385 L962 500" stroke="#6d7cff" stroke-opacity=".75"/>
+  </g>
+  <g>
+    <circle cx="500" cy="292" r="4" fill="#db2777"/>
+    <circle cx="780" cy="292" r="4" fill="#f59e0b"/>
+    <circle cx="500" cy="428" r="4" fill="#22b8cf"/>
+    <circle cx="826" cy="443" r="4" fill="#6d7cff"/>
+  </g>
+
+  <!-- The four hosts. Identical stroke weight on purpose: none outranks the others. -->
+  <g fill="none" stroke="#8b97b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- Browser -->
+    <g>
+      <rect x="110" y="105" width="300" height="190" rx="10"/>
+      <path d="M110 145 H410"/>
+      <path d="M132 125 h56 a6 6 0 0 1 6 6 v14 h-68 v-14 a6 6 0 0 1 6 -6 z"/>
+      <path d="M215 178 H305" stroke-opacity=".5"/>
+      <path d="M215 210 H360" stroke-opacity=".5"/>
+      <path d="M215 242 H280" stroke-opacity=".5"/>
+      <circle cx="168" cy="210" r="26" stroke-opacity=".8"/>
+    </g>
+
+    <!-- Desktop window -->
+    <g>
+      <rect x="870" y="105" width="300" height="190" rx="10"/>
+      <path d="M870 145 H1170"/>
+      <path d="M1104 125 h13" stroke-opacity=".8"/>
+      <rect x="1128" y="119" width="13" height="13" rx="2" stroke-opacity=".8"/>
+      <path d="M1152 119 l13 13 M1165 119 l-13 13" stroke-opacity=".8"/>
+      <path d="M975 178 H1065" stroke-opacity=".5"/>
+      <path d="M975 210 H1120" stroke-opacity=".5"/>
+      <path d="M975 242 H1040" stroke-opacity=".5"/>
+      <circle cx="928" cy="210" r="26" stroke-opacity=".8"/>
+    </g>
+
+    <!-- Terminal -->
+    <g>
+      <rect x="110" y="425" width="300" height="190" rx="10"/>
+      <path d="M146 480 l22 20 -22 20" stroke-opacity=".9"/>
+      <path d="M182 520 H244" stroke-opacity=".9"/>
+      <path d="M146 556 H330" stroke-opacity=".45"/>
+      <path d="M146 586 H268" stroke-opacity=".45"/>
+    </g>
+
+    <!-- Socket: the protocol host, deliberately not a window -->
+    <g>
+      <circle cx="1020" cy="520" r="52"/>
+      <circle cx="1020" cy="520" r="20" stroke-opacity=".8"/>
+      <path d="M1020 468 V440" stroke-opacity=".8"/>
+      <path d="M1020 572 V600" stroke-opacity=".8"/>
+      <path d="M968 520 H940" stroke-opacity=".8"/>
+      <path d="M1072 520 H1100" stroke-opacity=".8"/>
+    </g>
+  </g>
+
+  <!-- The engine. The only saturated, filled element in the image. -->
+  <circle cx="640" cy="360" r="150" fill="url(#coreGlow)"/>
+  <path d="M640 302 L690 331 L690 389 L640 418 L590 389 L590 331 Z" fill="url(#coreFill)"/>
+  <path d="M640 302 L690 331 L690 389 L640 418 L590 389 L590 331 Z"
+        fill="none" stroke="#c3caff" stroke-width="1.5" stroke-opacity=".65" stroke-linejoin="round"/>
+  <path d="M640 330 L666 345 L666 375 L640 390 L614 375 L614 345 Z"
+        fill="none" stroke="#0b1020" stroke-width="2" stroke-opacity=".5" stroke-linejoin="round"/>
+</svg>
