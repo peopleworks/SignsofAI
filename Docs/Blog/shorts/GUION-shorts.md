@@ -3,7 +3,28 @@
 Pipeline: WikiKit `../../../../SISTEMA/Tools/WikiIllustrationKit/shorts/build-short.mjs`.
 Cada short: HTML 1080×1920 (CSS keyframes) + `scenes/<id>.json` (narración ElevenLabs) → `out/<id>.mp4` + `.srt`.
 Paleta SignsOfAI: `--bg:#0b1020` · léxico `#db2777` · retórico `#f59e0b` · sintáctico `#22b8cf` · estadístico `#f0556f` · brand `#6d7cff`.
-3 shorts, ~25–35 s. Se hacen versiones ES y EN (mismo HTML, narración distinta).
+~25–30 s cada uno. Se hacen versiones ES y EN (HTML distinto por idioma: `shortN-*.html` y `en/shortN-*.html`).
+
+## Estado
+
+| # | Short | HTML | Narración | Render ES · EN |
+|---|-------|------|-----------|----------------|
+| 1 | El gancho (87%) | ✅ | ✅ | ✅ 26 s · 25,7 s |
+| 2 | Burstiness | ✅ | ✅ | ✅ 30 s · 30 s |
+| 3 | No hablan español | ✅ | ✅ | ✅ 28 s · 28 s |
+| 4 | Traducción | ✅ | ✅ | ✅ 26 s · 29 s |
+| 5 | Dos idiomas | ✅ | ✅ | ✅ 25 s · 26 s |
+| 6 | Reescritura | ✅ | ✅ | ✅ 25 s · 23 s |
+| 7 | Escritorio | ✅ | ✅ | ✅ 25 s · 23 s |
+| 8 | Artefactos | — | guion abajo | pendiente |
+| 9 | Bibliografía inventada | — | guion abajo | pendiente |
+| 10 | 61% / línea base | — | guion abajo | pendiente |
+
+Los renders están en `out/<id>.mp4` + `.srt`. Los 8–10 necesitan HTML antes de narrar.
+
+**Orden del pipeline:** narrar primero (`narrate-all.mjs`), sacar los tiempos de cue
+(`cue-times.mjs`) y **después** escribir el HTML alrededor de la duración medida, porque los
+retardos de animación son absolutos. `build-short.mjs` reutiliza el mp3 salvo `--revoice`.
 
 ---
 
@@ -22,17 +43,44 @@ Paleta SignsOfAI: `--bg:#0b1020` · léxico `#db2777` · retórico `#f59e0b` · 
 - **ES:** "Casi todos los detectores de IA piensan en inglés. Al español le dan una traducción tosca, y se pierden cómo suena la IA de verdad en nuestro idioma: sumérgete en el vasto mundo de, cabe destacar que, un rico tapiz de. SignsOfAI trae un pack de español derivado desde cero. Detecta la IA en tu idioma. Gratis y abierto."
 - **EN:** "Almost every A I detector thinks in English. Spanish gets a clumsy translation, and they miss how A I really sounds in Spanish. SignsOfAI ships a Spanish rule-pack derived from scratch. Detect A I in your language. Free and open source."
 
+## Short 4 — "Tu idioma, en un archivo" (la invitación a contribuir)
+**Visual:** "Habla inglés · español · ¿Y el tuyo?"; se abre `es.json` y las claves se traducen a la
+vista (`"home.upload"` → `"Subir documento"`); tres negaciones — sin C#, sin compilar, sin saber
+programar; "¿Falta una clave? Cae al inglés. Una traducción a medias ya sirve"; cierre "Tu idioma,
+en un archivo · Gratis · Open Source".
+- **ES:** "SignsOfAI habla inglés y español. ¿Y el tuyo? Las traducciones no están compiladas: son un archivo JSON. Copias el inglés, traduces las frases y mandas un pull request. Sin C sharp, sin compilar, sin saber programar. Si falta una clave, cae al inglés: una traducción a medias ya sirve. Tu idioma, en un archivo."
+- **EN:** "SignsOfAI speaks English and Spanish. What about yours? The translations aren't compiled. They're a JSON file. Copy the English one, translate the phrases, open a pull request. No C sharp, no build step, no programming. Miss a key and it falls back to English, so a half-finished translation still ships. Your language, in one file."
+
+## Short 5 — "Dos idiomas, a propósito" (lo que parece un bug)
+**Visual:** un clic cambia toda la interfaz; luego la pantalla en español con un consejo en inglés
+(`"delve" is heavily overused in AI writing`) y el rótulo "¿Un fallo?"; se parte en dos columnas —
+*Idioma de la app: Español* / *Idioma del texto: Inglés*; cierre "Dos idiomas, a propósito".
+- **ES:** "Un clic, y toda la interfaz cambia. Sin recargar, y se acuerda. Pero mira esto: la interfaz en español, y el consejo sigue en inglés. ¿Un fallo? No. Estás analizando texto inglés, y el consejo habla de palabras inglesas. Son dos idiomas independientes: el de la aplicación, y el de tu texto. A propósito."
+- **EN:** "One click, and the whole interface changes. No reload, and it remembers. But look at this: the interface in Spanish, and the advice still in English. A bug? No. You're analysing English text, and the advice is about English words. Two independent languages: the app's, and your text's. On purpose."
+
+## Short 6 — "Y cuando rompería la frase, no la cambia" (la reescritura que se niega)
+**Visual:** se teclea y el marcador `/100` baja en vivo; tres negaciones — sin nube, sin clave, sin
+esperar; se resalta la frase «…no es **solo** una herramienta, es un cambio de paradigma» con la
+nota "esta no la toca · quitar *solo* invierte el sentido"; cierre "Y cuando rompería la frase, no
+la cambia".
+- **ES:** "Escribe, y mira el número bajar. Cada cambio ocurre en tu dispositivo: sin nube, sin clave, sin esperar. Pero fíjate en esta palabra. No la toca. Porque cambiarla rompería la frase, y prefiere no tocarla antes que devolverte una frase rota. Eso ningún humanizador de pago te lo cuenta."
+- **EN:** "Type, and watch the number fall. Every change happens on your device: no cloud, no key, no waiting. But look at this word. It leaves it alone. Because changing it would break the sentence, and it would rather refuse than hand you broken prose. No paid humanizer tells you that."
+
+## Short 7 — "Ya hay app de escritorio" (lo que el navegador no puede)
+**Visual:** "Ya hay app de escritorio" y debajo la objeción "¿Para qué, si la web funciona?";
+aparece el medidor de **Previsibilidad 86%** con el pie "modelo corriendo dentro de la app · 122 ms"
+y las dos negaciones — sin servidor, sin conexión; luego una carpeta soltándose sobre la ventana con
+`entrega-041.pdf`, `entrega-118.docx`, `entrega-007.odt` y "…y 197 más, ordenadas de peor a mejor";
+cierre "Gratis, para Windows".
+- **ES:** "Ya hay aplicación de escritorio. ¿Para qué, si la web funciona? Para esto: mide la previsibilidad con un modelo que corre dentro de la aplicación. Sin servidor, sin conexión, y tu texto no sale de la máquina. Y lee una carpeta entera: doscientas entregas, ordenadas de peor a mejor. Gratis, para Windows."
+- **EN:** "There's a desktop app now. Why, if the web one works? For this: it measures predictability with a model running inside the app. No server, offline, and your text never leaves the machine. And it reads a whole folder: two hundred submissions, sorted worst first. Free, for Windows."
+
 ## Short 8 — "Buscar y reemplazar apaga un detector" (el artefacto)
 **Visual:** la palabra `delve` grande; una letra gira y se vuelve cirílica con marca roja; el contador
 de señales cae 17 → 6; aparece el reporte de caracteres con `U+0435 · línea 37, col 64`; cierre con
 marca y la frase "un hecho, no un porcentaje".
 - **ES:** "Puedes apagar casi cualquier detector de inteligencia artificial con buscar y reemplazar. Cambia la e latina por la e cirílica: se ven idénticas, en pantalla no cambia nada, y la regla deja de encontrar la palabra. Siete detectores cayeron por debajo del azar con ese truco. Con el mío también funcionaba. Ahora SignsOfAI te da el código, la línea y la columna de cada carácter raro. Un porcentaje se discute; un carácter en la línea catorce está o no está."
 - **EN:** "You can switch off almost any A I detector with find and replace. Swap the Latin e for the Cyrillic e: identical on screen, nothing looks different, and the rule stops finding the word. Seven detectors dropped below chance with that trick. Mine did too. Now SignsOfAI gives you the codepoint, the line and the column of every one. A percentage is arguable; a character at line fourteen either is there or is not."
-
-> Los shorts 4 a 7 ya existen como HTML sin entrada aquí (traducción, dos idiomas, reescritura,
-> escritorio); su copy está en `PUBLICACION.md`. **Orden del pipeline:** narrar primero
-> (`narrate-all.mjs`), sacar los tiempos de cue (`cue-times.mjs`) y **después** escribir el HTML
-> alrededor de la duración medida, porque los retardos de animación son absolutos.
 
 
 ## Short 9 — "0/100, y la bibliografía inventada" (las fuentes)

@@ -306,6 +306,8 @@ de los seis (video / voz / cola en segundos):
 | `signsofai-citations-story.{en,es}.html` | WordPress · Blogger — **generados** |
 | `signsofai-baseline-story.{en,es}.md` | dev.to · Hashnode · Medium — **quinto artículo**, sin publicar |
 | `signsofai-baseline-story.{en,es}.html` | WordPress · Blogger — **generados** |
+| `signsofai-calibration-story.{en,es}.md` | dev.to · Hashnode · Medium — **sexto artículo**, sin publicar |
+| `signsofai-calibration-story.{en,es}.html` | WordPress · Blogger — **generados** |
 
 **Generar el HTML.** Los dos primeros artículos se escribieron como HTML a mano. Transcribir 1.500
 palabras dos veces más, en dos idiomas, es la forma segura de corregir un párrafo en una copia y no
@@ -375,6 +377,28 @@ Ese segundo apartado es el corazón del texto y no conviene suavizarlo al editar
 Puntajes en su propio pie: **EN 8/100 · variabilidad 0.63 · 9 señales**, **ES 7/100 · variabilidad
 0.67 · 7 señales**. La comparación citada dentro del artículo es real: son los propios artículos de
 este blog medidos unos contra otros, y el 0.654 es el primer artículo del proyecto.
+
+**Sexto artículo — la calibración.** El de mayor alcance fuera del nicho, porque contesta la pregunta
+que todo docente hace en el primer minuto y que **ninguna herramienta de la categoría publica**:
+¿cuántas veces te equivocas? Noventa textos anteriores a los modelos generativos, **cero marcados a
+25/100**, con el intervalo de Wilson (0–4,1%) en vez de la estimación puntual.
+
+Dos cosas lo hacen distinto de un comunicado de resultados. La primera: la recomendación sale del
+extremo **superior** del intervalo, así que un corpus pequeño produce un umbral prudente y solo se
+estrecha al crecer — leer la estimación puntual permitiría afirmar «0% de falsos positivos» con
+noventa documentos. La segunda: el artículo publica **la lista de reglas propias que se disparan
+sobre escritura humana**, encabezada por `rhet.rule-of-three` en el **50%** de los artículos
+académicos. Esa sección es el motivo de publicar en vez de comprobarlo en privado, y no conviene
+recortarla al editar.
+
+Puntajes en su propio pie: **EN 10/100 · variabilidad 0.56 · ~1.470 palabras**, **ES 8/100 ·
+variabilidad 0.58 · ~1.530 palabras**. El pie corrige además una afirmación que llegué a escribir y
+resultó falsa al comprobarla antes de publicar (la regla de tres no disparó aquí; sí `lex.moreover` y
+`lex.furthermore`). **Esa corrección se queda**: es el artículo entero en miniatura.
+
+Y trae una petición concreta que conviene repetir en cada plataforma: **escritura académica en
+español**. SciELO y Redalyc no eran alcanzables, así que el lado español descansa hoy solo en prosa
+enciclopédica.
 
 > **Ojo con `canonical_url`.** En el front-matter apunta al demo. Eso está bien si el artículo solo
 > vive en dev.to/Medium, pero si lo publicas **primero en tu blog**, cambia `canonical_url` a la URL
@@ -782,6 +806,133 @@ valores y ninguno es ese, y hay una prueba que verifica la lista.
 MIT y gratis: https://github.com/peopleworks/SignsofAI
 
 #IntegridadAcadémica #IA #Estilometría #EdTech #DotNet
+```
+
+### X / Twitter — sexto artículo (EN)
+```
+Every teacher who picks up an AI detector asks the same question within a minute: how often are you
+wrong?
+
+Nobody answers it. Not Turnitin, not GPTZero, not Originality.ai. The one number that would let you
+judge them is the one number none of them publish.
+
+So I measured mine and put it in the repo.
+
+90 texts published before generative models existed. At 25/100 it flagged zero of them — a rate
+between 0% and 4.1%, because ninety texts cannot promise anything narrower.
+
+And the part that stung: my own rule-of-three detector fires on half of all human academic writing.
+That is published too, right next to the good number.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — sexto artículo (ES)
+```
+Todo profesor que agarra un detector de IA hace la misma pregunta al minuto: ¿cuántas veces te
+equivocas?
+
+Nadie la contesta. Ni Turnitin, ni GPTZero, ni Originality.ai. El único número que permitiría
+juzgarlas es justo el que ninguna publica.
+
+Así que medí el mío y lo puse en el repositorio.
+
+90 textos publicados antes de que existieran los modelos generativos. A 25/100 no marcó ninguno —
+una tasa entre 0% y 4,1%, porque noventa textos no pueden prometer nada más estrecho.
+
+Y la parte que escoció: mi propio detector de regla de tres se dispara en la mitad de toda la
+escritura académica humana. Eso también está publicado, al lado del número bueno.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — sexto artículo (EN)
+```
+I measured how often my own AI detector is wrong, and published the result.
+
+Not accuracy. Accuracy needs a pile of machine-written text, and any pile I assemble is a sample of
+whichever models were convenient that month — it ages badly and it flatters whoever assembled it. It
+is also the wrong number: a detector that is 95% accurate by flagging everyone who writes formally
+has done more damage than one that catches less and accuses nobody.
+
+What I measured is the false-positive rate: how often it flags writing no machine produced. That
+needs only human text, which does not go stale.
+
+And you do not establish the text is human by reading it. Reading it is the thing being measured; it
+cannot also be the thing doing the measuring. You establish it by date — open-access papers from
+2018–2020 and Wikipedia revisions as they stood in 2020 and 2021, pulled from the revision history.
+A paper with a 2019 DOI was not written by something that did not exist yet.
+
+Ninety texts, about 380,000 words. At a threshold of 25/100 it flagged none of them.
+
+Read that as 0% and you have been misled — including by me. Zero out of ninety is a rate somewhere
+between 0% and 4.1%, and the recommendation comes from the upper end. With nothing flagged at all it
+still takes about seventy-five texts before the interval alone gets under 5%. That is what "enough
+corpus" means, and it is far more than anyone assembles by accident.
+
+The most useful thing it produced is the part I liked least. The report lists which of my own rules
+fired on that human writing, and every hit is a false positive by construction. Top of the list: my
+rule-of-three detector, firing on 50% of human academic papers. Then "moreover" and "furthermore",
+in a quarter of the texts — ordinary academic connectives that scholars were writing long before
+anyone trained a transformer. A rule that fires on half of everything is measuring the genre, not
+the machine. I would not have known which ones without doing this.
+
+The corpus is a JSON manifest anyone can extend. Add texts and the published number changes — that
+is the point. A number that can go up when the corpus grows is a measurement. One that could only
+ever go down would be marketing.
+
+What I most want is Spanish academic writing. SciELO and Redalyc were not reachable from where I
+assembled this, so the Spanish side currently rests on encyclopedia prose alone — and Spanish is the
+half of this problem nobody else measures at all.
+
+MIT and free: https://github.com/peopleworks/SignsofAI
+
+#AcademicIntegrity #AI #EdTech #Statistics #dotnet
+```
+
+### LinkedIn — sexto artículo (ES)
+```
+Medí cuántas veces se equivoca mi propio detector de IA, y publiqué el resultado.
+
+Exactitud no. La exactitud necesita un montón de texto escrito por máquina, y cualquier montón que
+yo arme es una muestra de los modelos que me vinieran bien ese mes: envejece mal y favorece a quien
+lo armó. Además es el número equivocado: un detector con 95% de exactitud que lo consigue marcando a
+todo el que escribe formal ha hecho más daño que uno que caza menos y no acusa a nadie.
+
+Lo que medí es la tasa de falsos positivos: cuántas veces marca escritura que ninguna máquina
+produjo. Eso solo necesita texto humano, que no caduca.
+
+Y que el texto es humano no se establece leyéndolo. Leerlo es lo que se está midiendo; no puede ser
+además lo que mide. Se establece por su fecha — artículos de acceso abierto de 2018 a 2020 y
+revisiones de Wikipedia tal como estaban en 2020 y 2021, sacadas del historial. Un artículo con un
+DOI de 2019 no lo escribió algo que todavía no existía.
+
+Noventa textos, unas 380.000 palabras. A un umbral de 25 sobre 100 no marcó ninguno.
+
+Si lee eso como 0%, le han engañado — yo incluido. Cero de noventa es una tasa entre 0% y 4,1%, y la
+recomendación se hace desde el extremo superior. Sin marcar absolutamente nada, todavía hacen falta
+unos setenta y cinco textos para que el intervalo por sí solo baje del 5%. Eso es lo que significa
+«corpus suficiente», y es bastante más de lo que nadie reúne por accidente.
+
+Lo más útil que produjo es la parte que menos me gustó. El reporte lista cuáles de mis propias reglas
+se dispararon sobre esa escritura humana, y cada acierto es un falso positivo por construcción. En lo
+alto: mi detector de regla de tres, disparando en el 50% de los artículos académicos humanos. Después
+«moreover» y «furthermore», en la cuarta parte de los textos — conectores académicos normales que los
+investigadores llevan escribiendo desde mucho antes de que nadie entrenara un transformer. Una regla
+que dispara en la mitad de todo está midiendo el género, no la máquina. Sin hacer esto no habría
+sabido cuáles.
+
+El corpus es un manifiesto JSON que cualquiera puede ampliar. Añada textos y el número publicado
+cambia; de eso se trata. Un número que puede subir cuando el corpus crece es una medición. Uno que
+solo pudiera bajar sería publicidad.
+
+Lo que más quiero es escritura académica en español. SciELO y Redalyc no eran alcanzables desde donde
+armé esto, así que el lado español descansa hoy solo en prosa enciclopédica — y el español es la
+mitad de este problema que nadie más mide.
+
+MIT y gratis: https://github.com/peopleworks/SignsofAI
+
+#IntegridadAcadémica #IA #EdTech #Estadística #DotNet
 ```
 
 ## 8. Notas de publicación
