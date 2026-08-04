@@ -2,7 +2,7 @@
 title: "Mi detector de IA le puso 0/100 a este ensayo. La bibliografía era inventada."
 description: "La puntuación estilométrica no encontró nada. Comparar el documento contra su propia lista de referencias encontró cinco contradicciones en medio milisegundo, sin conexión y sin enviar nada a ninguna parte — y una de ellas era un DOI que aparecía en dos artículos distintos."
 canonical_url: "https://github.com/peopleworks/SignsofAI"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/citations-story-cover.png"
 tags: [ia, integridadacademica, dotnet, educacion]
 author: "Pedro Hernández (PeopleWorks)"
 lang: es

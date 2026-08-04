@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <!-- The fourth article's argument in one frame: the score says everything is fine,
+       and the bibliography contradicts itself five times. Kept almost wordless on
+       purpose — the few tokens that appear (0/100, DOI, 2027) read the same in
+       English and Spanish, so one cover serves both articles. -->
+  <defs>
+    <radialGradient id="vignette" cx="50%" cy="46%" r="78%">
+      <stop offset="0%" stop-color="#111a2e"/>
+      <stop offset="100%" stop-color="#0b1020"/>
+    </radialGradient>
+    <radialGradient id="okGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3ecf8e" stop-opacity=".28"/>
+      <stop offset="100%" stop-color="#3ecf8e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <rect width="1280" height="720" fill="url(#vignette)"/>
+
+  <!-- Left: the reassuring verdict. -->
+  <circle cx="280" cy="352" r="185" fill="url(#okGlow)"/>
+  <!-- The big number deliberately avoids the monospace stack: its zero is slashed,
+       and at this size a slashed zero reads as a "forbidden" sign rather than a score. -->
+  <g text-anchor="middle">
+    <text x="272" y="392" font-family="'Segoe UI', Arial, Helvetica, sans-serif"
+          font-size="240" font-weight="600" fill="#3ecf8e">0</text>
+    <text x="272" y="452" font-family="'Segoe UI', Arial, Helvetica, sans-serif"
+          font-size="44" fill="#3ecf8e" fill-opacity=".55">/100</text>
+    <text x="272" y="516" font-family="Consolas, 'DejaVu Sans Mono', monospace"
+          font-size="26" fill="#8b97b5">0 signals</text>
+  </g>
+  <g fill="none" stroke="#3ecf8e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="272" cy="196" r="30" stroke-opacity=".7"/>
+    <path d="M258 196 l10 11 20 -23" stroke-opacity=".9"/>
+  </g>
+
+  <!-- Right: the reference list the same document carries. -->
+  <g>
+    <rect x="556" y="150" width="654" height="420" rx="14" fill="#141d33" fill-opacity=".55"
+          stroke="#8b97b5" stroke-opacity=".22" stroke-width="2"/>
+
+    <g fill="#8b97b5">
+      <rect x="606" y="192" width="470" height="9" rx="4.5" fill-opacity=".38"/>
+      <rect x="606" y="211" width="300" height="9" rx="4.5" fill-opacity=".2"/>
+
+      <rect x="606" y="262" width="520" height="9" rx="4.5" fill-opacity=".38"/>
+      <rect x="606" y="281" width="264" height="9" rx="4.5" fill-opacity=".2"/>
+
+      <rect x="606" y="332" width="418" height="9" rx="4.5" fill-opacity=".38"/>
+      <rect x="606" y="351" width="330" height="9" rx="4.5" fill-opacity=".2"/>
+
+      <rect x="606" y="402" width="496" height="9" rx="4.5" fill-opacity=".38"/>
+      <rect x="606" y="421" width="288" height="9" rx="4.5" fill-opacity=".2"/>
+
+      <rect x="606" y="472" width="440" height="9" rx="4.5" fill-opacity=".38"/>
+      <rect x="606" y="491" width="312" height="9" rx="4.5" fill-opacity=".2"/>
+    </g>
+
+    <!-- Five contradictions, each an ordinary fact about the document itself. -->
+    <g fill="#f59e0b">
+      <path d="M1152 186 l13 23 h-26 z"/>
+      <path d="M1152 256 l13 23 h-26 z"/>
+      <path d="M1152 326 l13 23 h-26 z"/>
+      <path d="M1152 396 l13 23 h-26 z"/>
+      <path d="M1152 466 l13 23 h-26 z"/>
+    </g>
+
+    <!-- The same DOI on two different papers: one line, and the claim is visible. -->
+    <g fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round">
+      <path d="M596 266 C 556 266, 556 336, 596 336" stroke-opacity=".9"/>
+      <circle cx="598" cy="266" r="4" fill="#f59e0b" stroke="none"/>
+      <circle cx="598" cy="336" r="4" fill="#f59e0b" stroke="none"/>
+    </g>
+    <text x="524" y="307" font-family="Consolas, 'DejaVu Sans Mono', monospace" font-size="21"
+          fill="#f59e0b" text-anchor="middle">DOI</text>
+
+    <!-- A source published in a year that has not happened. -->
+    <text x="1104" y="418" font-family="Consolas, 'DejaVu Sans Mono', monospace" font-size="23"
+          fill="#f59e0b" text-anchor="end">2027</text>
+  </g>
+</svg>

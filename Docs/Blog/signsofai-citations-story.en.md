@@ -2,7 +2,7 @@
 title: "My AI detector scored this essay 0/100. Its bibliography was invented."
 description: "The stylometric score found nothing. Comparing the document against its own reference list found five contradictions in half a millisecond, offline, with nothing sent anywhere — and one of them was a DOI that appeared on two different papers."
 canonical_url: "https://github.com/peopleworks/SignsofAI"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/citations-story-cover.png"
 tags: [ai, academicintegrity, dotnet, education]
 author: "Pedro Hernández (PeopleWorks)"
 lang: en
