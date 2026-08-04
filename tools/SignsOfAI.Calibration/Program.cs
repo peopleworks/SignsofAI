@@ -230,6 +230,18 @@ var published = new PublishedCalibration
     RateHigh = atThreshold?.RateHigh ?? 1,
     NoisiestRules = [.. calibration.RuleFalsePositives.Take(8)
         .Select(r => new PublishedRuleRate { RuleId = r.RuleId, TextShare = r.TextShare })],
+
+    // Per language, because the report about a Spanish essay must not quote an English-heavy
+    // aggregate. The best bound a group can support is the tightest upper interval it reaches at any
+    // threshold; when that never gets inside the target, the group supports no threshold and the
+    // report has to say so instead of borrowing the overall one.
+    Languages = [.. calibration.ByLanguage.Select(g => new PublishedLanguage
+    {
+        Language = g.Name,
+        Texts = g.Count,
+        RecommendedThreshold = g.ThresholdForTarget,
+        BestBound = g.Thresholds.Count == 0 ? 1 : g.Thresholds.Min(t => t.RateHigh),
+    })],
 };
 
 // Anchored to the manifest rather than the working directory. Run from anywhere but the repository

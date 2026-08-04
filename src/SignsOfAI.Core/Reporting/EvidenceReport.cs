@@ -56,9 +56,39 @@ public static class EvidenceReport
         // ── The reading, and immediately the caveat that makes it usable ──────────────────────────
         sb.AppendLine("## What the analysis says");
         sb.AppendLine();
-        sb.Append("**").Append(Num(result.OverallScore)).Append("/100 — ").Append(result.Verdict)
-          .AppendLine("**");
+        // The verdict is withheld below the threshold this build can support, because printing
+        // "Reads mostly human" and then, four lines down, "treat the score as saying nothing" is a
+        // page arguing with itself — and the reader will keep whichever half suits them. A low score
+        // is not evidence of a human: a detector that detects nothing also returns zero, and this
+        // project deliberately never measured how much machine writing it catches.
+        sb.Append("**").Append(Num(result.OverallScore)).Append("/100");
+        if (VerdictHolds(result))
+            sb.Append(" — ").Append(result.Verdict);
+        sb.AppendLine("**");
         sb.AppendLine();
+        if (!VerdictHolds(result))
+        {
+            sb.AppendLine("*Below the threshold this build can support, so no verdict is given. A low " +
+                          "score is not evidence that a person wrote this.*");
+            sb.AppendLine();
+        }
+
+        // Named up here rather than left to the section below, because a page that opens "0/100" and
+        // buries four contradictions in its own bibliography further down has chosen the wrong thing
+        // to make salient — and that exact document is the one this project keeps writing about.
+        if (result.Citations.Issues.Count > 0 || result.Artifacts.Any)
+        {
+            sb.Append("**Checkable facts found: ");
+            var parts = new List<string>();
+            if (result.Citations.Issues.Count > 0)
+                parts.Add($"{result.Citations.Issues.Count} source contradiction" +
+                          (result.Citations.Issues.Count == 1 ? "" : "s"));
+            if (result.Artifacts.Any)
+                parts.Add($"{result.Artifacts.Count} unusual character" +
+                          (result.Artifacts.Count == 1 ? "" : "s"));
+            sb.Append(string.Join(", ", parts)).AppendLine(". These did not move the score.**");
+            sb.AppendLine();
+        }
         sb.Append("- ").Append(result.Signals.Count).Append(" signal")
           .Append(result.Signals.Count == 1 ? "" : "s").Append(" counted");
         if (result.Observations.Count > 0)
@@ -70,7 +100,7 @@ public static class EvidenceReport
           .Append(result.Statistics.SentenceCount).Append(" sentences · sentence-length variability ")
           .AppendLine(Num(result.Statistics.Burstiness, 2));
         sb.AppendLine();
-        sb.AppendLine(Caveat());
+        sb.AppendLine(Caveat(result.Language));
         sb.AppendLine();
 
         // ── Checkable facts first, because they are the part that settles anything ────────────────
@@ -235,7 +265,7 @@ public static class EvidenceReport
         if (unreadable.Count > 0) sb.Append(", ").Append(unreadable.Count).Append(" unreadable");
         sb.AppendLine(".");
         sb.AppendLine();
-        sb.AppendLine(Caveat());
+        sb.AppendLine(Caveat(null));
         sb.AppendLine();
         sb.AppendLine("> **This is a reading order, not a ranking.** A higher score means look sooner, " +
                       "and nothing more. Nothing on this page establishes that anyone did anything.");
@@ -295,11 +325,24 @@ public static class EvidenceReport
     }
 
     /// <summary>
+    /// Whether the score has earned the right to carry a verdict: only at or above the threshold
+    /// measured for the language actually analysed. Everywhere else the number stands alone.
+    /// </summary>
+    private static bool VerdictHolds(AnalysisResult result)
+    {
+        var c = PublishedCalibration.Current;
+        if (c is null) return false;
+
+        var threshold = c.For(result.Language)?.RecommendedThreshold ?? c.RecommendedThreshold;
+        return threshold is { } t && result.OverallScore >= t;
+    }
+
+    /// <summary>
     /// The sentence that has to appear on every report. Written from the embedded calibration so it
     /// cannot go stale, and explicit when there is none: a fork that has not measured itself says so
     /// rather than inheriting a number it did not earn.
     /// </summary>
-    private static string Caveat()
+    private static string Caveat(string? language)
     {
         var c = PublishedCalibration.Current;
 
@@ -313,6 +356,27 @@ public static class EvidenceReport
             return $"> **No threshold is supported yet.** This build was measured against {c.Texts} " +
                    "texts, too few to bound its false-positive rate, so no score on this page should " +
                    "be used to support a decision about a person.";
+
+        // The language actually analysed, never the aggregate. Docs/CALIBRATION.md says it one line
+        // above its own table: a rate that holds in English and fails in Spanish is not one number.
+        // On the current corpus English bounds at 5.6% and Spanish at 13.3%, and neither group is big
+        // enough to support the target alone — so a Spanish essay quoting the overall 4.1% would be
+        // handed a bound three times better than anything measured for its language.
+        if (c.For(language) is { } group)
+        {
+            if (group.RecommendedThreshold is not { } languageThreshold)
+                return $"> **No threshold is supported for this language yet.** The corpus holds " +
+                       $"{group.Texts} texts in it — too few to bound how often this build is wrong " +
+                       $"about writing in it, so no score on this page should be used to support a " +
+                       $"decision about a person. The best bound these texts support is " +
+                       $"{Pct(group.BestBound)}, and the overall figure is not a substitute for it.";
+
+            return $"> **A score is not proof.** On {group.Texts} texts in this language, published " +
+                   $"before generative models existed, this build's false-positive rate at a threshold " +
+                   $"of {Num(languageThreshold)}/100 was under {Pct(group.BestBound)} — the upper end " +
+                   $"of a 95% interval, not a guarantee, and measured on published articles rather " +
+                   $"than student work. Below that threshold, treat the score as saying nothing.";
+        }
 
         // "at most" was a guarantee, and a 95% interval does not give one. The corpus is also one
         // genre of writing, so generalising from it to "human writing" is the caller's inference and

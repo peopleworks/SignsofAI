@@ -34,7 +34,10 @@ public class EvidenceReportTests
         // how often the method errs is the artefact this project argues against.
         var report = Report();
 
-        Assert.Contains("A score is not proof", report);
+        // Either wording is honest; what must never happen is a page with neither. Which one appears
+        // depends on whether the analysed language has enough corpus to support a threshold at all.
+        Assert.True(report.Contains("A score is not proof")
+                    || report.Contains("No threshold is supported"));
         Assert.Contains("How often this is wrong", report);
     }
 
@@ -45,9 +48,20 @@ public class EvidenceReportTests
         // be making the overclaim this project criticises in everyone else.
         var report = Report();
 
-        Assert.Contains("upper end of a 95% interval", report);
-        Assert.Contains("not a guarantee", report);
         Assert.Contains("Read the interval, not the observed rate", report);
+
+        // When the language does support a threshold the caveat quotes the interval, never a promise;
+        // when it does not, it says so and refuses to borrow the aggregate. Both are asserted because
+        // which one appears is a property of the corpus, not of this code.
+        if (report.Contains("A score is not proof"))
+        {
+            Assert.Contains("upper end of a 95% interval", report);
+            Assert.Contains("not a guarantee", report);
+        }
+        else
+        {
+            Assert.Contains("the overall figure is not a substitute for it", report);
+        }
 
         // Never the bare rate dressed as a promise. Scoped to the claim about this tool: "at most"
         // is fine elsewhere on the page — a DOI issue legitimately says at most one of two entries
@@ -228,5 +242,44 @@ public class EvidenceReportTests
 
         Assert.Contains("Could not be read", report);
         Assert.DoesNotContain("| odd.docx |", report);
+    }
+
+    [Fact]
+    public void Never_quotes_a_bound_measured_on_another_language()
+    {
+        // The calibration page says it one line above its own table: a rate that holds in English and
+        // fails in Spanish is not one number. Quoting the aggregate on a Spanish essay would hand its
+        // author a bound measured mostly on English.
+        var report = EvidenceReport.ToMarkdown(new AiWritingAnalyzer().Analyze(
+            "La evaluación formativa mejora la retención estudiantil, y cabe destacar que el efecto " +
+            "parece mediado por la autoeficacia del estudiante más que por la retroalimentación.", "es"));
+
+        if (PublishedCalibration.Current?.For("es") is { } spanish)
+            Assert.Contains($"{spanish.Texts} texts", report);
+    }
+
+    [Fact]
+    public void Withholds_the_verdict_below_the_threshold_it_can_support()
+    {
+        // "Reads mostly human" printed above "treat the score as saying nothing" is a page arguing
+        // with itself, and the reader keeps whichever half suits them.
+        var report = Report();
+
+        Assert.DoesNotContain("Reads mostly human", report);
+        Assert.Contains("A low score is not evidence that a person wrote this", report);
+    }
+
+    [Fact]
+    public void Puts_the_checkable_facts_in_the_headline()
+    {
+        // The document this project keeps writing about scores near zero and has an invented
+        // bibliography. Burying that below the number would be choosing the wrong thing to make
+        // salient, on the one page where it matters most.
+        var report = Report();
+
+        Assert.Contains("Checkable facts found:", report);
+        Assert.Contains("source contradiction", report);
+        Assert.True(report.IndexOf("Checkable facts found:", StringComparison.Ordinal)
+                    < report.IndexOf("## Checkable facts", StringComparison.Ordinal));
     }
 }

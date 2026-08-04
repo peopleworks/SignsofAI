@@ -57,6 +57,24 @@ public sealed record PublishedCalibration
     /// </summary>
     public IReadOnlyList<PublishedRuleRate> NoisiestRules { get; init; } = [];
 
+    /// <summary>
+    /// The same measurement per language, and the reason this type is not a single number.
+    ///
+    /// `Docs/CALIBRATION.md` puts it plainly one line above its own table: "a rate that holds in
+    /// English and fails in Spanish is not one number, and reporting it as one would hide exactly the
+    /// failure that matters here." On the current corpus the English bound is 5.6% and the Spanish one
+    /// 13.3%, and neither group is large enough to support the 5% target on its own. Quoting the
+    /// aggregate on a report about a Spanish essay would hand its author a bound more than three times
+    /// better than anything measured for their language.
+    /// </summary>
+    public IReadOnlyList<PublishedLanguage> Languages { get; init; } = [];
+
+    /// <summary>What was measured for one language, or null when that language was not in the corpus.</summary>
+    public PublishedLanguage? For(string? language) =>
+        language is null
+            ? null
+            : Languages.FirstOrDefault(l => string.Equals(l.Language, language, StringComparison.OrdinalIgnoreCase));
+
     private static PublishedCalibration? _current;
     private static bool _loaded;
 
@@ -103,6 +121,23 @@ public sealed record PublishedCalibration
             return _current;
         }
     }
+}
+
+/// <summary>
+/// One language's slice of the corpus. <see cref="RecommendedThreshold"/> is null when this group is
+/// too small to bound its own rate — which must be said out loud, because it is the honest answer and
+/// the aggregate is not.
+/// </summary>
+public sealed record PublishedLanguage
+{
+    public required string Language { get; init; }
+
+    public required int Texts { get; init; }
+
+    public double? RecommendedThreshold { get; init; }
+
+    /// <summary>The best upper bound this group can support, as a fraction.</summary>
+    public required double BestBound { get; init; }
 }
 
 /// <summary>One rule and how often it appeared in writing no machine wrote.</summary>
