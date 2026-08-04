@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using SignsOfAI.Calibration;
 using SignsOfAI.Core;
 using SignsOfAI.Core.Calibration;
@@ -208,6 +209,34 @@ var report = Report.Render(calibration, manifest, $"SignsOfAI.Core {version}",
 
 Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outPath))!);
 File.WriteAllText(outPath, report);
+
+// The same numbers, in the form the engine can carry. A report that accuses somebody has to print
+// its own error rate on the same page, and reading it back out of the Markdown — or restating it
+// from memory in C# — is how a page ends up quoting a threshold three versions old.
+var overall = calibration.Overall;
+var atThreshold = overall.ThresholdForTarget is { } chosen
+    ? overall.Thresholds.FirstOrDefault(t => Math.Abs(t.Threshold - chosen) < 0.001)
+    : null;
+
+var published = new PublishedCalibration
+{
+    CorpusId = manifest.Id,
+    Texts = samples.Count,
+    MeasuredOn = DateTime.UtcNow.ToString("yyyy-MM-dd"),
+    Engine = version,
+    RecommendedThreshold = overall.ThresholdForTarget,
+    FlaggedAtThreshold = atThreshold?.Flagged ?? 0,
+    RateLow = atThreshold?.RateLow ?? 0,
+    RateHigh = atThreshold?.RateHigh ?? 1,
+    NoisiestRules = [.. calibration.RuleFalsePositives.Take(8)
+        .Select(r => new PublishedRuleRate { RuleId = r.RuleId, TextShare = r.TextShare })],
+};
+
+var embedPath = Path.Combine("src", "SignsOfAI.Core", "Calibration", "published-calibration.json");
+Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(embedPath))!);
+var publishedJson = JsonSerializer.Serialize(
+    published, PublishedCalibrationJsonContext.Default.PublishedCalibration);
+File.WriteAllText(embedPath, publishedJson.ReplaceLineEndings("\n") + "\n");
 
 Console.WriteLine();
 Console.WriteLine($"  {samples.Count} texts measured" + (missing > 0 ? $", {missing} missing" : ""));
