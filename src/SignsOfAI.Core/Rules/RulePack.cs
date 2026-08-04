@@ -5,7 +5,7 @@ using SignsOfAI.Core.Model;
 namespace SignsOfAI.Core.Rules;
 
 /// <summary>A vocabulary rule: one concept with all its surface forms.</summary>
-public sealed class LexicalRule
+public sealed record LexicalRule
 {
     public required string Id { get; init; }
 
@@ -38,6 +38,9 @@ public sealed class LexicalRule
 
     /// <summary>Optional supporting evidence shown to the user.</summary>
     public string? Evidence { get; init; }
+
+    /// <inheritdoc cref="PatternRule.HumanRatePer1000"/>
+    public double? HumanRatePer1000 { get; init; }
 
     /// <summary>
     /// What the live rewriter can substitute for a match, best first. Empty when this rule has no
@@ -96,7 +99,7 @@ public static class SuggestionParser
 }
 
 /// <summary>A regex rule for rhetorical/syntactic patterns spanning multiple words.</summary>
-public sealed class PatternRule
+public sealed record PatternRule
 {
     public required string Id { get; init; }
 
@@ -114,6 +117,35 @@ public sealed class PatternRule
     public required string Suggestion { get; init; }
 
     public string? Evidence { get; init; }
+
+    /// <summary>
+    /// How often this rule fires on writing no machine wrote, in hits per thousand words, at the
+    /// ninetieth percentile of the human calibration corpus. Absent — the default — means "never
+    /// measured", and the rule counts on presence as it always did. Present and zero means a catalog
+    /// turned the rate off deliberately, which is a different statement and has to stay distinguishable.
+    ///
+    /// When it is set, the rule still reports what it finds, but below that rate the findings are
+    /// marked <see cref="Model.Finding.AtHumanRate"/> and score nothing. That is the difference between
+    /// "this word appears" and "this word appears at a rate people don't write at", and it matters
+    /// because measuring on the corpus showed a median of seven flagged tells in every human academic
+    /// paper. "Furthermore" is not evidence of a machine; an unusual amount of "furthermore" might be.
+    ///
+    /// These numbers are measured, not chosen, and the repository can regenerate them:
+    ///
+    /// <code>dotnet run --project tools/SignsOfAI.Calibration -- thresholds</code>
+    ///
+    /// derives each one from the calibration corpus and writes it back here. A rule only gets a rate
+    /// when it fired on at least eight texts in that language — below that there is not enough evidence
+    /// to set a threshold, and inventing one is the failure this project exists to avoid. Rules with no
+    /// measured rate are untouched, which is why the strong tells (delve, tapestry) still count on a
+    /// single occurrence: they essentially never appear in the human corpus.
+    ///
+    /// A caveat that belongs next to the numbers rather than in a commit message: these are fitted on
+    /// the same ninety texts the project reports its false-positive rate against. The improvement is
+    /// therefore quoted leave-one-out — each text judged against thresholds derived from the other
+    /// eighty-nine — which is a smaller number than the in-sample one and the only honest version.
+    /// </summary>
+    public double? HumanRatePer1000 { get; init; }
 }
 
 /// <summary>A full rule-pack (a "catalog") — built-in or supplied by the user.</summary>
@@ -125,6 +157,29 @@ public sealed class RulePack
     public LexicalRule[] Lexical { get; init; } = [];
 
     public PatternRule[] Patterns { get; init; } = [];
+
+    private Dictionary<string, double>? _humanRates;
+
+    /// <summary>
+    /// Rule id to measured human rate, for the rules in this pack that carry one. Built once and kept:
+    /// the alternative is rebuilding a dictionary over every rule in the pack on each analysis, and
+    /// analysis runs on every keystroke in the live editor.
+    /// </summary>
+    public IReadOnlyDictionary<string, double> HumanRates
+    {
+        get
+        {
+            if (_humanRates is not null) return _humanRates;
+
+            var map = new Dictionary<string, double>(StringComparer.Ordinal);
+            foreach (var rule in Lexical ?? [])
+                if (rule.HumanRatePer1000 is { } lexRate and > 0) map[rule.Id] = lexRate;
+            foreach (var rule in Patterns ?? [])
+                if (rule.HumanRatePer1000 is { } patRate and > 0) map[rule.Id] = patRate;
+
+            return _humanRates = map;
+        }
+    }
 
     /// <summary>
     /// Wording for the analyzers that compute their findings instead of matching a rule — the
@@ -187,8 +242,22 @@ public sealed class RulePack
             // and a pack that supplies one means to use it instead of, not on top of, the built-in.
             if (pack.FunctionWords is { Length: > 0 }) functionWords = pack.FunctionWords;
             // A custom pack parsed from JSON may omit a section, leaving the array null under source-gen.
-            foreach (var rule in pack.Lexical ?? []) lexical[rule.Id] = rule;
-            foreach (var rule in pack.Patterns ?? []) patterns[rule.Id] = rule;
+            // A measured human rate survives an override that does not restate it. Contributing a
+            // reworded suggestion for `lex.moreover` is the documented way to help; silently switching
+            // that rule's calibration off because the contributor had no reason to know the field
+            // existed is not a trade this project should make. Setting it explicitly still works —
+            // including to zero, which turns the rate off on purpose.
+            foreach (var rule in pack.Lexical ?? [])
+                lexical[rule.Id] = rule.HumanRatePer1000 is null
+                                   && lexical.TryGetValue(rule.Id, out var priorLex)
+                    ? rule with { HumanRatePer1000 = priorLex.HumanRatePer1000 }
+                    : rule;
+
+            foreach (var rule in pack.Patterns ?? [])
+                patterns[rule.Id] = rule.HumanRatePer1000 is null
+                                    && patterns.TryGetValue(rule.Id, out var priorPat)
+                    ? rule with { HumanRatePer1000 = priorPat.HumanRatePer1000 }
+                    : rule;
             // Merged key by key, so a custom catalog can reword one message without restating them all.
             foreach (var (key, text) in pack.Messages ?? []) messages[key] = text;
         }

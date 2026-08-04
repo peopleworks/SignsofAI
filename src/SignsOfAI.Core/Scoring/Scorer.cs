@@ -43,6 +43,11 @@ public static class Scorer
         int words = Math.Max(stats.WordCount, WordFloor);
         double burstiness = BurstinessScore(stats);
 
+        // Findings whose rule is being used at a rate people write at are shown to the reader but
+        // score nothing. They are not evidence of a machine, and counting them is how a tool ends up
+        // reporting that ordinary academic prose looks generated.
+        findings = [.. findings.Where(f => !f.AtHumanRate)];
+
         var byCategory = new List<CategoryScore>();
         foreach (SignCategory category in Enum.GetValues<SignCategory>())
         {

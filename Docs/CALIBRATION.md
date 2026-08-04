@@ -10,8 +10,8 @@ It is **not an accuracy figure**. Accuracy needs machine-written text to measure
 
 - **Corpus** `signsofai-human-baseline`, fingerprint `123fa5b9ebca3f29`
 - **Texts** 90 (280,221 words)
-- **Engine** SignsOfAI.Core 0.2.1
-- **Run** 2026-08-03
+- **Engine** SignsOfAI.Core 0.3.0
+- **Run** 2026-08-04
 - **Target false-positive rate** 5%
 
 Every text here was published before generative models could have written it. That is the whole basis for calling it human, and it is a stronger guarantee than any classifier offers about anything. The manifest names each source, its licence and its year, so the claim can be traced rather than trusted.
@@ -28,8 +28,8 @@ A rate that holds in English and fails in Spanish is not one number, and reporti
 
 | Group | Texts | Median | 90th pct | Highest | Threshold for 5% | Best bound it can support |
 |---|---|---|---|---|---|---|
-| **en** | 65 | 6.4 | 12.3 | 23.4 | — | 5.6% |
-| **es** | 25 | 7.7 | 15.4 | 18.9 | — | 13.3% |
+| **en** | 65 | 5.8 | 11.8 | 23.4 | — | 5.6% |
+| **es** | 25 | 7.2 | 15.1 | 18.4 | — | 13.3% |
 
 A dash means this group has too few texts to bound that rate at all — with nothing flagged it still takes roughly seventy-five before the interval alone gets under 5%. That is a statement about the corpus, not the tool.
 
@@ -39,22 +39,22 @@ The reason the whole exercise exists. If this project cannot show a rate for sec
 
 | Group | Texts | Median | 90th pct | Highest | Threshold for 5% | Best bound it can support |
 |---|---|---|---|---|---|---|
-| **en-anglophone-affiliation** | 21 | 7.0 | 9.8 | 15.4 | — | 15.5% |
-| **en-other-affiliation** | 19 | 6.4 | 14.1 | 18.3 | — | 16.8% |
-| **en-wikipedia** | 25 | 5.2 | 10.4 | 23.4 | — | 13.3% |
-| **es-wikipedia** | 25 | 7.7 | 15.4 | 18.9 | — | 13.3% |
+| **en-anglophone-affiliation** | 21 | 5.9 | 9.0 | 14.2 | — | 15.5% |
+| **en-other-affiliation** | 19 | 6.2 | 13.6 | 18.0 | — | 16.8% |
+| **en-wikipedia** | 25 | 4.9 | 10.4 | 23.4 | — | 13.3% |
+| **es-wikipedia** | 25 | 7.2 | 15.1 | 18.4 | — | 13.3% |
 
 A dash means this group has too few texts to bound that rate at all — with nothing flagged it still takes roughly seventy-five before the interval alone gets under 5%. That is a statement about the corpus, not the tool.
 
-Across these groups the median score runs from 7.7 (**es-wikipedia**) down to 5.2 (**en-wikipedia**), a spread of 2.5 points on a scale of a hundred. The longest tail belongs to **es-wikipedia** at 15.4 for the ninetieth percentile. A tool with the defect this project criticises would show one group sitting well above the rest; on this corpus none does. It is a first indication rather than a finding — these are tens of texts, not hundreds — and the numbers move as the corpus grows, in whichever direction they move.
+Across these groups the median score runs from 7.2 (**es-wikipedia**) down to 4.9 (**en-wikipedia**), a spread of 2.3 points on a scale of a hundred. The longest tail belongs to **es-wikipedia** at 15.1 for the ninetieth percentile. A tool with the defect this project criticises would show one group sitting well above the rest; on this corpus none does. It is a first indication rather than a finding — these are tens of texts, not hundreds — and the numbers move as the corpus grows, in whichever direction they move.
 
 ## Every threshold
 
 | Score at or above | Human texts flagged | Rate | 95% interval |
 |---|---|---|---|
-| 5 | 75 / 90 | 83.3% | 74.3% – 89.6% |
-| 10 | 18 / 90 | 20% | 13% – 29.4% |
-| 15 | 7 / 90 | 7.8% | 3.8% – 15.2% |
+| 5 | 61 / 90 | 67.8% | 57.6% – 76.5% |
+| 10 | 16 / 90 | 17.8% | 11.2% – 26.9% |
+| 15 | 6 / 90 | 6.7% | 3.1% – 13.8% |
 | 20 | 1 / 90 | 1.1% | 0.2% – 6% |
 | 25 | 0 / 90 | 0% | 0% – 4.1% |
 | 30 | 0 / 90 | 0% | 0% – 4.1% |
@@ -79,31 +79,31 @@ Every rule below fired on text no machine wrote, so each hit is a false positive
 
 | Rule | Texts it fired on | Share | Total hits |
 |---|---|---|---|
-| `rhet.rule-of-three` | 45 | 50% | 100 |
 | `stat.burstiness` | 25 | 27.8% | 25 |
-| `lex.moreover` | 23 | 25.6% | 67 |
-| `lex.furthermore` | 23 | 25.6% | 55 |
-| `rhet.in-order-to` | 22 | 24.4% | 60 |
-| `lex.just` | 19 | 21.1% | 30 |
-| `lex.facilitate` | 17 | 18.9% | 29 |
-| `rhet.in-terms-of` | 16 | 17.8% | 30 |
-| `lex.comprehensive` | 14 | 15.6% | 36 |
-| `lex.simply` | 14 | 15.6% | 24 |
-| `lex.ademas` | 12 | 13.3% | 28 |
-| `lex.utilize` | 11 | 12.2% | 28 |
-| `rhet.not-only-but` | 11 | 12.2% | 19 |
-| `lex.robust` | 10 | 11.1% | 22 |
-| `lex.notably` | 10 | 11.1% | 17 |
-| `rhet.regla-de-tres` | 9 | 10% | 14 |
-| `lex.actually` | 9 | 10% | 11 |
-| `rhet.in-conclusion` | 9 | 10% | 11 |
-| `syn.serves-as` | 9 | 10% | 10 |
-| `lex.importantly` | 8 | 8.9% | 11 |
-| `rhet.weasel-attribution` | 8 | 8.9% | 11 |
-| `rhet.with-regard-to` | 8 | 8.9% | 11 |
-| `lex.crucial` | 8 | 8.9% | 9 |
+| `rhet.in-terms-of` | 9 | 10% | 22 |
+| `rhet.not-only-but` | 8 | 8.9% | 16 |
+| `rhet.in-order-to` | 7 | 7.8% | 33 |
+| `lex.furthermore` | 7 | 7.8% | 24 |
+| `lex.robust` | 7 | 7.8% | 19 |
+| `lex.just` | 7 | 7.8% | 16 |
+| `lex.simply` | 7 | 7.8% | 16 |
 | `lex.utilizar` | 7 | 7.8% | 15 |
 | `rhet.in-this-article` | 7 | 7.8% | 15 |
+| `lex.notably` | 7 | 7.8% | 14 |
+| `syn.superficial-ing` | 7 | 7.8% | 12 |
+| `rhet.with-regard-to` | 7 | 7.8% | 10 |
+| `lex.crucial` | 7 | 7.8% | 8 |
+| `syn.serves-as` | 7 | 7.8% | 8 |
+| `lex.moreover` | 6 | 6.7% | 35 |
+| `lex.comprehensive` | 6 | 6.7% | 27 |
+| `lex.utilize` | 6 | 6.7% | 22 |
+| `lex.facilitate` | 6 | 6.7% | 16 |
+| `rhet.rule-of-three` | 6 | 6.7% | 16 |
+| `lex.importantly` | 6 | 6.7% | 9 |
+| `rhet.weasel-attribution` | 6 | 6.7% | 9 |
+| `lex.actually` | 6 | 6.7% | 8 |
+| `rhet.in-conclusion` | 6 | 6.7% | 8 |
+| `rhet.important-note` | 6 | 6.7% | 7 |
 
 A rule near the top is not automatically wrong. Some tells genuinely appear in human academic prose and the catalog says so. But a rule firing on most human texts is measuring the genre rather than the machine, and should be reweighted or retired.
 

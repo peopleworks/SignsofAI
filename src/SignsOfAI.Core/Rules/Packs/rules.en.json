@@ -160,6 +160,7 @@
     },
     {
       "id": "lex.crucial",
+      "humanRatePer1000": 0.16,
       "terms": [
         "crucial"
       ],
@@ -221,6 +222,7 @@
     },
     {
       "id": "lex.robust",
+      "humanRatePer1000": 0.27,
       "terms": [
         "robust"
       ],
@@ -474,6 +476,7 @@
     },
     {
       "id": "lex.comprehensive",
+      "humanRatePer1000": 0.41,
       "terms": [
         "comprehensive"
       ],
@@ -527,6 +530,7 @@
     },
     {
       "id": "lex.moreover",
+      "humanRatePer1000": 0.98,
       "terms": [
         "moreover"
       ],
@@ -541,6 +545,7 @@
     },
     {
       "id": "lex.furthermore",
+      "humanRatePer1000": 0.77,
       "terms": [
         "furthermore"
       ],
@@ -555,6 +560,7 @@
     },
     {
       "id": "lex.notably",
+      "humanRatePer1000": 0.27,
       "terms": [
         "notably"
       ],
@@ -565,6 +571,7 @@
     },
     {
       "id": "lex.utilize",
+      "humanRatePer1000": 0.35,
       "terms": [
         "utilize",
         "utilizes",
@@ -582,6 +589,7 @@
     },
     {
       "id": "lex.facilitate",
+      "humanRatePer1000": 0.3,
       "terms": [
         "facilitate",
         "facilitates",
@@ -661,6 +669,7 @@
     },
     {
       "id": "lex.just",
+      "humanRatePer1000": 0.38,
       "terms": [
         "just"
       ],
@@ -671,6 +680,7 @@
     },
     {
       "id": "lex.simply",
+      "humanRatePer1000": 0.27,
       "terms": [
         "simply"
       ],
@@ -681,6 +691,7 @@
     },
     {
       "id": "lex.actually",
+      "humanRatePer1000": 0.14,
       "terms": [
         "actually"
       ],
@@ -721,6 +732,7 @@
     },
     {
       "id": "lex.importantly",
+      "humanRatePer1000": 0.13,
       "terms": [
         "importantly"
       ],
@@ -782,6 +794,7 @@
     },
     {
       "id": "rhet.not-only-but",
+      "humanRatePer1000": 0.16,
       "category": "Rhetorical",
       "regex": "\\bnot only\\b[^.?!\\n]{1,80}?\\bbut (also|it also)\\b",
       "weight": 5.0,
@@ -854,6 +867,7 @@
     },
     {
       "id": "rhet.in-conclusion",
+      "humanRatePer1000": 0.22,
       "category": "Rhetorical",
       "regex": "\\bin conclusion\\b|\\bto sum up\\b|\\bin summary\\b",
       "weight": 2.5,
@@ -872,6 +886,7 @@
     },
     {
       "id": "rhet.rule-of-three",
+      "humanRatePer1000": 1.09,
       "category": "Rhetorical",
       "regex": "\\b(\\w+), (\\w+),? and (\\w+)[.,;]",
       "weight": 1.2,
@@ -881,6 +896,7 @@
     },
     {
       "id": "syn.serves-as",
+      "humanRatePer1000": 0.16,
       "category": "Syntactic",
       "regex": "\\b(serves|stands|acts|functions) as (a|an|the)\\b",
       "weight": 3.5,
@@ -962,6 +978,7 @@
     },
     {
       "id": "rhet.in-terms-of",
+      "humanRatePer1000": 0.27,
       "category": "Rhetorical",
       "regex": "\\bin terms of\\b",
       "weight": 2.0,
@@ -971,6 +988,7 @@
     },
     {
       "id": "rhet.with-regard-to",
+      "humanRatePer1000": 0.2,
       "category": "Rhetorical",
       "regex": "\\b(with|in) regards? to\\b",
       "weight": 2.0,
@@ -980,6 +998,7 @@
     },
     {
       "id": "rhet.in-order-to",
+      "humanRatePer1000": 0.8,
       "category": "Rhetorical",
       "regex": "\\bin order to\\b",
       "weight": 1.0,
@@ -1016,6 +1035,7 @@
     },
     {
       "id": "rhet.weasel-attribution",
+      "humanRatePer1000": 0.15,
       "category": "Rhetorical",
       "regex": "\\b(experts?|scientists?|researchers?|studies|research|critics|analysts) (agree|say|claim|believe|show|shows|suggest|argue|note|found)\\b|\\bit is widely (regarded|considered|believed|accepted|known)\\b|\\bwidely (regarded|considered|seen) as\\b|\\bit(('| i)s| is) (said|believed|thought) that\\b|\\bmany (people )?(believe|argue|say)\\b",
       "weight": 4.0,

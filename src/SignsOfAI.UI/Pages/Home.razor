@@ -210,7 +210,7 @@
             </div>
             <div class="verdict">
                 <h2 class="@ScoreClass(r.OverallScore)">@L.Verdict(r.OverallScore)</h2>
-                <p>@L.P(r.Findings.Count, "home.signals") · @L["home.analyzedas"]
+                <p>@L.P(r.Signals.Count, "home.signals") · @L["home.analyzedas"]
                     <strong>@L.TextLanguageName(r.Language)</strong></p>
                 <div class="cat-chips">
                     @foreach (var c in r.CategoryScores.Where(c => c.FindingCount > 0))
@@ -354,8 +354,8 @@
             </div>
 
             <div class="findings card">
-                <h3>@L.F("home.recommendations", r.Findings.Count)</h3>
-                @if (r.Findings.Count == 0)
+                <h3>@L.F("home.recommendations", r.Signals.Count)</h3>
+                @if (r.Signals.Count == 0)
                 {
                     <p class="empty"><Icon Name="check-circle" /> @L["home.nofindings"]</p>
                 }
@@ -669,7 +669,7 @@ else
             Score: r.OverallScore,
             ScoreColor: ScoreHex(r.OverallScore),
             Verdict: L.Verdict(r.OverallScore),
-            Signals: r.Findings.Count,
+            Signals: r.Signals.Count,
             Language: L.TextLanguageName(r.Language),
             Categories: r.CategoryScores.Where(c => c.FindingCount > 0)
                 .Select(c => new CardCategory(L.Category(c.Category), c.FindingCount, Highlighter.CategoryHex(c.Category)))

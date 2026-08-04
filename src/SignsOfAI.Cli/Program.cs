@@ -183,7 +183,11 @@ if (json)
         findings = result.Findings.Select(f => new
         {
             f.RuleId, category = f.Category.ToString(), severity = f.Severity.ToString(),
-            f.MatchedText, f.Message, f.Suggestion, f.Evidence
+            f.MatchedText, f.Message, f.Suggestion, f.Evidence,
+            // Reported so a consumer can tell the two apart: this one matched, and it matched at a
+            // rate people write at, so it counts for nothing. Leaving it out would make the findings
+            // list and the score disagree with no way to see why.
+            f.AtHumanRate
         }),
         // Kept in its own object rather than folded in with the findings: these are characters at
         // offsets, not judgements about prose, and a consumer should not have to tell them apart.
@@ -324,6 +328,17 @@ static void PrintBaseline(string path, BaselineReport r, bool useColor)
     Console.WriteLine();
 }
 
+// The headline counts evidence, so it agrees with the category tallies and with the score. What
+// matched at a human rate is named beside it rather than folded in: a reader who sees eleven
+// highlights under a headline of three deserves to know why, on the same line.
+static int Counted(AnalysisResult r) => r.Signals.Count;
+
+static string AtRate(AnalysisResult r)
+{
+    var n = r.Observations.Count;
+    return n == 0 ? "" : $" + {n} at a human rate";
+}
+
 static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
 {
     string Col(string s, int code) => useColor ? $"[{code}m{s}[0m" : s;
@@ -333,7 +348,7 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
     Console.WriteLine();
     Console.WriteLine(Bold($"  ✍  Signs of AI Writing — {Path.GetFileName(path)}"));
     Console.WriteLine($"     {Col($"{r.OverallScore:0}/100", scoreColor)}  {Bold(r.Verdict)}   " +
-                      $"({r.Findings.Count} signal{(r.Findings.Count == 1 ? "" : "s")}, {(r.Language == "es" ? "Español" : "English")})");
+                      $"({Counted(r)} signal{(Counted(r) == 1 ? "" : "s")}{AtRate(r)}, {(r.Language == "es" ? "Español" : "English")})");
     Console.WriteLine($"     words {r.Statistics.WordCount} · sentences {r.Statistics.SentenceCount} · " +
                       $"burstiness {r.Statistics.Burstiness:0.00} · lexical diversity {r.Statistics.LexicalDiversity:0.00}");
 
@@ -349,9 +364,12 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
     foreach (var f in shown)
     {
         int sev = f.Severity switch { Severity.High => 31, Severity.Medium => 33, Severity.Low => 36, _ => 90 };
+        if (f.AtHumanRate) sev = 90;
         var head = $"  {Col("●", sev)} [{f.Category}] " + (string.IsNullOrEmpty(f.MatchedText) ? "" : Bold(f.MatchedText));
         Console.WriteLine(head.TrimEnd());
         Console.WriteLine($"      {f.Message}");
+        if (f.AtHumanRate)
+            Console.WriteLine(Col("      used here at a rate people write at — shown, not counted", 90));
         Console.WriteLine(Col($"      → {f.Suggestion}", 90));
     }
     if (r.Findings.Count > shown.Count)

@@ -72,12 +72,17 @@ public sealed class AiWritingAnalyzer
             Statistics = statistics,
         };
 
-        var findings = _analyzers
+        var matched = _analyzers
             .SelectMany(a => a.Analyze(context))
             .Select(f => normalized.Changed ? ToSource(f, normalized, text) : f)
             .OrderBy(f => f.Span.Start)
             .ThenBy(f => f.Span.Length)
             .ToList();
+
+        // Rules that measured the genre rather than the machine are silenced here, against rates taken
+        // from writing that predates generative models. Nothing is re-decided per finding: a rule is
+        // either used at a human rate in this text, and says nothing, or it is not.
+        var findings = GenreGate.Apply(matched, rulePack, statistics.WordCount);
 
         var (overall, byCategory) = Scorer.Score(findings, statistics);
 

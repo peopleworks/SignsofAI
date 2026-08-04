@@ -30,4 +30,18 @@ public sealed record Finding
 
     /// <summary>Contribution of this finding to the overall score (higher = stronger AI signal).</summary>
     public double Weight { get; init; }
+
+    /// <summary>
+    /// True when this rule is being used in this text at a rate people write at, measured against
+    /// writing published before generative models existed. The finding still describes something real
+    /// and is still shown, but it is not evidence of a machine and contributes nothing to the score.
+    ///
+    /// It is marked rather than removed on purpose. Ninety human academic papers produced a median of
+    /// seven flagged tells each, which is the sort of thing that teaches a reader to disbelieve the
+    /// eighth — but a tool whose whole argument is *showing the evidence* cannot answer that by hiding
+    /// evidence. "Furthermore appears once in three thousand words, which is how people write" is a
+    /// more useful thing to tell someone than silence, and it keeps the finding available to the
+    /// rewriter for a writer whose goal is removing the word rather than proving anything.
+    /// </summary>
+    public bool AtHumanRate { get; init; }
 }

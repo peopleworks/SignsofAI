@@ -487,6 +487,7 @@
     },
     {
       "id": "lex.ademas",
+      "humanRatePer1000": 1.65,
       "terms": [
         "además"
       ],
@@ -755,6 +756,7 @@
     },
     {
       "id": "rhet.regla-de-tres",
+      "humanRatePer1000": 1.29,
       "category": "Rhetorical",
       "regex": "\\b(\\w+), (\\w+) y (\\w+)[.,;]",
       "weight": 1.2,
