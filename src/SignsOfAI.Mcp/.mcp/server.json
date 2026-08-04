@@ -1,15 +1,15 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.peopleworks/signs-of-ai",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "title": "Signs of AI Writing",
-  "description": "Bilingual (EN/ES) AI-writing detection that shows the evidence, plus originality checking.",
+  "description": "Bilingual (EN/ES) AI-writing detection that shows the evidence: named tells with line and column, hidden-character inspection, citation cross-checking against a document's own bibliography, comparison to a writer's earlier work, and originality checking. Seven of the nine tools run locally.",
   "packages": [
     {
       "registryType": "nuget",
       "registryBaseUrl": "https://api.nuget.org/v3/index.json",
       "identifier": "SignsOfAI.Mcp",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "transport": {
         "type": "stdio"
       },
@@ -18,7 +18,7 @@
       "environmentVariables": [
         {
           "name": "SIGNSOFAI_API_ENDPOINT",
-          "description": "Base URL of the SignsOfAI API used by the two optional server-backed tools (measure_predictability, check_paraphrase). Defaults to the PeopleWorks-hosted endpoint. The four analysis tools never call it.",
+          "description": "Base URL of the SignsOfAI API used by the two optional server-backed tools (measure_predictability, check_paraphrase). Defaults to the PeopleWorks-hosted endpoint. The other seven tools never call it.",
           "isRequired": false,
           "isSecret": false
         }
