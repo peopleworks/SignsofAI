@@ -2,7 +2,7 @@
 title: "Cualquiera podía apagar mi detector de IA con buscar y reemplazar"
 description: "Cambiar unas letras por otras idénticas de otro alfabeto hunde a siete detectores publicados por debajo del azar. Con el mío también funcionaba. El arreglo son 200 líneas, sin modelo, y una decisión que quiero defender: no toca la puntuación."
 canonical_url: "https://github.com/peopleworks/SignsofAI"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/artifacts-story-cover.png"
 tags: [dotnet, unicode, seguridad, ia]
 author: "Pedro Hernández (PeopleWorks)"
 lang: es

@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <!-- The article's own demo, drawn: the word "delve" where the final letter is not
+       a Latin e but U+0435, the Cyrillic small letter ie. Identical on screen, and
+       every rule looking for the word stops finding it.
+
+       The character below IS a real Cyrillic е. Replacing it with a Latin one to make
+       the file "clean" would be the exact move the article criticises. -->
+  <defs>
+    <radialGradient id="vignette" cx="50%" cy="46%" r="78%">
+      <stop offset="0%" stop-color="#111a2e"/>
+      <stop offset="100%" stop-color="#0b1020"/>
+    </radialGradient>
+    <radialGradient id="markGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f0556f" stop-opacity=".38"/>
+      <stop offset="100%" stop-color="#f0556f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <rect width="1280" height="720" fill="url(#vignette)"/>
+
+  <!-- The word. Each glyph placed individually so the marker below lands exactly. -->
+  <g font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace"
+     font-size="170" text-anchor="middle" dominant-baseline="middle">
+    <text x="460" y="300" fill="#8b97b5">d</text>
+    <text x="550" y="300" fill="#8b97b5">e</text>
+    <text x="640" y="300" fill="#8b97b5">l</text>
+    <text x="730" y="300" fill="#8b97b5">v</text>
+    <circle cx="820" cy="300" r="110" fill="url(#markGlow)"/>
+    <text x="820" y="300" fill="#f0556f">е</text>
+  </g>
+
+  <!-- The marker: a dashed drop from the impostor to what the report says about it. -->
+  <g stroke="#f0556f" fill="none" stroke-width="2">
+    <path d="M820 392 V452" stroke-dasharray="6 7" stroke-opacity=".85"/>
+    <circle cx="820" cy="392" r="4" fill="#f0556f" stroke="none"/>
+  </g>
+
+  <!-- What the tool hands you instead of a percentage. -->
+  <g>
+    <rect x="588" y="452" width="464" height="104" rx="12"
+          fill="#141d33" stroke="#f0556f" stroke-opacity=".45" stroke-width="2"/>
+    <text x="616" y="496" font-family="Consolas, 'DejaVu Sans Mono', monospace"
+          font-size="30" fill="#f0556f">U+0435</text>
+    <text x="740" y="496" font-family="Consolas, 'DejaVu Sans Mono', monospace"
+          font-size="22" fill="#8b97b5">CYRILLIC SMALL LETTER IE</text>
+    <text x="616" y="532" font-family="Consolas, 'DejaVu Sans Mono', monospace"
+          font-size="22" fill="#c3caff">line 37 · column 64</text>
+  </g>
+
+  <!-- Left of the word: the signals that quietly disappeared. Seventeen marks, then six.
+       Labelled, because unlabelled tick marks read as decoration. -->
+  <g font-family="Consolas, 'DejaVu Sans Mono', monospace" font-size="20">
+    <text x="150" y="446" fill="#db2777">17 signals</text>
+    <text x="456" y="446" fill="#8b97b5" fill-opacity=".7">6</text>
+  </g>
+  <g>
+    <g fill="#db2777" fill-opacity=".9">
+      <rect x="150" y="470" width="6" height="26" rx="3"/>
+      <rect x="164" y="470" width="6" height="26" rx="3"/>
+      <rect x="178" y="470" width="6" height="26" rx="3"/>
+      <rect x="192" y="470" width="6" height="26" rx="3"/>
+      <rect x="206" y="470" width="6" height="26" rx="3"/>
+      <rect x="220" y="470" width="6" height="26" rx="3"/>
+      <rect x="234" y="470" width="6" height="26" rx="3"/>
+      <rect x="248" y="470" width="6" height="26" rx="3"/>
+      <rect x="262" y="470" width="6" height="26" rx="3"/>
+      <rect x="276" y="470" width="6" height="26" rx="3"/>
+      <rect x="290" y="470" width="6" height="26" rx="3"/>
+      <rect x="304" y="470" width="6" height="26" rx="3"/>
+      <rect x="318" y="470" width="6" height="26" rx="3"/>
+      <rect x="332" y="470" width="6" height="26" rx="3"/>
+      <rect x="346" y="470" width="6" height="26" rx="3"/>
+      <rect x="360" y="470" width="6" height="26" rx="3"/>
+      <rect x="374" y="470" width="6" height="26" rx="3"/>
+    </g>
+    <path d="M398 483 H438 M428 475 l10 8 -10 8" fill="none" stroke="#8b97b5"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#8b97b5" fill-opacity=".45">
+      <rect x="456" y="470" width="6" height="26" rx="3"/>
+      <rect x="470" y="470" width="6" height="26" rx="3"/>
+      <rect x="484" y="470" width="6" height="26" rx="3"/>
+      <rect x="498" y="470" width="6" height="26" rx="3"/>
+      <rect x="512" y="470" width="6" height="26" rx="3"/>
+      <rect x="526" y="470" width="6" height="26" rx="3"/>
+    </g>
+  </g>
+</svg>

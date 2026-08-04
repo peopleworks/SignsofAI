@@ -2,7 +2,7 @@
 title: "Someone could switch off my AI detector with find-and-replace"
 description: "Swapping a few letters for identical-looking ones from another alphabet drops seven published AI detectors below chance. It worked on mine too. The fix took 200 lines, no model, and one decision I want to argue for: it does not touch the score."
 canonical_url: "https://github.com/peopleworks/SignsofAI"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/artifacts-story-cover.png"
 tags: [dotnet, unicode, security, ai]
 author: "Pedro Hernández (PeopleWorks)"
 lang: en
