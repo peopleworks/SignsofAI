@@ -4,6 +4,7 @@
 @using SignsOfAI.Core
 @using SignsOfAI.Core.Documents
 @using SignsOfAI.Core.Model
+@using SignsOfAI.Core.Reporting
 @using SignsOfAI.Core.Rules
 @inherits LocalizedComponent
 @inject AiWritingAnalyzer Analyzer
@@ -229,6 +230,12 @@
                         else { <Icon Name="sparkle" /> <span>@L["home.humanize"]</span> }
                     </button>
                     <button class="ghost" @onclick="ShowCard"><Icon Name="image" /> @L["home.sharecard"]</button>
+                    @* The card is for posting in public and carries no text; the report holds the
+                       document itself and is for keeping, forwarding or printing. Kept next to each
+                       other so the difference is visible at the moment of choosing. *@
+                    <button class="ghost" @onclick="DownloadReport" title="@L["home.report.hint"]">
+                        <Icon Name="book" /> @L["home.report"]
+                    </button>
                 </div>
             </div>
         </div>
@@ -396,6 +403,9 @@ else
     private string _analyzedText = string.Empty;
     private string? _fileNote;
 
+    /// <summary>Name of the loaded file, so a saved report can say which document it describes.</summary>
+    private string? _fileName;
+
     private CancellationTokenSource? _debounceCts;
 
     private bool _showSettings;
@@ -457,6 +467,7 @@ else
     private async Task OnTextChanged()
     {
         _fileNote = null;
+        _fileName = null;
         _debounceCts?.Cancel();
         var cts = _debounceCts = new CancellationTokenSource();
         try { await Task.Delay(350, cts.Token); }
@@ -537,6 +548,7 @@ else
             await using var stream = file.OpenReadStream(MaxFileBytes);
             var read = await Reader.ReadAsync(stream, file.Name, MaxFileBytes);
             _text = read.Text;
+            _fileName = file.Name;
 
             RunAnalysis();
             _fileNote = read.Warning is null
@@ -679,6 +691,27 @@ else
             Burstiness: r.Statistics.Burstiness.ToString("0.00"),
             Lengths: r.Statistics.SentenceLengths.ToArray());
         return JsonSerializer.Serialize(data, ShareCardJsonContext.Default.ShareCardData);
+    }
+
+    /// <summary>
+    /// The evidence as a document the reader keeps: a self-contained page that opens by double-click
+    /// and prints to PDF. Unlike the share card it contains the analysed text, so it is downloaded
+    /// rather than displayed — it belongs in the reader's files, not on their screen next to a button
+    /// that says "share".
+    /// </summary>
+    private async Task DownloadReport()
+    {
+        if (_result is not { } r) return;
+
+        var options = new ReportOptions
+        {
+            Title = L["home.report.title"],
+            DocumentName = _fileName ?? "",
+        };
+
+        var stamp = DateTime.Now.ToString("yyyy-MM-dd-HHmm");
+        await JS.InvokeVoidAsync("signsofai.downloadText",
+            $"signsofai-report-{stamp}.html", EvidenceReport.ToHtml(r, options));
     }
 
     private static string ScoreClass(double score) => score switch

@@ -188,6 +188,90 @@ public static class EvidenceReport
     }
 
     /// <summary>
+    /// A whole folder as one document: every file scanned, ordered worst first, over the same caveat
+    /// every single-document report carries.
+    ///
+    /// A stack of essays is what a teacher actually has, and the honest thing a triage list can do is
+    /// tell them where to <em>look</em> — not which student to accuse. So the top of the list is the
+    /// reading order, and the page says so, because a table sorted by score with no explanation reads
+    /// like a ranking of guilt.
+    /// </summary>
+    public static string FolderToMarkdown(
+        string folderName, IReadOnlyList<FolderEntry> entries, ReportOptions? options = null)
+    {
+        var o = options ?? ReportOptions.Default;
+        var sb = new StringBuilder();
+        var scored = entries.Where(e => e.Score is not null).ToList();
+        var unreadable = entries.Where(e => e.Error is not null).ToList();
+
+        sb.Append("# ").AppendLine(o.Title);
+        sb.AppendLine();
+        sb.Append("**Folder:** ").AppendLine(folderName);
+        sb.Append("**Generated:** ").Append(o.GeneratedOn).Append(" · **Engine:** SignsOfAI ")
+          .AppendLine(o.EngineVersion);
+        sb.AppendLine();
+        sb.Append(entries.Count).Append(" file").Append(entries.Count == 1 ? "" : "s").Append(" scanned");
+        if (unreadable.Count > 0) sb.Append(", ").Append(unreadable.Count).Append(" unreadable");
+        sb.AppendLine(".");
+        sb.AppendLine();
+        sb.AppendLine(Caveat());
+        sb.AppendLine();
+        sb.AppendLine("> **This is a reading order, not a ranking.** A higher score means look sooner, " +
+                      "and nothing more. Nothing on this page establishes that anyone did anything.");
+        sb.AppendLine();
+
+        sb.AppendLine("| File | Score | Signals | Words |");
+        sb.AppendLine("|---|---:|---:|---:|");
+        foreach (var e in scored.OrderByDescending(e => e.Score).ThenBy(e => e.Name).Take(o.MaxRows))
+            sb.Append("| ").Append(e.Name).Append(" | ").Append(Num(e.Score ?? 0, 0))
+              .Append(" | ").Append(e.Signals?.ToString(CultureInfo.InvariantCulture) ?? "—")
+              .Append(" | ").Append(e.Words?.ToString(CultureInfo.InvariantCulture) ?? "—")
+              .AppendLine(" |");
+        if (scored.Count > o.MaxRows)
+            sb.AppendLine().Append("… and ").Append(scored.Count - o.MaxRows).AppendLine(" more.");
+        sb.AppendLine();
+
+        if (unreadable.Count > 0)
+        {
+            sb.AppendLine("## Could not be read");
+            sb.AppendLine();
+            foreach (var e in unreadable.Take(o.MaxRows))
+                sb.Append("- ").Append(e.Name).Append(" — ").AppendLine(e.Error);
+            sb.AppendLine();
+        }
+
+        sb.AppendLine("## How often this is wrong");
+        sb.AppendLine();
+        sb.AppendLine(HowOftenWrong());
+        sb.AppendLine();
+        sb.AppendLine("---");
+        sb.AppendLine();
+        sb.AppendLine("*Produced on the device that scanned the folder. It names your students' files, " +
+                      "so treat it as you would the coursework itself; nothing here was uploaded anywhere.*");
+
+        return sb.ToString();
+    }
+
+    /// <inheritdoc cref="FolderToMarkdown"/>
+    public static string FolderToHtml(
+        string folderName, IReadOnlyList<FolderEntry> entries, ReportOptions? options = null)
+    {
+        var o = options ?? ReportOptions.Default;
+        return $"""
+            <!doctype html>
+            <html lang="en">
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>{Escape(o.Title)}</title>
+            <style>
+            {Css}
+            </style>
+            {MarkdownToHtml(FolderToMarkdown(folderName, entries, o))}
+            </html>
+            """;
+    }
+
+    /// <summary>
     /// The sentence that has to appear on every report. Written from the embedded calibration so it
     /// cannot go stale, and explicit when there is none: a fork that has not measured itself says so
     /// rather than inheriting a number it did not earn.
@@ -417,3 +501,7 @@ public sealed record ReportOptions
 
     public static ReportOptions Default { get; } = new();
 }
+
+/// <summary>One file in a folder scan, as the report needs it.</summary>
+public sealed record FolderEntry(
+    string Name, int? Words, double? Score, int? Signals, string? Error);

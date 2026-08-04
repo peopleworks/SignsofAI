@@ -1,6 +1,8 @@
 @page "/batch"
 @using SignsOfAI.Core
 @using SignsOfAI.Core.Model
+@using SignsOfAI.Core.Reporting
+@inject IJSRuntime JS
 @inherits LocalizedComponent
 @inject IFolderBatch Folders
 @inject AiWritingAnalyzer Analyzer
@@ -56,6 +58,9 @@ else
                 {
                     <span class="warn">@L.P(_failed, "batch.unreadable")</span>
                 }
+                <button class="ghost" @onclick="DownloadFolderReport" title="@L["batch.report.hint"]">
+                    <Icon Name="book" /> @L["home.report"]
+                </button>
             </div>
 
             <table class="batch-table">
@@ -99,6 +104,30 @@ else
     private sealed record Row(string Name, string Path, int? Words, int? Score, int? Findings, string? Error);
 
     private readonly List<Row> _rows = [];
+
+    /// <summary>
+    /// The scan as one document. A teacher who has just triaged two hundred essays needs to be able to
+    /// close the app and still know what they found, and to hand the list to a colleague without
+    /// asking them to run anything.
+    ///
+    /// It names students' files, so it is downloaded rather than shown, and it says on its face that
+    /// it is a reading order and not a ranking of guilt.
+    /// </summary>
+    private async Task DownloadFolderReport()
+    {
+        if (_rows.Count == 0) return;
+
+        var entries = _rows
+            .Select(r => new FolderEntry(r.Name, r.Words, r.Score, r.Findings, r.Error))
+            .ToList();
+
+        var options = new ReportOptions { Title = L["batch.report.title"] };
+        var stamp = DateTime.Now.ToString("yyyy-MM-dd-HHmm");
+
+        await JS.InvokeVoidAsync("signsofai.downloadText",
+            $"signsofai-folder-{stamp}.html",
+            EvidenceReport.FolderToHtml(_folder ?? "", entries, options));
+    }
     private string? _folder;
     private bool _recursive;
     private bool _scanning;
@@ -149,7 +178,7 @@ else
                         file.Name, file.Path,
                         result.Statistics.WordCount,
                         (int)Math.Round(result.OverallScore),
-                        result.Findings.Count, null));
+                        result.Signals.Count, null));
                 }
 
                 // Render each row as it lands. Two hundred files behind one silent await looks

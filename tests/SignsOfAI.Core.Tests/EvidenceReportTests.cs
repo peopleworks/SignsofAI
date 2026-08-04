@@ -123,4 +123,38 @@ public class EvidenceReportTests
         Assert.Contains("at a rate people write at", report);
         Assert.Contains("lex.furthermore", report);
     }
+
+    [Fact]
+    public void The_folder_report_says_it_is_a_reading_order_and_not_a_ranking()
+    {
+        // A table of students sorted by score, with nothing else on the page, reads like a ranking of
+        // guilt. That sentence is the difference between a triage tool and an accusation generator.
+        var report = EvidenceReport.FolderToMarkdown("Essays/Week 1",
+        [
+            new FolderEntry("ana.docx", 1200, 61, 7, null),
+            new FolderEntry("luis.docx", 900, 12, 1, null),
+            new FolderEntry("broken.pdf", null, null, null, "Encrypted"),
+        ]);
+
+        Assert.Contains("reading order, not a ranking", report);
+        Assert.Contains("Nothing on this page establishes that anyone did anything", report);
+        Assert.Contains("A score is not proof", report);
+        Assert.Contains("How often this is wrong", report);
+    }
+
+    [Fact]
+    public void The_folder_report_puts_the_highest_score_first_and_keeps_unreadable_files()
+    {
+        var report = EvidenceReport.FolderToMarkdown("Essays",
+        [
+            new FolderEntry("low.docx", 900, 12, 1, null),
+            new FolderEntry("high.docx", 1200, 61, 7, null),
+            new FolderEntry("broken.pdf", null, null, null, "Encrypted"),
+        ]);
+
+        Assert.True(report.IndexOf("high.docx", StringComparison.Ordinal)
+                    < report.IndexOf("low.docx", StringComparison.Ordinal));
+        Assert.Contains("Could not be read", report);
+        Assert.Contains("broken.pdf — Encrypted", report);
+    }
 }
