@@ -512,6 +512,138 @@ forma que puedas ver, a acertar de una forma que no puedas revisar.
 ```
 
 
+### X / Twitter — segundo artículo (EN)
+```
+A stranger on Reddit asked for a desktop version of my Blazor WebAssembly app.
+
+My first reaction was not excitement. It was the sinking feeling that I had picked the wrong
+architecture months ago.
+
+I was wrong. The port took a day, and exactly one thing broke.
+
+The reason was a rule I set early and then forgot I had set: the analysis engine has no package
+references. Not one. No browser, no I/O, no dependencies. By the time the question arrived it was
+already feeding a web app, a CLI and an MCP server. A fourth host was not an architectural change.
+
+The decision that saved me was made months before the problem existed, and nothing was visibly
+better the day I made it.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — segundo artículo (ES)
+```
+Un desconocido en Reddit me pidió una versión de escritorio de mi aplicación Blazor WebAssembly.
+
+Mi primera reacción no fue ilusión. Fue la sensación de haber elegido mal la arquitectura hace
+meses.
+
+Me equivocaba. El port llevó un día, y se rompió exactamente una cosa.
+
+El motivo fue una regla que puse pronto y olvidé que había puesto: el motor de análisis no tiene
+ni una referencia a paquetes. Ninguna. Sin navegador, sin E/S, sin dependencias. Cuando llegó la
+pregunta ya alimentaba una web, una CLI y un servidor MCP. Un cuarto consumidor no era un cambio
+de arquitectura.
+
+La decisión que me salvó se tomó meses antes de que existiera el problema, y el día que la tomé no
+se veía mejor nada.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — segundo artículo (EN)
+```
+Someone on Reddit was hunting for a cracked copy of a paid "AI humanizer". I pointed him at mine,
+which is free and open source. He asked how to install it. I said it runs in a browser and asked
+whether he wanted a desktop version.
+
+"Yes app."
+
+My first reaction was not excitement. It was the sinking feeling that I had picked the wrong
+architecture months ago. SignsOfAI is Blazor WebAssembly. It runs in a tab. Turning that into
+something you download and double-click sounded like starting over.
+
+It took a day, and the reason is the only part worth writing down.
+
+Before touching anything I opened the project file for the analysis engine. It has no package
+references. Not one. That was not luck — it was a rule I set early and then forgot I had set: the
+engine stays pure .NET. No browser, no I/O, no dependencies. Rule packs are embedded resources.
+By the time the Reddit question arrived, that engine was already feeding three front ends: a web
+app, a CLI, and an MCP server. A fourth was not an architectural change. It was another consumer.
+
+So the port was an extraction, not a rewrite: move the pages and components into a Razor class
+library and let a second host render them.
+
+Exactly one thing genuinely broke, and it is worth knowing if you ever do this. A .NET HttpClient
+cannot reach the WebView's virtual host. In the browser, fetching your own wwwroot through an
+HttpClient bound to the base address is ordinary; in a WebView the app is served from a virtual
+origin only the page can talk to, so native HTTP goes out to the network and finds nothing. In my
+case that was one line — the loader for the interface translations. My instinct was an interface
+with two implementations, one per host. Then I noticed the browser's own fetch works in both
+places, so the fix deleted code instead of adding it.
+
+The second surprise cost more time: the app compiled, launched, and died at first render with a
+missing Microsoft.Windows.SDK.NET. BlazorWebView reaches for the Windows SDK WinRT projections,
+and net10.0-windows does not bring them in — you need net10.0-windows10.0.19041.0. It builds
+either way, which is exactly what makes it annoying to diagnose.
+
+I also ran the work as three coding agents in parallel, one git worktree each, split by file rather
+than by topic. All three branches merged with no conflicts. Sharing one working tree would have had
+the second agent's checkout rewriting the first one's files mid-edit, and it would have looked like
+my own mistake.
+
+MIT and free, web and Windows: https://github.com/peopleworks/SignsofAI
+
+#dotnet #Blazor #WebAssembly #SoftwareArchitecture #OpenSource
+```
+
+### LinkedIn — segundo artículo (ES)
+```
+Alguien en Reddit buscaba una copia pirata de un "humanizador de IA" de pago. Le pasé el mío, que
+es gratis y de código abierto. Me preguntó cómo se instala. Le dije que corre en el navegador y le
+pregunté si quería una versión de escritorio.
+
+"Yes app."
+
+Mi primera reacción no fue ilusión. Fue la sensación de haber elegido mal la arquitectura hacía
+meses. SignsOfAI es Blazor WebAssembly. Vive en una pestaña. Convertir eso en algo que se descarga
+y se abre con doble clic sonaba a empezar de cero.
+
+Llevó un día, y el motivo es lo único que merece escribirse.
+
+Antes de tocar nada abrí el fichero de proyecto del motor de análisis. No tiene ni una referencia a
+paquetes. Ninguna. Eso no fue suerte: fue una regla que puse pronto y olvidé que había puesto. El
+motor se queda en .NET puro. Sin navegador, sin E/S, sin dependencias. Los packs de reglas son
+recursos incrustados. Cuando llegó la pregunta de Reddit, ese motor ya alimentaba tres frentes: la
+web, una herramienta de línea de comandos y un servidor MCP. Un cuarto no era un cambio de
+arquitectura. Era otro consumidor.
+
+Así que el port fue una extracción, no una reescritura: sacar las páginas y los componentes a una
+biblioteca de clases Razor y dejar que un segundo anfitrión los renderice.
+
+Se rompió exactamente una cosa, y conviene saberla si alguna vez hace esto. Un HttpClient de .NET
+no puede alcanzar el host virtual del WebView. En el navegador, pedir tu propio wwwroot con un
+HttpClient apuntando a la dirección base es lo normal; en un WebView la aplicación se sirve desde
+un origen virtual con el que solo habla la propia página, así que el HTTP nativo sale a la red y no
+encuentra nada. En mi caso era una línea: el cargador de las traducciones de la interfaz. Mi
+instinto fue una interfaz con dos implementaciones, una por anfitrión. Luego vi que el fetch del
+propio navegador funciona en los dos sitios, así que el arreglo borró código en vez de añadirlo.
+
+La segunda sorpresa costó más tiempo: compilaba, arrancaba y moría en el primer render por un
+Microsoft.Windows.SDK.NET que faltaba. BlazorWebView tira de las proyecciones WinRT del SDK de
+Windows, y net10.0-windows no las trae — hace falta net10.0-windows10.0.19041.0. Compila igual de
+las dos formas, que es justo lo que lo hace molesto de diagnosticar.
+
+Además repartí el trabajo entre tres agentes en paralelo, un worktree de git para cada uno y la
+división por ficheros, no por temas. Las tres ramas se fusionaron sin un solo conflicto. Con un
+único directorio de trabajo, el checkout del segundo agente habría reescrito los ficheros del
+primero a media edición, y habría parecido un error mío.
+
+MIT y gratis, web y Windows: https://github.com/peopleworks/SignsofAI
+
+#dotnet #Blazor #WebAssembly #Arquitectura #OpenSource
+```
+
 ### X / Twitter — tercer artículo (EN)
 ```
 You can switch off almost any AI detector with find-and-replace.
