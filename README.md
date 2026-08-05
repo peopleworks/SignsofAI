@@ -1,7 +1,7 @@
 # ✍︎ Signs of AI Writing
 
 [![Live demo](https://img.shields.io/badge/demo-live-brightgreen?logo=googlechrome&logoColor=white)](https://peopleworks.github.io/SignsofAI/)
-[![Windows app](https://img.shields.io/github/v/release/peopleworks/SignsofAI?filter=desktop-v*&label=Windows%20app&logo=windows&logoColor=white&color=0078D4)](https://github.com/peopleworks/SignsofAI/releases/tag/desktop-v0.1.0)
+[![Windows app](https://img.shields.io/github/v/release/peopleworks/SignsofAI?filter=desktop-v*&label=Windows%20app&logo=windows&logoColor=white&color=0078D4)](https://github.com/peopleworks/SignsofAI/releases?q=desktop&expanded=true)
 [![License: MIT](https://img.shields.io/github/license/peopleworks/SignsofAI?color=blue)](LICENSE)
 [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![Blazor WebAssembly](https://img.shields.io/badge/Blazor-WASM-512BD4?logo=blazor&logoColor=white)](https://learn.microsoft.com/aspnet/core/blazor/)
@@ -14,7 +14,7 @@
 
 **[Try the live demo &rarr;](https://peopleworks.github.io/SignsofAI/)** — English & Spanish, runs 100% in your browser. No signup, and nothing leaves your device.
 
-**[Download the Windows app &rarr;](https://github.com/peopleworks/SignsofAI/releases/tag/desktop-v0.1.0)** — the same tool in a window. Nothing to install alongside it: the .NET runtime is bundled.
+**[Download the Windows app &rarr;](https://github.com/peopleworks/SignsofAI/releases?q=desktop&expanded=true)** — the same tool in a window. Nothing to install alongside it: the .NET runtime is bundled.
 
 ![Signs of AI Writing analyzing text live: the score climbs as AI tells accumulate, then every tell is highlighted with a fix](Docs/screenshots/analyze-live.gif)
 
@@ -75,6 +75,20 @@ The corpus is a JSON manifest anyone can extend, the tool that builds and measur
 `tools/SignsOfAI.Calibration`, and the whole thing re-runs in one command. See
 [`Docs/Calibration/README.md`](Docs/Calibration/README.md) — Spanish academic writing is the most
 wanted contribution.
+
+---
+
+## For teachers: the part that is not software
+
+A detector is not what you need first. **[`Docs/Teaching/`](Docs/Teaching/README.md)** is syllabus
+language you can paste, a one-page sheet to hand students before anything goes wrong, and a procedure
+for the day a question becomes formal — all bilingual, all free of any licence, attribution or
+permission.
+
+None of it requires this tool. It exists because the hard part of AI writing in a classroom was never
+detection; it is what you do on the morning you suspect something and have nobody to ask. All three
+documents are built on the same rule: **a score is never the reason for a decision about a student**,
+and a conversation about the work settles what no software can.
 
 ---
 
