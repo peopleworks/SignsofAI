@@ -52,6 +52,38 @@ const SCRIPTS = {
     voice: RACHEL,
     text: "There's a desktop app now. Why, if the web one works? For this: it measures predictability with a model running inside the app. No server, offline, and your text never leaves the machine. And it reads a whole folder: two hundred submissions, sorted worst first. Free, for Windows.",
   },
+  'short8-artefactos-es': {
+    voice: 'Marcela',
+    text: "Puedes apagar casi cualquier detector de inteligencia artificial con buscar y reemplazar. Cambia la e latina por la e cirílica: se ven idénticas, en pantalla no cambia nada, y la regla deja de encontrar la palabra. Siete detectores cayeron por debajo del azar con ese truco. Con el mío también funcionaba. Ahora SignsOfAI te da el código, la línea y la columna de cada carácter raro. Un porcentaje se discute; un carácter en la línea catorce está o no está.",
+  },
+  'short8-artefactos-en': {
+    voice: RACHEL,
+    text: "You can switch off almost any A I detector with find and replace. Swap the Latin e for the Cyrillic e: identical on screen, nothing looks different, and the rule stops finding the word. Seven detectors dropped below chance with that trick. Mine did too. Now SignsOfAI gives you the codepoint, the line and the column of every one. A percentage is arguable; a character at line fourteen either is there or is not.",
+  },
+  'short9-bibliografia-es': {
+    voice: 'Marcela',
+    text: "Mi propio detector le puso cero sobre cien a este ensayo. Cero señales. Vocabulario bien, ritmo humano. Y la bibliografía era inventada. Dos autores citados que no están en su propia lista de referencias. El mismo DOI en dos artículos distintos. Una fuente publicada en dos mil veintisiete. Nada de eso necesita internet: el documento se contradice a sí mismo. Y eso no es una acusación, es una pregunta que se contesta en una frase: ¿me manda el artículo?",
+  },
+  'short9-bibliografia-en': {
+    voice: RACHEL,
+    text: "My own detector scored this essay zero out of a hundred. Zero signals. Good vocabulary, human rhythm. And the bibliography was invented. Two authors cited that are nowhere in its own reference list. The same D O I on two different papers. A source published in twenty twenty-seven. None of that needs the internet: the document contradicts itself. And that is not an accusation, it is a question you answer in one sentence: can you send me the paper?",
+  },
+  'short10-linea-base-es': {
+    voice: 'Marcela',
+    text: "Sesenta y uno por ciento. Esa es la proporción de ensayos de estudiantes que escriben en su segunda lengua que los detectores marcan como inteligencia artificial. No de los tramposos: de los ensayos. Porque escribir formal y cuidado se parece a una máquina, y así es como escribes en un idioma que aprendiste después. Eso no se arregla con mejor detector. Se arregla con otra pregunta: no si se parece a una máquina, sino si se parece a quien escribió los otros trabajos. Y si escribes formal, tu propia línea base ya es formal.",
+  },
+  'short10-linea-base-en': {
+    voice: RACHEL,
+    text: "Sixty-one percent. That is the share of essays by students writing in their second language that AI detectors flag as machine-written. Not of the cheats: of the essays. Because formal, careful writing looks like a machine, and that is how you write in a language you learned second. You do not fix that with a better detector. You fix it with a different question: not does this look like a machine, but does this look like the person who wrote the others. And if you write formally, your own baseline is already formal.",
+  },
+  'short11-veredicto-es': {
+    voice: 'Marcela',
+    text: "Mi detector le puso noventa sobre cien a este texto y dijo: señales fuertes de escritura con inteligencia artificial. El informe que un profesor imprime y lleva a un comité, del mismo texto y en la misma ejecución, no dijo nada. Y no era un caso raro: no había emitido un veredicto nunca, en ningún idioma. Una condición pedía un umbral que ningún idioma tenía. Yo tenía trescientas cuarenta pruebas. Ninguna comparaba las dos caras entre sí.",
+  },
+  'short11-veredicto-en': {
+    voice: RACHEL,
+    text: "My detector scored this text ninety out of a hundred and called it strong signs of A I writing. The report a teacher prints and carries to a committee, same text, same run, said nothing at all. And that was not a rare case: it had never given a verdict, not once, in any language. One condition asked for a threshold that no language had. I had three hundred and forty tests. Not one of them compared the two faces.",
+  },
 };
 
 const wanted = process.argv.slice(2).filter((a) => !a.startsWith('-'));

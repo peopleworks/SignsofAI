@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+/* Tiempos cuadrados con la narración medida (34.1s). Cues de cue-times.mjs:
+   8.4s "El informe" · 20.8s "no había emitido" · 24.8s "Una condición" · 29.7s "trescientas cuarenta".
+   Las dos tarjetas repiten la portada del séptimo artículo a propósito: quien vio una reconoce la otra. */
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 82% 8%,rgba(245,158,11,.16),transparent 60%),
+   radial-gradient(700px 700px at 14% 62%,rgba(109,124,255,.16),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+@keyframes strike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes drop{from{opacity:0;transform:translateY(-26px)}to{opacity:1;transform:none}}
+.brand{position:absolute;top:80px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.title{position:absolute;top:186px;width:100%;font-size:74px;font-weight:900;line-height:1.14;opacity:0;animation:rv .7s .3s forwards}
+.title b{color:#f59e0b}
+.card{position:absolute;left:80px;right:80px;border-radius:24px;padding:30px 40px 38px;opacity:0}
+.tag{font-size:34px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7c8aa6}
+.score{font-size:150px;font-weight:900;line-height:1;margin-top:4px;font-variant-numeric:tabular-nums}
+.score span{font-size:48px;font-weight:700;opacity:.5}
+.vbar{height:26px;border-radius:13px;margin:26px auto 0;width:70%}
+/* Arriba: la línea de comandos. Dice el veredicto. */
+.a{top:396px;background:rgba(245,158,11,.08);border:3px solid rgba(245,158,11,.42);animation:rv .7s 2.4s forwards}
+.a .score{color:#f59e0b}
+.a .vbar{background:#f59e0b}
+/* Abajo: el informe que va al comité. El mismo texto, y no dice nada. */
+.b{top:1004px;background:rgba(124,138,166,.06);border:3px solid rgba(124,138,166,.24);animation:rv .7s 8.4s forwards}
+.b .score{color:#7c8aa6;opacity:.8}
+.b .vbar{background:none;border:3px dashed rgba(124,138,166,.5);position:relative}
+.b .vbar::after{content:"";position:absolute;left:6%;right:6%;top:50%;height:4px;border-radius:2px;
+ background:rgba(124,138,166,.75);transform:scaleX(0);transform-origin:left;animation:strike .5s 10.4s forwards}
+/* El ≠ va entre las barras, no entre los números: los números coinciden. */
+.neq{position:absolute;top:872px;left:50%;transform:translateX(-50%);width:132px;height:132px;border-radius:50%;
+ background:#0b1020;border:5px solid #f0556f;color:#f0556f;font-size:82px;font-weight:900;line-height:126px;opacity:0;animation:pop .5s 20.8s forwards}
+.code{position:absolute;top:1330px;left:80px;right:80px;border-radius:18px;padding:26px 30px;text-align:left;
+ background:rgba(10,18,35,.9);border:2px solid rgba(255,255,255,.12);font-family:Consolas,'DejaVu Sans Mono',monospace;
+ font-size:33px;line-height:1.5;color:#9aa8ff;opacity:0;animation:rv .6s 24.8s forwards}
+.code em{color:#7c8aa6;font-style:normal}
+.nulls{position:absolute;top:1508px;width:100%;display:flex;gap:26px;justify-content:center}
+.n{padding:12px 30px;border-radius:999px;font-size:38px;font-weight:800;font-family:Consolas,monospace;
+ background:rgba(240,85,111,.14);color:#f0556f;border:2px solid rgba(240,85,111,.45);opacity:0}
+.n1{animation:drop .4s 26.6s forwards}.n2{animation:drop .4s 27.2s forwards}
+.tests{position:absolute;top:1606px;width:100%;font-size:44px;font-weight:800;color:#7c8aa6;opacity:0;animation:rv .5s 29.7s forwards}
+.tests b{color:#eaf1fb;font-size:52px}
+.foot{position:absolute;bottom:96px;width:100%;opacity:0;animation:rv .8s 32.1s forwards}
+.foot .big{font-size:46px;font-weight:900;line-height:1.26}
+.foot .big b{background:linear-gradient(90deg,#f59e0b,#f0556f);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">Un <b>if</b> que siempre<br>era falso</div>
+
+<div class="card a">
+ <div class="tag">línea de comandos</div>
+ <div class="score">90<span>/100</span></div>
+ <div class="vbar"></div>
+</div>
+
+<div class="neq">≠</div>
+
+<div class="card b">
+ <div class="tag">el informe que va al comité</div>
+ <div class="score">90<span>/100</span></div>
+ <div class="vbar"></div>
+</div>
+
+<div class="code">RecommendedThreshold is { } threshold<br><em>// el umbral medido para ese idioma</em></div>
+<div class="nulls"><span class="n n1">en → null</span><span class="n n2">es → null</span></div>
+
+<div class="tests"><b>340</b> pruebas · ninguna comparaba las dos</div>
+
+<div class="foot"><div class="big">Ahora dice lo que midió:<br><b>«Sin señales por encima del umbral medido»</b></div></div>
+</body></html>

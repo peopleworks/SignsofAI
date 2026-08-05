@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+/* Timed to the measured narration (28.6s). Cues from cue-times.mjs:
+   5.0s "Swap the Latin" · 13.1s "Seven detectors" · 17.4s "Now SignsOfAI" · 22.8s "A percentage". */
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 80% 10%,rgba(240,85,111,.18),transparent 60%),
+   radial-gradient(700px 700px at 16% 60%,rgba(109,124,255,.16),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+@keyframes flip{0%{transform:rotateY(0);color:#eaf1fb}49%{transform:rotateY(90deg)}50%{color:#f0556f}100%{transform:rotateY(360deg);color:#f0556f}}
+@keyframes fade{to{opacity:0}}
+.brand{position:absolute;top:80px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.title{position:absolute;top:184px;width:100%;font-size:70px;font-weight:900;line-height:1.14;opacity:0;animation:rv .7s .3s forwards}
+.title b{color:#f0556f}
+/* The word. One letter turns and stops being Latin. */
+.word{position:absolute;top:404px;width:100%;font-size:190px;font-weight:900;letter-spacing:.02em;font-family:Consolas,'DejaVu Sans Mono',monospace;opacity:0;animation:rv .6s 1.8s forwards}
+.word i{display:inline-block;font-style:normal;animation:flip .9s 5.0s forwards}
+.same{position:absolute;top:620px;width:100%;font-size:40px;color:#7c8aa6;opacity:0;animation:rv .5s 6.4s forwards}
+.cp{position:absolute;top:684px;width:100%;font-size:44px;font-weight:800;font-family:Consolas,monospace;color:#f0556f;opacity:0;animation:pop .5s 6.0s forwards}
+/* The signal count, collapsing while nothing on screen changes. */
+.count{position:absolute;top:800px;width:100%;display:flex;align-items:center;justify-content:center;gap:40px;opacity:0;animation:rv .6s 8.6s forwards}
+.num{font-size:132px;font-weight:900;font-variant-numeric:tabular-nums}
+.was{color:#f59e0b}.now{color:#2fd27a}
+.arrow{font-size:76px;color:#7c8aa6}
+.clabel{position:absolute;top:952px;width:100%;font-size:38px;color:#7c8aa6;opacity:0;animation:rv .5s 9.2s forwards}
+/* Seven detectors, below chance. */
+.paper{position:absolute;top:1050px;left:80px;right:80px;border-radius:20px;padding:26px 32px;
+ background:rgba(240,85,111,.10);border:2px solid rgba(240,85,111,.36);opacity:0;animation:rv .6s 13.1s forwards}
+.paper .k{font-size:40px;font-weight:800;color:#ffb9c6}
+.paper .v{font-size:58px;font-weight:900;margin-top:8px;font-variant-numeric:tabular-nums}
+.paper .v s{color:#7c8aa6;text-decoration-color:#f0556f}
+/* What SignsOfAI returns now: not an opinion, a coordinate. */
+.rep{position:absolute;top:1268px;left:80px;right:80px;border-radius:18px;padding:24px 30px;text-align:left;
+ background:rgba(10,18,35,.9);border:2px solid rgba(255,255,255,.12);font-family:Consolas,'DejaVu Sans Mono',monospace;
+ font-size:34px;line-height:1.55;color:#9aa8ff;opacity:0;animation:rv .6s 17.4s forwards}
+.rep b{color:#f0556f;font-weight:800}
+.rep em{color:#7c8aa6;font-style:normal}
+.zero{position:absolute;top:1494px;width:100%;font-size:42px;font-weight:800;color:#2fd27a;opacity:0;animation:rv .5s 19.6s forwards}
+.foot{position:absolute;bottom:150px;width:100%;opacity:0;animation:rv .8s 22.8s forwards}
+.foot .big{font-size:58px;font-weight:900;line-height:1.22}
+.foot .big b{background:linear-gradient(90deg,#f59e0b,#f0556f);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">Find and replace<br><b>switches off a detector</b></div>
+
+<div class="word">d<i>e</i>lve</div>
+<div class="cp">U+0435 · Cyrillic &ldquo;е&rdquo;</div>
+<div class="same">Nothing changes on screen</div>
+
+<div class="count"><span class="num was">17</span><span class="arrow">→</span><span class="num now">6</span></div>
+<div class="clabel">signals found, same paragraph</div>
+
+<div class="paper">
+ <div class="k">7 detectors, COLING 2025</div>
+ <div class="v"><s>MCC 0.64</s> → −0.01</div>
+</div>
+
+<div class="rep">character <b>U+0435</b> CYRILLIC SMALL LETTER IE<br><em>line 37, column 64</em></div>
+<div class="zero">contributes 0 to the score</div>
+
+<div class="foot"><div class="big">A score is arguable.<br><b>A character is there or it is not.</b></div></div>
+</body></html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+/* Timed to the measured narration (36.0s). Cues from cue-times.mjs:
+   8.1s "Not of the cheats" · 10.8s "Because formal" · 22.1s "You fix it with" · 33.7s "your own baseline". */
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 78% 10%,rgba(240,85,111,.20),transparent 60%),
+   radial-gradient(700px 700px at 18% 66%,rgba(47,210,122,.14),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.4)}60%{transform:scale(1.14)}100%{opacity:1;transform:scale(1)}}
+@keyframes cross{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes dim{to{opacity:.34}}
+@keyframes marker{from{opacity:0;left:8%}to{opacity:1;left:47%}}
+.brand{position:absolute;top:80px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+/* The number this opens with, and that almost nobody quotes. */
+.pct{position:absolute;top:206px;width:100%;font-size:230px;font-weight:900;color:#f0556f;line-height:1;opacity:0;animation:pop .8s .9s forwards}
+.cap{position:absolute;top:472px;left:90px;right:90px;font-size:46px;line-height:1.3;color:#eaf1fb;opacity:0;animation:rv .6s 3.2s forwards}
+.cap b{color:#f0556f}
+.notcheats{position:absolute;top:650px;width:100%;font-size:52px;font-weight:900;opacity:0;animation:rv .6s 8.1s forwards}
+.notcheats s{color:#7c8aa6;text-decoration-color:#f0556f}
+.why{position:absolute;top:754px;left:80px;right:80px;border-radius:18px;padding:26px 30px;font-size:42px;line-height:1.34;
+ background:rgba(10,18,35,.85);border:2px solid rgba(255,255,255,.12);color:#9aa8ff;opacity:0;animation:rv .6s 10.8s forwards}
+.why b{color:#eaf1fb;font-weight:900}
+/* The two questions. The first is struck out; the second is the useful one. */
+.q{position:absolute;left:80px;right:80px;border-radius:18px;padding:28px 30px;font-size:44px;font-weight:800;opacity:0}
+.q1{top:1000px;background:rgba(240,85,111,.08);border:2px solid rgba(240,85,111,.34);color:#ffb9c6;
+ animation:rv .5s 22.1s forwards, dim .6s 23.3s forwards}
+.q1::after{content:"";position:absolute;left:6%;right:6%;top:50%;height:5px;border-radius:3px;background:#f0556f;
+ transform:scaleX(0);transform-origin:left;animation:cross .5s 23.3s forwards}
+.q2{top:1154px;background:rgba(47,210,122,.10);border:2px solid rgba(47,210,122,.45);color:#eaf1fb;
+ animation:rv .5s 24.3s forwards}
+.q2 b{color:#2fd27a}
+/* Their own range, not ours: the mark falls inside it. */
+.scale{position:absolute;top:1370px;left:90px;right:90px;height:96px}
+.track{position:absolute;top:36px;left:0;right:0;height:22px;border-radius:11px;background:rgba(124,138,166,.22)}
+.band{position:absolute;top:36px;left:26%;width:48%;height:22px;border-radius:11px;background:rgba(47,210,122,.42)}
+.mark{position:absolute;top:20px;width:22px;height:54px;border-radius:11px;background:#2fd27a;opacity:0;
+ box-shadow:0 0 22px rgba(47,210,122,.7);animation:marker .9s 29.2s forwards}
+.slabel{position:absolute;top:1482px;width:100%;font-size:38px;color:#7c8aa6;opacity:0;animation:rv .5s 30.2s forwards}
+.foot{position:absolute;bottom:150px;width:100%;opacity:0;animation:rv .8s 33.7s forwards}
+.foot .big{font-size:52px;font-weight:900;line-height:1.24}
+.foot .big b{background:linear-gradient(90deg,#2fd27a,#4aa8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+
+<div class="pct">61%</div>
+<div class="cap">of essays by people writing in <b>their second language</b>, flagged as AI</div>
+
+<div class="notcheats"><s>Not of the cheats.</s> Of the essays.</div>
+<div class="why">Formal, careful writing <b>looks like a machine</b>, and that is how you write in a language you learned second.</div>
+
+<div class="q q1">Does this look like a machine?</div>
+<div class="q q2">Does it look like <b>whoever wrote the others</b>?</div>
+
+<div class="scale">
+ <div class="track"></div>
+ <div class="band"></div>
+ <div class="mark"></div>
+</div>
+<div class="slabel">their own range, measured on their own work</div>
+
+<div class="foot"><div class="big">If you write formally,<br><b>your baseline is already formal.</b></div></div>
+</body></html>

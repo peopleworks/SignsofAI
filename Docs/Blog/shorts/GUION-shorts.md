@@ -16,11 +16,16 @@ Paleta SignsOfAI: `--bg:#0b1020` · léxico `#db2777` · retórico `#f59e0b` · 
 | 5 | Dos idiomas | ✅ | ✅ | ✅ 25 s · 26 s |
 | 6 | Reescritura | ✅ | ✅ | ✅ 25 s · 23 s |
 | 7 | Escritorio | ✅ | ✅ | ✅ 25 s · 23 s |
-| 8 | Artefactos | — | guion abajo | pendiente |
-| 9 | Bibliografía inventada | — | guion abajo | pendiente |
-| 10 | 61% / línea base | — | guion abajo | pendiente |
+| 8 | Artefactos | ✅ | ✅ | ✅ 34,5 s · 30,0 s |
+| 9 | Bibliografía inventada | ✅ | ✅ | ✅ 36,3 s · 35,5 s |
+| 10 | 61% / línea base | ✅ | ✅ | ✅ 40,2 s · 37,4 s |
+| 11 | El veredicto que nunca se dio | ✅ | ✅ | ✅ 35,5 s · 32,4 s |
 
-Los renders están en `out/<id>.mp4` + `.srt`. Los 8–10 necesitan HTML antes de narrar.
+Los renders están en `out/<id>.mp4` + `.srt`.
+
+**Los 8–11 duran más que los 1–7** (29–40 s frente a 23–30). Siguen dentro del límite de
+Shorts, pero el 10 es un tercio más largo que nada publicado antes: si la retención cae, el guion
+es lo que hay que recortar, no la animación.
 
 **Orden del pipeline:** narrar primero (`narrate-all.mjs`), sacar los tiempos de cue
 (`cue-times.mjs`) y **después** escribir el HTML alrededor de la duración medida, porque los
@@ -99,6 +104,23 @@ y una marca cayendo dentro, en verde.
 - **ES:** "Sesenta y uno por ciento. Esa es la proporción de ensayos de estudiantes que escriben en su segunda lengua que los detectores marcan como inteligencia artificial. No de los tramposos: de los ensayos. Porque escribir formal y cuidado se parece a una máquina, y así es como escribes en un idioma que aprendiste después. Eso no se arregla con mejor detector. Se arregla con otra pregunta: no si se parece a una máquina, sino si se parece a quien escribió los otros trabajos. Y si escribes formal, tu propia línea base ya es formal."
 - **EN:** "Sixty-one percent. That is the share of essays by students writing in their second language that AI detectors flag as machine-written. Not of the cheats: of the essays. Because formal, careful writing looks like a machine, and that is how you write in a language you learned second. You do not fix that with a better detector. You fix it with a different question: not does this look like a machine, but does this look like the person who wrote the others. And if you write formally, your own baseline is already formal."
 
+
+
+## Short 11 — "Un `if` que siempre era falso" (el veredicto que nunca se dio)
+**Visual:** un documento arriba que se bifurca en dos tarjetas — igual que la portada del séptimo
+artículo, para que quien vio una reconozca la otra. Izquierda: el contador sube a `90/100` y aparece
+una barra ámbar sólida (el veredicto dicho). Derecha: el mismo `90/100` y una barra punteada
+**tachada** (el veredicto ausente). Entra el `≠` entre las dos barras, no entre los números —
+los números coinciden, ese es el chiste. Corte a la línea de código con
+`RecommendedThreshold is { } threshold`, y `null` cayendo sobre ella en rojo, dos veces: `en`, `es`.
+Cierre: `340 pruebas` y ninguna mirando ahí; luego la frase nueva, «Sin señales por encima del
+umbral medido», apareciendo bajo las dos tarjetas ya iguales.
+- **ES:** "Mi detector le puso noventa sobre cien a este texto y dijo: señales fuertes de escritura con inteligencia artificial. El informe que un profesor imprime y lleva a un comité, del mismo texto y en la misma ejecución, no dijo nada. Y no era un caso raro: no había emitido un veredicto nunca, en ningún idioma. Una condición pedía un umbral que ningún idioma tenía. Yo tenía trescientas cuarenta pruebas. Ninguna comparaba las dos caras entre sí."
+- **EN:** "My detector scored this text ninety out of a hundred and called it strong signs of A I writing. The report a teacher prints and carries to a committee, same text, same run, said nothing at all. And that was not a rare case: it had never given a verdict, not once, in any language. One condition asked for a threshold that no language had. I had three hundred and forty tests. Not one of them compared the two faces."
+
+**Por qué este short y no otro:** es el único de la serie donde la herramienta queda mal, y por eso
+funciona. Los diez anteriores explican algo que hace bien; este cuenta que se contradecía a sí misma
+y que lo publicamos igual.
 
 ---
 
