@@ -85,12 +85,19 @@ public sealed record AnalysisResult
     /// </summary>
     public CitationReport Citations { get; init; } = CitationReport.Empty;
 
-    /// <summary>Human-readable one-line verdict derived from <see cref="OverallScore"/>.</summary>
-    public string Verdict => OverallScore switch
+    /// <summary>
+    /// Human-readable one-line verdict derived from <see cref="OverallScore"/>, in English.
+    ///
+    /// English-only on purpose: this is what a machine consumer gets — the CLI's `--json`, the MCP
+    /// tool's payload — where a stable string is more use than a translated one. Anything shown to a
+    /// person goes through the interface's localiser or the report's own resources, both of which
+    /// take their boundary from <see cref="VerdictBands"/> exactly as this does.
+    /// </summary>
+    public string Verdict => VerdictBands.Emphasis(OverallScore) switch
     {
-        >= 70 => "Strong signs of AI writing",
-        >= 45 => "Moderate signs of AI writing",
-        >= 20 => "Light signs of AI writing",
+        VerdictEmphasis.High => "Strong signs of AI writing",
+        VerdictEmphasis.Elevated => "Moderate signs of AI writing",
+        VerdictEmphasis.Present => "Light signs of AI writing",
         _ => "Reads mostly human",
     };
 }

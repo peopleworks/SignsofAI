@@ -245,12 +245,15 @@ public sealed class Loc(IJSRuntime js, BrowserStorage storage)
 
     public string Sev(Severity severity) => this["sev." + severity.ToString().ToLowerInvariant()];
 
-    /// <summary>The one-line verdict for an overall score. Mirrors the bands in <c>AnalysisResult.Verdict</c>.</summary>
-    public string Verdict(double score) => score switch
+    /// <summary>
+    /// The one-line verdict for an overall score, in the interface's language. The boundary comes
+    /// from <see cref="VerdictBands"/>; this only chooses the words for it.
+    /// </summary>
+    public string Verdict(double score) => VerdictBands.Emphasis(score) switch
     {
-        >= 70 => this["verdict.strong"],
-        >= 45 => this["verdict.moderate"],
-        >= 20 => this["verdict.light"],
+        VerdictEmphasis.High => this["verdict.strong"],
+        VerdictEmphasis.Elevated => this["verdict.moderate"],
+        VerdictEmphasis.Present => this["verdict.light"],
         _ => this["verdict.minimal"],
     };
 
