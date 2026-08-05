@@ -1,6 +1,7 @@
 using SignsOfAI.Core;
 using SignsOfAI.Core.Calibration;
 using SignsOfAI.Core.Reporting;
+using System.Text.RegularExpressions;
 
 namespace SignsOfAI.Core.Tests;
 
@@ -48,8 +49,6 @@ public class EvidenceReportTests
         // be making the overclaim this project criticises in everyone else.
         var report = Report();
 
-        Assert.Contains("Read the interval, not the observed rate", report);
-
         // When the language does support a threshold the caveat quotes the interval, never a promise;
         // when it does not, it says so and refuses to borrow the aggregate. Both are asserted because
         // which one appears is a property of the corpus, not of this code.
@@ -61,6 +60,7 @@ public class EvidenceReportTests
         else
         {
             Assert.Contains("the overall figure is not a substitute for it", report);
+            Assert.DoesNotContain("Read the interval, not the observed rate", report);
         }
 
         // Never the bare rate dressed as a promise. Scoped to the claim about this tool: "at most"
@@ -70,9 +70,10 @@ public class EvidenceReportTests
 
         // Skipped rather than asserted when no snapshot is embedded: a fork that has never measured
         // itself is a state the design blesses, and a test suite that fails for it would push people
-        // toward shipping somebody else's number.
-        if (PublishedCalibration.Current is { } published)
-            Assert.Contains($"{published.Texts} texts published before generative models existed", report);
+        // toward shipping somebody else's number. When present, only the analysed-language stratum
+        // may be named here — never the aggregate.
+        if (PublishedCalibration.Current?.For("en") is { } english)
+            Assert.Contains($"{english.Texts} texts in this language", report);
     }
 
     [Fact]
@@ -259,6 +260,72 @@ public class EvidenceReportTests
     }
 
     [Fact]
+    public void An_unmeasured_language_gets_no_aggregate_threshold_or_verdict()
+    {
+        var analysed = new AiWritingAnalyzer().Analyze(Essay, "en") with
+        {
+            Language = "pt",
+            OverallScore = 100,
+        };
+
+        var report = EvidenceReport.ToMarkdown(analysed);
+
+        Assert.Contains("never been measured for language code pt", report);
+        Assert.Contains("aggregate result from other languages is not a substitute", report);
+        Assert.DoesNotContain("Strong signs of AI writing", report);
+
+        if (PublishedCalibration.Current is { } calibration)
+        {
+            Assert.DoesNotContain($"{calibration.Texts} texts published", report);
+            if (calibration.RecommendedThreshold is { } threshold)
+                Assert.DoesNotContain($"{threshold:0.#}/100", report);
+        }
+    }
+
+    [Fact]
+    public void Report_structure_follows_the_interface_not_the_analysed_language()
+    {
+        var result = new AiWritingAnalyzer().Analyze(Essay, "en");
+        var options = new ReportOptions { InterfaceLanguage = "es" };
+
+        var markdown = EvidenceReport.ToMarkdown(result, options);
+        var html = EvidenceReport.ToHtml(result, options);
+
+        Assert.Contains("# Informe del análisis de escritura", markdown);
+        Assert.Contains("## Qué dice el análisis", markdown);
+        Assert.Contains("## Con qué frecuencia se equivoca", markdown);
+        Assert.Contains("Este informe contiene", markdown);
+        Assert.Contains("Este bloque aún no está traducido", markdown);
+        Assert.Contains("<html lang=\"es\">", html);
+
+        var stated = int.Parse(Regex.Match(markdown,
+            @"Este informe contiene (\d+) bloque").Groups[1].Value);
+        var marked = Regex.Matches(markdown,
+            "Este bloque aún no está traducido").Count;
+        Assert.Equal(marked, stated);
+        Assert.True(markdown.IndexOf("Este informe contiene", StringComparison.Ordinal)
+                    < markdown.IndexOf("Este bloque aún no está traducido", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void A_report_language_without_the_mandatory_core_is_rejected()
+    {
+        var result = new AiWritingAnalyzer().Analyze(Essay, "en");
+
+        // Rejected as a language the report can be *written in* — never as a reason to withhold the
+        // report. An incomplete translation must not be able to destroy the evidence: the page is
+        // served in English and says so, which is a worse read and an honest one.
+        var report = EvidenceReport.ToMarkdown(result, new ReportOptions { InterfaceLanguage = "pt" });
+
+        Assert.Contains("not available in", report);
+
+        // The caveat still has to be on the page. Which of the two wordings appears is a property of
+        // the corpus, not of this code, so both are accepted and neither may be absent.
+        Assert.True(report.Contains("A score is not proof")
+                    || report.Contains("No threshold is supported"));
+    }
+
+    [Fact]
     public void Withholds_the_verdict_below_the_threshold_it_can_support()
     {
         // "Reads mostly human" printed above "treat the score as saying nothing" is a page arguing
@@ -267,6 +334,45 @@ public class EvidenceReportTests
 
         Assert.DoesNotContain("Reads mostly human", report);
         Assert.Contains("A low score is not evidence that a person wrote this", report);
+    }
+
+    [Fact]
+    public void A_language_it_cannot_write_in_still_produces_the_report()
+    {
+        // The first version threw. A teacher holding two hundred essays and a button that does
+        // nothing has lost the evidence entirely, which is the outcome this feature exists to
+        // prevent — and the MCP tool takes the interface language as free text from a model, so
+        // any unknown string would have crashed the tool rather than degraded the page.
+        var result = new AiWritingAnalyzer().Analyze(Essay, "en");
+
+        var report = EvidenceReport.ToMarkdown(result, new ReportOptions { InterfaceLanguage = "fr" });
+
+        Assert.Contains("not available in", report);
+        Assert.Contains("How often this is wrong", report);
+    }
+
+    [Fact]
+    public void Says_it_is_serving_English_rather_than_serving_it_quietly()
+    {
+        // Silent fallback is the failure this project criticises in everyone else: a page that looks
+        // complete while withholding the part that limits it.
+        var result = new AiWritingAnalyzer().Analyze(Essay, "en");
+
+        var report = EvidenceReport.ToMarkdown(result, new ReportOptions { InterfaceLanguage = "pt" });
+
+        Assert.Contains("shown in English", report);
+        Assert.Contains("pt", report);
+    }
+
+    [Fact]
+    public void A_supported_interface_language_carries_no_apology()
+    {
+        var result = new AiWritingAnalyzer().Analyze(Essay, "en");
+
+        var report = EvidenceReport.ToMarkdown(result, new ReportOptions { InterfaceLanguage = "es" });
+
+        Assert.DoesNotContain("not available in", report);
+        Assert.DoesNotContain("no está disponible en", report);
     }
 
     [Fact]
