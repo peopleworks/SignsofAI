@@ -89,6 +89,7 @@ public sealed class AiWritingAnalyzer
         return new AnalysisResult
         {
             Language = lang,
+            RulePackLanguage = RulePackLoader.Resolve(lang).Language,
             Findings = findings,
             CategoryScores = byCategory,
             OverallScore = overall,

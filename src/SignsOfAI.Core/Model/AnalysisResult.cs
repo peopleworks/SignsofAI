@@ -9,8 +9,19 @@ public sealed record CategoryScore(SignCategory Category, double Score, int Find
 /// <summary>The complete result of analyzing a document.</summary>
 public sealed record AnalysisResult
 {
-    /// <summary>Language code actually used for analysis ("en" or "es").</summary>
+    /// <summary>The language of the text: given by the caller, or detected.</summary>
     public required string Language { get; init; }
+
+    /// <summary>
+    /// The language whose rule pack actually supplied the tells. Equal to <see cref="Language"/>
+    /// except when that language has no pack yet, in which case the English catalog was used.
+    ///
+    /// The two must not be conflated. Running English rules over French prose finds few tells, and
+    /// reporting that as a French analysis would present "nothing fired" as a result when nothing
+    /// French was ever looked for. Rule packs are files anyone can contribute, so a language without
+    /// one is an ordinary state that hosts should describe rather than an error.
+    /// </summary>
+    public string RulePackLanguage { get; init; } = "";
 
     /// <summary>
     /// Everything that matched, ordered by position in the text — both the findings that count as

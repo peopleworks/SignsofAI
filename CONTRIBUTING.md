@@ -37,7 +37,8 @@ dotnet run --project src/SignsOfAI.Cli -- check some-file.md
 
 ## Adding or changing a rule
 
-Rules live in two JSON files: `src/SignsOfAI.Core/Rules/Packs/rules.en.json` and `rules.es.json`.
+Rules live in JSON files under `src/SignsOfAI.Core/Rules/Packs/` — today `rules.en.json` and
+`rules.es.json`, and any `rules.<code>.json` you add (see *Adding a whole language* below).
 There are two kinds.
 
 **Lexical** — single overused words. All inflections go in `terms`:
@@ -119,6 +120,29 @@ Also note: the **Statistical** category score comes from burstiness alone. A rul
 into it will be asked for rework. Spanish AI writing has its own tells (*sumérgete en el vasto mundo
 de*, *cabe destacar que*, *un rico tapiz de*). If you propose a Spanish rule, ground it in Spanish
 text you have actually seen a model produce.
+
+### Adding a whole language
+
+**Drop `rules.<code>.json` into `src/SignsOfAI.Core/Rules/Packs/` and it is picked up.** No project
+file to edit, no C# to touch, no list to register in — the build embeds the pack by wildcard and
+`RulePackLoader` finds it by name. That is deliberate: a contributor who cannot get their language
+heard without editing a build script will not contribute a language.
+
+Derive it, do not translate it, for the reason above.
+
+Two things the tool will then say on your behalf, and you should expect both:
+
+- **Until your pack exists, text in your language is examined with the English catalog**, and the
+  report says so and tells the reader to treat the score as meaningless — a low number would mean
+  nothing was looked for, not that nothing was found.
+- **A new language has no measured error rate.** The calibration corpus contains no texts in it, so
+  no threshold is supported and no verdict is printed. That is honest rather than broken, and it is
+  fixed by contributing texts published before 2022 — see `Docs/Calibration/README.md`. **Roughly
+  seventy-five such texts are worth more to your language's users than the rule pack is**, because
+  they are what lets the tool say anything at all about how often it is wrong there.
+
+The interface (`wwwroot/i18n/<code>.json`) and the report prose (`Reporting/report.<code>.json`) are
+separate and can land in separate pull requests: see [`Docs/TRANSLATING.md`](Docs/TRANSLATING.md).
 
 ## Tests
 

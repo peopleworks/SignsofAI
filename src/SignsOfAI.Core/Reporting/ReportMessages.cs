@@ -16,6 +16,7 @@ public static class ReportMessages
     public const string FallbackMarker = "fallback.marker";
     public const string FallbackSummary = "fallback.summary";
     public const string FallbackLanguage = "fallback.language";
+    public const string NoRulePack = "analysis.no-rule-pack";
     public const string DefaultTitle = "default.title";
     public const string MetaDocument = "meta.document";
     public const string MetaGenerated = "meta.generated";
@@ -93,6 +94,7 @@ public static class ReportMessages
         [FallbackMarker] = 0,
         [FallbackSummary] = 1,
         [FallbackLanguage] = 1,
+        [NoRulePack] = 1,          // {0} the language of the text
         [DefaultTitle] = 0,
         [MetaDocument] = 1,
         [MetaGenerated] = 2,
@@ -176,6 +178,11 @@ public static class ReportMessages
         [FallbackLanguage] = "This report is not available in {0}, so the whole of it is shown in English. " +
                              "Nothing has been withheld or shortened, but a reader who cannot read English " +
                              "cannot read the part that limits the score, and that part is the point of the page.",
+        [NoRulePack] = "> **There is no rule pack for {0} yet, so this text was examined with the English one.** " +
+                       "Treat the score as saying nothing at all: the tells this tool knows are English " +
+                       "ones, and few of them can fire on writing in another language — so a low number " +
+                       "here means nothing was looked for, not that nothing was found. Rule packs are " +
+                       "JSON files anyone can contribute.",
         [DefaultTitle] = "Writing analysis report",
         [MetaDocument] = "**Document:** {0}",
         [MetaGenerated] = "**Generated:** {0} · **Engine:** SignsOfAI {1}",
