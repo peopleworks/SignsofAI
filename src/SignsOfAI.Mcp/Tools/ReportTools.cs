@@ -43,7 +43,8 @@ public static class ReportTools
         [Description("The document to analyse and describe.")] string text,
         [Description("\"en\", \"es\", or \"auto\" to detect. Defaults to auto.")] string? language = null,
         [Description("Name of the file or assignment, printed on the report. Optional.")] string? documentName = null,
-        [Description("Title for the document. Defaults to \"Writing analysis report\".")] string? title = null)
+        [Description("Title for the document. Defaults to a title in the report language.")] string? title = null,
+        [Description("Reader-facing report language: \"en\" or \"es\". Independent from the analysed text. Defaults to English.")] string? interfaceLanguage = null)
     {
         if (string.IsNullOrWhiteSpace(text))
             return "No text was supplied, so there is nothing to report on.";
@@ -54,6 +55,7 @@ public static class ReportTools
         {
             DocumentName = documentName ?? "",
             Title = string.IsNullOrWhiteSpace(title) ? ReportOptions.Default.Title : title,
+            InterfaceLanguage = string.IsNullOrWhiteSpace(interfaceLanguage) ? "en" : interfaceLanguage,
         };
 
         return EvidenceReport.ToMarkdown(result, options);

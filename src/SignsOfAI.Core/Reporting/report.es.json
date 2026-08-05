@@ -1,0 +1,150 @@
+{
+  "language": "es",
+  "translators": ["Equipo de SignsOfAI"],
+  "messages": {
+    "fallback.marker": {
+      "text": "Este bloque aún no está traducido; se muestra en inglés.",
+      "sourceHash": "61ff9df5b9ee5af2a03fe114c463b88debc63956974d1c84248a5d53b310598e"
+    },
+    "fallback.summary": {
+      "text": "Este informe contiene {0} bloque(s) aún no traducido(s). Cada uno está marcado y se muestra en inglés.",
+      "sourceHash": "cdf4c1a629f3a7320c1a1e3ba3d5a4451efd820c33ed1876d5ac7909ca0303da"
+    },
+    "fallback.language": {
+      "text": "Este informe no está disponible en {0}, así que se muestra completo en inglés. No se ha ocultado ni acortado nada, pero quien no lea inglés no puede leer la parte que limita la puntuación, y esa parte es la razón de ser de esta página.",
+      "sourceHash": "c43be4647f39ade1600db2c60ed02ecd38d3539b195ec9afaae737316234a6d4"
+    },
+    "default.title": {
+      "text": "Informe del análisis de escritura",
+      "sourceHash": "90b8ccc0903d87a2f8ba07531f1e76736d5fce4adab65154f05ac147b919b291"
+    },
+    "section.analysis": {
+      "text": "Qué dice el análisis",
+      "sourceHash": "0748fca5cf563b203f20c1dd1d37995297529a10375adc2cfc73504b1feb3d34"
+    },
+    "section.checkable": {
+      "text": "Hechos comprobables",
+      "sourceHash": "a5b06ad0c4a21924b6875294885cf984bbbe905b7ea47bb72e5def9ea0f0a9ab"
+    },
+    "section.characters": {
+      "text": "Caracteres encontrados en el archivo",
+      "sourceHash": "f5a89bd9c98f1058fe11125d4e01a5140e31daa4e965f04eb5e12ba55f63d800"
+    },
+    "section.citations": {
+      "text": "Qué dice el documento sobre sus propias fuentes",
+      "sourceHash": "48154ec9cbb3913fcfce8c0e578877960563ae128ff8bd0c1739a02f8c031bad"
+    },
+    "section.signals": {
+      "text": "Señales contabilizadas",
+      "sourceHash": "078671a3b913dc8d830dc433445ca4b4cc401debf4b6fb8829ea9376ab658cc2"
+    },
+    "section.observations": {
+      "text": "Encontrado, pero a una frecuencia habitual en textos humanos",
+      "sourceHash": "828c9cc6ac44b392c9e7a358d18a7c9771519012e0c878ac3c02e367c5f75338"
+    },
+    "section.error-rate": {
+      "text": "Con qué frecuencia se equivoca",
+      "sourceHash": "0d3b280e1f979e2b44c60f5495f459360693f3bb430104c391b0b5cc7f1e3e97"
+    },
+    "section.unreadable": {
+      "text": "No se pudieron leer",
+      "sourceHash": "51a02791dcb61eb8846a00d3f0263a9da516b30b6a92a3b08e34d65af4cef259"
+    },
+    "verdict.strong": {
+      "text": "Señales fuertes de escritura con IA",
+      "sourceHash": "ee17bc5f7ea18e88a5a4a535d8a7d8f86fbaf3559c0b1927c71eb299ca138eef"
+    },
+    "verdict.moderate": {
+      "text": "Señales moderadas de escritura con IA",
+      "sourceHash": "78304806a705ef996e3115ba84e0256f7838debf03afccb023e91d299d628a5b"
+    },
+    "verdict.light": {
+      "text": "Señales leves de escritura con IA",
+      "sourceHash": "99844fce9fa8df4247389342a41e53d0d231b950cc700f2458207dfef79d5d2e"
+    },
+    "verdict.minimal": {
+      "text": "Parece escrito mayormente por una persona",
+      "sourceHash": "4dd5c224203bf31595b61831cbd46ec9f2da352ce359b92ce46262e86cda64ce"
+    },
+    "analysis.no-verdict": {
+      "text": "*Por debajo del umbral que esta compilación puede respaldar, no se emite ningún veredicto. Una puntuación baja no demuestra que una persona haya escrito este texto.*",
+      "sourceHash": "b249a9a70a6e6c6acbd87df70e9eb60558eddb6bb39e8ac49af95db5c44811e8"
+    },
+    "language.en": {
+      "text": "inglés",
+      "sourceHash": "ba118bf7fc9c1aedc1edb28a0aa86e0b43b681f222af6616e13c43be87815b06"
+    },
+    "language.es": {
+      "text": "español",
+      "sourceHash": "3411059cb8e0660e29dd7a3737e65a28b08eb01524a8ebc3d4168932649f23e6"
+    },
+    "language.other": {
+      "text": "el código de idioma {0}",
+      "sourceHash": "7424864832569d0a219e01a11a7679541dce4d720c740b9e2067c33843eedf30"
+    },
+    "caveat.uncalibrated": {
+      "text": "> **Esta compilación no ha sido calibrada.** No se ha medido su tasa de falsos positivos, por lo que la puntuación anterior no debe usarse para respaldar una decisión sobre una persona.",
+      "sourceHash": "ef2b9ee79830caa2daacf6d023b0345063d3e8265bd8e7ea2c947db69aa331fd"
+    },
+    "caveat.aggregate-no-threshold": {
+      "text": "> **Todavía no hay un umbral respaldado.** Esta compilación se midió con {0} textos, demasiado pocos para acotar su tasa de falsos positivos; por ello, ninguna puntuación de esta página debe usarse para respaldar una decisión sobre una persona.",
+      "sourceHash": "10649e561239b00ca2b9af785553741e8dd2fe08412d0720d82a4b529df764cb"
+    },
+    "caveat.language-unmeasured": {
+      "text": "> **Esta compilación nunca se ha medido para textos en {0}.** No existe una tasa de falsos positivos ni un umbral respaldado para textos en este idioma, y el resultado agregado de otros idiomas no lo sustituye. Ninguna puntuación de esta página debe usarse para respaldar una decisión sobre una persona.",
+      "sourceHash": "037939c621a3beb90bf7523a866c68092d5ea4e667dbc53b083c49d814aa554b"
+    },
+    "caveat.language-no-threshold": {
+      "text": "> **Todavía no hay un umbral respaldado para este idioma.** El corpus contiene {0} textos en él: demasiado pocos para acotar con qué frecuencia esta compilación se equivoca sobre textos en este idioma; por ello, ninguna puntuación de esta página debe usarse para respaldar una decisión sobre una persona. La mejor cota superior que permiten estos textos es {1}, y la cifra agregada no la sustituye.",
+      "sourceHash": "08c2211aa03c38ed8dc1c7c9245ca4aadc38492032aa91deb3cfa4700f8e3f44"
+    },
+    "caveat.language-measured": {
+      "text": "> **Una puntuación no es una prueba.** En {0} textos de este idioma, publicados antes de que existieran los modelos generativos, la tasa de falsos positivos de esta compilación con un umbral de {1}/100 estuvo por debajo de {2}: el extremo superior de un intervalo del 95 %, no una garantía, y medido en artículos publicados, no en trabajos estudiantiles. Por debajo de ese umbral, considere que la puntuación no dice nada.",
+      "sourceHash": "afe3b6e337129413cdcd13c30d6bcf26279811bfdc7ab55fb67c61de6613081d"
+    },
+    "caveat.aggregate-measured": {
+      "text": "> **Una puntuación no es una prueba.** En {0} textos publicados antes de que existieran los modelos generativos, la tasa de falsos positivos de esta compilación con un umbral de {1}/100 estuvo por debajo de {2}: el extremo superior de un intervalo del 95 %, no una garantía, y medido en artículos publicados, no en trabajos estudiantiles. Por debajo de ese umbral, considere que la puntuación no dice nada.",
+      "sourceHash": "6a84dab32d61e99ac8c4c18ccbe2aca123c36441f862333ba3c6eba72c0c6282"
+    },
+    "how.uncalibrated": {
+      "text": "Esta compilación no incluye calibración, de modo que se desconoce con qué frecuencia se equivoca. Eso es lo más importante de esta página.",
+      "sourceHash": "3d08342b9cec54d7833cfc72fcc8ec0d63cf1c90c3eab00df9c3c3f8bb2835de"
+    },
+    "how.language-unmeasured": {
+      "text": "Esta compilación nunca se ha medido con textos en {0}. No existe una tasa de falsos positivos ni un umbral específicos para este idioma, y el resultado agregado de otros idiomas no los sustituye.",
+      "sourceHash": "0fd44e4f3d48c7f8a7e2ee3f588ce6dda6e8dd83dd99db3ea2c47531fc1a77a8"
+    },
+    "how.language-no-threshold": {
+      "text": "Se midió con **{0} textos en este idioma**, publicados antes de que existieran los modelos generativos, el {2} con el motor {3}. La muestra es demasiado pequeña para respaldar un umbral; la mejor cota superior que permite es **{1}**, y la cifra agregada no la sustituye.",
+      "sourceHash": "c6a4b1a3ac90968737b11fbea85a95931856913d2a51c07309535afbc8989a32"
+    },
+    "how.language-measured": {
+      "text": "Se midió con **{0} textos en este idioma**, publicados antes de que existieran los modelos generativos, el {3} con el motor {4}. Con **{1}/100**, el extremo superior del intervalo medido del 95 % para falsos positivos fue **{2}**: un intervalo, no una garantía.",
+      "sourceHash": "fcc0ccad3acfa43793d5cd94f1276d035ccf04c862623bc384fb6eaf760919de"
+    },
+    "how.aggregate-intro": {
+      "text": "Se midió con **{0} textos publicados antes de que existieran los modelos generativos**, por lo que su autoría se apoya en sus fechas y no en el juicio de nadie. La medición se realizó el {1} con el motor {2}.",
+      "sourceHash": "0e5f2a6324d9104026434dd5715c1fff88699baf5bae70a0921b5cb4c70c8da6"
+    },
+    "how.aggregate-threshold": {
+      "text": "Con **{0}/100**, se marcaron {1} de esos {2}: un valor observado de {3}, con un intervalo del 95 % de {4} a {5}.",
+      "sourceHash": "ab2e7c50963de0936a2b1d8e09e1bffd2528ef0bb49578afce47095757fd81b2"
+    },
+    "how.read-interval": {
+      "text": "Lea el intervalo, no el valor observado. {0} de {1} no es una tasa de falsos positivos que pueda redondearse hacia abajo.",
+      "sourceHash": "31820b9573ba310691f38a15e931c1e69bfac63048cdb1d7d9aa6589d6c0ebf1"
+    },
+    "how.noisy-intro": {
+      "text": "Las reglas que aparecieron con mayor frecuencia en esos textos humanos, de peor a mejor; si la evidencia anterior depende de alguna, sopésela en consecuencia:",
+      "sourceHash": "c0ca8a3d93c5cbb4f762b063f7977ac884a313b7379fa31a22df3507fd5af1d9"
+    },
+    "how.noisy-rule": {
+      "text": "- `{0}` — {1} de los textos humanos",
+      "sourceHash": "ae1c3a772d08c93a99f877182ad3622bd631b364979cb86b0e8385ee40557719"
+    },
+    "how.limitation": {
+      "text": "Lo que esto **no** indica es cuánto texto escrito por máquinas detecta. Esa es la otra mitad del problema y aquí no se mide deliberadamente, porque cualquier colección de textos escritos por máquinas sólo representa los modelos que resultaron convenientes ese mes. Una herramienta que no marca nada tiene una tasa de falsos positivos perfecta.",
+      "sourceHash": "28e614ad0734da232d17fbf1e7a826e040184990935189aacd8aadfde88951a2"
+    }
+  }
+}

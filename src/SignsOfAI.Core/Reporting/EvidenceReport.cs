@@ -43,33 +43,38 @@ public static class EvidenceReport
     public static string ToMarkdown(AnalysisResult result, ReportOptions? options = null)
     {
         var o = options ?? ReportOptions.Default;
+        var text = ReportMessages.For(o.InterfaceLanguage);
         var sb = new StringBuilder();
+        var title = string.Equals(o.Title, ReportOptions.Default.Title, StringComparison.Ordinal)
+            ? text.Get(ReportMessages.DefaultTitle).Text
+            : o.Title;
 
-        sb.Append("# ").Append(o.Title).AppendLine();
+        sb.Append("# ").Append(title).AppendLine();
         sb.AppendLine();
+        var fallbackNoticeAt = sb.Length;
         if (!string.IsNullOrWhiteSpace(o.DocumentName))
-            sb.Append("**Document:** ").AppendLine(Cell(o.DocumentName));
-        sb.Append("**Generated:** ").Append(o.GeneratedOn).Append(" · **Engine:** SignsOfAI ")
-          .AppendLine(o.EngineVersion);
+            AppendBlock(sb, text, ReportMessages.MetaDocument, Cell(o.DocumentName));
+        AppendBlock(sb, text, ReportMessages.MetaGenerated, o.GeneratedOn, o.EngineVersion);
         sb.AppendLine();
 
         // ── The reading, and immediately the caveat that makes it usable ──────────────────────────
-        sb.AppendLine("## What the analysis says");
+        AppendHeading(sb, text, 2, ReportMessages.SectionAnalysis);
         sb.AppendLine();
         // The verdict is withheld below the threshold this build can support, because printing
         // "Reads mostly human" and then, four lines down, "treat the score as saying nothing" is a
         // page arguing with itself — and the reader will keep whichever half suits them. A low score
         // is not evidence of a human: a detector that detects nothing also returns zero, and this
         // project deliberately never measured how much machine writing it catches.
-        sb.Append("**").Append(Num(result.OverallScore)).Append("/100");
         if (VerdictHolds(result))
-            sb.Append(" — ").Append(result.Verdict);
-        sb.AppendLine("**");
+            AppendBlock(sb, text, ReportMessages.AnalysisScoreWithVerdict,
+                Num(result.OverallScore), Verdict(text, result.OverallScore));
+        else
+            AppendBlock(sb, text, ReportMessages.AnalysisScoreWithoutVerdict,
+                Num(result.OverallScore));
         sb.AppendLine();
         if (!VerdictHolds(result))
         {
-            sb.AppendLine("*Below the threshold this build can support, so no verdict is given. A low " +
-                          "score is not evidence that a person wrote this.*");
+            AppendBlock(sb, text, ReportMessages.AnalysisNoVerdict);
             sb.AppendLine();
         }
 
@@ -78,43 +83,56 @@ public static class EvidenceReport
         // to make salient — and that exact document is the one this project keeps writing about.
         if (result.Citations.Issues.Count > 0 || result.Artifacts.Any)
         {
-            sb.Append("**Checkable facts found: ");
-            var parts = new List<string>();
-            if (result.Citations.Issues.Count > 0)
-                parts.Add($"{result.Citations.Issues.Count} source contradiction" +
-                          (result.Citations.Issues.Count == 1 ? "" : "s"));
-            if (result.Artifacts.Any)
-                parts.Add($"{result.Artifacts.Count} unusual character" +
-                          (result.Artifacts.Count == 1 ? "" : "s"));
-            sb.Append(string.Join(", ", parts)).AppendLine(". These did not move the score.**");
+            if (result.Citations.Issues.Count > 0 && result.Artifacts.Any)
+                AppendBlock(sb, text,
+                    result.Citations.Issues.Count == 1
+                        ? result.Artifacts.Count == 1
+                            ? ReportMessages.AnalysisFactsBothOneOne
+                            : ReportMessages.AnalysisFactsBothOneOther
+                        : result.Artifacts.Count == 1
+                            ? ReportMessages.AnalysisFactsBothOtherOne
+                            : ReportMessages.AnalysisFactsBothOtherOther,
+                    result.Citations.Issues.Count, result.Artifacts.Count);
+            else if (result.Citations.Issues.Count > 0)
+                AppendBlock(sb, text, result.Citations.Issues.Count == 1
+                        ? ReportMessages.AnalysisFactsCitationOne
+                        : ReportMessages.AnalysisFactsCitationOther,
+                    result.Citations.Issues.Count);
+            else
+                AppendBlock(sb, text, result.Artifacts.Count == 1
+                        ? ReportMessages.AnalysisFactsArtifactOne
+                        : ReportMessages.AnalysisFactsArtifactOther,
+                    result.Artifacts.Count);
             sb.AppendLine();
         }
-        sb.Append("- ").Append(result.Signals.Count).Append(" signal")
-          .Append(result.Signals.Count == 1 ? "" : "s").Append(" counted");
         if (result.Observations.Count > 0)
-            sb.Append(", plus ").Append(result.Observations.Count)
-              .Append(" found at a rate people write at, which count for nothing");
+            AppendBlock(sb, text, result.Signals.Count == 1
+                    ? ReportMessages.AnalysisCountsWithObservationsOne
+                    : ReportMessages.AnalysisCountsWithObservationsOther,
+                result.Signals.Count, result.Observations.Count);
+        else
+            AppendBlock(sb, text, result.Signals.Count == 1
+                    ? ReportMessages.AnalysisCountsOne
+                    : ReportMessages.AnalysisCountsOther,
+                result.Signals.Count);
+        AppendBlock(sb, text, ReportMessages.AnalysisLanguageStats,
+            LanguageName(text, result.Language), result.Statistics.WordCount,
+            result.Statistics.SentenceCount, Num(result.Statistics.Burstiness, 2));
         sb.AppendLine();
-        sb.Append("- Analysed as ").Append(result.Language == "es" ? "Spanish" : "English")
-          .Append(" · ").Append(result.Statistics.WordCount).Append(" words · ")
-          .Append(result.Statistics.SentenceCount).Append(" sentences · sentence-length variability ")
-          .AppendLine(Num(result.Statistics.Burstiness, 2));
-        sb.AppendLine();
-        sb.AppendLine(Caveat(result.Language));
+        AppendLocalized(sb, text, Caveat(text, result.Language));
         sb.AppendLine();
 
         // ── Checkable facts first, because they are the part that settles anything ────────────────
         if (result.Artifacts.Any || result.Citations.Any)
         {
-            sb.AppendLine("## Checkable facts");
+            AppendHeading(sb, text, 2, ReportMessages.SectionCheckable);
             sb.AppendLine();
-            sb.AppendLine("These are not judgements about the writing and they did not move the score. " +
-                          "Each is either present in the file or it is not.");
+            AppendBlock(sb, text, ReportMessages.CheckableIntro);
             sb.AppendLine();
 
             if (result.Artifacts.Any)
             {
-                sb.AppendLine("### Characters found in the file");
+                AppendHeading(sb, text, 3, ReportMessages.SectionCharacters);
                 sb.AppendLine();
                 sb.AppendLine(result.Artifacts.Summary);
                 sb.AppendLine();
@@ -123,27 +141,26 @@ public static class EvidenceReport
                 // non-breaking space arrives with any copy-paste from a web page. Only the invisible
                 // and impostor-letter kinds are hard to arrive at innocently, and even they can be
                 // pasted in. Saying so here is the difference between a fact and an insinuation.
-                sb.AppendLine("Several of these have ordinary explanations — word processors insert " +
-                              "soft hyphens and unusual spaces on their own, and any copy-paste can " +
-                              "carry them. Invisible characters and letters borrowed from another " +
-                              "alphabet are harder to arrive at by accident, though pasting text can " +
-                              "do it. This table says what is in the file, not how it got there.");
+                AppendBlock(sb, text, ReportMessages.CharactersExplanation);
                 sb.AppendLine();
-                sb.AppendLine("| Character | Codepoint | Line | Column |");
+                AppendBlock(sb, text, ReportMessages.CharactersTableHeader);
                 sb.AppendLine("|---|---|---:|---:|");
                 foreach (var occurrence in result.Artifacts.Occurrences.Take(o.MaxRows))
                     sb.Append("| ").Append(Cell(Describe(occurrence.Kind))).Append(" | `")
                       .Append(occurrence.CodePoint).Append("` | ").Append(occurrence.Line)
                       .Append(" | ").Append(occurrence.Column).AppendLine(" |");
                 if (result.Artifacts.Occurrences.Count > o.MaxRows)
-                    sb.Append("\n… and ").Append(result.Artifacts.Occurrences.Count - o.MaxRows)
-                      .AppendLine(" more.");
+                {
+                    sb.AppendLine();
+                    AppendBlock(sb, text, ReportMessages.MoreRows,
+                        result.Artifacts.Occurrences.Count - o.MaxRows);
+                }
                 sb.AppendLine();
             }
 
             if (result.Citations.Any)
             {
-                sb.AppendLine("### What the document says about its own sources");
+                AppendHeading(sb, text, 3, ReportMessages.SectionCitations);
                 sb.AppendLine();
                 sb.AppendLine(result.Citations.Summary);
                 sb.AppendLine();
@@ -156,20 +173,19 @@ public static class EvidenceReport
                 // its own voice, a self-contradiction it had explicitly not looked for. In a document
                 // that goes to a committee about a nineteen-year-old, that is the precise harm this
                 // project exists to argue against.
-                sb.AppendLine(result.Citations.Issues.Count > 0
-                    ? "> None of this needed the internet: the document disagrees with itself. It is a " +
-                      "question to ask, not a conclusion — the answer is usually one sentence."
-                    : "> Nothing here is a finding. It describes what could and could not be checked.");
+                AppendBlock(sb, text, result.Citations.Issues.Count > 0
+                    ? ReportMessages.CitationsIssuesNote
+                    : ReportMessages.CitationsNoIssuesNote);
                 sb.AppendLine();
             }
         }
 
         // ── The judgement, clearly labelled as one ───────────────────────────────────────────────
-        sb.AppendLine("## Signals counted");
+        AppendHeading(sb, text, 2, ReportMessages.SectionSignals);
         sb.AppendLine();
         if (result.Signals.Count == 0)
         {
-            sb.AppendLine("None.");
+            AppendBlock(sb, text, ReportMessages.SignalsNone);
         }
         else
         {
@@ -181,32 +197,36 @@ public static class EvidenceReport
                 sb.Append(Cell(f.Message)).Append(' ').Append("*→ ").Append(Cell(f.Suggestion)).AppendLine("*");
             }
             if (result.Signals.Count > o.MaxRows)
-                sb.Append("\n… and ").Append(result.Signals.Count - o.MaxRows).AppendLine(" more.");
+            {
+                sb.AppendLine();
+                AppendBlock(sb, text, ReportMessages.MoreRows, result.Signals.Count - o.MaxRows);
+            }
         }
         sb.AppendLine();
 
         if (result.Observations.Count > 0)
         {
-            sb.AppendLine("## Found, but at a rate people write at");
+            AppendHeading(sb, text, 2, ReportMessages.SectionObservations);
             sb.AppendLine();
-            sb.AppendLine("Measured against writing published before generative models existed. Shown " +
-                          "because they are real, and counted for nothing because they are ordinary.");
+            AppendBlock(sb, text, ReportMessages.ObservationsIntro);
             sb.AppendLine();
             foreach (var group in result.Observations.GroupBy(f => f.RuleId).Take(o.MaxRows))
-                sb.Append("- ").Append(group.Key).Append(" — ").Append(group.Count())
-                  .Append(group.Count() == 1 ? " occurrence" : " occurrences").AppendLine();
+                AppendBlock(sb, text, group.Count() == 1
+                        ? ReportMessages.ObservationsRowOne
+                        : ReportMessages.ObservationsRowOther,
+                    group.Key, group.Count());
             sb.AppendLine();
         }
 
-        sb.AppendLine("## How often this is wrong");
+        AppendHeading(sb, text, 2, ReportMessages.SectionErrorRate);
         sb.AppendLine();
-        sb.AppendLine(HowOftenWrong());
+        HowOftenWrong(sb, text, result.Language);
         sb.AppendLine();
         sb.AppendLine("---");
         sb.AppendLine();
-        sb.AppendLine("*This report was produced on the device that ran the analysis and contains " +
-                      "material from the document it describes. It is yours to keep or to send; nothing " +
-                      "here was uploaded anywhere.*");
+        AppendBlock(sb, text, ReportMessages.PrivacyDocument);
+
+        InsertFallbackSummary(sb, fallbackNoticeAt, text);
 
         return sb.ToString();
     }
@@ -220,14 +240,18 @@ public static class EvidenceReport
     public static string ToHtml(AnalysisResult result, ReportOptions? options = null)
     {
         var o = options ?? ReportOptions.Default;
+        var text = ReportMessages.For(o.InterfaceLanguage);
+        var title = string.Equals(o.Title, ReportOptions.Default.Title, StringComparison.Ordinal)
+            ? text.Get(ReportMessages.DefaultTitle).Text
+            : o.Title;
         var body = MarkdownToHtml(ToMarkdown(result, o));
 
         return $"""
             <!doctype html>
-            <html lang="{(result.Language == "es" ? "es" : "en")}">
+            <html lang="{text.Language}">
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>{Escape(o.Title)}</title>
+            <title>{Escape(title)}</title>
             <style>
             {Css}
             </style>
@@ -249,29 +273,37 @@ public static class EvidenceReport
         string folderName, IReadOnlyList<FolderEntry> entries, ReportOptions? options = null)
     {
         var o = options ?? ReportOptions.Default;
+        var text = ReportMessages.For(o.InterfaceLanguage);
         var sb = new StringBuilder();
+        var title = string.Equals(o.Title, ReportOptions.Default.Title, StringComparison.Ordinal)
+            ? text.Get(ReportMessages.DefaultTitle).Text
+            : o.Title;
         // An error wins over a score: a file that failed to read has no business in the reading order,
         // and nothing on the public FolderEntry stops a caller supplying both.
         var unreadable = entries.Where(e => e.Error is not null).ToList();
         var scored = entries.Where(e => e.Error is null && e.Score is not null).ToList();
 
-        sb.Append("# ").AppendLine(o.Title);
+        sb.Append("# ").AppendLine(title);
         sb.AppendLine();
-        sb.Append("**Folder:** ").AppendLine(Cell(folderName));
-        sb.Append("**Generated:** ").Append(o.GeneratedOn).Append(" · **Engine:** SignsOfAI ")
-          .AppendLine(o.EngineVersion);
+        var fallbackNoticeAt = sb.Length;
+        AppendBlock(sb, text, ReportMessages.MetaFolder, Cell(folderName));
+        AppendBlock(sb, text, ReportMessages.MetaGenerated, o.GeneratedOn, o.EngineVersion);
         sb.AppendLine();
-        sb.Append(entries.Count).Append(" file").Append(entries.Count == 1 ? "" : "s").Append(" scanned");
-        if (unreadable.Count > 0) sb.Append(", ").Append(unreadable.Count).Append(" unreadable");
-        sb.AppendLine(".");
+        AppendBlock(sb, text, unreadable.Count > 0
+                ? entries.Count == 1
+                    ? ReportMessages.FolderSummaryUnreadableOne
+                    : ReportMessages.FolderSummaryUnreadableOther
+                : entries.Count == 1
+                    ? ReportMessages.FolderSummaryOne
+                    : ReportMessages.FolderSummaryOther,
+            unreadable.Count > 0 ? [entries.Count, unreadable.Count] : [entries.Count]);
         sb.AppendLine();
-        sb.AppendLine(Caveat(null));
+        AppendLocalized(sb, text, Caveat(text, null));
         sb.AppendLine();
-        sb.AppendLine("> **This is a reading order, not a ranking.** A higher score means look sooner, " +
-                      "and nothing more. Nothing on this page establishes that anyone did anything.");
+        AppendBlock(sb, text, ReportMessages.FolderReadingOrder);
         sb.AppendLine();
 
-        sb.AppendLine("| File | Score | Signals | Words |");
+        AppendBlock(sb, text, ReportMessages.FolderTableHeader);
         sb.AppendLine("|---|---:|---:|---:|");
         // Every file, deliberately unlike the findings lists. This is the document a teacher keeps
         // after closing the app, and a scan of two hundred essays that silently omitted a hundred and
@@ -286,21 +318,23 @@ public static class EvidenceReport
 
         if (unreadable.Count > 0)
         {
-            sb.AppendLine("## Could not be read");
+            AppendHeading(sb, text, 2, ReportMessages.SectionUnreadable);
             sb.AppendLine();
             foreach (var e in unreadable)
-                sb.Append("- ").Append(Cell(e.Name)).Append(" — ").AppendLine(Cell(e.Error));
+                AppendBlock(sb, text, ReportMessages.FolderUnreadableRow,
+                    Cell(e.Name), Cell(e.Error));
             sb.AppendLine();
         }
 
-        sb.AppendLine("## How often this is wrong");
+        AppendHeading(sb, text, 2, ReportMessages.SectionErrorRate);
         sb.AppendLine();
-        sb.AppendLine(HowOftenWrong());
+        HowOftenWrong(sb, text, null);
         sb.AppendLine();
         sb.AppendLine("---");
         sb.AppendLine();
-        sb.AppendLine("*Produced on the device that scanned the folder. It names your students' files, " +
-                      "so treat it as you would the coursework itself; nothing here was uploaded anywhere.*");
+        AppendBlock(sb, text, ReportMessages.PrivacyFolder);
+
+        InsertFallbackSummary(sb, fallbackNoticeAt, text);
 
         return sb.ToString();
     }
@@ -310,12 +344,16 @@ public static class EvidenceReport
         string folderName, IReadOnlyList<FolderEntry> entries, ReportOptions? options = null)
     {
         var o = options ?? ReportOptions.Default;
+        var text = ReportMessages.For(o.InterfaceLanguage);
+        var title = string.Equals(o.Title, ReportOptions.Default.Title, StringComparison.Ordinal)
+            ? text.Get(ReportMessages.DefaultTitle).Text
+            : o.Title;
         return $"""
             <!doctype html>
-            <html lang="en">
+            <html lang="{text.Language}">
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>{Escape(o.Title)}</title>
+            <title>{Escape(title)}</title>
             <style>
             {Css}
             </style>
@@ -333,8 +371,10 @@ public static class EvidenceReport
         var c = PublishedCalibration.Current;
         if (c is null) return false;
 
-        var threshold = c.For(result.Language)?.RecommendedThreshold ?? c.RecommendedThreshold;
-        return threshold is { } t && result.OverallScore >= t;
+        // Never borrow the aggregate. A language absent from the corpus has no supported verdict,
+        // even when the combined EN/ES sample happens to support one.
+        return c.For(result.Language)?.RecommendedThreshold is { } threshold
+            && result.OverallScore >= threshold;
     }
 
     /// <summary>
@@ -342,97 +382,160 @@ public static class EvidenceReport
     /// cannot go stale, and explicit when there is none: a fork that has not measured itself says so
     /// rather than inheriting a number it did not earn.
     /// </summary>
-    private static string Caveat(string? language)
+    private static LocalizedReportText Caveat(ReportText text, string? language)
     {
         var c = PublishedCalibration.Current;
 
         if (c is null)
-            return "> **This build has not been calibrated.** No false-positive rate has been measured " +
-                   "for it, so the score above should not be used to support a decision about a person.";
+            return text.Get(ReportMessages.CaveatUncalibrated);
+
+        // A single-document report always needs the stratum for the language it actually analysed.
+        // Falling through to the aggregate here would attach a measurement from other languages to
+        // writing the corpus never contained.
+        if (!string.IsNullOrWhiteSpace(language))
+        {
+            var group = c.For(language);
+            if (group is null)
+                return text.Get(ReportMessages.CaveatLanguageUnmeasured,
+                    LanguageName(text, language));
+
+            if (group.RecommendedThreshold is not { } languageThreshold)
+                return text.Get(ReportMessages.CaveatLanguageNoThreshold,
+                    group.Texts, Pct(group.BestBound));
+
+            return text.Get(ReportMessages.CaveatLanguageMeasured,
+                group.Texts, Num(languageThreshold), Pct(group.BestBound));
+        }
 
         // Measured, but on too little text to support any threshold. Saying "not calibrated" here
         // would contradict the section further down, which goes on to name the corpus and the date.
         if (c.RecommendedThreshold is not { } threshold)
-            return $"> **No threshold is supported yet.** This build was measured against {c.Texts} " +
-                   "texts, too few to bound its false-positive rate, so no score on this page should " +
-                   "be used to support a decision about a person.";
-
-        // The language actually analysed, never the aggregate. Docs/CALIBRATION.md says it one line
-        // above its own table: a rate that holds in English and fails in Spanish is not one number.
-        // On the current corpus English bounds at 5.6% and Spanish at 13.3%, and neither group is big
-        // enough to support the target alone — so a Spanish essay quoting the overall 4.1% would be
-        // handed a bound three times better than anything measured for its language.
-        if (c.For(language) is { } group)
-        {
-            if (group.RecommendedThreshold is not { } languageThreshold)
-                return $"> **No threshold is supported for this language yet.** The corpus holds " +
-                       $"{group.Texts} texts in it — too few to bound how often this build is wrong " +
-                       $"about writing in it, so no score on this page should be used to support a " +
-                       $"decision about a person. The best bound these texts support is " +
-                       $"{Pct(group.BestBound)}, and the overall figure is not a substitute for it.";
-
-            return $"> **A score is not proof.** On {group.Texts} texts in this language, published " +
-                   $"before generative models existed, this build's false-positive rate at a threshold " +
-                   $"of {Num(languageThreshold)}/100 was under {Pct(group.BestBound)} — the upper end " +
-                   $"of a 95% interval, not a guarantee, and measured on published articles rather " +
-                   $"than student work. Below that threshold, treat the score as saying nothing.";
-        }
+            return text.Get(ReportMessages.CaveatAggregateNoThreshold, c.Texts);
 
         // "at most" was a guarantee, and a 95% interval does not give one. The corpus is also one
         // genre of writing, so generalising from it to "human writing" is the caller's inference and
         // not this sentence's claim.
-        return $"> **A score is not proof.** On {c.Texts} texts published before generative models " +
-               $"existed, this build's false-positive rate at a threshold of {Num(threshold)}/100 was " +
-               $"under {Pct(c.RateHigh)} — the upper end of a 95% interval, not a guarantee, and " +
-               $"measured on published articles rather than student work. Below that threshold, treat " +
-               $"the score as saying nothing.";
+        return text.Get(ReportMessages.CaveatAggregateMeasured,
+            c.Texts, Num(threshold), Pct(c.RateHigh));
     }
 
-    private static string HowOftenWrong()
+    private static void HowOftenWrong(StringBuilder sb, ReportText text, string? language)
     {
         var c = PublishedCalibration.Current;
         if (c is null)
-            return "This build ships no calibration, so nothing is known about how often it is wrong. " +
-                   "That is itself the most important thing on this page.";
-
-        var sb = new StringBuilder();
-        sb.Append("Measured against **").Append(c.Texts)
-          .Append(" texts published before generative models existed**, so their authorship rests on ")
-          .Append("their dates rather than on anybody's judgement. Measured on ").Append(c.MeasuredOn)
-          .Append(" with engine ").Append(c.Engine).AppendLine(".");
-        sb.AppendLine();
-
-        if (c.RecommendedThreshold is { } threshold)
         {
-            sb.Append("At **").Append(Num(threshold)).Append("/100**, ").Append(c.FlaggedAtThreshold)
-              .Append(" of those ").Append(c.Texts).Append(" were flagged — an observed ")
-              .Append(Pct((double)c.FlaggedAtThreshold / Math.Max(c.Texts, 1)))
-              .Append(", with a 95% interval of ").Append(Pct(c.RateLow)).Append(" – ")
-              .Append(Pct(c.RateHigh)).AppendLine(".");
-            sb.AppendLine();
-            sb.Append("Read the interval, not the observed rate. ").Append(c.FlaggedAtThreshold)
-              .Append(" out of ").Append(c.Texts)
-              .AppendLine(" is not a false-positive rate you can round down.");
+            AppendBlock(sb, text, ReportMessages.HowUncalibrated);
+            return;
         }
 
+        if (!string.IsNullOrWhiteSpace(language))
+        {
+            var group = c.For(language);
+            if (group is null)
+            {
+                AppendBlock(sb, text, ReportMessages.HowLanguageUnmeasured,
+                    LanguageName(text, language));
+                sb.AppendLine();
+                AppendBlock(sb, text, ReportMessages.HowLimitation);
+                return;
+            }
+
+            if (group.RecommendedThreshold is { } languageThreshold)
+                AppendBlock(sb, text, ReportMessages.HowLanguageMeasured,
+                    group.Texts, Num(languageThreshold), Pct(group.BestBound), c.MeasuredOn, c.Engine);
+            else
+                AppendBlock(sb, text, ReportMessages.HowLanguageNoThreshold,
+                    group.Texts, Pct(group.BestBound), c.MeasuredOn, c.Engine);
+        }
+        else
+        {
+            AppendBlock(sb, text, ReportMessages.HowAggregateIntro,
+                c.Texts, c.MeasuredOn, c.Engine);
+
+            if (c.RecommendedThreshold is { } threshold)
+            {
+                sb.AppendLine();
+                AppendBlock(sb, text, ReportMessages.HowAggregateThreshold,
+                    Num(threshold), c.FlaggedAtThreshold, c.Texts,
+                    Pct((double)c.FlaggedAtThreshold / Math.Max(c.Texts, 1)),
+                    Pct(c.RateLow), Pct(c.RateHigh));
+                sb.AppendLine();
+                AppendBlock(sb, text, ReportMessages.HowReadInterval,
+                    c.FlaggedAtThreshold, c.Texts);
+            }
+        }
+
+        // The noisiest-rule rates are aggregate measurements. They remain useful for a language that
+        // is represented in the corpus, but are withheld entirely for an unmeasured language above.
         if (c.NoisiestRules.Count > 0)
         {
             sb.AppendLine();
-            sb.AppendLine("The rules seen most often on that human writing, worst first — if the " +
-                          "evidence above leans on one of these, weigh it accordingly:");
+            AppendBlock(sb, text, ReportMessages.HowNoisyIntro);
             sb.AppendLine();
             foreach (var rule in c.NoisiestRules)
-                sb.Append("- `").Append(rule.RuleId).Append("` — ").Append(Pct(rule.TextShare))
-                  .AppendLine(" of human texts");
+                AppendBlock(sb, text, ReportMessages.HowNoisyRule,
+                    rule.RuleId, Pct(rule.TextShare));
         }
 
         sb.AppendLine();
-        sb.AppendLine("What this does **not** tell you: how much machine-written text it catches. That " +
-                      "is the other half of the picture and it is deliberately not measured here, because " +
-                      "any collection of machine-written text samples whichever models were convenient " +
-                      "that month. A tool that flags nothing has a perfect false-positive rate.");
+        AppendBlock(sb, text, ReportMessages.HowLimitation);
+    }
 
-        return sb.ToString();
+    private static string Verdict(ReportText text, double score) => text.Get(score switch
+    {
+        >= 70 => ReportMessages.VerdictStrong,
+        >= 45 => ReportMessages.VerdictModerate,
+        >= 20 => ReportMessages.VerdictLight,
+        _ => ReportMessages.VerdictMinimal,
+    }).Text;
+
+    private static string LanguageName(ReportText text, string language) => text.Get(
+        language.Equals("en", StringComparison.OrdinalIgnoreCase) ? ReportMessages.LanguageEnglish
+        : language.Equals("es", StringComparison.OrdinalIgnoreCase) ? ReportMessages.LanguageSpanish
+        : ReportMessages.LanguageOther,
+        language.Equals("en", StringComparison.OrdinalIgnoreCase)
+            || language.Equals("es", StringComparison.OrdinalIgnoreCase) ? [] : [language]).Text;
+
+    private static void AppendBlock(
+        StringBuilder sb, ReportText text, string key, params object?[] args) =>
+        AppendLocalized(sb, text, text.Get(key, args));
+
+    private static void AppendHeading(StringBuilder sb, ReportText text, int level, string key)
+    {
+        var value = text.Get(key);
+        if (value.FellBack)
+        {
+            sb.Append('*').Append(text.FallbackMarker).AppendLine("*");
+            sb.AppendLine();
+        }
+
+        sb.Append('#', level).Append(' ').AppendLine(value.Text);
+    }
+
+    private static void AppendLocalized(StringBuilder sb, ReportText text, LocalizedReportText value)
+    {
+        if (value.FellBack)
+        {
+            sb.Append('*').Append(text.FallbackMarker).AppendLine("*");
+            sb.AppendLine();
+        }
+
+        sb.AppendLine(value.Text);
+    }
+
+    private static void InsertFallbackSummary(StringBuilder sb, int at, ReportText text)
+    {
+        // A language with no resource at all is one notice, not sixty markers: every block fell back,
+        // so marking each of them would bury the page in its own apology.
+        if (text.UnavailableLanguage is { } missing)
+        {
+            var notice = text.Get(ReportMessages.FallbackLanguage, LanguageName(text, missing)).Text;
+            sb.Insert(at, $"*{notice}*{Environment.NewLine}{Environment.NewLine}");
+            return;
+        }
+
+        if (text.FallbackBlocks == 0) return;
+        sb.Insert(at, $"*{text.FallbackSummary}*{Environment.NewLine}{Environment.NewLine}");
     }
 
 
@@ -625,6 +728,14 @@ public static class EvidenceReport
 public sealed record ReportOptions
 {
     public string Title { get; init; } = "Writing analysis report";
+
+    /// <summary>
+    /// Language of the reader-facing report structure and caveats, independent from the language of
+    /// the analysed text. A language without the mandatory report core is rejected rather than
+    /// silently producing unreadable caveats; a valid partial translation marks every block that
+    /// falls back.
+    /// </summary>
+    public string InterfaceLanguage { get; init; } = "en";
 
     /// <summary>The file or assignment this describes. Blank when the text was pasted.</summary>
     public string DocumentName { get; init; } = "";

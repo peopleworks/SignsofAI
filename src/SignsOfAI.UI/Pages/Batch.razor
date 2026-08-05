@@ -125,7 +125,11 @@ else
             .Select(r => new FolderEntry(Relative(r.Path, r.Name), r.Words, r.Score, r.Findings, r.Error))
             .ToList();
 
-        var options = new ReportOptions { Title = L["batch.report.title"] };
+        var options = new ReportOptions
+        {
+            Title = L["batch.report.title"],
+            InterfaceLanguage = L.Current,
+        };
         var stamp = DateTime.Now.ToString("yyyy-MM-dd-HHmm");
 
         await JS.InvokeVoidAsync("signsofai.downloadText",

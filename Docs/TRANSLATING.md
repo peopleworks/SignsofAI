@@ -1,8 +1,8 @@
 # Translating the interface
 
 The interface of Signs of AI Writing is translated by whoever wants to translate it. You do not need
-to know C#, .NET or Blazor, and you do not need to build anything: a language is **two files' worth
-of edits**, both plain JSON.
+to know C#, .NET or Blazor. The interface and the saved evidence report are **two independent plain
+JSON resources**, because the report's caveats need a stricter completeness check than the app chrome.
 
 If you speak a language this tool doesn't, you can add it. That's the whole idea.
 
@@ -32,6 +32,10 @@ on screen; only the text does.
 
 `en.json` is the reference. Every other file is a translation of it.
 
+The document a teacher saves has a second resource under
+`src/SignsOfAI.Core/Reporting/report.<language>.json`. Findings in that document still follow the
+language of the analysed text; headings and caveats follow the interface language.
+
 ---
 
 ## Adding a new language
@@ -52,7 +56,19 @@ change the keys on the left.
 "home.stat.words": "Mots",
 ```
 
-**3. Add one line to `locales.json`:**
+**3. Copy `Reporting/report.en.json` to `Reporting/report.fr.json` and translate its values.** Report
+translations may be partial, but the fallback notices, caveats, error-rate prose and section headings
+must all be present. Those keys form the mandatory core. Until it is complete, reports are written in
+English and say on their face that they are — because a report whose limitation cannot be read is
+worse than no report, and a report that will not print at all is worse than either: the evidence is
+lost and nothing explains why.
+
+Every translated report entry also has a `sourceHash`. It pins that sentence to the exact English
+sentence it translated. If English changes later, the tests print the new expected hash and the old
+translation falls back visibly until a speaker reviews it. Do not update a hash without rereading the
+new English source.
+
+**4. Add one line to `locales.json`:**
 
 ```json
 {
@@ -72,16 +88,24 @@ change the keys on the left.
 | `endonym` | The language's name **in that language** — `Français`, not `French`. A French speaker looks for `Français`. |
 | `credit` | You. Shown when hovering the language switch, so contributors get named. Leave `""` to stay anonymous. |
 
-**4. Open a pull request.** That's it — the switch picks the new language up automatically, no code
+**5. Open a pull request.** That's it — the switch picks the new language up automatically, no code
 change anywhere.
 
 ---
 
 ## You don't have to finish
 
-**A partial translation is welcome.** Any key you leave out falls back to English at run time, so
+**A partial interface translation is welcome.** Any key you leave out falls back to English at run time, so
 half a translation ships as half-translated — not as a page full of blanks. Translate the navigation
 and the main page, open the PR, come back for the rest whenever.
+
+A partial report translation is welcome once its mandatory core is complete. Every untranslated
+report block carries a notice in the reader's language and the total appears near the top; it never
+looks silently complete.
+
+Before the core is complete the report is not withheld — it is written in English, with one notice at
+the top naming the language it could not be written in. One honest notice, rather than sixty markers
+on a page that fell back entirely.
 
 You can also simply **delete** any key you're unsure about. Deleting is safer than guessing: a
 deleted key shows English, while a wrong translation shows something wrong.
