@@ -6,7 +6,7 @@
   "batch.pagetitle": "Scan a folder — Signs of AI Writing",
   "batch.h1": "Scan a whole folder",
   "batch.tagline": "Point it at a folder of documents and it reads every one it can — PDF, Word, ODT, EPUB, RTF and plain text — on this machine. Nothing is uploaded.",
-  "batch.unavailable": "Folder scanning needs the <strong>desktop app</strong>: a browser tab is handed files, never a folder. <a href=\"https://github.com/peopleworks/SignsofAI/releases/tag/desktop-v0.1.0\">Download it here</a>, or use <em>Upload document</em> on the Analyze page for one file at a time.",
+  "batch.unavailable": "Folder scanning needs the <strong>desktop app</strong>: a browser tab is handed files, never a folder. <a href=\"https://github.com/peopleworks/SignsofAI/releases?q=desktop&expanded=true\">Download it here</a>, or use <em>Upload document</em> on the Analyze page for one file at a time.",
   "batch.choose": "Choose a folder",
   "batch.recursive": "Include subfolders",
   "batch.progress": "Reading {0} of {1}…",

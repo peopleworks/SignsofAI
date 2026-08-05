@@ -6,7 +6,7 @@
   "batch.pagetitle": "Analizar una carpeta — Señales de escritura IA",
   "batch.h1": "Analiza una carpeta entera",
   "batch.tagline": "Señálale una carpeta de documentos y lee todos los que puede —PDF, Word, ODT, EPUB, RTF y texto plano— en esta máquina. No se sube nada.",
-  "batch.unavailable": "Analizar carpetas requiere la <strong>app de escritorio</strong>: a una pestaña del navegador se le entregan archivos, nunca una carpeta. <a href=\"https://github.com/peopleworks/SignsofAI/releases/tag/desktop-v0.1.0\">Descárgala aquí</a>, o usa <em>Subir documento</em> en la página de análisis para ir de uno en uno.",
+  "batch.unavailable": "Analizar carpetas requiere la <strong>app de escritorio</strong>: a una pestaña del navegador se le entregan archivos, nunca una carpeta. <a href=\"https://github.com/peopleworks/SignsofAI/releases?q=desktop&expanded=true\">Descárgala aquí</a>, o usa <em>Subir documento</em> en la página de análisis para ir de uno en uno.",
   "batch.choose": "Elegir carpeta",
   "batch.recursive": "Incluir subcarpetas",
   "batch.progress": "Leyendo {0} de {1}…",
