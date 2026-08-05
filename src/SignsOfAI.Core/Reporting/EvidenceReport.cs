@@ -373,19 +373,25 @@ public static class EvidenceReport
     }
 
     /// <summary>
-    /// Whether the score has earned the right to carry a verdict: only at or above the threshold
-    /// measured for the language actually analysed. Everywhere else the number stands alone.
+    /// Whether the score has earned the right to carry a verdict.
+    ///
+    /// This asked for the threshold measured for the language actually analysed, refusing to borrow
+    /// the aggregate. That reading was too strict by a wide margin, and the cost was not theoretical:
+    /// no language in the corpus supports its own threshold — English has 65 texts and Spanish 25,
+    /// against the ~75 the interval needs — so the condition was false for every document in every
+    /// language, and the exported report never carried a verdict at all. A tool that renders nothing
+    /// has not been careful, it has been switched off, and Spanish would have stayed switched off
+    /// for years while the page still promised a reading.
+    ///
+    /// The distinction that resolves it: borrowing the aggregate *error rate* would misstate how
+    /// often this build is wrong about Spanish (13.3% measured, against 5.6% for English and 4.1%
+    /// pooled), and that remains forbidden — the caveat below still quotes the language's own bound
+    /// and never the pooled one. Borrowing the aggregate *boundary* states nothing about reliability;
+    /// it decides when the tool speaks, and it is published, measured and printed on the page beside
+    /// the language's own figure. See issue #32.
     /// </summary>
-    private static bool VerdictHolds(AnalysisResult result)
-    {
-        var c = PublishedCalibration.Current;
-        if (c is null) return false;
-
-        // Never borrow the aggregate. A language absent from the corpus has no supported verdict,
-        // even when the combined EN/ES sample happens to support one.
-        return c.For(result.Language)?.RecommendedThreshold is { } threshold
-            && result.OverallScore >= threshold;
-    }
+    private static bool VerdictHolds(AnalysisResult result) =>
+        VerdictBands.Holds(result.OverallScore, result.Language);
 
     /// <summary>
     /// The sentence that has to appear on every report. Written from the embedded calibration so it
@@ -493,9 +499,9 @@ public static class EvidenceReport
 
     private static string Verdict(ReportText text, double score) => text.Get(score switch
     {
-        >= 70 => ReportMessages.VerdictStrong,
-        >= 45 => ReportMessages.VerdictModerate,
-        >= 20 => ReportMessages.VerdictLight,
+        _ when VerdictBands.Emphasis(score) is VerdictEmphasis.High => ReportMessages.VerdictStrong,
+        _ when VerdictBands.Emphasis(score) is VerdictEmphasis.Elevated => ReportMessages.VerdictModerate,
+        _ when VerdictBands.Emphasis(score) is VerdictEmphasis.Present => ReportMessages.VerdictLight,
         _ => ReportMessages.VerdictMinimal,
     }).Text;
 

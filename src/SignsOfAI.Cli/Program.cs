@@ -364,7 +364,12 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
     string Col(string s, int code) => useColor ? $"[{code}m{s}[0m" : s;
     string Bold(string s) => useColor ? $"[1m{s}[0m" : s;
 
-    int scoreColor = r.OverallScore switch { >= 70 => 31, >= 45 => 33, >= 20 => 33, _ => 32 };
+    int scoreColor = VerdictBands.Emphasis(r.OverallScore) switch
+    {
+        VerdictEmphasis.High => 31,
+        VerdictEmphasis.Elevated or VerdictEmphasis.Present => 33,
+        _ => 32,
+    };
     Console.WriteLine();
     Console.WriteLine(Bold($"  ✍  Signs of AI Writing — {Path.GetFileName(path)}"));
     Console.WriteLine($"     {Col($"{r.OverallScore:0}/100", scoreColor)}  {Bold(r.Verdict)}   " +

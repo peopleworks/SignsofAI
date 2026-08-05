@@ -715,19 +715,19 @@ else
             $"signsofai-report-{stamp}.html", EvidenceReport.ToHtml(r, options));
     }
 
-    private static string ScoreClass(double score) => score switch
+    private static string ScoreClass(double score) => VerdictBands.Emphasis(score) switch
     {
-        >= 70 => "danger",
-        >= 45 => "warn",
-        >= 20 => "notice",
+        VerdictEmphasis.High => "danger",
+        VerdictEmphasis.Elevated => "warn",
+        VerdictEmphasis.Present => "notice",
         _ => "good",
     };
 
-    private static string ScoreHex(double score) => score switch
+    private static string ScoreHex(double score) => VerdictBands.Emphasis(score) switch
     {
-        >= 70 => "#dc2626",
-        >= 45 => "#ea580c",
-        >= 20 => "#ca8a04",
+        VerdictEmphasis.High => "#dc2626",
+        VerdictEmphasis.Elevated => "#ea580c",
+        VerdictEmphasis.Present => "#ca8a04",
         _ => "#16a34a",
     };
 

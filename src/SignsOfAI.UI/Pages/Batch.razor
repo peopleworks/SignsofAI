@@ -214,10 +214,12 @@ else
         }
     }
 
-    private static string BandClass(int score) => score switch
+    // This said 40 where every other surface said 45 — the drift the single source exists to stop,
+    // and it had already happened: one document could be coloured two ways by the same build.
+    private static string BandClass(int score) => VerdictBands.Emphasis(score) switch
     {
-        >= 70 => "high",
-        >= 40 => "medium",
+        VerdictEmphasis.High => "high",
+        VerdictEmphasis.Elevated => "medium",
         _ => "low",
     };
 }

@@ -269,11 +269,11 @@
         if (cursor < Text.Length) yield return new Seg(Text[cursor..], null);
     }
 
-    private static string ScoreClass(double score) => score switch
+    private static string ScoreClass(double score) => VerdictBands.Emphasis(score) switch
     {
-        >= 70 => "danger",
-        >= 45 => "warn",
-        >= 20 => "notice",
+        VerdictEmphasis.High => "danger",
+        VerdictEmphasis.Elevated => "warn",
+        VerdictEmphasis.Present => "notice",
         _ => "good",
     };
 }
