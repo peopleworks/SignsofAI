@@ -54,21 +54,13 @@
       "text": "No se pudieron leer",
       "sourceHash": "51a02791dcb61eb8846a00d3f0263a9da516b30b6a92a3b08e34d65af4cef259"
     },
-    "verdict.strong": {
-      "text": "Señales fuertes de escritura con IA",
-      "sourceHash": "ee17bc5f7ea18e88a5a4a535d8a7d8f86fbaf3559c0b1927c71eb299ca138eef"
+    "verdict.signs": {
+      "text": "Señales de escritura con IA",
+      "sourceHash": "a03ec88d694c5dee62e6b04c9b46b89cdcb6e5d48b2971dba539fe7a5fbef0fc"
     },
-    "verdict.moderate": {
-      "text": "Señales moderadas de escritura con IA",
-      "sourceHash": "78304806a705ef996e3115ba84e0256f7838debf03afccb023e91d299d628a5b"
-    },
-    "verdict.light": {
-      "text": "Señales leves de escritura con IA",
-      "sourceHash": "99844fce9fa8df4247389342a41e53d0d231b950cc700f2458207dfef79d5d2e"
-    },
-    "verdict.minimal": {
-      "text": "Parece escrito mayormente por una persona",
-      "sourceHash": "4dd5c224203bf31595b61831cbd46ec9f2da352ce359b92ce46262e86cda64ce"
+    "verdict.none": {
+      "text": "Sin señales por encima del umbral medido",
+      "sourceHash": "dfdd3c06acb001454e7ec45ae2ffce857964a2531bb41686fc9f61c6abc16003"
     },
     "analysis.no-verdict": {
       "text": "*Por debajo del umbral que esta compilación puede respaldar, no se emite ningún veredicto. Una puntuación baja no demuestra que una persona haya escrito este texto.*",

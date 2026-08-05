@@ -103,6 +103,47 @@ public static class Report
         }
         sb.AppendLine();
 
+        // ---- what the product does with the number ------------------------------------------------
+        // Written here rather than left to the reader, because the gap between the measured figure and
+        // the shipped wording is precisely what this project criticises in other tools, and a page that
+        // publishes the figure without saying what the product does with it invites the same charge.
+        sb.AppendLine("## What the product does with this number");
+        sb.AppendLine();
+        if (r.Overall.ThresholdForTarget is { } recommended)
+        {
+            sb.AppendLine(
+                $"The tool speaks at **{recommended.ToString("0.#", Inv)}/100** and nowhere else, taking the " +
+                "boundary from the table above rather than from anybody's judgement. Below it a document " +
+                "gets its score and the reason it gets nothing more: a low score is not evidence that a " +
+                "person wrote something, since a detector that detects nothing also returns a low score, " +
+                "and this project has deliberately never measured how much machine writing it catches. " +
+                "The boundary moves when this page moves — including upward if a larger corpus turns out " +
+                "to be less flattering.");
+            sb.AppendLine();
+            sb.AppendLine(
+                "Above it there is **one** verdict, not a scale of them. This corpus can place a boundary " +
+                "and can say nothing whatever about how much further past it a score has travelled: no " +
+                "text known to be human came close to the upper reaches, and grading \"moderate\" against " +
+                "\"strong\" would need machine-written text, which the opening of this page argues against " +
+                "collecting. Interfaces do shade a high score more urgently than a low one, and those " +
+                "shades are a display convention — they are not on this page because nothing measured " +
+                "them.");
+            sb.AppendLine();
+            sb.AppendLine(
+                "A language absent from the corpus entirely gets no verdict at all, whatever it scores. " +
+                "A language present but too thin to bound its own rate borrows this boundary and carries " +
+                "its own figure beside it, so the reader weighs the rate that was measured for the " +
+                "writing in front of them rather than the pooled one.");
+        }
+        else
+        {
+            sb.AppendLine(
+                "This corpus supports no threshold, so the tool renders no verdict at any score. It " +
+                "reports what it found and says the boundary is unmeasured, which is the honest output " +
+                "of an unmeasured build and the reason this section is not silently omitted.");
+        }
+        sb.AppendLine();
+
         // ---- rules -------------------------------------------------------------------------------
         if (r.RuleFalsePositives.Count > 0)
         {

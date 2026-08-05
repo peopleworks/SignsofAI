@@ -74,6 +74,38 @@ public class VerdictAgreementTests
     }
 
     [Fact]
+    public void The_verdict_reaches_its_reader_in_their_own_language()
+    {
+        // Rewording the English retires the SHA-256 pin every translation records for it, and a
+        // translation whose pin no longer matches is treated as stale — the whole report silently
+        // falls back to English. That is the correct behaviour and a silent way to undo #36, so the
+        // wording change and the pins have to travel together. This is the test that says they did.
+        var result = new AiWritingAnalyzer().Analyze(ObviouslyMachine, "en");
+        var spanish = EvidenceReport.ToMarkdown(result, new ReportOptions { InterfaceLanguage = "es" });
+
+        Assert.Contains("Señales de escritura con IA", spanish);
+        Assert.DoesNotContain("Signs of AI writing", spanish);
+    }
+
+    [Fact]
+    public void A_low_score_says_nothing_about_who_wrote_the_text()
+    {
+        // "Reads mostly human" in the report, "Minimal signs of AI writing" in the interface: the
+        // same state, two claims, and the first was never ours to make. A detector that detects
+        // nothing also returns zero, and this project has deliberately never measured how much
+        // machine writing it catches.
+        var human = new AiWritingAnalyzer().Analyze(
+            "We measured height, weight and age in three hundred participants recruited at two " +
+            "hospitals during the winter of 2011. At one site the effect vanished entirely.", "en");
+
+        Assert.False(VerdictBands.Holds(human.OverallScore),
+            $"The fixture stopped being a low-scoring text (scored {human.OverallScore:0}).");
+
+        Assert.DoesNotContain("human", human.Verdict, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("person", human.Verdict, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public void The_boundary_the_product_draws_is_the_boundary_the_project_publishes()
     {
         // The product used to say "light signs of AI writing" from 20, five points below the only

@@ -28,7 +28,7 @@ public class LocaleFileTests
     [
         .. Enum.GetValues<SignCategory>().Select(c => "cat." + c.ToString().ToLowerInvariant()),
         .. Enum.GetValues<Severity>().Select(s => "sev." + s.ToString().ToLowerInvariant()),
-        "verdict.strong", "verdict.moderate", "verdict.light", "verdict.minimal",
+        "verdict.signs", "verdict.none",
         "lang.english", "lang.spanish",
     ];
 
