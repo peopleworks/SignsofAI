@@ -93,8 +93,15 @@ not, in the finding itself:
 
 > A writing-analysis tool was used to decide which sections to examine. Its output is not evidence of
 > authorship and was not treated as such. It publishes a false-positive rate on writing known to be
-> human of under 4.1% overall, with no threshold supported for either language on its own — the
+> human, measured for the language this work is written in and printed on the report itself — the
 > findings below rest on the source verification and the interview, not on that tool.
+
+**Copy the figure from the report in front of you, not from here.** The tool measures a separate rate
+per language and the report prints the one that applies to the work being judged. Quoting the pooled
+figure instead is the single easiest way to overstate this tool at a hearing: on the current corpus
+the pooled rate is under 4.1%, while Spanish on its own supports only 13.3% — three times worse. A
+committee handed the flattering number about a Spanish essay has been given a better tool than the
+one that was actually used, and the difference is the sort of thing that surfaces on appeal.
 
 A committee that writes this sentence is in a stronger position than one that omits it, because the
 sentence is going to be raised at appeal whether or not it appears.

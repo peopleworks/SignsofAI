@@ -24,8 +24,12 @@ programas detectan patrones en trabajos inocentes todo el tiempo.
 Publica con qué frecuencia se equivoca sobre escritura que se sabe humana — una cifra que casi
 ninguna herramienta de esta categoría dice sobre sí misma. En su corpus de noventa textos publicados
 antes de que existiera la escritura con IA, no marcó **ninguno** en su ajuste recomendado. Pero son
-noventa textos, y la lectura honesta es el rango alrededor de ese cero, no el cero: algo **por debajo
-de 4 de cada 100**.
+noventa textos, y la lectura honesta es el rango alrededor de ese cero, no el cero.
+
+Y de esos noventa, solo veinticinco estaban en español. Esta hoja cita la cifra del **español**, que
+es la que te corresponde: algo **por debajo de 13 de cada 100**. La cifra agregada que mezcla los dos
+idiomas es más favorable, y usarla contigo sería atribuirle a la herramienta una precisión que nadie
+midió sobre escritura en tu idioma.
 
 También hace algo que la mayoría se niega a hacer: **por debajo de su umbral respaldado no imprime
 ningún veredicto.** Una puntuación baja no es un certificado de que lo escribió una persona, y no

@@ -24,7 +24,12 @@ patterns. Software notices patterns in innocent work constantly.
 It publishes how often it is wrong about writing known to be human — a figure almost no tool in this
 category will state about itself. On its test corpus of ninety texts published before AI writing
 existed, it flagged **none of them** at its recommended setting. But that is ninety texts, and the
-honest reading is the range around it, not the zero: somewhere **under about 4 in 100**.
+honest reading is the range around it, not the zero.
+
+Of those ninety, sixty-five were in English. This sheet quotes the **English** figure, which is the
+one that applies to you: somewhere **under about 6 in 100**. The pooled figure that mixes both
+languages is more flattering, and using it here would credit the tool with a precision nobody
+measured on writing in your language.
 
 It also does something most tools refuse to do: **below its supported threshold it prints no verdict
 at all.** A low score is not a certificate that a person wrote something, and it does not claim to be
