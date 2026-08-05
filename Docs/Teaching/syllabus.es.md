@@ -39,8 +39,9 @@ detector nunca es el motivo de una decisión sobre un estudiante.** Todo lo dem�
 > Que se lo pida no es una acusación ni conlleva ninguna penalización. Es parte de cómo se evalúa en
 > esta asignatura, y puedo pedírselo a cualquiera.
 >
-> Puedo analizar los trabajos con una herramienta que funciona sin conexión. No emite veredictos, y
-> ninguna puntuación suya será la base de una decisión sobre usted. Sirve para indicarme dónde leer
+> Puedo analizar los trabajos con una herramienta que funciona sin conexión. No concluye nada sobre
+> quién escribió qué, y nada de lo que produzca será la base de una decisión sobre usted. Sirve para
+> indicarme dónde leer
 > con más atención — lo mismo que hacen mis propios ojos, aplicado por igual a todos los trabajos y
 > no solo a los estudiantes sobre los que casualmente me pregunte algo.
 

@@ -96,9 +96,17 @@ resolución qué es y qué no es:
 
 > Se utilizó una herramienta de análisis de escritura para decidir qué secciones examinar. Su
 > resultado no es prueba de autoría y no se ha tratado como tal. Publica una tasa de falsos positivos
-> sobre escritura conocidamente humana inferior al 4,1% en agregado, sin que ningún idioma por
-> separado respalde un umbral propio; las conclusiones siguientes se apoyan en la verificación de
-> fuentes y en la entrevista, no en esa herramienta.
+> sobre escritura conocidamente humana, medida para el idioma en que está escrito este trabajo e
+> impresa en el propio informe; las conclusiones siguientes se apoyan en la verificación de fuentes y
+> en la entrevista, no en esa herramienta.
+
+**Copie la cifra del informe que tiene delante, no de aquí.** La herramienta mide una tasa distinta
+por idioma y el informe imprime la que corresponde al trabajo que se está juzgando. Citar la cifra
+agregada es la forma más fácil de exagerar esta herramienta en una audiencia: en el corpus actual la
+agregada queda por debajo del 4,1%, mientras que el español por separado solo respalda un 13,3% —
+tres veces peor. A un comité al que se le entrega el número halagador sobre un ensayo en español se
+le ha dado una herramienta mejor que la que realmente se usó, y esa diferencia es de las que salen a
+la luz en una apelación.
 
 Un comité que escribe esa frase queda en mejor posición que uno que la omite, porque la cuestión se
 va a plantear en apelación aparezca o no.

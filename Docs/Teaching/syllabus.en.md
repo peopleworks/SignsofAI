@@ -40,10 +40,10 @@ never the reason for a decision about a student.** Everything else is negotiable
 > Being asked is not an accusation and carries no penalty. It is part of how work is assessed in
 > this course, and I may ask anyone.
 >
-> I may run submitted work through an offline writing-analysis tool. It produces no verdict, and no
-> score from it will ever be the basis of a decision about you. Its purpose is to tell me where to
-> read more carefully — the same thing my own eyes do, applied evenly to everyone's work rather than
-> only to the students I happen to wonder about.
+> I may run submitted work through an offline writing-analysis tool. It reaches no conclusion about
+> who wrote anything, and nothing it produces will ever be the basis of a decision about you. Its
+> purpose is to tell me where to read more carefully — the same thing my own eyes do, applied evenly
+> to everyone's work rather than only to the students I happen to wonder about.
 
 ## Option C — Not permitted
 
