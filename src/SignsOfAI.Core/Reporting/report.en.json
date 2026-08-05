@@ -5,6 +5,7 @@
     "fallback.marker": { "text": "This block has not been translated yet; it is shown in English." },
     "fallback.summary": { "text": "This report contains {0} block(s) not yet translated. Each is marked and shown in English." },
     "fallback.language": { "text": "This report is not available in {0}, so the whole of it is shown in English. Nothing has been withheld or shortened, but a reader who cannot read English cannot read the part that limits the score, and that part is the point of the page." },
+    "analysis.no-rule-pack": { "text": "> **There is no rule pack for {0} yet, so this text was examined with the English one.** Treat the score as saying nothing at all: the tells this tool knows are English ones, and few of them can fire on writing in another language — so a low number here means nothing was looked for, not that nothing was found. Rule packs are JSON files anyone can contribute." },
     "default.title": { "text": "Writing analysis report" },
     "meta.document": { "text": "**Document:** {0}" },
     "meta.generated": { "text": "**Generated:** {0} · **Engine:** SignsOfAI {1}" },

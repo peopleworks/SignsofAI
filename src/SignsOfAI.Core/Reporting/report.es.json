@@ -14,6 +14,10 @@
       "text": "Este informe no está disponible en {0}, así que se muestra completo en inglés. No se ha ocultado ni acortado nada, pero quien no lea inglés no puede leer la parte que limita la puntuación, y esa parte es la razón de ser de esta página.",
       "sourceHash": "c43be4647f39ade1600db2c60ed02ecd38d3539b195ec9afaae737316234a6d4"
     },
+    "analysis.no-rule-pack": {
+      "text": "> **Todavía no existe un catálogo de reglas para {0}, así que este texto se examinó con el de inglés.** Trate la puntuación como si no dijera absolutamente nada: las señales que conoce esta herramienta son inglesas, y pocas pueden activarse sobre escritura en otro idioma — de modo que un número bajo aquí significa que no se buscó nada, no que no se encontró nada. Los catálogos de reglas son archivos JSON que cualquiera puede aportar.",
+      "sourceHash": "148085719a308a40ec90895e2bd4621ed8367db5573f5d9d31f94d4c99e5e344"
+    },
     "default.title": {
       "text": "Informe del análisis de escritura",
       "sourceHash": "90b8ccc0903d87a2f8ba07531f1e76736d5fce4adab65154f05ac147b919b291"

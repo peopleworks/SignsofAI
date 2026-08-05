@@ -26,11 +26,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- WithCulture=false is essential: filenames like rules.en.json / rules.es.json would
+    <!-- A wildcard, so adding a language is adding a file. Listing packs one by one made every
+         translator edit the build to be heard, which contradicts this project's own rule that
+         extension points are JSON anyone can send by pull request and never compiled code.
+
+         WithCulture=false is essential: filenames like rules.en.json / rules.es.json would
          otherwise be mistaken for culture-specific satellite resources and dropped from the
          main assembly manifest. LogicalName pins the reflection lookup name. -->
-    <EmbeddedResource Include="Rules\Packs\rules.en.json" WithCulture="false" LogicalName="SignsOfAI.Core.Rules.Packs.rules.en.json" />
-    <EmbeddedResource Include="Rules\Packs\rules.es.json" WithCulture="false" LogicalName="SignsOfAI.Core.Rules.Packs.rules.es.json" />
+    <EmbeddedResource Include="Rules\Packs\rules.*.json" WithCulture="false">
+      <LogicalName>SignsOfAI.Core.Rules.Packs.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
 
     <!-- Reader-facing report prose is selected by interface language, independently from the rule
          pack selected for the analysed text. LogicalName keeps dotted locale filenames in the main

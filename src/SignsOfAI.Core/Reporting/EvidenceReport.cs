@@ -119,6 +119,16 @@ public static class EvidenceReport
             LanguageName(text, result.Language), result.Statistics.WordCount,
             result.Statistics.SentenceCount, Num(result.Statistics.Burstiness, 2));
         sb.AppendLine();
+
+        // Said before the error rate, because it outranks it: a rate measured on English writing
+        // describes nothing about what these rules do to French prose they were never written for.
+        if (result.RulePackLanguage is { Length: > 0 } packLanguage
+            && !packLanguage.Equals(result.Language, StringComparison.OrdinalIgnoreCase))
+        {
+            AppendBlock(sb, text, ReportMessages.NoRulePack, LanguageName(text, result.Language));
+            sb.AppendLine();
+        }
+
         AppendLocalized(sb, text, Caveat(text, result.Language));
         sb.AppendLine();
 
