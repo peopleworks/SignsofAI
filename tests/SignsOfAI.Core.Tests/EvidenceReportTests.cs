@@ -272,7 +272,7 @@ public class EvidenceReportTests
 
         Assert.Contains("never been measured for language code pt", report);
         Assert.Contains("aggregate result from other languages is not a substitute", report);
-        Assert.DoesNotContain("Strong signs of AI writing", report);
+        Assert.DoesNotContain("Signs of AI writing", report);
 
         if (PublishedCalibration.Current is { } calibration)
         {
@@ -328,11 +328,13 @@ public class EvidenceReportTests
     [Fact]
     public void Withholds_the_verdict_below_the_threshold_it_can_support()
     {
-        // "Reads mostly human" printed above "treat the score as saying nothing" is a page arguing
-        // with itself, and the reader keeps whichever half suits them.
+        // A verdict printed above "treat the score as saying nothing" is a page arguing with itself,
+        // and the reader keeps whichever half suits them. Below the boundary the report prints the
+        // score and the reason, and no verdict line of either kind.
         var report = Report();
 
-        Assert.DoesNotContain("Reads mostly human", report);
+        Assert.DoesNotContain("No signs above the measured boundary", report);
+        Assert.DoesNotContain("Signs of AI writing", report);
         Assert.Contains("A low score is not evidence that a person wrote this", report);
     }
 

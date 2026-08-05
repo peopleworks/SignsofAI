@@ -29,10 +29,27 @@ public static class ReportMessages
     public const string SectionObservations = "section.observations";
     public const string SectionErrorRate = "section.error-rate";
     public const string SectionUnreadable = "section.unreadable";
-    public const string VerdictStrong = "verdict.strong";
-    public const string VerdictModerate = "verdict.moderate";
-    public const string VerdictLight = "verdict.light";
-    public const string VerdictMinimal = "verdict.minimal";
+    /// <summary>
+    /// Above the measured boundary. One wording, not three.
+    ///
+    /// "Strong", "Moderate" and "Light" read as three measured degrees, and they never were: the
+    /// corpus locates the boundary and says nothing whatever about 45 or 70, since no text known to
+    /// be human came within twenty points of either. Separating degrees would need machine-written
+    /// text, and Docs/CALIBRATION.md argues against ever collecting it. Printing the three words
+    /// with a footnote admitting they are unmeasured does not fix that — the footnote is read once
+    /// and the heading is read every time.
+    /// </summary>
+    public const string VerdictSigns = "verdict.signs";
+
+    /// <summary>
+    /// Below it. A statement about this tool, never about the writer.
+    ///
+    /// The report used to say "Reads mostly human" and the interface "Minimal signs of AI writing" —
+    /// the same state, two claims, and the first one is not ours to make. A detector that detects
+    /// nothing also returns a low score, and this project has deliberately never measured how much
+    /// machine writing it catches, so a low score is evidence about the boundary and nothing else.
+    /// </summary>
+    public const string VerdictNone = "verdict.none";
     public const string AnalysisScoreWithVerdict = "analysis.score.with-verdict";
     public const string AnalysisScoreWithoutVerdict = "analysis.score.without-verdict";
     public const string AnalysisNoVerdict = "analysis.no-verdict";
@@ -107,10 +124,8 @@ public static class ReportMessages
         [SectionObservations] = 0,
         [SectionErrorRate] = 0,
         [SectionUnreadable] = 0,
-        [VerdictStrong] = 0,
-        [VerdictModerate] = 0,
-        [VerdictLight] = 0,
-        [VerdictMinimal] = 0,
+        [VerdictSigns] = 0,
+        [VerdictNone] = 0,
         [AnalysisScoreWithVerdict] = 2,
         [AnalysisScoreWithoutVerdict] = 1,
         [AnalysisNoVerdict] = 0,
@@ -195,10 +210,8 @@ public static class ReportMessages
         [SectionObservations] = "Found, but at a rate people write at",
         [SectionErrorRate] = "How often this is wrong",
         [SectionUnreadable] = "Could not be read",
-        [VerdictStrong] = "Strong signs of AI writing",
-        [VerdictModerate] = "Moderate signs of AI writing",
-        [VerdictLight] = "Light signs of AI writing",
-        [VerdictMinimal] = "Reads mostly human",
+        [VerdictSigns] = "Signs of AI writing",
+        [VerdictNone] = "No signs above the measured boundary",
         [AnalysisScoreWithVerdict] = "**{0}/100 — {1}**",
         [AnalysisScoreWithoutVerdict] = "**{0}/100**",
         [AnalysisNoVerdict] = "*Below the threshold this build can support, so no verdict is given. A low score is not evidence that a person wrote this.*",
@@ -264,7 +277,7 @@ public static class ReportMessages
         FallbackMarker, FallbackSummary, FallbackLanguage, DefaultTitle,
         SectionAnalysis, SectionCheckable, SectionCharacters, SectionCitations, SectionSignals,
         SectionObservations, SectionErrorRate, SectionUnreadable,
-        VerdictStrong, VerdictModerate, VerdictLight, VerdictMinimal,
+        VerdictSigns, VerdictNone,
         AnalysisNoVerdict,
         LanguageEnglish, LanguageSpanish, LanguageOther,
         CaveatUncalibrated, CaveatAggregateNoThreshold, CaveatLanguageUnmeasured,

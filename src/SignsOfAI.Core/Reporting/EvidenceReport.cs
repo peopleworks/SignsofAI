@@ -499,10 +499,8 @@ public static class EvidenceReport
 
     private static string Verdict(ReportText text, double score) => text.Get(score switch
     {
-        _ when VerdictBands.Emphasis(score) is VerdictEmphasis.High => ReportMessages.VerdictStrong,
-        _ when VerdictBands.Emphasis(score) is VerdictEmphasis.Elevated => ReportMessages.VerdictModerate,
-        _ when VerdictBands.Emphasis(score) is VerdictEmphasis.Present => ReportMessages.VerdictLight,
-        _ => ReportMessages.VerdictMinimal,
+        _ when VerdictBands.Holds(score) => ReportMessages.VerdictSigns,
+        _ => ReportMessages.VerdictNone,
     }).Text;
 
     private static string LanguageName(ReportText text, string language) => text.Get(

@@ -93,11 +93,7 @@ public sealed record AnalysisResult
     /// person goes through the interface's localiser or the report's own resources, both of which
     /// take their boundary from <see cref="VerdictBands"/> exactly as this does.
     /// </summary>
-    public string Verdict => VerdictBands.Emphasis(OverallScore) switch
-    {
-        VerdictEmphasis.High => "Strong signs of AI writing",
-        VerdictEmphasis.Elevated => "Moderate signs of AI writing",
-        VerdictEmphasis.Present => "Light signs of AI writing",
-        _ => "Reads mostly human",
-    };
+    public string Verdict => VerdictBands.Holds(OverallScore)
+        ? "Signs of AI writing"
+        : "No signs above the measured boundary";
 }

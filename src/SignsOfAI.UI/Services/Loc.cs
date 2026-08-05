@@ -249,12 +249,10 @@ public sealed class Loc(IJSRuntime js, BrowserStorage storage)
     /// The one-line verdict for an overall score, in the interface's language. The boundary comes
     /// from <see cref="VerdictBands"/>; this only chooses the words for it.
     /// </summary>
-    public string Verdict(double score) => VerdictBands.Emphasis(score) switch
+    public string Verdict(double score) => VerdictBands.Holds(score) switch
     {
-        VerdictEmphasis.High => this["verdict.strong"],
-        VerdictEmphasis.Elevated => this["verdict.moderate"],
-        VerdictEmphasis.Present => this["verdict.light"],
-        _ => this["verdict.minimal"],
+        true => this["verdict.signs"],
+        false => this["verdict.none"],
     };
 
     /// <summary>How to name the language the analyzer settled on. The engine only knows EN and ES.</summary>
