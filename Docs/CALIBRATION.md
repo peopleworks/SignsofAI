@@ -73,6 +73,14 @@ Across these groups the median score runs from 7.2 (**es-wikipedia**) down to 4.
 | 95 | 0 / 90 | 0% | 0% – 4.1% |
 | 100 | 0 / 90 | 0% | 0% – 4.1% |
 
+## What the product does with this number
+
+The tool speaks at **25/100** and nowhere else, taking the boundary from the table above rather than from anybody's judgement. Below it a document gets its score and the reason it gets nothing more: a low score is not evidence that a person wrote something, since a detector that detects nothing also returns a low score, and this project has deliberately never measured how much machine writing it catches. The boundary moves when this page moves — including upward if a larger corpus turns out to be less flattering.
+
+Above it there is **one** verdict, not a scale of them. This corpus can place a boundary and can say nothing whatever about how much further past it a score has travelled: no text known to be human came close to the upper reaches, and grading "moderate" against "strong" would need machine-written text, which the opening of this page argues against collecting. Interfaces do shade a high score more urgently than a low one, and those shades are a display convention — they are not on this page because nothing measured them.
+
+A language absent from the corpus entirely gets no verdict at all, whatever it scores. A language present but too thin to bound its own rate borrows this boundary and carries its own figure beside it, so the reader weighs the rate that was measured for the writing in front of them rather than the pooled one.
+
 ## Which rules misfire
 
 Every rule below fired on text no machine wrote, so each hit is a false positive by construction — there is no judgement call to make. This is the most immediately useful thing the exercise produces: it turns "our rules probably have false positives somewhere" into a ranked list.
