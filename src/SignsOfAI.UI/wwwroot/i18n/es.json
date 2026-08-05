@@ -371,5 +371,10 @@
   "base.explain.scale": "El número por sí solo no significa nada, así que nunca aparece solo. Al lado va cuánto se separa del centro cada uno de los propios trabajos de esta persona, medido exactamente igual. La escala es su variación, no un umbral inventado aquí — usted no tiene que aceptar la idea de nadie sobre qué es «demasiado lejos».",
   "base.explain.cannot": "No puede decirle quién escribió algo, y aquí no hay ningún resultado que signifique «lo escribió otra persona». El estilo cambia con la tarea, con el género, con el plazo, con un coautor, con un corrector, y con que alguien simplemente mejore. Un texto fuera del rango es una razón para preguntar qué cambió. No es prueba de nada.",
   "base.explain.useful": "La respuesta tranquilizadora es la útil. Una entrega que cae dentro del propio rango de la persona es el resultado que zanja una sospecha — y zanjar sospechas es la mayor parte de lo que un proceso de integridad debería estar haciendo.",
-  "base.explain.needs": "Se niega a responder con poca evidencia: unas 1.400 palabras de trabajo previo repartidas en piezas suficientes, y 300 en el texto revisado. Por debajo de eso lo dice en vez de producir un número, porque una distancia calculada sobre tan poco texto es ruido con un decimal puesto."
+  "base.explain.needs": "Se niega a responder con poca evidencia: unas 1.400 palabras de trabajo previo repartidas en piezas suficientes, y 300 en el texto revisado. Por debajo de eso lo dice en vez de producir un número, porque una distancia calculada sobre tan poco texto es ruido con un decimal puesto.",
+  "home.report": "Guardar reporte",
+  "home.report.hint": "Un documento para guardar, reenviar o imprimir. Contiene tu texto, así que se guarda en tu dispositivo.",
+  "home.report.title": "Reporte de análisis de escritura",
+  "batch.report.hint": "Guarda el análisis como un documento para conservar o pasar a un colega. Nombra los archivos de tus estudiantes.",
+  "batch.report.title": "Análisis de carpeta — orden de lectura"
 }

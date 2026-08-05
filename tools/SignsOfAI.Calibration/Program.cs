@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using SignsOfAI.Calibration;
 using SignsOfAI.Core;
 using SignsOfAI.Core.Calibration;
@@ -208,6 +209,52 @@ var report = Report.Render(calibration, manifest, $"SignsOfAI.Core {version}",
 
 Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outPath))!);
 File.WriteAllText(outPath, report);
+
+// The same numbers, in the form the engine can carry. A report that accuses somebody has to print
+// its own error rate on the same page, and reading it back out of the Markdown — or restating it
+// from memory in C# — is how a page ends up quoting a threshold three versions old.
+var overall = calibration.Overall;
+var atThreshold = overall.ThresholdForTarget is { } chosen
+    ? overall.Thresholds.FirstOrDefault(t => Math.Abs(t.Threshold - chosen) < 0.001)
+    : null;
+
+var published = new PublishedCalibration
+{
+    CorpusId = manifest.Id,
+    Texts = samples.Count,
+    MeasuredOn = DateTime.UtcNow.ToString("yyyy-MM-dd"),
+    Engine = version,
+    RecommendedThreshold = overall.ThresholdForTarget,
+    FlaggedAtThreshold = atThreshold?.Flagged ?? 0,
+    RateLow = atThreshold?.RateLow ?? 0,
+    RateHigh = atThreshold?.RateHigh ?? 1,
+    NoisiestRules = [.. calibration.RuleFalsePositives.Take(8)
+        .Select(r => new PublishedRuleRate { RuleId = r.RuleId, TextShare = r.TextShare })],
+
+    // Per language, because the report about a Spanish essay must not quote an English-heavy
+    // aggregate. The best bound a group can support is the tightest upper interval it reaches at any
+    // threshold; when that never gets inside the target, the group supports no threshold and the
+    // report has to say so instead of borrowing the overall one.
+    Languages = [.. calibration.ByLanguage.Select(g => new PublishedLanguage
+    {
+        Language = g.Name,
+        Texts = g.Count,
+        RecommendedThreshold = g.ThresholdForTarget,
+        BestBound = g.Thresholds.Count == 0 ? 1 : g.Thresholds.Min(t => t.RateHigh),
+    })],
+};
+
+// Anchored to the manifest rather than the working directory. Run from anywhere but the repository
+// root, the old version silently created a second copy under the current folder while
+// Docs/CALIBRATION.md updated correctly — leaving the real embedded snapshot stale, and the build
+// happily embedding last month's threshold under this build's name.
+var repoRoot = Path.GetFullPath(Path.Combine(
+    Path.GetDirectoryName(Path.GetFullPath(manifestPath))!, "..", ".."));
+var embedPath = Path.Combine(repoRoot, "src", "SignsOfAI.Core", "Calibration", "published-calibration.json");
+Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(embedPath))!);
+var publishedJson = JsonSerializer.Serialize(
+    published, PublishedCalibrationJsonContext.Default.PublishedCalibration);
+File.WriteAllText(embedPath, publishedJson.ReplaceLineEndings("\n") + "\n");
 
 Console.WriteLine();
 Console.WriteLine($"  {samples.Count} texts measured" + (missing > 0 ? $", {missing} missing" : ""));

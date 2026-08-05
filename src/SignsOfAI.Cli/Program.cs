@@ -6,6 +6,7 @@ using SignsOfAI.Core.Stylometry;
 using SignsOfAI.Core.Text;
 using SignsOfAI.Core.Documents;
 using SignsOfAI.Core.Model;
+using SignsOfAI.Core.Reporting;
 using SignsOfAI.Core.Rules;
 
 // ── signsofai: lint prose for the signs of AI writing ────────────────────────
@@ -125,6 +126,7 @@ var positionals = new List<string>();
 var ruleFiles = new List<string>();
 string language = "auto";
 bool json = false, noColor = false, failOnArtifacts = false;
+string? reportPath = null;
 double? maxScore = null;
 int top = 10;
 
@@ -135,6 +137,7 @@ for (int i = 1; i < argList.Count; i++)
     {
         case "--lang": language = Next(); break;
         case "--json": json = true; break;
+        case "--report": reportPath = Next(); break;
         case "--no-color": noColor = true; break;
         case "--rules": ruleFiles.Add(Next()); break;
         case "--max-score": maxScore = double.Parse(Next(), System.Globalization.CultureInfo.InvariantCulture); break;
@@ -149,7 +152,7 @@ for (int i = 1; i < argList.Count; i++)
 
 if (positionals.Count == 0)
 {
-    Console.Error.WriteLine("Usage: signsofai check <path> [--lang auto|en|es] [--json] [--max-score N] [--fail-on-artifacts] [--top N]");
+    Console.Error.WriteLine("Usage: signsofai check <path> [--lang auto|en|es] [--json] [--report FILE] [--max-score N] [--fail-on-artifacts] [--top N]");
     return 2;
 }
 
@@ -232,6 +235,23 @@ else
 {
     PrintReport(path, result, top, useColor: !noColor && !Console.IsOutputRedirected
         && Environment.GetEnvironmentVariable("NO_COLOR") is null);
+}
+
+// ── The evidence as something you can keep ───────────────────────────────────
+// Written last so it never interferes with piping the analysis somewhere else, and so a failing
+// --max-score gate still leaves the document behind for whoever has to look at it.
+if (reportPath is not null)
+{
+    var options = new ReportOptions { DocumentName = Path.GetFileName(path) };
+    var markdown = Path.GetExtension(reportPath).Equals(".md", StringComparison.OrdinalIgnoreCase);
+    var document = markdown
+        ? EvidenceReport.ToMarkdown(result, options)
+        : EvidenceReport.ToHtml(result, options);
+
+    var full = Path.GetFullPath(reportPath);
+    Directory.CreateDirectory(Path.GetDirectoryName(full)!);
+    File.WriteAllText(full, document);
+    Console.Error.WriteLine($"Report written to {full}");
 }
 
 // ── CI gate ──────────────────────────────────────────────────────────────────
@@ -452,6 +472,10 @@ static void PrintHelp()
           --lang <auto|en|es>   Language of the text (default: auto-detect)
           --rules <file.json>   Add a custom catalog (rule-pack). Repeatable.
           --json                Emit a JSON report instead of the pretty report
+          --report <file>       Write the evidence as a document you can keep, forward or print.
+                                .md for pasting into an email or an LMS; anything else writes a
+                                self-contained HTML page that prints to PDF from a browser. Every
+                                report carries this build's own false-positive rate.
           --max-score <N>       Exit with code 1 if the overall score exceeds N (for CI gating)
           --fail-on-artifacts   Exit with code 1 if the text holds characters typing cannot produce
                                 (invisible characters, letters impersonating Latin ones)
@@ -472,6 +496,7 @@ static void PrintHelp()
           signsofai check README.md
           signsofai check article.docx --lang en
           signsofai check post.md --max-score 40      # fail CI if it reads too much like AI
+          signsofai check essay.docx --report essay-report.html   # a document for the student
           signsofai check post.md --json > report.json
           signsofai check essay.docx --fail-on-artifacts   # reject text a rewriting tool has been through
           signsofai baseline essay4.docx --against essay1.docx --against essay2.docx --against essay3.docx

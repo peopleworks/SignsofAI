@@ -371,5 +371,10 @@
   "base.explain.scale": "The number on its own means nothing, so it never appears alone. Next to it sits how far each of this writer’s own pieces falls from their centre, measured in exactly the same way. The scale is their variation, not a threshold invented here — you do not have to accept anybody’s idea of “too far”.",
   "base.explain.cannot": "It cannot tell you who wrote something, and there is no result here meaning “someone else did”. Style moves with the assignment, the genre, the deadline, a co-author, an editor, and with a person simply getting better. A text outside the range is a reason to ask what changed. It is not evidence of anything.",
   "base.explain.useful": "The reassuring answer is the useful one. A submission that lands inside the writer’s own range is the result that settles a suspicion — and settling suspicions is most of what an integrity process should be doing.",
-  "base.explain.needs": "It refuses to answer on thin evidence: roughly 1,400 words of earlier work across enough separate pieces, and 300 in the piece being checked. Below that it says so rather than produce a number, because a distance computed from too little writing is noise wearing a decimal point."
+  "base.explain.needs": "It refuses to answer on thin evidence: roughly 1,400 words of earlier work across enough separate pieces, and 300 in the piece being checked. Below that it says so rather than produce a number, because a distance computed from too little writing is noise wearing a decimal point.",
+  "home.report": "Save report",
+  "home.report.hint": "A document you can keep, forward or print. It contains your text, so it is saved to your device.",
+  "home.report.title": "Writing analysis report",
+  "batch.report.hint": "Save the scan as a document you can keep or hand to a colleague. It names your students' files.",
+  "batch.report.title": "Folder scan — reading order"
 }
