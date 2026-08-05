@@ -18,11 +18,13 @@ Built on the official [`ModelContextProtocol`](https://www.nuget.org/packages/Mo
 | `inspect_characters` | Characters typing cannot produce — zero-width, homoglyphs, hidden tag characters — with the exact line and column of each | 🖥️ offline |
 | `check_citations` | Where a document contradicts its **own** reference list: a source cited but never listed, one DOI on two works, a year that has not happened | 🖥️ offline |
 | `compare_to_baseline` | How a piece sits against the same person's earlier work (Burrows's Delta) — measured on **their** variation, never a verdict about who wrote it | 🖥️ offline |
+| `write_report` | The whole analysis as a document a person can keep, forward, or take to a committee — with the tool's own error rate printed on it | 🖥️ offline |
 | `measure_predictability` | Perplexity — how predictable/generic a model finds the phrasing | ☁️ server |
 | `check_paraphrase` | Reworded/translated copies via sentence embeddings (EmbeddingGemma) | ☁️ server |
 
-The first seven run **entirely on the machine** — the text never leaves it. The last two **send the text**
-to the SignsOfAI server (their descriptions disclose this); see [Server tools](#server-tools-optional).
+Eight of the ten run **entirely on the machine** — the text never leaves it. The two marked ☁️ **send
+the text** to the SignsOfAI server (their descriptions disclose this); see
+[Server tools](#server-tools-optional).
 
 ## Install
 
