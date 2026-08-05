@@ -27,6 +27,6 @@ WORKDIR /app
 COPY --from=build /app ./
 
 # stdio transport: the client speaks JSON-RPC over stdin/stdout, so nothing is
-# exposed on a port and there is no health endpoint to probe. Seven of the nine
+# exposed on a port and there is no health endpoint to probe. Eight of the ten
 # tools never open a socket at all.
 ENTRYPOINT ["dotnet", "SignsOfAI.Mcp.dll"]
