@@ -1,0 +1,8 @@
+{
+  "id": "short10-linea-base-en",
+  "html": "en/short10-linea-base.html",
+  "voice": "Rachel",
+  "minSeconds": 36,
+  "tailSeconds": 1.4,
+  "narration": "Sixty-one percent. That is the share of essays by students writing in their second language that AI detectors flag as machine-written. Not of the cheats: of the essays. Because formal, careful writing looks like a machine, and that is how you write in a language you learned second. You do not fix that with a better detector. You fix it with a different question: not does this look like a machine, but does this look like the person who wrote the others. And if you write formally, your own baseline is already formal."
+}

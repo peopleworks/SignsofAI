@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+/* Tiempos cuadrados con la narración medida (34.9s). Cues de cue-times.mjs:
+   7.5s "Y la bibliografía" · 15.0s "El mismo DOI" · 21.2s "Nada de eso" · 29.6s "una pregunta que". */
+html,body{margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 78% 12%,rgba(47,210,122,.14),transparent 60%),
+   radial-gradient(700px 700px at 18% 64%,rgba(245,158,11,.16),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.4)}60%{transform:scale(1.15)}100%{opacity:1;transform:scale(1)}}
+@keyframes slide{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+@keyframes glow{from{box-shadow:0 0 0 0 rgba(245,158,11,0)}to{box-shadow:0 0 0 6px rgba(245,158,11,.22)}}
+.brand{position:absolute;top:80px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+/* Arriba, la parte tranquilizadora: el detector no encontró nada. */
+.score{position:absolute;top:210px;width:100%;opacity:0;animation:rv .7s .8s forwards}
+.big{font-size:172px;font-weight:900;color:#2fd27a;line-height:1;font-variant-numeric:tabular-nums}
+.big span{font-size:54px;opacity:.55}
+.ok{font-size:42px;color:#7c8aa6;margin-top:14px}
+.calm{position:absolute;top:474px;width:100%;font-size:40px;color:#2fd27a;opacity:0;animation:rv .5s 3.4s forwards}
+/* Y debajo, lo que el mismo documento dice de sus propias fuentes. */
+.head{position:absolute;top:576px;width:100%;font-size:52px;font-weight:900;opacity:0;animation:rv .6s 7.5s forwards}
+.head b{color:#f59e0b}
+.refs{position:absolute;top:672px;left:80px;right:80px;text-align:left}
+.r{display:flex;align-items:center;gap:22px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.10);
+ border-radius:16px;padding:20px 26px;margin-bottom:16px;font-size:34px;opacity:0}
+.r .bar{flex:1;height:12px;border-radius:6px;background:rgba(124,138,166,.35)}
+.r .warn{color:#f59e0b;font-size:44px;font-weight:900}
+.r1{animation:slide .35s 8.4s forwards}.r2{animation:slide .35s 9.1s forwards}
+.r3{animation:slide .35s 9.8s forwards}.r4{animation:slide .35s 10.5s forwards}
+.doi{position:absolute;top:1168px;left:80px;right:80px;border-radius:18px;padding:24px 30px;
+ background:rgba(245,158,11,.10);border:2px solid rgba(245,158,11,.42);opacity:0;
+ animation:rv .6s 15.0s forwards, glow 1s 15.6s forwards}
+.doi .k{font-size:36px;font-weight:800;color:#f59e0b}
+.doi .v{font-family:Consolas,monospace;font-size:34px;color:#eaf1fb;margin-top:10px}
+.year{position:absolute;top:1348px;width:100%;font-size:40px;font-weight:800;color:#f59e0b;opacity:0;animation:pop .5s 17.6s forwards}
+.offline{position:absolute;top:1440px;left:80px;right:80px;border-radius:18px;padding:26px 30px;
+ background:rgba(10,18,35,.85);border:2px solid rgba(255,255,255,.12);font-size:40px;line-height:1.35;
+ color:#9aa8ff;opacity:0;animation:rv .6s 21.2s forwards}
+.offline b{color:#eaf1fb;font-weight:900}
+.foot{position:absolute;bottom:118px;width:100%;opacity:0;animation:rv .8s 29.6s forwards}
+.foot .f1{font-size:46px;color:#7c8aa6;font-weight:800}
+.foot .f2{font-size:52px;font-weight:900;margin-top:12px}
+.foot .f2 b{background:linear-gradient(90deg,#f59e0b,#2fd27a);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+
+<div class="score">
+ <div class="big">0<span>/100</span></div>
+ <div class="ok">0 señales · vocabulario bien · ritmo humano</div>
+</div>
+<div class="calm">Mi propio detector: todo en orden</div>
+
+<div class="head">Y la bibliografía era <b>inventada</b></div>
+<div class="refs">
+ <div class="r r1"><span class="bar"></span><span class="warn">!</span></div>
+ <div class="r r2"><span class="bar"></span><span class="warn">!</span></div>
+ <div class="r r3"><span class="bar"></span><span class="warn">!</span></div>
+ <div class="r r4"><span class="bar"></span><span class="warn">!</span></div>
+</div>
+
+<div class="doi">
+ <div class="k"><span style="color:#f59e0b">!</span> el mismo DOI en dos artículos distintos</div>
+ <div class="v">10.1016/j.compedu.2023.104812</div>
+</div>
+<div class="year">una fuente publicada en 2027</div>
+
+<div class="offline">Nada de esto necesita internet:<br><b>el documento se contradice a sí mismo.</b></div>
+
+<div class="foot">
+ <div class="f1">No es una acusación.</div>
+ <div class="f2">Es una pregunta: <b>¿me manda el artículo?</b></div>
+</div>
+</body></html>
