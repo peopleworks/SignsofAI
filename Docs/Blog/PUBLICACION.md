@@ -308,6 +308,8 @@ de los seis (video / voz / cola en segundos):
 | `signsofai-baseline-story.{en,es}.html` | WordPress · Blogger — **generados** |
 | `signsofai-calibration-story.{en,es}.md` | dev.to · Hashnode · Medium — **sexto artículo**, sin publicar |
 | `signsofai-calibration-story.{en,es}.html` | WordPress · Blogger — **generados** |
+| `signsofai-verdict-story.{en,es}.md` | dev.to · Hashnode · Medium — **séptimo artículo**, sin publicar |
+| `signsofai-verdict-story.{en,es}.html` | WordPress · Blogger — **generados** |
 
 **Generar el HTML.** Los dos primeros artículos se escribieron como HTML a mano. Transcribir 1.500
 palabras dos veces más, en dos idiomas, es la forma segura de corregir un párrafo en una copia y no
@@ -1093,6 +1095,117 @@ mitad de este problema que nadie más mide.
 MIT y gratis: https://github.com/peopleworks/SignsofAI
 
 #IntegridadAcadémica #IA #EdTech #Estadística #DotNet
+```
+
+### X / Twitter — séptimo artículo (EN)
+```
+My AI detector never once gave a verdict. Not one, in any language, since the feature shipped.
+
+The report gated the verdict behind the threshold measured for that specific language. My corpus has
+65 English texts and 25 Spanish; bounding a rate under 5% takes ~75. So the threshold was null for
+both, and the condition after it was false. Always.
+
+Meanwhile the CLI printed "Strong signs of AI writing" on the same text, in the same run.
+
+340 tests. Not one compared the two.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — séptimo artículo (ES)
+```
+Mi detector de IA no emitió un veredicto ni una sola vez. Ninguno, en ningún idioma, desde que existe
+la función.
+
+El informe exigía el umbral medido para ese idioma concreto. Mi corpus tiene 65 textos en inglés y 25
+en español; acotar una tasa por debajo del 5% pide unos 75. El umbral era null en los dos, y la
+condición siguiente, falsa. Siempre.
+
+Mientras tanto el CLI decía "Señales fuertes de escritura con IA" del mismo texto, en la misma
+ejecución.
+
+340 pruebas. Ninguna comparaba las dos.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — séptimo artículo (EN)
+```
+The same text, the same build of my own tool, the same minute.
+
+Command line: 90/100, "Strong signs of AI writing".
+The exported report — the document a teacher prints and carries to an integrity meeting: no verdict
+at all.
+
+The report withheld its verdict below the threshold measured for the language it was reading. That
+rule is right. But my corpus holds 65 English texts and 25 Spanish, and bounding a false-positive
+rate under 5% needs roughly 75 in a group. Neither group qualifies. The threshold was null for both
+languages, so the condition was false for every document ever analysed.
+
+Two things let it live there:
+
+The bands were written out in nine places, kept in step by a comment. They had already drifted — one
+page cut at 40 where the rest cut at 45.
+
+And nothing compared the surfaces. I had 340 tests, each checking one face against its own
+expectations. None asked whether the three faces agreed about the same text.
+
+Underneath sat something worse. This project publishes a measured threshold of 25/100. The product
+drew its line at 20 and called it "light signs of AI writing" — five points below the number on my
+own calibration page, and below the highest-scoring human text in the corpus.
+
+Publishing a calibrated figure and shipping an uncalibrated one is exactly what I criticise other
+detectors for.
+
+Two independent reviewers found the always-false condition before I wrote a line of code. Then they
+disagreed about the fix, which was more useful than agreement.
+
+Four bands are now two. Above the measured line: "Signs of AI writing". Below it: "No signs above the
+measured boundary" — a statement about the tool, not about the person. That was the last place the
+product said anything about a human being rather than about my own instrument.
+
+Full write-up, and the command that regenerates every number in it:
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — séptimo artículo (ES)
+```
+El mismo texto, la misma compilación de mi herramienta, el mismo minuto.
+
+Línea de comandos: 90/100, "Señales fuertes de escritura con IA".
+El informe exportado — el documento que un profesor imprime y lleva a una comisión de integridad:
+ningún veredicto.
+
+El informe retenía el veredicto por debajo del umbral medido para el idioma que estaba leyendo. Esa
+regla está bien. Pero mi corpus tiene 65 textos en inglés y 25 en español, y acotar una tasa de
+falsos positivos por debajo del 5% pide unos 75 por grupo. Ninguno llega. El umbral era null en los
+dos idiomas, así que la condición era falsa para todos los documentos analizados.
+
+Dos cosas le permitieron vivir ahí:
+
+Las bandas estaban escritas en nueve sitios, sincronizadas por un comentario. Ya se habían desviado:
+una página cortaba en 40 donde el resto cortaba en 45.
+
+Y nada comparaba las caras entre sí. Tenía 340 pruebas, cada una comprobando una superficie contra
+sus propias expectativas. Ninguna preguntaba si las tres coincidían sobre el mismo texto.
+
+Debajo había algo peor. Este proyecto publica un umbral medido de 25/100. El producto trazaba su
+línea en 20 y lo llamaba "señales leves de escritura con IA": cinco puntos por debajo de la cifra de
+mi propia página de calibración, y por debajo del texto humano más alto del corpus.
+
+Publicar una cifra calibrada y entregar otra sin calibrar es exactamente lo que le critico a otros
+detectores.
+
+Dos revisores independientes encontraron la condición siempre falsa antes de que yo escribiera una
+línea de código. Luego discreparon sobre el arreglo, que fue más útil que si hubieran coincidido.
+
+Cuatro bandas son ahora dos. Por encima de la línea medida: "Señales de escritura con IA". Por
+debajo: "Sin señales por encima del umbral medido" — una afirmación sobre la herramienta, no sobre
+la persona. Era el último sitio donde el producto decía algo sobre un ser humano en vez de sobre mi
+propio instrumento.
+
+El artículo completo, y el comando que regenera cada número que contiene:
+https://github.com/peopleworks/SignsofAI
 ```
 
 ## 8. Notas de publicación
