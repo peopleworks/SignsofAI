@@ -96,6 +96,47 @@ public class LocaleFileTests
             $"key text): {string.Join(", ", missing)}");
     }
 
+    /// <summary>
+    /// Wordings this project decided it may not use, in any locale, because they are claims about the
+    /// writer rather than about the tool.
+    ///
+    /// A blacklist is a blunt instrument and this one is deliberate. The decision was taken in #32 and
+    /// applied to the report and to the score card; it survived for months in the empty state of the
+    /// home page — "This reads mostly human — nice work" — and in the rhythm caption, because the test
+    /// that guards it reads <c>AnalysisResult.Verdict</c> and these are locale data. Translations
+    /// arrive as community pull requests, so the guard has to live where the data does.
+    /// </summary>
+    private static readonly string[] RetiredClaims =
+    [
+        "reads mostly human", "reads human", "mostly human",
+        "se lee humano", "se lee bastante humano", "bastante humano",
+    ];
+
+    [Fact]
+    public void No_locale_tells_the_reader_a_person_wrote_the_text()
+    {
+        var problems = new List<string>();
+
+        foreach (var file in LocaleFiles())
+        {
+            var name = Path.GetFileName(file);
+            foreach (var (key, value) in ReadLocale(Path.GetFileNameWithoutExtension(file)))
+            {
+                foreach (var claim in RetiredClaims)
+                {
+                    if (value.Contains(claim, StringComparison.OrdinalIgnoreCase))
+                        problems.Add($"{name} → \"{key}\": says \"{claim}\"");
+                }
+            }
+        }
+
+        Assert.True(problems.Count == 0,
+            "A low score is a fact about this tool, not about who wrote the text: a detector that " +
+            "detects nothing also returns a low score, and this project has deliberately never " +
+            "measured how much machine writing it catches. Say what was measured instead — see " +
+            "verdict.none. Found:\n  " + string.Join("\n  ", problems));
+    }
+
     [Fact]
     public void Translations_use_only_known_keys()
     {

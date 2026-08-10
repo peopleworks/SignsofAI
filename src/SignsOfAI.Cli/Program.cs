@@ -399,8 +399,15 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
     }
     if (r.Findings.Count > shown.Count)
         Console.WriteLine(Col($"  … and {r.Findings.Count - shown.Count} more (use --top {r.Findings.Count}).", 90));
+    // Not "reads mostly human", and not a green tick. Both were the same claim in two forms, and it
+    // is the one #32 removed from the report and the interface because it was never ours to make: a
+    // detector that detects nothing also finds nothing, and this project has deliberately never
+    // measured how much machine writing it catches. It survived here for months because the test
+    // that guards the wording reads AnalysisResult.Verdict, and this line is a literal.
     if (r.Findings.Count == 0)
-        Console.WriteLine(Col("  ✓ No strong AI tells found — reads mostly human.", 32));
+        Console.WriteLine(Col(
+            "  No strong AI tells found — nothing above the measured boundary. " +
+            "That is not evidence a person wrote this.", 90));
     Console.WriteLine();
 }
 
