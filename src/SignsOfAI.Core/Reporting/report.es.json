@@ -42,6 +42,10 @@
       "text": "Señales contabilizadas",
       "sourceHash": "078671a3b913dc8d830dc433445ca4b4cc401debf4b6fb8829ea9376ab658cc2"
     },
+    "characters.ordered": {
+      "text": "Se listan primero los caracteres más difíciles de obtener por accidente, y después en el orden en que aparecen en el fichero.",
+      "sourceHash": "268fa7576be22e9731efa7d6e98715ff6d62e83a1af2c40601cdc85036c3cdb7"
+    },
     "signals.ordered": {
       "text": "Ordenadas por el peso que carga cada una, de mayor a menor, y no por el lugar que ocupan en el texto.",
       "sourceHash": "5a270776bb1082eb80960b1a1b431b1a56fd4d6dd3f422544cd5959eeaf18c04"

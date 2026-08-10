@@ -47,6 +47,7 @@
     "caveat.aggregate-measured": { "text": "> **A score is not proof.** On {0} texts published before generative models existed, this build's false-positive rate at a threshold of {1}/100 was under {2} — the upper end of a 95% interval, not a guarantee, and measured on published articles rather than student work. Below that threshold, treat the score as saying nothing." },
     "checkable.intro": { "text": "These are not judgements about the writing and they did not move the score. Each is either present in the file or it is not." },
     "characters.explanation": { "text": "Several of these have ordinary explanations — word processors insert soft hyphens and unusual spaces on their own, and any copy-paste can carry them. Invisible characters and letters borrowed from another alphabet are harder to arrive at by accident, though pasting text can do it. This table says what is in the file, not how it got there." },
+    "characters.ordered": { "text": "Listed with the characters hardest to arrive at by accident first, then in the order they appear in the file." },
     "characters.table-header": { "text": "| Character | Codepoint | Line | Column |" },
     "common.more-rows": { "text": "… and {0} more." },
     "citations.issues-note": { "text": "> None of this needed the internet: the document disagrees with itself. It is a question to ask, not a conclusion — the answer is usually one sentence." },

@@ -48,6 +48,11 @@ public static class EvidenceReport
         var title = string.Equals(o.Title, ReportOptions.Default.Title, StringComparison.Ordinal)
             ? text.Get(ReportMessages.DefaultTitle).Text
             : o.Title;
+        // MaxRows is public, settable and unvalidated, and this library is on NuGet. A negative value
+        // printed "… and 12 more" for two findings — a count of omitted evidence larger than the
+        // evidence — because the arithmetic is Count minus the limit. Clamped once, here, rather than
+        // trusted at four call sites.
+        var rows = Math.Max(0, o.MaxRows);
 
         // Through Cell like everything else this report did not write: the title is a caller's string,
         // and every host that has one builds it from a filename.
@@ -83,23 +88,31 @@ public static class EvidenceReport
         // Named up here rather than left to the section below, because a page that opens "0/100" and
         // buries four contradictions in its own bibliography further down has chosen the wrong thing
         // to make salient — and that exact document is the one this project keeps writing about.
-        if (result.Citations.Issues.Count > 0 || result.Artifacts.Any)
+        // Contradictions, not issues. CitationIssue draws this line itself — a cited source missing
+        // from the list is a contradiction, an uncited entry in the list is not, "because people
+        // legitimately list further reading" — and the headline used to count both. A document whose
+        // only fault was further reading was announced as "1 source contradiction", and the note
+        // below the section then asserted in the report's own voice that it "disagrees with itself".
+        // That is an accusation the checker had explicitly declined to make, printed on the page a
+        // teacher takes to a committee, and it shipped for months.
+        var contradictions = result.Citations.ContradictionCount;
+        if (contradictions > 0 || result.Artifacts.Any)
         {
-            if (result.Citations.Issues.Count > 0 && result.Artifacts.Any)
+            if (contradictions > 0 && result.Artifacts.Any)
                 AppendBlock(sb, text,
-                    result.Citations.Issues.Count == 1
+                    contradictions == 1
                         ? result.Artifacts.Count == 1
                             ? ReportMessages.AnalysisFactsBothOneOne
                             : ReportMessages.AnalysisFactsBothOneOther
                         : result.Artifacts.Count == 1
                             ? ReportMessages.AnalysisFactsBothOtherOne
                             : ReportMessages.AnalysisFactsBothOtherOther,
-                    result.Citations.Issues.Count, result.Artifacts.Count);
-            else if (result.Citations.Issues.Count > 0)
-                AppendBlock(sb, text, result.Citations.Issues.Count == 1
+                    contradictions, result.Artifacts.Count);
+            else if (contradictions > 0)
+                AppendBlock(sb, text, contradictions == 1
                         ? ReportMessages.AnalysisFactsCitationOne
                         : ReportMessages.AnalysisFactsCitationOther,
-                    result.Citations.Issues.Count);
+                    contradictions);
             else
                 AppendBlock(sb, text, result.Artifacts.Count == 1
                         ? ReportMessages.AnalysisFactsArtifactOne
@@ -155,6 +168,11 @@ public static class EvidenceReport
                 // pasted in. Saying so here is the difference between a fact and an insinuation.
                 AppendBlock(sb, text, ReportMessages.CharactersExplanation);
                 sb.AppendLine();
+                // Said above the one table the reader is invited to check in an editor. Without it
+                // the Line column reads 6, 1, 2, 3 and looks like the tool lost its place — the
+                // same reason the signals list carries its own ordering line.
+                AppendBlock(sb, text, ReportMessages.CharactersOrdered);
+                sb.AppendLine();
                 AppendBlock(sb, text, ReportMessages.CharactersTableHeader);
                 sb.AppendLine("|---|---|---:|---:|");
                 // Strong kinds first, then by position. A file can hold two hundred soft hyphens —
@@ -165,15 +183,15 @@ public static class EvidenceReport
                 foreach (var occurrence in result.Artifacts.Occurrences
                              .OrderByDescending(a => a.IsStrong)
                              .ThenBy(a => a.Line).ThenBy(a => a.Column)
-                             .Take(o.MaxRows))
+                             .Take(rows))
                     sb.Append("| ").Append(Cell(Describe(occurrence.Kind))).Append(" | `")
                       .Append(occurrence.CodePoint).Append("` | ").Append(occurrence.Line)
                       .Append(" | ").Append(occurrence.Column).AppendLine(" |");
-                if (result.Artifacts.Occurrences.Count > o.MaxRows)
+                if (result.Artifacts.Occurrences.Count > rows)
                 {
                     sb.AppendLine();
                     AppendBlock(sb, text, ReportMessages.MoreRows,
-                        result.Artifacts.Occurrences.Count - o.MaxRows);
+                        result.Artifacts.Occurrences.Count - rows);
                 }
                 sb.AppendLine();
             }
@@ -184,16 +202,22 @@ public static class EvidenceReport
                 sb.AppendLine();
                 sb.AppendLine(Cell(result.Citations.Summary));
                 sb.AppendLine();
-                foreach (var issue in result.Citations.Issues.Take(o.MaxRows))
+                // Contradictions before untidiness, then in document order. Cutting this list by
+                // position was the same defect as the signals list and it was left in place one
+                // commit ago: forty uncited entries early in a long bibliography would print, and
+                // the repeated DOI in the last one — the finding that settles anything — would not.
+                foreach (var issue in result.Citations.Issues
+                             .OrderByDescending(i => i.IsContradiction).ThenBy(i => i.Line)
+                             .Take(rows))
                     sb.Append("- ").AppendLine(Cell(issue.Message));
                 // This list used to stop at forty in silence, alone among the four. A reader counting
                 // the contradictions on the page against the number the summary above states would
                 // find the page contradicting itself about a document accused of contradicting itself.
-                if (result.Citations.Issues.Count > o.MaxRows)
+                if (result.Citations.Issues.Count > rows)
                 {
                     sb.AppendLine();
                     AppendBlock(sb, text, ReportMessages.MoreRows,
-                        result.Citations.Issues.Count - o.MaxRows);
+                        result.Citations.Issues.Count - rows);
                 }
                 sb.AppendLine();
                 // Only claimed when something actually contradicts. The first version printed it
@@ -202,7 +226,7 @@ public static class EvidenceReport
                 // its own voice, a self-contradiction it had explicitly not looked for. In a document
                 // that goes to a committee about a nineteen-year-old, that is the precise harm this
                 // project exists to argue against.
-                AppendBlock(sb, text, result.Citations.Issues.Count > 0
+                AppendBlock(sb, text, result.Citations.ContradictionCount > 0
                     ? ReportMessages.CitationsIssuesNote
                     : ReportMessages.CitationsNoIssuesNote);
                 sb.AppendLine();
@@ -258,20 +282,23 @@ public static class EvidenceReport
                          .ThenBy(x => x.Rank)
                          .ThenBy(x => x.Finding.Span.Start)
                          .Select(x => x.Finding)
-                         .Take(o.MaxRows))
+                         .Take(rows))
             {
                 sb.Append("- **").Append(f.Category).Append("** — ");
                 if (!string.IsNullOrWhiteSpace(f.MatchedText))
                     sb.Append('“').Append(Cell(f.MatchedText)).Append("” — ");
                 sb.Append(Cell(f.Message)).Append(' ').Append("*→ ").Append(Cell(f.Suggestion)).AppendLine("*");
             }
-            if (result.Signals.Count > o.MaxRows)
+            if (result.Signals.Count > rows)
             {
                 sb.AppendLine();
                 // Not the generic "… and N more": what was cut is now a property of the evidence
                 // rather than of where it happened to fall, and the reader is entitled to know that
-                // nothing stronger than what they are looking at was left out.
-                AppendBlock(sb, text, ReportMessages.SignalsMore, result.Signals.Count - o.MaxRows);
+                // nothing stronger than what they are looking at was left out. That clause needs
+                // something to be looking at — at zero rows there is nothing above for the omitted
+                // findings to weigh less than, so the generic line, which stays true, is used.
+                AppendBlock(sb, text, rows > 0 ? ReportMessages.SignalsMore : ReportMessages.MoreRows,
+                    result.Signals.Count - rows);
             }
         }
         sb.AppendLine();
@@ -289,15 +316,15 @@ public static class EvidenceReport
             var groups = result.Observations.GroupBy(f => f.RuleId)
                 .OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal)
                 .ToList();
-            foreach (var group in groups.Take(o.MaxRows))
+            foreach (var group in groups.Take(rows))
                 AppendBlock(sb, text, group.Count() == 1
                         ? ReportMessages.ObservationsRowOne
                         : ReportMessages.ObservationsRowOther,
                     Cell(group.Key), group.Count());
-            if (groups.Count > o.MaxRows)
+            if (groups.Count > rows)
             {
                 sb.AppendLine();
-                AppendBlock(sb, text, ReportMessages.MoreRows, groups.Count - o.MaxRows);
+                AppendBlock(sb, text, ReportMessages.MoreRows, groups.Count - rows);
             }
             sb.AppendLine();
         }

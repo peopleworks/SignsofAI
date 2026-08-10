@@ -1,5 +1,6 @@
 using SignsOfAI.Core;
 using SignsOfAI.Core.Calibration;
+using SignsOfAI.Core.Citations;
 using SignsOfAI.Core.Model;
 using SignsOfAI.Core.Reporting;
 using System.Text.RegularExpressions;
@@ -383,7 +384,8 @@ public class EvidenceReportTests
     /// report prints and a known strongest one, and building that out of real prose would make the
     /// test a statement about which rules happen to fire rather than about what the report keeps.
     /// </summary>
-    private static AnalysisResult Synthetic(IReadOnlyList<Finding> findings) => new()
+    private static AnalysisResult Synthetic(
+        IReadOnlyList<Finding> findings, IReadOnlyList<CitationIssue>? issues = null) => new()
     {
         Language = "en",
         RulePackLanguage = "en",
@@ -391,6 +393,29 @@ public class EvidenceReportTests
         CategoryScores = [],
         OverallScore = 30,
         Statistics = new TextStatistics { WordCount = 4000, SentenceCount = 200 },
+        Citations = issues is null ? CitationReport.Empty : new CitationReport
+        {
+            References = [],
+            // One citation, because CitationReport.Any gates the whole section on there being
+            // something to describe — a report with issues and no sources is not a real state.
+            Citations =
+            [
+                new InTextCitation
+                {
+                    Raw = "(Delgado & Ruiz, 2021)",
+                    Span = new TextSpan(0, 22),
+                    Line = 1,
+                    Surname = "Delgado",
+                    Year = 2021,
+                },
+            ],
+            Issues = issues,
+            Style = CitationStyle.AuthorYear,
+            HasReferenceList = true,
+            Summary = "A bibliography with one contradiction and a great deal of untidiness.",
+            Advice = "Ask about the repeated identifier.",
+            ContradictionCount = issues.Count(i => i.IsContradiction),
+        },
     };
 
     private static Finding Signal(string id, double weight, int start, string matched) => new()
@@ -438,6 +463,92 @@ public class EvidenceReportTests
 
         Assert.Contains("Ordered by how much weight each one carries", report);
         Assert.Contains("21 more, none of them carrying more weight than what is shown above", report);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-10)]
+    public void A_row_limit_below_one_cannot_invent_omitted_evidence(int maxRows)
+    {
+        // MaxRows is public, settable and unvalidated, and this library is on NuGet. The omission
+        // count is Count minus the limit, so a negative limit reported more omitted findings than
+        // the document had; and at zero rows the strong clause claimed nothing omitted outweighed
+        // what was shown, with nothing shown.
+        var findings = Enumerable.Range(0, 2)
+            .Select(i => Signal("lex.weak", 1.0, i * 100, $"weak-{i:000}"))
+            .ToList();
+
+        var report = EvidenceReport.ToMarkdown(Synthetic(findings),
+            new ReportOptions { MaxRows = maxRows });
+
+        Assert.Contains("… and 2 more.", report);
+        Assert.DoesNotContain("carrying more weight than what is shown above", report);
+    }
+
+    [Fact]
+    public void A_contradiction_is_not_pushed_out_of_the_list_by_untidiness()
+    {
+        // The same defect as the signals list, left in place one commit ago. The checker draws the
+        // line itself with IsContradiction, and a bibliography can carry forty uncited entries and
+        // one repeated DOI — the finding that settles anything — in its last one.
+        var issues = Enumerable.Range(0, 45)
+            .Select(i => new CitationIssue
+            {
+                Kind = CitationIssueKind.ListedButNotCited,
+                Span = new TextSpan(i * 10, 5),
+                Line = i + 1,
+                Subject = $"Entry {i}",
+                Message = $"untidy-{i:000} is listed but never cited.",
+                IsContradiction = false,
+            })
+            .Append(new CitationIssue
+            {
+                Kind = CitationIssueKind.RepeatedDoi,
+                Span = new TextSpan(9_000, 5),
+                Line = 999,
+                Subject = "10.1080/jem.2019.4471",
+                Message = "the-same-doi on two different works.",
+                IsContradiction = true,
+            })
+            .ToList();
+
+        var report = EvidenceReport.ToMarkdown(Synthetic([], issues));
+
+        Assert.Contains("the-same-doi", report);
+        Assert.DoesNotContain("untidy-044", report);
+        Assert.Contains("… and 6 more.", report);
+    }
+
+    [Fact]
+    public void An_untidy_bibliography_is_not_announced_as_a_contradiction()
+    {
+        // People legitimately list further reading, which is why CitationIssue draws the line itself
+        // with IsContradiction. The headline counted every issue instead, so a document whose only
+        // fault is an uncited entry was announced as "1 source contradiction" over a note asserting
+        // it "disagrees with itself" — an accusation the checker had explicitly declined to make,
+        // on the page a teacher takes to a committee.
+        const string tidy = """
+            Formative assessment improves retention. Delgado and Ruiz (2021) report gains across two
+            cohorts, and the effect held after a year.
+
+            ## References
+
+            Delgado, M., & Ruiz, C. (2021). Formative assessment and retention. Studies in Higher
+            Education, 46(4), 512-538.
+
+            Whitfield, J. (2020). Feedback timing in large cohorts. Assessment Review, 12(1), 33-51.
+            """;
+
+        var result = new AiWritingAnalyzer().Analyze(tidy, "en");
+        var report = EvidenceReport.ToMarkdown(result);
+
+        // Guard the premise: the fixture must actually produce an untidiness and no contradiction,
+        // or the assertions below would pass without testing anything.
+        Assert.Contains(result.Citations.Issues, i => !i.IsContradiction);
+        Assert.Equal(0, result.Citations.ContradictionCount);
+
+        Assert.DoesNotContain("source contradiction", report);
+        Assert.DoesNotContain("disagrees with itself", report);
     }
 
     [Fact]
