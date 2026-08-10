@@ -122,6 +122,38 @@ umbral medido», apareciendo bajo las dos tarjetas ya iguales.
 funciona. Los diez anteriores explican algo que hace bien; este cuenta que se contradecía a sí misma
 y que lo publicamos igual.
 
+## Short 12 — "La acusación que mi propio código se negaba a hacer" (el titular que contaba mal)
+**Visual:** una bibliografía limpia de dos entradas, en blanco, con aire de estar bien. Encima cae el
+titular real del informe en rojo: «1 contradicción de fuentes», y debajo la nota «el documento se
+contradice a sí mismo». Corte al código: el campo `IsContradiction` con su propio comentario
+resaltado —*«una entrada listada que nadie cita no lo es, porque la gente lista lectura adicional con
+toda legitimidad»*— y al lado la línea del titular contando `Issues.Count` en vez de
+`ContradictionCount`. Las dos, en pantalla, a la vez. Cierre: el informe nuevo diciendo «las dos
+concuerdan» y, debajo, `5 días · v0.4.0 · 0 usuarios`.
+- **ES:** "Esta bibliografía está bien. Dos referencias, una citada, y la otra es lectura adicional: la gente lista lectura adicional. Mi informe la anunció así: una contradicción de fuentes. El documento se contradice a sí mismo. En la página que un profesor imprime y lleva a un comité. Y lo peor no es el fallo: mi propio código sabía la diferencia. Hay un campo que la distingue, con un comentario que explica exactamente por qué. La línea que escribía el titular nunca le preguntó. Estuvo publicado cinco días, en una versión. No lo encontró ningún usuario, porque todavía no hay usuarios."
+- **EN:** "This bibliography is fine. Two references, one cited, and the other is further reading: people list further reading. My report announced it like this: one source contradiction. The document disagrees with itself. On the page a teacher prints and carries to a committee. And the bug is not the worst part: my own code knew the difference. There is a field that draws the line, with a comment explaining exactly why. The line printing the headline never asked it. It shipped for five days, in one release. No user found it, because there are no users yet."
+
+**Por qué este short:** es el segundo de la serie donde la herramienta queda mal, y es peor que el
+once. El once contaba que no decía nada; este cuenta que dijo de más, y en la dirección que acusa.
+
+## Short 13 — "Un informe que jura que nada se subió, pidiendo un píxel" (el escapado incompleto)
+**Visual:** la última línea del informe, en cursiva y grande: «nada de esto se subió a ningún sitio».
+Debajo, el ensayo del alumno con una línea suelta en monoespaciado: `![x](https://…/pixel.png)`.
+El profesor pega el informe en el aula virtual —campo de comentario, botón enviar— y desde la
+palabra sale una flecha hacia un servidor ajeno que devuelve `200 OK` y una hora exacta. Corte:
+`\<` tachado en rojo, con el rótulo «esto bloquea HTML», y al lado `![](…)` intacto con «esto no es
+HTML: es Markdown». Cierre: la línea escapada `!\[x](…)` y la frase final.
+- **ES:** "Mi informe termina con esta frase: nada de esto se subió a ningún sitio. Y era verdad, hasta que el alumno escribe esto en su ensayo. No es HTML, es Markdown. Yo escapaba el HTML. El profesor pega el informe en el aula virtual, y el aula virtual va a buscar esa imagen al servidor de otro. Que ahora sabe que abrió el informe, y a qué hora. La promesa la rompía el propio documento analizado. Lo encontró un revisor al que le pedí una sola cosa: rómpelo."
+- **EN:** "My report ends with this sentence: nothing here was uploaded anywhere. And it was true, until the student writes this in their essay. That is not HTML. That is Markdown. I was escaping the HTML. The teacher pastes the report into the learning platform, and the platform goes and fetches that image from somebody else's server. Which now knows they opened the report, and when. The promise was broken by the document being analysed. A reviewer found it, after I asked it one thing: break this."
+
+## Short 14 — "Dos revisores, dos preguntas, cero solapamiento" (cómo se revisa con IA)
+**Visual:** el mismo diff en el centro. Salen dos columnas: izquierda «¿afirma más de lo que midió?»,
+derecha «encuentra una entrada que lo rompa». Van cayendo hallazgos en cada columna, cuatro y cinco,
+en colores distintos. Al final las dos columnas se solapan sobre el centro y la intersección queda
+**vacía**: un `0` grande. Cierre: dos briefs idénticos → una revisión; dos briefs distintos → nueve.
+- **ES:** "Le pedí a dos modelos que revisaran el mismo código. A uno le pregunté: ¿esta página afirma más de lo que midió? Al otro: encuentra una entrada que la rompa. Encontraron nueve defectos entre los dos. Y ni uno solo coincidía. El de las afirmaciones no vio ningún problema de escapado. El que atacaba no vio ninguna sobreafirmación. Si les mando el mismo encargo a los dos, pago dos revisiones y recibo una. La lente importa más que el modelo."
+- **EN:** "I asked two models to review the same change. One I asked: does this page claim more than it measured? The other: find an input that breaks it. Between them they found nine defects. Not one of them overlapped. The claims reviewer found no escaping bug. The attacker found no overclaim. Send both the same brief and you pay for two reviews and get one. The lens matters more than the model."
+
 ---
 
 ## Build (una vez existan los HTML de cada short)
