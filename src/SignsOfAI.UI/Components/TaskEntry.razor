@@ -1,0 +1,72 @@
+@* The front door, organised by what the reader came to do rather than by which engine runs.
+
+   The pages behind this already speak the right language — the baseline page's own heading is
+   literally "Does this look like the person who wrote the others?" — but the navigation hid every
+   one of them behind the name of its machinery: Analyse, Originality, Baseline, Catalogue, Folder.
+   A teacher does not arrive wanting a baseline. They arrive with thirty essays and one that felt
+   wrong, and nothing on the page told them which of the five things was theirs.
+
+   Deliberately not a wizard and deliberately not a filter. It routes and it explains; the editor is
+   still directly below, so the person who came to paste a paragraph loses one short band of page
+   and nothing else. The current task is shown rather than hidden, because a chooser that omits
+   where you already are makes the reader wonder what they missed.
+
+   The folder card always links, including in a browser where scanning a folder is impossible: that
+   page states why and points at the download. Hiding the card would leave the browser visitor
+   believing the product cannot do it at all, which is the lowest-common-denominator answer
+   HostCapabilities exists to avoid. *@
+@inherits LocalizedComponent
+@inject IFolderBatch Folders
+
+<nav class="task-entry" aria-label="@L["task.aria"]">
+    <p class="task-q">@L["task.question"]</p>
+    <ul class="task-cards">
+        @foreach (var task in Tasks)
+        {
+            var here = task.Key == Current;
+            <li>
+                @if (here)
+                {
+                    <div class="task-card here" aria-current="page">
+                        <span class="task-name">@L[$"task.{task.Key}.name"]</span>
+                        <span class="task-what">@L[$"task.{task.Key}.what"]</span>
+                        <span class="task-here">@L["task.here"]</span>
+                    </div>
+                }
+                else
+                {
+                    <NavLink class="task-card" href="@task.Href">
+                        <span class="task-name">@L[$"task.{task.Key}.name"]</span>
+                        <span class="task-what">@L[$"task.{task.Key}.what"]</span>
+                        @* Said before the click, not after it. The card stays in a browser because
+                           hiding it would leave the visitor thinking the product cannot do this at
+                           all — but sending them to a page that explains why, with no warning here,
+                           is a small bait, and this project cannot afford small baits. *@
+                        @if (task.Key == "folder" && !Folders.IsAvailable)
+                        {
+                            <span class="task-where">@L["task.folder.desktop"]</span>
+                        }
+                    </NavLink>
+                }
+            </li>
+        }
+    </ul>
+</nav>
+
+@code {
+    /// <summary>Which of the four the reader is already on. Empty on a page that is none of them.</summary>
+    [Parameter] public string Current { get; set; } = "";
+
+    private sealed record Task(string Key, string Href);
+
+    // Ordered by how often a teacher's week starts there, not by how the code is arranged: the stack
+    // of submissions comes before the single text, because the single text is usually the second
+    // step of the same afternoon.
+    private static readonly Task[] Tasks =
+    [
+        new("text", ""),
+        new("folder", "batch"),
+        new("person", "baseline"),
+        new("overlap", "originality"),
+    ];
+}

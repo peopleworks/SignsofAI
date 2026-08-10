@@ -10,15 +10,16 @@
             <span class="dot"></span> @L["nav.builtwith"]
         </span>
         <div class="nav-links">
+            @* Same order as the cards in TaskEntry, so somebody who learns one finds the other. *@
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">@L["nav.analyze"]</NavLink>
-            <NavLink class="nav-link" href="originality">@L["nav.originality"]</NavLink>
-            <NavLink class="nav-link" href="baseline">@L["nav.baseline"]</NavLink>
-            <NavLink class="nav-link" href="catalog">@L["nav.catalog"]</NavLink>
             @* Only where a folder can actually be opened, which is not a browser tab. *@
             @if (Folders.IsAvailable)
             {
                 <NavLink class="nav-link" href="batch">@L["nav.batch"]</NavLink>
             }
+            <NavLink class="nav-link" href="baseline">@L["nav.baseline"]</NavLink>
+            <NavLink class="nav-link" href="originality">@L["nav.originality"]</NavLink>
+            <NavLink class="nav-link" href="catalog">@L["nav.catalog"]</NavLink>
             <a class="nav-link" href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">GitHub</a>
             <LanguageSwitch />
         </div>
