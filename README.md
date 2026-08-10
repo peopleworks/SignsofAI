@@ -12,6 +12,8 @@
 [![NuGet MCP](https://img.shields.io/nuget/v/SignsOfAI.Mcp?logo=nuget&label=MCP%20server)](https://www.nuget.org/packages/SignsOfAI.Mcp)
 [![Available on CodeGuilds](https://img.shields.io/badge/Available_on-CodeGuilds-6366f1?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgN2wxMCA1IDEwLTV6TTIgMTdsMTAgNSAxMC01TTIgMTJsMTAgNSAxMC01Ii8+PC9zdmc+)](https://codeguilds.dev/packages/signsofai)
 
+**[Are you a teacher? Start here &rarr;](https://peopleworks.github.io/SignsofAI/why.html)** — what this does and what it cannot do, in plain language, with the error rate drawn rather than tabulated. No badges, no interval notation, nothing to install. English & Spanish.
+
 **[Try the live demo &rarr;](https://peopleworks.github.io/SignsofAI/)** — English & Spanish, runs in your browser. No signup, and the analysis uploads nothing.
 
 **[Download the Windows app &rarr;](https://github.com/peopleworks/SignsofAI/releases?q=desktop&expanded=true)** — the same tool in a window. Nothing to install alongside it: the .NET runtime is bundled.
