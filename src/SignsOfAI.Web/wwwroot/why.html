@@ -1,0 +1,530 @@
+<!doctype html>
+<!--
+  The page for somebody who will never read the README.
+
+  Everything this project has published is written for people who already know what a false-positive
+  rate is. The README opens with badges; CALIBRATION.md opens with a confidence interval. Both are
+  honest and both are unreadable to the person we most need to reach: a teacher, a head of
+  department, or a parent deciding whether to trust any of this.
+
+  Three rules govern this file.
+
+  It phones nowhere. No CDN, no web font, no analytics, no image host. A page whose argument is that
+  your students' work never leaves your machine cannot itself make a request to somebody else's
+  server — and the same defect we shipped in the report this month (an image tag that fetched a
+  pixel when a teacher pasted it into a comment box) is exactly what this rule prevents here.
+
+  The numbers are drawn, not tabulated. "Zero of ninety, with a 95% interval reaching 4.1%" is a
+  sentence a statistician reads and everybody else skips. Ninety dots with none of them filled is a
+  picture anyone reads in a second, and the interval drawn around the zero is why we do not claim
+  zero.
+
+  Both languages live in this file, switched with a radio input and :has() — no script at all. The
+  Spanish is written in Spanish rather than translated into it, as everything else here is.
+
+  Every figure comes from src/SignsOfAI.Core/Calibration/published-calibration.json, measured on
+  2026-08-05 with engine 0.4.0. If that file changes, this page is stale and must be regenerated
+  by hand — there is no build step behind it, deliberately: it has to open from a downloads folder
+  years from now on a machine that has never heard of this project.
+-->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Puede un programa saber si esto lo escribió una máquina? · Signs of AI Writing</title>
+<meta name="description" content="Una explicación honesta de qué hace y qué no hace un detector de escritura con IA, para quien tiene que decidir si fiarse.">
+<style>
+:root{
+  --bg:#0f1216; --surface:#171b21; --surface-2:#1e242c;
+  --text:#e8ebee; --muted:#9aa4b0; --border:#2a313a;
+  --brand:#60a5fa; --fact:#2fd27a; --opinion:#f59e0b; --no:#f0556f;
+  --maxw:44rem;
+}
+@media (prefers-color-scheme: light){
+  :root{ --bg:#f6f7f9; --surface:#fff; --surface-2:#f0f2f5;
+         --text:#1a1d21; --muted:#5b6470; --border:#e2e6ea; --brand:#2563eb; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+main{max-width:var(--maxw); margin:0 auto; padding:0 1.25rem 5rem}
+h1{font-size:clamp(1.9rem,5vw,2.7rem); line-height:1.15; letter-spacing:-.02em; margin:0 0 .6rem}
+h2{font-size:clamp(1.3rem,3.4vw,1.7rem); line-height:1.25; margin:3.2rem 0 .8rem; letter-spacing:-.01em}
+h3{font-size:1.05rem; margin:1.6rem 0 .4rem}
+p{margin:0 0 1rem}
+a{color:var(--brand)}
+strong{font-weight:650}
+.lede{font-size:1.12rem; color:var(--muted)}
+.small{font-size:.88rem; color:var(--muted)}
+
+/* The answer, given before anything else and at the size of the question. */
+.answer{
+  font-size:clamp(3.2rem,12vw,5.5rem); font-weight:800; line-height:1;
+  color:var(--no); margin:.4rem 0 1rem; letter-spacing:-.03em;
+}
+
+.card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:1.1rem 1.25rem; margin:1.1rem 0}
+.card h3{margin-top:0}
+
+/* Facts and opinions are told apart by looking, before a word is read. */
+.kinds{display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin:1.2rem 0}
+.kind.opinion{grid-column:1/-1}
+@media (max-width:560px){ .kinds{grid-template-columns:1fr} }
+.kind{border:1px solid var(--border); border-radius:14px; padding:1rem 1.15rem; background:var(--surface)}
+.kind.opinion{border-left:4px solid var(--opinion)}
+.kind.fact{border-left:4px solid var(--fact)}
+.tag{display:inline-block; font-size:.7rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; margin-bottom:.45rem}
+.kind.opinion .tag{color:var(--opinion)}
+.kind.fact .tag{color:var(--fact)}
+.kind p{margin:0; font-size:.95rem; color:var(--muted)}
+.kind p b{color:var(--text); font-weight:600}
+
+figure{margin:1.4rem 0; padding:0}
+figcaption{font-size:.86rem; color:var(--muted); margin-top:.6rem}
+svg{display:block; width:100%; height:auto}
+
+.quote{border-left:3px solid var(--border); padding:.1rem 0 .1rem 1rem; margin:1.2rem 0; color:var(--muted)}
+.quote b{color:var(--text)}
+
+.mono{font-family:ui-monospace,Consolas,monospace; font-size:.92em}
+
+.cta{display:flex; flex-wrap:wrap; gap:.6rem; margin:1.2rem 0}
+.cta a{
+  display:inline-block; text-decoration:none; font-weight:600; font-size:.95rem;
+  padding:.6rem 1.1rem; border-radius:10px; border:1px solid var(--border);
+  color:var(--text); background:var(--surface);
+}
+.cta a.primary{background:var(--brand); border-color:var(--brand); color:#fff}
+
+hr{border:0; border-top:1px solid var(--border); margin:3rem 0}
+footer{max-width:var(--maxw); margin:0 auto; padding:0 1.25rem 4rem; font-size:.85rem; color:var(--muted)}
+
+/* ---- language switch: a radio input and :has(), so the page carries no script ---- */
+.langpick{position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid var(--border)}
+.langpick div{max-width:var(--maxw); margin:0 auto; padding:.7rem 1.25rem; display:flex; gap:.4rem; align-items:center}
+.langpick label{
+  cursor:pointer; font-size:.82rem; font-weight:700; letter-spacing:.04em;
+  padding:.3rem .7rem; border-radius:999px; border:1px solid var(--border); color:var(--muted);
+}
+input[name="lang"]{position:absolute; opacity:0; pointer-events:none}
+#es:checked ~ .langpick label[for="es"],
+#en:checked ~ .langpick label[for="en"]{background:var(--brand); border-color:var(--brand); color:#fff}
+.only-en{display:none}
+body:has(#en:checked) .only-es{display:none}
+body:has(#en:checked) .only-en{display:block}
+</style>
+</head>
+<body>
+
+<input type="radio" name="lang" id="es" checked>
+<input type="radio" name="lang" id="en">
+<nav class="langpick"><div>
+  <label for="es">ES</label>
+  <label for="en">EN</label>
+  <span class="small" style="margin-left:auto">Signs of AI Writing</span>
+</div></nav>
+
+<!-- ══════════════════════════════ ESPAÑOL ══════════════════════════════ -->
+<main class="only-es">
+
+<h1>¿Puede un programa saber si un texto lo escribió una máquina?</h1>
+<div class="answer">No.</div>
+<p class="lede">
+  Ninguno puede. Ni este, ni los de pago, ni el que le enseñaron en una formación.
+  Si alguien le dice lo contrario, le está vendiendo algo.
+</p>
+<p>
+  Esta página explica, sin una sola palabra técnica, qué hace entonces esta herramienta,
+  cuánto se equivoca —con el número medido, que casi nadie publica— y qué puede usted
+  hacer el lunes con todo eso.
+</p>
+
+<h2>Entonces, ¿qué hace?</h2>
+<p>
+  Tres cosas distintas. Y lo importante no son las tres: es que <strong>dos son hechos y una
+  es una opinión</strong>, y confundirlas es de donde salen las injusticias.
+</p>
+
+<div class="kinds">
+  <div class="kind opinion">
+    <span class="tag">Opinión sobre la prosa</span>
+    <p><b>La puntuación.</b> Señala palabras y giros que la escritura de máquina usa mucho, y le
+    enseña cada uno subrayado en el texto. Es un juicio sobre cómo suena. Se puede discutir,
+    y a veces se equivoca.</p>
+  </div>
+  <div class="kind fact">
+    <span class="tag">Hecho</span>
+    <p><b>Caracteres que no se teclean.</b> Las herramientas que «humanizan» texto dejan letras
+    de otro alfabeto que se ven idénticas. Le da el código, la línea y la columna. Está o no está.</p>
+  </div>
+  <div class="kind fact">
+    <span class="tag">Hecho</span>
+    <p><b>La bibliografía contra sí misma.</b> Una fuente citada que no aparece en su propia lista;
+    el mismo identificador en dos artículos distintos; un año que aún no ha llegado. Sin internet:
+    el documento se contradice solo.</p>
+  </div>
+</div>
+
+<p>
+  Un porcentaje se discute en una reunión durante media hora. <strong>Que el mismo identificador
+  esté en dos referencias distintas se resuelve con una pregunta:</strong> «¿me manda el artículo?».
+  Por eso la herramienta enseña las dos cosas por separado y nunca suma la segunda a la primera.
+</p>
+
+<h2>¿Cuánto se equivoca?</h2>
+<p>
+  Esta es la pregunta que ningún detector contesta, y es la única que importa cuando hay
+  una persona delante.
+</p>
+<p>
+  Lo medimos así: noventa textos <strong>publicados antes de que existieran los modelos
+  generativos</strong>. No los juzgó nadie: sabemos que son humanos por su fecha. Después los
+  pasamos por la herramienta y contamos a cuántos habría acusado.
+</p>
+
+<figure>
+  <svg viewBox="0 0 640 250" role="img" aria-label="Noventa círculos, ninguno marcado, y el intervalo dibujado alrededor del cero">
+    <text x="0" y="14" fill="currentColor" font-size="13" font-weight="700" opacity=".75">90 TEXTOS HUMANOS</text>
+    <g fill="none" stroke="currentColor" stroke-opacity=".38" stroke-width="1.5">
+      <!-- 90 dots: 15 per row, 6 rows. None filled, because none was flagged. -->
+      <circle cx="12" cy="38" r="6"/><circle cx="36" cy="38" r="6"/><circle cx="60" cy="38" r="6"/><circle cx="84" cy="38" r="6"/><circle cx="108" cy="38" r="6"/><circle cx="132" cy="38" r="6"/><circle cx="156" cy="38" r="6"/><circle cx="180" cy="38" r="6"/><circle cx="204" cy="38" r="6"/><circle cx="228" cy="38" r="6"/><circle cx="252" cy="38" r="6"/><circle cx="276" cy="38" r="6"/><circle cx="300" cy="38" r="6"/><circle cx="324" cy="38" r="6"/><circle cx="348" cy="38" r="6"/>
+      <circle cx="12" cy="62" r="6"/><circle cx="36" cy="62" r="6"/><circle cx="60" cy="62" r="6"/><circle cx="84" cy="62" r="6"/><circle cx="108" cy="62" r="6"/><circle cx="132" cy="62" r="6"/><circle cx="156" cy="62" r="6"/><circle cx="180" cy="62" r="6"/><circle cx="204" cy="62" r="6"/><circle cx="228" cy="62" r="6"/><circle cx="252" cy="62" r="6"/><circle cx="276" cy="62" r="6"/><circle cx="300" cy="62" r="6"/><circle cx="324" cy="62" r="6"/><circle cx="348" cy="62" r="6"/>
+      <circle cx="12" cy="86" r="6"/><circle cx="36" cy="86" r="6"/><circle cx="60" cy="86" r="6"/><circle cx="84" cy="86" r="6"/><circle cx="108" cy="86" r="6"/><circle cx="132" cy="86" r="6"/><circle cx="156" cy="86" r="6"/><circle cx="180" cy="86" r="6"/><circle cx="204" cy="86" r="6"/><circle cx="228" cy="86" r="6"/><circle cx="252" cy="86" r="6"/><circle cx="276" cy="86" r="6"/><circle cx="300" cy="86" r="6"/><circle cx="324" cy="86" r="6"/><circle cx="348" cy="86" r="6"/>
+      <circle cx="12" cy="110" r="6"/><circle cx="36" cy="110" r="6"/><circle cx="60" cy="110" r="6"/><circle cx="84" cy="110" r="6"/><circle cx="108" cy="110" r="6"/><circle cx="132" cy="110" r="6"/><circle cx="156" cy="110" r="6"/><circle cx="180" cy="110" r="6"/><circle cx="204" cy="110" r="6"/><circle cx="228" cy="110" r="6"/><circle cx="252" cy="110" r="6"/><circle cx="276" cy="110" r="6"/><circle cx="300" cy="110" r="6"/><circle cx="324" cy="110" r="6"/><circle cx="348" cy="110" r="6"/>
+      <circle cx="12" cy="134" r="6"/><circle cx="36" cy="134" r="6"/><circle cx="60" cy="134" r="6"/><circle cx="84" cy="134" r="6"/><circle cx="108" cy="134" r="6"/><circle cx="132" cy="134" r="6"/><circle cx="156" cy="134" r="6"/><circle cx="180" cy="134" r="6"/><circle cx="204" cy="134" r="6"/><circle cx="228" cy="134" r="6"/><circle cx="252" cy="134" r="6"/><circle cx="276" cy="134" r="6"/><circle cx="300" cy="134" r="6"/><circle cx="324" cy="134" r="6"/><circle cx="348" cy="134" r="6"/>
+      <circle cx="12" cy="158" r="6"/><circle cx="36" cy="158" r="6"/><circle cx="60" cy="158" r="6"/><circle cx="84" cy="158" r="6"/><circle cx="108" cy="158" r="6"/><circle cx="132" cy="158" r="6"/><circle cx="156" cy="158" r="6"/><circle cx="180" cy="158" r="6"/><circle cx="204" cy="158" r="6"/><circle cx="228" cy="158" r="6"/><circle cx="252" cy="158" r="6"/><circle cx="276" cy="158" r="6"/><circle cx="300" cy="158" r="6"/><circle cx="324" cy="158" r="6"/><circle cx="348" cy="158" r="6"/>
+    </g>
+    <text x="380" y="86" fill="#2fd27a" font-size="46" font-weight="800">0</text>
+    <text x="380" y="112" fill="currentColor" font-size="14" opacity=".8">marcados</text>
+    <text x="380" y="134" fill="currentColor" font-size="13" opacity=".55">ninguno relleno,</text>
+    <text x="380" y="151" fill="currentColor" font-size="13" opacity=".55">ninguno acusado</text>
+
+    <!-- The interval, drawn, because zero of ninety is not a rate of zero. -->
+    <text x="0" y="196" fill="currentColor" font-size="12" font-weight="700" opacity=".75">LO QUE SE PUEDE AFIRMAR DE VERDAD</text>
+    <line x1="12" y1="216" x2="620" y2="216" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/>
+    <rect x="12" y="209" width="249" height="14" rx="7" fill="#f59e0b" fill-opacity=".28"/>
+    <circle cx="12" cy="216" r="6" fill="#2fd27a"/>
+    <text x="12" y="241" fill="currentColor" font-size="12" opacity=".75">0 %</text>
+    <text x="222" y="241" fill="#f59e0b" font-size="12" font-weight="700">4,1 %</text>
+    <text x="620" y="241" fill="currentColor" font-size="12" opacity=".55" text-anchor="end">10 %</text>
+  </svg>
+  <figcaption>
+    Ninguno de los noventa fue marcado. Pero <strong>cero de noventa no significa que la tasa
+    sea cero</strong>: con esa muestra, lo máximo que se puede afirmar honestamente es que se
+    equivoca <strong>menos del 4,1 %</strong> de las veces. Esa franja ámbar es la diferencia
+    entre una medición y una promesa.
+  </figcaption>
+</figure>
+
+<h3>Y no es el mismo número para todos</h3>
+<p>
+  Repartir la cifra global a todo el mundo sería cómodo y sería falso. El corpus tiene
+  sesenta y cinco textos en inglés y veinticinco en español, así que lo que se puede
+  afirmar sobre cada idioma es distinto — y en la herramienta cada lector ve el suyo,
+  no el promedio.
+</p>
+
+<figure>
+  <svg viewBox="0 0 640 140" role="img" aria-label="Cota por idioma: inglés 5,6 por ciento, español 13,3 por ciento">
+    <text x="0" y="22" fill="currentColor" font-size="14" font-weight="600">Inglés</text>
+    <text x="0" y="39" fill="currentColor" font-size="11.5" opacity=".55">65 textos</text>
+    <line x1="120" y1="26" x2="620" y2="26" stroke="currentColor" stroke-opacity=".2" stroke-width="2"/>
+    <rect x="120" y="19" width="187" height="14" rx="7" fill="#f59e0b" fill-opacity=".3"/>
+    <text x="317" y="31" fill="#f59e0b" font-size="13" font-weight="700">5,6 %</text>
+
+    <text x="0" y="80" fill="currentColor" font-size="14" font-weight="600">Español</text>
+    <text x="0" y="97" fill="currentColor" font-size="11.5" opacity=".55">25 textos</text>
+    <line x1="120" y1="84" x2="620" y2="84" stroke="currentColor" stroke-opacity=".2" stroke-width="2"/>
+    <rect x="120" y="77" width="443" height="14" rx="7" fill="#f0556f" fill-opacity=".32"/>
+    <text x="573" y="89" fill="#f0556f" font-size="13" font-weight="700">13,3 %</text>
+
+    <g fill="currentColor" opacity=".45" font-size="11">
+      <line x1="120" y1="108" x2="620" y2="108" stroke="currentColor" stroke-opacity=".18"/>
+      <text x="120" y="126">0 %</text>
+      <text x="287" y="126">5 %</text>
+      <text x="453" y="126">10 %</text>
+      <text x="620" y="126" text-anchor="end">15 %</text>
+    </g>
+  </svg>
+  <figcaption>
+    Menos textos en español significa menos certeza, no más errores. La barra es más larga
+    porque <strong>sabemos menos</strong>, y decirlo es más útil que esconderlo detrás del promedio.
+  </figcaption>
+</figure>
+
+<h2>Lo que <em>no</em> le dice</h2>
+<p>
+  <strong>Cuánta escritura de máquina se le escapa.</strong> No está medido, y es a propósito:
+  para medirlo habría que reunir textos generados, y esa colección solo representa los modelos
+  que estaban de moda ese mes. Una herramienta que no marca nada tiene una tasa de error perfecta.
+</p>
+<p>
+  Los noventa textos son <strong>artículos publicados, no trabajos de estudiantes</strong>. Un
+  ensayo de primero de carrera no se parece a un artículo revisado por pares, y esa diferencia
+  no está medida aquí.
+</p>
+<div class="quote">
+  Y una que conviene saber antes de mirar ninguna puntuación: la señal que más salta en escritura
+  humana es <b>el ritmo uniforme de las frases</b> — aparece en el <b>27,8 %</b> de los textos
+  humanos que medimos. Si la evidencia de un trabajo se apoya sobre todo en eso, vale menos.
+  La herramienta lo dice en cada informe, por su nombre.
+</div>
+
+<h2>¿Por qué fiarse de este y no de otro?</h2>
+<p>
+  No por la tecnología. Por esto: <strong>el 10 de agosto de 2026 esta herramienta acusaba
+  en falso, y lo publicamos.</strong>
+</p>
+<p>
+  Un trabajo con la bibliografía en orden, que solo listaba una lectura adicional sin citarla,
+  se anunciaba en el informe como «<span class="mono">1 contradicción de fuentes</span>», encima
+  de la frase «el documento se contradice a sí mismo». En la página que un profesor imprime y
+  lleva a un comité.
+</p>
+<p>
+  Lo peor no fue el fallo. Fue que <strong>el propio código sabía la diferencia</strong>: hay un
+  campo que distingue una contradicción real de un simple desorden, con un comentario que explica
+  que la gente lista lectura adicional con toda legitimidad. La línea que escribía el titular
+  nunca le preguntó. Estuvo cinco días publicado y no lo encontró ningún usuario.
+</p>
+<p>
+  Está arreglado, está contado y el historial es público. <strong>Pregúntele a cualquier detector
+  de pago cuándo fue la última vez que acusó en falso.</strong> Esa respuesta, y no un porcentaje,
+  es lo que debería decidir de quién se fía.
+</p>
+
+<h2>¿Y el lunes qué hago?</h2>
+<p>
+  Nada de esto sirve si no se traduce en algo que decir en un aula o en una reunión. Eso está
+  escrito, en castellano, y no lleva software dentro:
+</p>
+<div class="cta">
+  <a class="primary" href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/Teaching/syllabus.es.md">Texto para el programa de la asignatura</a>
+  <a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/Teaching/student-sheet.es.md">Hoja de una página para el estudiante</a>
+  <a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/Teaching/committee.es.md">Procedimiento para un comité</a>
+</div>
+<p class="small">
+  La hoja del estudiante lleva impresa la cifra medida <em>para su idioma</em>, no la global.
+  Si el trabajo está en español, el número que va al comité es el 13,3 %.
+</p>
+<div class="cta">
+  <a href="./">Probar la herramienta</a>
+  <a href="https://github.com/peopleworks/SignsofAI">Ver el código</a>
+</div>
+<p class="small">
+  Se ejecuta entera en su navegador. El texto no se sube a ningún sitio — tampoco a nosotros.
+  Esta página tampoco pide nada a ningún servidor: ni una fuente, ni una imagen, ni una analítica.
+</p>
+
+</main>
+
+<!-- ══════════════════════════════ ENGLISH ══════════════════════════════ -->
+<main class="only-en">
+
+<h1>Can software tell whether a machine wrote this?</h1>
+<div class="answer">No.</div>
+<p class="lede">
+  None of them can. Not this one, not the paid ones, not the one demonstrated at a training day.
+  Anyone who tells you otherwise is selling something.
+</p>
+<p>
+  This page explains, without a single technical word, what this tool does instead, how often it is
+  wrong — with the measured number, which almost nobody publishes — and what you can do with any of
+  it on Monday morning.
+</p>
+
+<h2>So what does it do?</h2>
+<p>
+  Three separate things. What matters is not the three: it is that <strong>two of them are facts and
+  one is an opinion</strong>, and confusing those is where the injustices come from.
+</p>
+
+<div class="kinds">
+  <div class="kind opinion">
+    <span class="tag">An opinion about prose</span>
+    <p><b>The score.</b> It names words and turns of phrase that machine writing leans on, and shows
+    you each one underlined in the text. It is a judgement about how the writing sounds. It can be
+    argued with, and sometimes it is wrong.</p>
+  </div>
+  <div class="kind fact">
+    <span class="tag">A fact</span>
+    <p><b>Characters nobody types.</b> Tools that "humanise" text leave behind letters from another
+    alphabet that look identical. It gives you the codepoint, the line and the column. Either it is
+    there or it is not.</p>
+  </div>
+  <div class="kind fact">
+    <span class="tag">A fact</span>
+    <p><b>A bibliography against itself.</b> A source cited in the text and missing from its own
+    list; the same identifier on two different papers; a year that has not happened. No internet
+    needed: the document contradicts itself.</p>
+  </div>
+</div>
+
+<p>
+  A percentage can be argued about for half an hour in a meeting. <strong>The same identifier on two
+  different references is settled with one question:</strong> "can you send me the paper?" That is
+  why the tool shows the two apart, and never adds the second to the first.
+</p>
+
+<h2>How often is it wrong?</h2>
+<p>
+  This is the question no detector answers, and the only one that matters when there is a person
+  on the other side of it.
+</p>
+<p>
+  Here is how it was measured: ninety texts <strong>published before generative models
+  existed</strong>. Nobody judged them human — their dates did. Then they went through the tool and
+  we counted how many it would have accused.
+</p>
+
+<figure>
+  <svg viewBox="0 0 640 250" role="img" aria-label="Ninety circles, none of them filled, and the interval drawn around zero">
+    <text x="0" y="14" fill="currentColor" font-size="13" font-weight="700" opacity=".75">90 HUMAN TEXTS</text>
+    <g fill="none" stroke="currentColor" stroke-opacity=".38" stroke-width="1.5">
+      <circle cx="12" cy="38" r="6"/><circle cx="36" cy="38" r="6"/><circle cx="60" cy="38" r="6"/><circle cx="84" cy="38" r="6"/><circle cx="108" cy="38" r="6"/><circle cx="132" cy="38" r="6"/><circle cx="156" cy="38" r="6"/><circle cx="180" cy="38" r="6"/><circle cx="204" cy="38" r="6"/><circle cx="228" cy="38" r="6"/><circle cx="252" cy="38" r="6"/><circle cx="276" cy="38" r="6"/><circle cx="300" cy="38" r="6"/><circle cx="324" cy="38" r="6"/><circle cx="348" cy="38" r="6"/>
+      <circle cx="12" cy="62" r="6"/><circle cx="36" cy="62" r="6"/><circle cx="60" cy="62" r="6"/><circle cx="84" cy="62" r="6"/><circle cx="108" cy="62" r="6"/><circle cx="132" cy="62" r="6"/><circle cx="156" cy="62" r="6"/><circle cx="180" cy="62" r="6"/><circle cx="204" cy="62" r="6"/><circle cx="228" cy="62" r="6"/><circle cx="252" cy="62" r="6"/><circle cx="276" cy="62" r="6"/><circle cx="300" cy="62" r="6"/><circle cx="324" cy="62" r="6"/><circle cx="348" cy="62" r="6"/>
+      <circle cx="12" cy="86" r="6"/><circle cx="36" cy="86" r="6"/><circle cx="60" cy="86" r="6"/><circle cx="84" cy="86" r="6"/><circle cx="108" cy="86" r="6"/><circle cx="132" cy="86" r="6"/><circle cx="156" cy="86" r="6"/><circle cx="180" cy="86" r="6"/><circle cx="204" cy="86" r="6"/><circle cx="228" cy="86" r="6"/><circle cx="252" cy="86" r="6"/><circle cx="276" cy="86" r="6"/><circle cx="300" cy="86" r="6"/><circle cx="324" cy="86" r="6"/><circle cx="348" cy="86" r="6"/>
+      <circle cx="12" cy="110" r="6"/><circle cx="36" cy="110" r="6"/><circle cx="60" cy="110" r="6"/><circle cx="84" cy="110" r="6"/><circle cx="108" cy="110" r="6"/><circle cx="132" cy="110" r="6"/><circle cx="156" cy="110" r="6"/><circle cx="180" cy="110" r="6"/><circle cx="204" cy="110" r="6"/><circle cx="228" cy="110" r="6"/><circle cx="252" cy="110" r="6"/><circle cx="276" cy="110" r="6"/><circle cx="300" cy="110" r="6"/><circle cx="324" cy="110" r="6"/><circle cx="348" cy="110" r="6"/>
+      <circle cx="12" cy="134" r="6"/><circle cx="36" cy="134" r="6"/><circle cx="60" cy="134" r="6"/><circle cx="84" cy="134" r="6"/><circle cx="108" cy="134" r="6"/><circle cx="132" cy="134" r="6"/><circle cx="156" cy="134" r="6"/><circle cx="180" cy="134" r="6"/><circle cx="204" cy="134" r="6"/><circle cx="228" cy="134" r="6"/><circle cx="252" cy="134" r="6"/><circle cx="276" cy="134" r="6"/><circle cx="300" cy="134" r="6"/><circle cx="324" cy="134" r="6"/><circle cx="348" cy="134" r="6"/>
+      <circle cx="12" cy="158" r="6"/><circle cx="36" cy="158" r="6"/><circle cx="60" cy="158" r="6"/><circle cx="84" cy="158" r="6"/><circle cx="108" cy="158" r="6"/><circle cx="132" cy="158" r="6"/><circle cx="156" cy="158" r="6"/><circle cx="180" cy="158" r="6"/><circle cx="204" cy="158" r="6"/><circle cx="228" cy="158" r="6"/><circle cx="252" cy="158" r="6"/><circle cx="276" cy="158" r="6"/><circle cx="300" cy="158" r="6"/><circle cx="324" cy="158" r="6"/><circle cx="348" cy="158" r="6"/>
+    </g>
+    <text x="380" y="86" fill="#2fd27a" font-size="46" font-weight="800">0</text>
+    <text x="380" y="112" fill="currentColor" font-size="14" opacity=".8">flagged</text>
+    <text x="380" y="134" fill="currentColor" font-size="13" opacity=".55">none filled in,</text>
+    <text x="380" y="151" fill="currentColor" font-size="13" opacity=".55">none accused</text>
+
+    <text x="0" y="196" fill="currentColor" font-size="12" font-weight="700" opacity=".75">WHAT CAN HONESTLY BE CLAIMED</text>
+    <line x1="12" y1="216" x2="620" y2="216" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/>
+    <rect x="12" y="209" width="249" height="14" rx="7" fill="#f59e0b" fill-opacity=".28"/>
+    <circle cx="12" cy="216" r="6" fill="#2fd27a"/>
+    <text x="12" y="241" fill="currentColor" font-size="12" opacity=".75">0%</text>
+    <text x="222" y="241" fill="#f59e0b" font-size="12" font-weight="700">4.1%</text>
+    <text x="620" y="241" fill="currentColor" font-size="12" opacity=".55" text-anchor="end">10%</text>
+  </svg>
+  <figcaption>
+    None of the ninety was flagged. But <strong>zero out of ninety is not a rate of zero</strong>:
+    with a sample that size, the most anyone can honestly claim is that it is wrong
+    <strong>less than 4.1%</strong> of the time. That amber band is the difference between a
+    measurement and a promise.
+  </figcaption>
+</figure>
+
+<h3>And it is not the same number for everybody</h3>
+<p>
+  Handing the pooled figure to everyone would be convenient and false. The corpus holds sixty-five
+  English texts and twenty-five Spanish ones, so what can be claimed about each language differs —
+  and in the tool, each reader is shown their own, never the average.
+</p>
+
+<figure>
+  <svg viewBox="0 0 640 140" role="img" aria-label="Bound by language: English 5.6 percent, Spanish 13.3 percent">
+    <text x="0" y="22" fill="currentColor" font-size="14" font-weight="600">English</text>
+    <text x="0" y="39" fill="currentColor" font-size="11.5" opacity=".55">65 texts</text>
+    <line x1="120" y1="26" x2="620" y2="26" stroke="currentColor" stroke-opacity=".2" stroke-width="2"/>
+    <rect x="120" y="19" width="187" height="14" rx="7" fill="#f59e0b" fill-opacity=".3"/>
+    <text x="317" y="31" fill="#f59e0b" font-size="13" font-weight="700">5.6%</text>
+
+    <text x="0" y="80" fill="currentColor" font-size="14" font-weight="600">Spanish</text>
+    <text x="0" y="97" fill="currentColor" font-size="11.5" opacity=".55">25 texts</text>
+    <line x1="120" y1="84" x2="620" y2="84" stroke="currentColor" stroke-opacity=".2" stroke-width="2"/>
+    <rect x="120" y="77" width="443" height="14" rx="7" fill="#f0556f" fill-opacity=".32"/>
+    <text x="573" y="89" fill="#f0556f" font-size="13" font-weight="700">13.3%</text>
+
+    <g fill="currentColor" opacity=".45" font-size="11">
+      <line x1="120" y1="108" x2="620" y2="108" stroke="currentColor" stroke-opacity=".18"/>
+      <text x="120" y="126">0%</text>
+      <text x="287" y="126">5%</text>
+      <text x="453" y="126">10%</text>
+      <text x="620" y="126" text-anchor="end">15%</text>
+    </g>
+  </svg>
+  <figcaption>
+    Fewer Spanish texts means less certainty, not more mistakes. The bar is longer because
+    <strong>we know less</strong>, and saying so is more use than hiding it behind an average.
+  </figcaption>
+</figure>
+
+<h2>What it does <em>not</em> tell you</h2>
+<p>
+  <strong>How much machine writing it misses.</strong> That is not measured, deliberately: measuring
+  it would mean collecting generated text, and any such collection represents whichever models were
+  fashionable that month. A tool that flags nothing has a perfect error rate.
+</p>
+<p>
+  The ninety texts are <strong>published articles, not student work</strong>. A first-year essay
+  does not read like a peer-reviewed paper, and that difference is not measured here.
+</p>
+<div class="quote">
+  And one worth knowing before you look at any score: the signal that fires most often on human
+  writing is <b>uniform sentence rhythm</b> — it appears in <b>27.8%</b> of the human texts we
+  measured. If the evidence against a piece of work leans mostly on that, it is worth less. The
+  tool says so on every report, by name.
+</div>
+
+<h2>Why trust this one and not another?</h2>
+<p>
+  Not because of the technology. Because of this: <strong>on 10 August 2026 this tool was accusing
+  people falsely, and we published that.</strong>
+</p>
+<p>
+  A piece of work with a perfectly good bibliography, which merely listed some further reading
+  without citing it, was announced in the report as "<span class="mono">1 source contradiction</span>",
+  above the sentence "the document disagrees with itself". On the page a teacher prints and carries
+  into a committee.
+</p>
+<p>
+  The bug was not the worst part. <strong>The code itself knew the difference</strong>: there is a
+  field that separates a real contradiction from mere untidiness, with a comment explaining that
+  people legitimately list further reading. The line printing the headline never asked it. It was
+  published for five days and no user found it.
+</p>
+<p>
+  It is fixed, it is written up, and the history is public. <strong>Ask any paid detector when it
+  last accused someone falsely.</strong> That answer, not a percentage, is what should decide who
+  you trust.
+</p>
+
+<h2>What do I do on Monday?</h2>
+<p>
+  None of this is worth anything until it becomes something you can say in a classroom or a
+  meeting. That part is written, and there is no software in it:
+</p>
+<div class="cta">
+  <a class="primary" href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/Teaching/syllabus.en.md">Wording for your syllabus</a>
+  <a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/Teaching/student-sheet.en.md">A one-page sheet for students</a>
+  <a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/Teaching/committee.en.md">A procedure for a committee</a>
+</div>
+<p class="small">
+  The student sheet carries the figure measured <em>for their language</em>, not the pooled one.
+  If the work is in Spanish, the number that goes to the committee is 13.3%.
+</p>
+<div class="cta">
+  <a href="./">Try the tool</a>
+  <a href="https://github.com/peopleworks/SignsofAI">Read the code</a>
+</div>
+<p class="small">
+  It runs entirely in your browser. The text is not uploaded anywhere — not even to us. This page
+  requests nothing from any server either: no font, no image, no analytics.
+</p>
+
+</main>
+
+<hr>
+<footer>
+  <p class="only-es">
+    Signs of AI Writing · PeopleWorks — Pedro Hernández · Código abierto (MIT).
+    Cifras medidas el 5 de agosto de 2026 sobre el motor 0.4.0, con noventa textos publicados
+    antes de que existieran los modelos generativos.
+  </p>
+  <p class="only-en">
+    Signs of AI Writing · PeopleWorks — Pedro Hernández · Open source (MIT).
+    Figures measured on 5 August 2026 against engine 0.4.0, over ninety texts published before
+    generative models existed.
+  </p>
+</footer>
+
+</body>
+</html>
