@@ -30,6 +30,11 @@ public class LocaleFileTests
         .. Enum.GetValues<Severity>().Select(s => "sev." + s.ToString().ToLowerInvariant()),
         "verdict.signs", "verdict.none",
         "lang.english", "lang.spanish",
+        // TaskEntry builds these from its own list, so a plain text search cannot see them and a
+        // deleted one would render as the raw key on the front door.
+        .. new[] { "text", "folder", "person", "overlap" }
+            .SelectMany(t => new[] { $"task.{t}.name", $"task.{t}.what" }),
+        "task.folder.desktop",
     ];
 
     [Fact]
@@ -100,11 +105,12 @@ public class LocaleFileTests
     /// Wordings this project decided it may not use, in any locale, because they are claims about the
     /// writer rather than about the tool.
     ///
-    /// A blacklist is a blunt instrument and this one is deliberate. The decision was taken in #32 and
-    /// applied to the report and to the score card; it survived for months in the empty state of the
-    /// home page — "This reads mostly human — nice work" — and in the rhythm caption, because the test
-    /// that guards it reads <c>AnalysisResult.Verdict</c> and these are locale data. Translations
-    /// arrive as community pull requests, so the guard has to live where the data does.
+    /// A blacklist is a blunt instrument and this one is deliberate. The decision was taken in #32 on
+    /// 2026-08-05 and applied to the report and the score card; the wording survived it by five days
+    /// in the empty state of the home page — "This reads mostly human — nice work" — and in the
+    /// rhythm caption, because the test that guards the decision reads <c>AnalysisResult.Verdict</c>
+    /// and these are locale data. Translations arrive as community pull requests, so the guard has to
+    /// live where the data does.
     /// </summary>
     private static readonly string[] RetiredClaims =
     [
