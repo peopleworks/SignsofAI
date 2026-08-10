@@ -1,5 +1,6 @@
 using SignsOfAI.Core;
 using SignsOfAI.Core.Calibration;
+using SignsOfAI.Core.Citations;
 using SignsOfAI.Core.Model;
 using SignsOfAI.Core.Reporting;
 using System.Text.RegularExpressions;
@@ -383,7 +384,8 @@ public class EvidenceReportTests
     /// report prints and a known strongest one, and building that out of real prose would make the
     /// test a statement about which rules happen to fire rather than about what the report keeps.
     /// </summary>
-    private static AnalysisResult Synthetic(IReadOnlyList<Finding> findings) => new()
+    private static AnalysisResult Synthetic(
+        IReadOnlyList<Finding> findings, IReadOnlyList<CitationIssue>? issues = null) => new()
     {
         Language = "en",
         RulePackLanguage = "en",
@@ -391,6 +393,29 @@ public class EvidenceReportTests
         CategoryScores = [],
         OverallScore = 30,
         Statistics = new TextStatistics { WordCount = 4000, SentenceCount = 200 },
+        Citations = issues is null ? CitationReport.Empty : new CitationReport
+        {
+            References = [],
+            // One citation, because CitationReport.Any gates the whole section on there being
+            // something to describe — a report with issues and no sources is not a real state.
+            Citations =
+            [
+                new InTextCitation
+                {
+                    Raw = "(Delgado & Ruiz, 2021)",
+                    Span = new TextSpan(0, 22),
+                    Line = 1,
+                    Surname = "Delgado",
+                    Year = 2021,
+                },
+            ],
+            Issues = issues,
+            Style = CitationStyle.AuthorYear,
+            HasReferenceList = true,
+            Summary = "A bibliography with one contradiction and a great deal of untidiness.",
+            Advice = "Ask about the repeated identifier.",
+            ContradictionCount = issues.Count(i => i.IsContradiction),
+        },
     };
 
     private static Finding Signal(string id, double weight, int start, string matched) => new()
@@ -436,8 +461,94 @@ public class EvidenceReportTests
 
         var report = EvidenceReport.ToMarkdown(Synthetic(findings));
 
-        Assert.Contains("Ordered by how much each one moved the score", report);
-        Assert.Contains("21 more, none of which moved the score as much as any of the above", report);
+        Assert.Contains("Ordered by how much weight each one carries", report);
+        Assert.Contains("21 more, none of them carrying more weight than what is shown above", report);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-10)]
+    public void A_row_limit_below_one_cannot_invent_omitted_evidence(int maxRows)
+    {
+        // MaxRows is public, settable and unvalidated, and this library is on NuGet. The omission
+        // count is Count minus the limit, so a negative limit reported more omitted findings than
+        // the document had; and at zero rows the strong clause claimed nothing omitted outweighed
+        // what was shown, with nothing shown.
+        var findings = Enumerable.Range(0, 2)
+            .Select(i => Signal("lex.weak", 1.0, i * 100, $"weak-{i:000}"))
+            .ToList();
+
+        var report = EvidenceReport.ToMarkdown(Synthetic(findings),
+            new ReportOptions { MaxRows = maxRows });
+
+        Assert.Contains("… and 2 more.", report);
+        Assert.DoesNotContain("carrying more weight than what is shown above", report);
+    }
+
+    [Fact]
+    public void A_contradiction_is_not_pushed_out_of_the_list_by_untidiness()
+    {
+        // The same defect as the signals list, left in place one commit ago. The checker draws the
+        // line itself with IsContradiction, and a bibliography can carry forty uncited entries and
+        // one repeated DOI — the finding that settles anything — in its last one.
+        var issues = Enumerable.Range(0, 45)
+            .Select(i => new CitationIssue
+            {
+                Kind = CitationIssueKind.ListedButNotCited,
+                Span = new TextSpan(i * 10, 5),
+                Line = i + 1,
+                Subject = $"Entry {i}",
+                Message = $"untidy-{i:000} is listed but never cited.",
+                IsContradiction = false,
+            })
+            .Append(new CitationIssue
+            {
+                Kind = CitationIssueKind.RepeatedDoi,
+                Span = new TextSpan(9_000, 5),
+                Line = 999,
+                Subject = "10.1080/jem.2019.4471",
+                Message = "the-same-doi on two different works.",
+                IsContradiction = true,
+            })
+            .ToList();
+
+        var report = EvidenceReport.ToMarkdown(Synthetic([], issues));
+
+        Assert.Contains("the-same-doi", report);
+        Assert.DoesNotContain("untidy-044", report);
+        Assert.Contains("… and 6 more.", report);
+    }
+
+    [Fact]
+    public void An_untidy_bibliography_is_not_announced_as_a_contradiction()
+    {
+        // People legitimately list further reading, which is why CitationIssue draws the line itself
+        // with IsContradiction. The headline counted every issue instead, so a document whose only
+        // fault is an uncited entry was announced as "1 source contradiction" over a note asserting
+        // it "disagrees with itself" — an accusation the checker had explicitly declined to make,
+        // on the page a teacher takes to a committee.
+        const string tidy = """
+            Formative assessment improves retention. Delgado and Ruiz (2021) report gains across two
+            cohorts, and the effect held after a year.
+
+            ## References
+
+            Delgado, M., & Ruiz, C. (2021). Formative assessment and retention. Studies in Higher
+            Education, 46(4), 512-538.
+
+            Whitfield, J. (2020). Feedback timing in large cohorts. Assessment Review, 12(1), 33-51.
+            """;
+
+        var result = new AiWritingAnalyzer().Analyze(tidy, "en");
+        var report = EvidenceReport.ToMarkdown(result);
+
+        // Guard the premise: the fixture must actually produce an untidiness and no contradiction,
+        // or the assertions below would pass without testing anything.
+        Assert.Contains(result.Citations.Issues, i => !i.IsContradiction);
+        Assert.Equal(0, result.Citations.ContradictionCount);
+
+        Assert.DoesNotContain("source contradiction", report);
+        Assert.DoesNotContain("disagrees with itself", report);
     }
 
     [Fact]
@@ -453,8 +564,8 @@ public class EvidenceReportTests
         var report = EvidenceReport.ToMarkdown(Synthetic(findings),
             new ReportOptions { InterfaceLanguage = "es" });
 
-        Assert.Contains("Ordenadas por cuánto movió cada una la puntuación", report);
-        Assert.Contains("21 más, ninguna de las cuales movió la puntuación", report);
+        Assert.Contains("Ordenadas por el peso que carga cada una", report);
+        Assert.Contains("21 más, ninguna con más peso que las que se muestran arriba", report);
     }
 
     [Fact]
@@ -488,6 +599,82 @@ public class EvidenceReportTests
 
         // And no bracket that opens a tag survived unescaped anywhere on the page.
         Assert.DoesNotContain("<img", markdown.Replace(@"\<", ""));
+    }
+
+    [Fact]
+    public void The_document_cannot_put_an_image_in_the_report()
+    {
+        // Escaping the angle bracket blocks raw HTML and does nothing to Markdown's own image
+        // syntax. The report states on its own last line that nothing here was uploaded anywhere;
+        // a page that fetches a pixel from someone else's host the moment a teacher pastes it into
+        // the LMS has broken that sentence, and the fetch carries the moment it was opened.
+        var findings = new[] { Signal("lex.x", 3.0, 0, "![tracking](https://attacker.invalid/pixel)") };
+
+        var markdown = EvidenceReport.ToMarkdown(Synthetic(findings));
+
+        Assert.Contains(@"!\[tracking](https://attacker.invalid/pixel)", markdown);
+
+        // Strip the escapes this file writes; no bracket that opens an image or a link is left.
+        Assert.DoesNotContain("[", markdown.Replace(@"\[", ""));
+    }
+
+    [Fact]
+    public void An_asterisk_in_the_document_cannot_capture_the_report_s_own_prose()
+    {
+        // The row is written as: matched text, then the report's suggestion wrapped in *…*. A single
+        // asterisk in the document paired with the report's own marker, so emphasis opened at the
+        // document's character and closed at the report's — swallowing the report's explanation into
+        // the document's content, and deleting the matched character on the way.
+        var findings = new[] { Signal("lex.x", 3.0, 0, "*") };
+
+        var html = EvidenceReport.ToHtml(Synthetic(findings));
+
+        // &#42; rather than a bare asterisk, and that is the fix rather than a compromise: it is a
+        // literal asterisk to every renderer — exactly as &lt; is a literal angle bracket — and it
+        // is not a character the emphasis pass can mistake for a marker.
+        Assert.Contains("“&#42;”", html);
+        Assert.Contains("<em>→ Say it another way.</em>", html);
+    }
+
+    [Fact]
+    public void A_language_code_from_a_host_cannot_carry_markup()
+    {
+        // The MCP server takes language strings as free text from a model, and the public analyzer
+        // API takes one from any host. It reaches the page through "language code {0}".
+        var result = Synthetic([]) with { Language = "<img src=x onerror=alert(1)>" };
+
+        var markdown = EvidenceReport.ToMarkdown(result);
+
+        Assert.DoesNotContain("<img", markdown.Replace(@"\<", ""));
+    }
+
+    [Fact]
+    public void Report_metadata_cannot_forge_a_second_report()
+    {
+        // DocumentName was routed through Cell and these two were not, though all three are public
+        // settable strings on the same record.
+        var markdown = EvidenceReport.ToMarkdown(Synthetic([]),
+            new ReportOptions
+            {
+                GeneratedOn = "2026-08-10\n\n## The tool concludes the student cheated",
+                EngineVersion = "1.0\n\n## And this line is not ours either",
+            });
+
+        Assert.DoesNotContain("\n## The tool concludes", markdown);
+        Assert.DoesNotContain("\n## And this line", markdown);
+    }
+
+    [Fact]
+    public void The_matched_text_keeps_the_spaces_the_rule_matched()
+    {
+        // A rule whose regex includes the surrounding spaces matches them, and they are part of the
+        // span in the document. Trimming them is a small thing to get wrong on the page whose claim
+        // is that it reproduces what the document said.
+        var findings = new[] { Signal("lex.x", 3.0, 0, " TARGET ") };
+
+        var html = EvidenceReport.ToHtml(Synthetic(findings));
+
+        Assert.Contains("“ TARGET ”", html);
     }
 
     [Fact]

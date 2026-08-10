@@ -48,6 +48,11 @@ public static class EvidenceReport
         var title = string.Equals(o.Title, ReportOptions.Default.Title, StringComparison.Ordinal)
             ? text.Get(ReportMessages.DefaultTitle).Text
             : o.Title;
+        // MaxRows is public, settable and unvalidated, and this library is on NuGet. A negative value
+        // printed "… and 12 more" for two findings — a count of omitted evidence larger than the
+        // evidence — because the arithmetic is Count minus the limit. Clamped once, here, rather than
+        // trusted at four call sites.
+        var rows = Math.Max(0, o.MaxRows);
 
         // Through Cell like everything else this report did not write: the title is a caller's string,
         // and every host that has one builds it from a filename.
@@ -56,7 +61,7 @@ public static class EvidenceReport
         var fallbackNoticeAt = sb.Length;
         if (!string.IsNullOrWhiteSpace(o.DocumentName))
             AppendBlock(sb, text, ReportMessages.MetaDocument, Cell(o.DocumentName));
-        AppendBlock(sb, text, ReportMessages.MetaGenerated, o.GeneratedOn, o.EngineVersion);
+        AppendBlock(sb, text, ReportMessages.MetaGenerated, Cell(o.GeneratedOn), Cell(o.EngineVersion));
         sb.AppendLine();
 
         // ── The reading, and immediately the caveat that makes it usable ──────────────────────────
@@ -83,23 +88,31 @@ public static class EvidenceReport
         // Named up here rather than left to the section below, because a page that opens "0/100" and
         // buries four contradictions in its own bibliography further down has chosen the wrong thing
         // to make salient — and that exact document is the one this project keeps writing about.
-        if (result.Citations.Issues.Count > 0 || result.Artifacts.Any)
+        // Contradictions, not issues. CitationIssue draws this line itself — a cited source missing
+        // from the list is a contradiction, an uncited entry in the list is not, "because people
+        // legitimately list further reading" — and the headline used to count both. A document whose
+        // only fault was further reading was announced as "1 source contradiction", and the note
+        // below the section then asserted in the report's own voice that it "disagrees with itself".
+        // That is an accusation the checker had explicitly declined to make, printed on the page a
+        // teacher takes to a committee, and it shipped for months.
+        var contradictions = result.Citations.ContradictionCount;
+        if (contradictions > 0 || result.Artifacts.Any)
         {
-            if (result.Citations.Issues.Count > 0 && result.Artifacts.Any)
+            if (contradictions > 0 && result.Artifacts.Any)
                 AppendBlock(sb, text,
-                    result.Citations.Issues.Count == 1
+                    contradictions == 1
                         ? result.Artifacts.Count == 1
                             ? ReportMessages.AnalysisFactsBothOneOne
                             : ReportMessages.AnalysisFactsBothOneOther
                         : result.Artifacts.Count == 1
                             ? ReportMessages.AnalysisFactsBothOtherOne
                             : ReportMessages.AnalysisFactsBothOtherOther,
-                    result.Citations.Issues.Count, result.Artifacts.Count);
-            else if (result.Citations.Issues.Count > 0)
-                AppendBlock(sb, text, result.Citations.Issues.Count == 1
+                    contradictions, result.Artifacts.Count);
+            else if (contradictions > 0)
+                AppendBlock(sb, text, contradictions == 1
                         ? ReportMessages.AnalysisFactsCitationOne
                         : ReportMessages.AnalysisFactsCitationOther,
-                    result.Citations.Issues.Count);
+                    contradictions);
             else
                 AppendBlock(sb, text, result.Artifacts.Count == 1
                         ? ReportMessages.AnalysisFactsArtifactOne
@@ -155,6 +168,11 @@ public static class EvidenceReport
                 // pasted in. Saying so here is the difference between a fact and an insinuation.
                 AppendBlock(sb, text, ReportMessages.CharactersExplanation);
                 sb.AppendLine();
+                // Said above the one table the reader is invited to check in an editor. Without it
+                // the Line column reads 6, 1, 2, 3 and looks like the tool lost its place — the
+                // same reason the signals list carries its own ordering line.
+                AppendBlock(sb, text, ReportMessages.CharactersOrdered);
+                sb.AppendLine();
                 AppendBlock(sb, text, ReportMessages.CharactersTableHeader);
                 sb.AppendLine("|---|---|---:|---:|");
                 // Strong kinds first, then by position. A file can hold two hundred soft hyphens —
@@ -165,15 +183,15 @@ public static class EvidenceReport
                 foreach (var occurrence in result.Artifacts.Occurrences
                              .OrderByDescending(a => a.IsStrong)
                              .ThenBy(a => a.Line).ThenBy(a => a.Column)
-                             .Take(o.MaxRows))
+                             .Take(rows))
                     sb.Append("| ").Append(Cell(Describe(occurrence.Kind))).Append(" | `")
                       .Append(occurrence.CodePoint).Append("` | ").Append(occurrence.Line)
                       .Append(" | ").Append(occurrence.Column).AppendLine(" |");
-                if (result.Artifacts.Occurrences.Count > o.MaxRows)
+                if (result.Artifacts.Occurrences.Count > rows)
                 {
                     sb.AppendLine();
                     AppendBlock(sb, text, ReportMessages.MoreRows,
-                        result.Artifacts.Occurrences.Count - o.MaxRows);
+                        result.Artifacts.Occurrences.Count - rows);
                 }
                 sb.AppendLine();
             }
@@ -184,16 +202,22 @@ public static class EvidenceReport
                 sb.AppendLine();
                 sb.AppendLine(Cell(result.Citations.Summary));
                 sb.AppendLine();
-                foreach (var issue in result.Citations.Issues.Take(o.MaxRows))
+                // Contradictions before untidiness, then in document order. Cutting this list by
+                // position was the same defect as the signals list and it was left in place one
+                // commit ago: forty uncited entries early in a long bibliography would print, and
+                // the repeated DOI in the last one — the finding that settles anything — would not.
+                foreach (var issue in result.Citations.Issues
+                             .OrderByDescending(i => i.IsContradiction).ThenBy(i => i.Line)
+                             .Take(rows))
                     sb.Append("- ").AppendLine(Cell(issue.Message));
                 // This list used to stop at forty in silence, alone among the four. A reader counting
                 // the contradictions on the page against the number the summary above states would
                 // find the page contradicting itself about a document accused of contradicting itself.
-                if (result.Citations.Issues.Count > o.MaxRows)
+                if (result.Citations.Issues.Count > rows)
                 {
                     sb.AppendLine();
                     AppendBlock(sb, text, ReportMessages.MoreRows,
-                        result.Citations.Issues.Count - o.MaxRows);
+                        result.Citations.Issues.Count - rows);
                 }
                 sb.AppendLine();
                 // Only claimed when something actually contradicts. The first version printed it
@@ -202,7 +226,7 @@ public static class EvidenceReport
                 // its own voice, a self-contradiction it had explicitly not looked for. In a document
                 // that goes to a committee about a nineteen-year-old, that is the precise harm this
                 // project exists to argue against.
-                AppendBlock(sb, text, result.Citations.Issues.Count > 0
+                AppendBlock(sb, text, result.Citations.ContradictionCount > 0
                     ? ReportMessages.CitationsIssuesNote
                     : ReportMessages.CitationsNoIssuesNote);
                 sb.AppendLine();
@@ -226,7 +250,17 @@ public static class EvidenceReport
             // the visible evidence could not account for — in the one document this project builds
             // for somebody to take into a room where a decision is made about a person.
             //
-            // Weight is the finding's own contribution to the score. Ties are broken by how many
+            // The line says weight and not "how much it moved the score", which was the first
+            // wording and is false for one finding. Every non-statistical finding pools into a
+            // single weighted density that Map turns into the pattern score, and Map is monotone,
+            // so among those the order by weight *is* the order by contribution. The burstiness
+            // finding is not one of those: Scorer excludes the Statistical category from that sum
+            // and derives its share from the sentence-length distribution instead, so the weight it
+            // carries ranks it on this page without being what moved the number. It sorted to the
+            // top of the first report generated from this code, which is where the claim would have
+            // been read and where it would have been wrong.
+            //
+            // Ties are broken by how many
             // times that rule has already appeared, and only then by position: sixteen English rules
             // share the weight 3.5, and in a tie the reader is better served by one occurrence of
             // each before any second occurrence than by one rule's run. It reorders strictly within
@@ -248,20 +282,23 @@ public static class EvidenceReport
                          .ThenBy(x => x.Rank)
                          .ThenBy(x => x.Finding.Span.Start)
                          .Select(x => x.Finding)
-                         .Take(o.MaxRows))
+                         .Take(rows))
             {
                 sb.Append("- **").Append(f.Category).Append("** — ");
                 if (!string.IsNullOrWhiteSpace(f.MatchedText))
                     sb.Append('“').Append(Cell(f.MatchedText)).Append("” — ");
                 sb.Append(Cell(f.Message)).Append(' ').Append("*→ ").Append(Cell(f.Suggestion)).AppendLine("*");
             }
-            if (result.Signals.Count > o.MaxRows)
+            if (result.Signals.Count > rows)
             {
                 sb.AppendLine();
                 // Not the generic "… and N more": what was cut is now a property of the evidence
                 // rather than of where it happened to fall, and the reader is entitled to know that
-                // nothing stronger than what they are looking at was left out.
-                AppendBlock(sb, text, ReportMessages.SignalsMore, result.Signals.Count - o.MaxRows);
+                // nothing stronger than what they are looking at was left out. That clause needs
+                // something to be looking at — at zero rows there is nothing above for the omitted
+                // findings to weigh less than, so the generic line, which stays true, is used.
+                AppendBlock(sb, text, rows > 0 ? ReportMessages.SignalsMore : ReportMessages.MoreRows,
+                    result.Signals.Count - rows);
             }
         }
         sb.AppendLine();
@@ -279,15 +316,15 @@ public static class EvidenceReport
             var groups = result.Observations.GroupBy(f => f.RuleId)
                 .OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal)
                 .ToList();
-            foreach (var group in groups.Take(o.MaxRows))
+            foreach (var group in groups.Take(rows))
                 AppendBlock(sb, text, group.Count() == 1
                         ? ReportMessages.ObservationsRowOne
                         : ReportMessages.ObservationsRowOther,
                     Cell(group.Key), group.Count());
-            if (groups.Count > o.MaxRows)
+            if (groups.Count > rows)
             {
                 sb.AppendLine();
-                AppendBlock(sb, text, ReportMessages.MoreRows, groups.Count - o.MaxRows);
+                AppendBlock(sb, text, ReportMessages.MoreRows, groups.Count - rows);
             }
             sb.AppendLine();
         }
@@ -361,7 +398,7 @@ public static class EvidenceReport
         sb.AppendLine();
         var fallbackNoticeAt = sb.Length;
         AppendBlock(sb, text, ReportMessages.MetaFolder, Cell(folderName));
-        AppendBlock(sb, text, ReportMessages.MetaGenerated, o.GeneratedOn, o.EngineVersion);
+        AppendBlock(sb, text, ReportMessages.MetaGenerated, Cell(o.GeneratedOn), Cell(o.EngineVersion));
         sb.AppendLine();
         AppendBlock(sb, text, unreadable.Count > 0
                 ? entries.Count == 1
@@ -567,12 +604,18 @@ public static class EvidenceReport
         _ => ReportMessages.VerdictNone,
     }).Text;
 
+    /// <summary>
+    /// The two known names, or the code itself. Through <see cref="Cell"/>, because for anything
+    /// other than en and es this prints a string the report did not write: <c>Analyze</c> takes the
+    /// language from its caller, the MCP server takes it as free text from a model, and
+    /// <see cref="AnalysisResult"/> is a public record any host can construct.
+    /// </summary>
     private static string LanguageName(ReportText text, string language) => text.Get(
         language.Equals("en", StringComparison.OrdinalIgnoreCase) ? ReportMessages.LanguageEnglish
         : language.Equals("es", StringComparison.OrdinalIgnoreCase) ? ReportMessages.LanguageSpanish
         : ReportMessages.LanguageOther,
         language.Equals("en", StringComparison.OrdinalIgnoreCase)
-            || language.Equals("es", StringComparison.OrdinalIgnoreCase) ? [] : [language]).Text;
+            || language.Equals("es", StringComparison.OrdinalIgnoreCase) ? [] : [Cell(language)]).Text;
 
     private static void AppendBlock(
         StringBuilder sb, ReportText text, string key, params object?[] args) =>
@@ -666,7 +709,28 @@ public static class EvidenceReport
     /// followed become report prose — a line beginning "## " arrived as a heading, in the report's own
     /// voice, from a filename or an extractor's error message; and a <c>&lt;</c>.
     ///
-    /// The last one is why the Markdown form needs escaping at all. <see cref="ToHtml"/> escapes on
+    /// Then two of Markdown's own: <c>[</c>, because escaping the angle bracket blocks raw HTML and
+    /// does nothing whatever to <c>![alt](url)</c> — the page's last line says nothing here was
+    /// uploaded anywhere, and an image node fetches from somebody else's host the moment a teacher
+    /// pastes the report into an LMS, carrying the moment they opened it. Escaping the opening
+    /// bracket is enough for both images and links; the <c>!</c> in front of one is only a
+    /// character. And <c>*</c>, because the signal row is written as the matched text followed by
+    /// the report's own <c>*→ suggestion*</c>: a single asterisk in the document paired with the
+    /// report's marker, so emphasis opened at the document's character and closed at the report's,
+    /// swallowing the report's explanation into the document's content and deleting the matched
+    /// character on the way. That covers <c>**</c> with it, which could shift the pairing of the
+    /// category's own bold.
+    ///
+    /// <c>_</c> and <c>`</c> are deliberately left alone. Neither can pair with a marker this report
+    /// writes on the same line, so the worst they do is italicise a document's own text, and
+    /// escaping them would put a backslash in front of the underscore in every filename a teacher
+    /// reads. A bare URL still autolinks in some renderers; that is a link, not a request, and it
+    /// cannot be escaped without mangling the URL the reader needs to see.
+    ///
+    /// Nothing here is trimmed. Whitespace a rule matched is part of the span in the document, and
+    /// this is the page that claims to reproduce what the document said.
+    ///
+    /// The angle bracket is why the Markdown form needs escaping at all. <see cref="ToHtml"/> escapes on
     /// its way out, so the HTML was never at risk — but Markdown is the form this file documents for
     /// pasting into an LMS comment box or a GitHub issue, and both of those render raw HTML embedded
     /// in Markdown. A document containing <c>&lt;img src=x onerror=…&gt;</c> reached them intact, and
@@ -688,7 +752,8 @@ public static class EvidenceReport
                   .Replace("\\", "\\\\")
                   .Replace("|", "\\|")
                   .Replace("<", "\\<")
-                  .Trim();
+                  .Replace("[", "\\[")
+                  .Replace("*", "\\*");
 
     private static string Escape(string s) =>
         s.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
@@ -796,7 +861,7 @@ public static class EvidenceReport
     /// <summary>Bold, italic and code, applied after escaping so a document cannot inject markup.</summary>
     private static string Inline(string text)
     {
-        var s = Escape(Unescape(text));
+        var s = EscapeInline(text);
         s = Wrap(s, "**", "<strong>", "</strong>");
         s = Wrap(s, "`", "<code>", "</code>");
         s = Wrap(s, "*", "<em>", "</em>");
@@ -804,29 +869,46 @@ public static class EvidenceReport
     }
 
     /// <summary>
-    /// Undoes what <see cref="Cell"/> wrote, so the HTML shows the character and not the backslash
-    /// that protected it in the Markdown. Only the three escapes this file emits: a backslash before
-    /// anything else came from the document and stays.
+    /// HTML-escapes a line and resolves the escapes <see cref="Cell"/> wrote, in one pass, so the
+    /// page shows the character rather than the backslash that protected it in the Markdown — and so
+    /// that a character the document supplied can never be read as a marker by <see cref="Wrap"/>.
     ///
-    /// Table cells already lose their <c>\|</c> in <see cref="SplitRow"/>, which has to resolve them
-    /// before it can tell a real column boundary from a pipe inside a filename; the list items and
-    /// paragraphs had no such step, so a citation message containing a pipe used to reach the HTML
-    /// page as <c>\|</c>.
+    /// The order is the whole point. Resolving the escapes first and escaping afterwards puts a live
+    /// asterisk back into the line before the emphasis pass runs, which is the defect this is here to
+    /// stop: the row is written as the matched text and then the report's own <c>*→ suggestion*</c>,
+    /// so one asterisk from the document paired with the report's marker and swallowed the report's
+    /// explanation into the document's content. An asterisk therefore comes back as <c>&amp;#42;</c>,
+    /// which is a literal asterisk to every renderer and is not a character <see cref="Wrap"/> can
+    /// see. Nothing else needs the treatment: <c>[</c> and <c>|</c> are not markers here.
+    ///
+    /// Table cells lose their <c>\|</c> earlier, in <see cref="SplitRow"/>, which has to resolve them
+    /// before it can tell a column boundary from a pipe inside a filename. List items and paragraphs
+    /// had no such step, so a citation message containing a pipe used to reach the page as <c>\|</c>.
     /// </summary>
-    private static string Unescape(string text)
+    private static string EscapeInline(string text)
     {
-        if (!text.Contains('\\')) return text;
-
         var sb = new StringBuilder(text.Length);
         for (int i = 0; i < text.Length; i++)
         {
             if (text[i] == '\\' && i + 1 < text.Length
-                && (text[i + 1] is '|' or '<' or '\\'))
+                && text[i + 1] is '|' or '<' or '[' or '*' or '\\')
             {
-                sb.Append(text[++i]);
+                sb.Append(text[++i] switch
+                {
+                    '*' => "&#42;",
+                    '<' => "&lt;",
+                    var c => c.ToString(),
+                });
                 continue;
             }
-            sb.Append(text[i]);
+
+            sb.Append(text[i] switch
+            {
+                '&' => "&amp;",
+                '<' => "&lt;",
+                '>' => "&gt;",
+                var c => c.ToString(),
+            });
         }
         return sb.ToString();
     }

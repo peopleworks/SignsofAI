@@ -78,6 +78,13 @@ public static class ReportMessages
     public const string CheckableIntro = "checkable.intro";
     public const string CharactersExplanation = "characters.explanation";
     public const string CharactersTableHeader = "characters.table-header";
+
+    /// <summary>
+    /// Why the table is not in file order. It prints line and column so the reader can find each
+    /// occurrence in an editor, which makes it the one table on the page they are invited to verify —
+    /// and a Line column reading 6, 1, 2, 3 with no explanation looks like a defect.
+    /// </summary>
+    public const string CharactersOrdered = "characters.ordered";
     public const string MoreRows = "common.more-rows";
     public const string CitationsIssuesNote = "citations.issues-note";
     public const string CitationsNoIssuesNote = "citations.no-issues-note";
@@ -168,6 +175,7 @@ public static class ReportMessages
         [CheckableIntro] = 0,
         [CharactersExplanation] = 0,
         [CharactersTableHeader] = 0,
+        [CharactersOrdered] = 0,
         [MoreRows] = 1,
         [CitationsIssuesNote] = 0,
         [CitationsNoIssuesNote] = 0,
@@ -256,12 +264,13 @@ public static class ReportMessages
         [CheckableIntro] = "These are not judgements about the writing and they did not move the score. Each is either present in the file or it is not.",
         [CharactersExplanation] = "Several of these have ordinary explanations — word processors insert soft hyphens and unusual spaces on their own, and any copy-paste can carry them. Invisible characters and letters borrowed from another alphabet are harder to arrive at by accident, though pasting text can do it. This table says what is in the file, not how it got there.",
         [CharactersTableHeader] = "| Character | Codepoint | Line | Column |",
+        [CharactersOrdered] = "Listed with the characters hardest to arrive at by accident first, then in the order they appear in the file.",
         [MoreRows] = "… and {0} more.",
         [CitationsIssuesNote] = "> None of this needed the internet: the document disagrees with itself. It is a question to ask, not a conclusion — the answer is usually one sentence.",
         [CitationsNoIssuesNote] = "> Nothing here is a finding. It describes what could and could not be checked.",
         [SignalsNone] = "None.",
-        [SignalsOrdered] = "Ordered by how much each one moved the score, strongest first, rather than by where it appears in the text.",
-        [SignalsMore] = "… and {0} more, none of which moved the score as much as any of the above.",
+        [SignalsOrdered] = "Ordered by how much weight each one carries, heaviest first, rather than by where it appears in the text.",
+        [SignalsMore] = "… and {0} more, none of them carrying more weight than what is shown above.",
         [ObservationsIntro] = "Measured against writing published before generative models existed. Shown because they are real, and counted for nothing because they are ordinary.",
         [ObservationsRowOne] = "- {0} — {1} occurrence",
         [ObservationsRowOther] = "- {0} — {1} occurrences",

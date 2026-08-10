@@ -28,7 +28,19 @@ public sealed record Finding
     /// <summary>Optional evidence, e.g. "48× more frequent post-ChatGPT".</summary>
     public string? Evidence { get; init; }
 
-    /// <summary>Contribution of this finding to the overall score (higher = stronger AI signal).</summary>
+    /// <summary>
+    /// How much this finding weighs (higher = stronger AI signal).
+    ///
+    /// For everything outside <see cref="SignCategory.Statistical"/> this is its contribution to the
+    /// score: the scorer sums these into one weighted density and maps it monotonically, so more
+    /// weight is more score. <c>stat.burstiness</c> is the exception — the scorer excludes that
+    /// category from the sum and derives its share from the sentence-length distribution instead, so
+    /// the weight it carries ranks it against the others without being what moved the number.
+    ///
+    /// This said "contribution of this finding to the overall score", which was false for that one
+    /// finding, and it stopped being a harmless inaccuracy the moment the evidence report began
+    /// sorting by it and telling the reader what the order meant.
+    /// </summary>
     public double Weight { get; init; }
 
     /// <summary>
