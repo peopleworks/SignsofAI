@@ -49,7 +49,9 @@ public static class EvidenceReport
             ? text.Get(ReportMessages.DefaultTitle).Text
             : o.Title;
 
-        sb.Append("# ").Append(title).AppendLine();
+        // Through Cell like everything else this report did not write: the title is a caller's string,
+        // and every host that has one builds it from a filename.
+        sb.Append("# ").Append(Cell(title)).AppendLine();
         sb.AppendLine();
         var fallbackNoticeAt = sb.Length;
         if (!string.IsNullOrWhiteSpace(o.DocumentName))
@@ -144,7 +146,7 @@ public static class EvidenceReport
             {
                 AppendHeading(sb, text, 3, ReportMessages.SectionCharacters);
                 sb.AppendLine();
-                sb.AppendLine(result.Artifacts.Summary);
+                sb.AppendLine(Cell(result.Artifacts.Summary));
                 sb.AppendLine();
                 // The heading used to say "characters writing does not produce", which is false for
                 // half of what this table lists: Word makes soft hyphens on its own and a stray
@@ -155,7 +157,15 @@ public static class EvidenceReport
                 sb.AppendLine();
                 AppendBlock(sb, text, ReportMessages.CharactersTableHeader);
                 sb.AppendLine("|---|---|---:|---:|");
-                foreach (var occurrence in result.Artifacts.Occurrences.Take(o.MaxRows))
+                // Strong kinds first, then by position. A file can hold two hundred soft hyphens —
+                // Word inserts them unprompted — and one letter borrowed from another alphabet. In
+                // document order the innocent two hundred fill the table and the one occurrence that
+                // is hard to arrive at by accident falls off the end. IsStrong is the scanner's own
+                // published distinction, not a new judgement invented for the page.
+                foreach (var occurrence in result.Artifacts.Occurrences
+                             .OrderByDescending(a => a.IsStrong)
+                             .ThenBy(a => a.Line).ThenBy(a => a.Column)
+                             .Take(o.MaxRows))
                     sb.Append("| ").Append(Cell(Describe(occurrence.Kind))).Append(" | `")
                       .Append(occurrence.CodePoint).Append("` | ").Append(occurrence.Line)
                       .Append(" | ").Append(occurrence.Column).AppendLine(" |");
@@ -172,10 +182,19 @@ public static class EvidenceReport
             {
                 AppendHeading(sb, text, 3, ReportMessages.SectionCitations);
                 sb.AppendLine();
-                sb.AppendLine(result.Citations.Summary);
+                sb.AppendLine(Cell(result.Citations.Summary));
                 sb.AppendLine();
                 foreach (var issue in result.Citations.Issues.Take(o.MaxRows))
                     sb.Append("- ").AppendLine(Cell(issue.Message));
+                // This list used to stop at forty in silence, alone among the four. A reader counting
+                // the contradictions on the page against the number the summary above states would
+                // find the page contradicting itself about a document accused of contradicting itself.
+                if (result.Citations.Issues.Count > o.MaxRows)
+                {
+                    sb.AppendLine();
+                    AppendBlock(sb, text, ReportMessages.MoreRows,
+                        result.Citations.Issues.Count - o.MaxRows);
+                }
                 sb.AppendLine();
                 // Only claimed when something actually contradicts. The first version printed it
                 // whenever there was anything to say about sources at all — including "no reference
@@ -199,7 +218,37 @@ public static class EvidenceReport
         }
         else
         {
-            foreach (var f in result.Signals.Take(o.MaxRows))
+            // Strongest first, and the page says so. The analyser returns findings in the order they
+            // occur in the text, because that is what highlighting and the rewriter need; printing
+            // them that way and then cutting at forty meant a long document could spend the whole
+            // list on weak hits in its opening pages while the finding that did most to produce the
+            // headline number sat in the last paragraph, omitted. The reader was then given a score
+            // the visible evidence could not account for — in the one document this project builds
+            // for somebody to take into a room where a decision is made about a person.
+            //
+            // Weight is the finding's own contribution to the score. Ties are broken by how many
+            // times that rule has already appeared, and only then by position: sixteen English rules
+            // share the weight 3.5, and in a tie the reader is better served by one occurrence of
+            // each before any second occurrence than by one rule's run. It reorders strictly within
+            // equal weight, so it costs the guarantee nothing — everything omitted still weighs no
+            // more than everything shown, which is what the line below is entitled to say.
+            //
+            // A rule that genuinely outweighs the rest still fills the list with its own repeats,
+            // and that is the honest picture: fourteen occurrences of one word are where such a
+            // document's number actually comes from. Whether the section should collapse them into
+            // a count, as the observations section does, is a question about its shape rather than
+            // about which evidence it drops.
+            AppendBlock(sb, text, ReportMessages.SignalsOrdered);
+            sb.AppendLine();
+            foreach (var f in result.Signals
+                         .GroupBy(f => f.RuleId)
+                         .SelectMany(g => g.OrderBy(f => f.Span.Start)
+                                           .Select((f, rank) => (Finding: f, Rank: rank)))
+                         .OrderByDescending(x => x.Finding.Weight)
+                         .ThenBy(x => x.Rank)
+                         .ThenBy(x => x.Finding.Span.Start)
+                         .Select(x => x.Finding)
+                         .Take(o.MaxRows))
             {
                 sb.Append("- **").Append(f.Category).Append("** — ");
                 if (!string.IsNullOrWhiteSpace(f.MatchedText))
@@ -209,7 +258,10 @@ public static class EvidenceReport
             if (result.Signals.Count > o.MaxRows)
             {
                 sb.AppendLine();
-                AppendBlock(sb, text, ReportMessages.MoreRows, result.Signals.Count - o.MaxRows);
+                // Not the generic "… and N more": what was cut is now a property of the evidence
+                // rather than of where it happened to fall, and the reader is entitled to know that
+                // nothing stronger than what they are looking at was left out.
+                AppendBlock(sb, text, ReportMessages.SignalsMore, result.Signals.Count - o.MaxRows);
             }
         }
         sb.AppendLine();
@@ -220,11 +272,23 @@ public static class EvidenceReport
             sb.AppendLine();
             AppendBlock(sb, text, ReportMessages.ObservationsIntro);
             sb.AppendLine();
-            foreach (var group in result.Observations.GroupBy(f => f.RuleId).Take(o.MaxRows))
+            // Most frequent first, for the same reason as the signals list: a rule used thirty times
+            // is the one the reader wants to see, and in rule-id order it can be pushed out by
+            // twenty rules that fired once. The id comes from a rule pack, which is JSON anyone can
+            // contribute, so it goes through Cell like any other text this report did not write.
+            var groups = result.Observations.GroupBy(f => f.RuleId)
+                .OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal)
+                .ToList();
+            foreach (var group in groups.Take(o.MaxRows))
                 AppendBlock(sb, text, group.Count() == 1
                         ? ReportMessages.ObservationsRowOne
                         : ReportMessages.ObservationsRowOther,
-                    group.Key, group.Count());
+                    Cell(group.Key), group.Count());
+            if (groups.Count > o.MaxRows)
+            {
+                sb.AppendLine();
+                AppendBlock(sb, text, ReportMessages.MoreRows, groups.Count - o.MaxRows);
+            }
             sb.AppendLine();
         }
 
@@ -293,7 +357,7 @@ public static class EvidenceReport
         var unreadable = entries.Where(e => e.Error is not null).ToList();
         var scored = entries.Where(e => e.Error is null && e.Score is not null).ToList();
 
-        sb.Append("# ").AppendLine(title);
+        sb.Append("# ").AppendLine(Cell(title));
         sb.AppendLine();
         var fallbackNoticeAt = sb.Length;
         AppendBlock(sb, text, ReportMessages.MetaFolder, Cell(folderName));
@@ -596,19 +660,35 @@ public static class EvidenceReport
                                   CultureInfo.InvariantCulture) + "%";
 
     /// <summary>
-    /// User content on its way into a Markdown line. Two things it must survive being given: a pipe,
+    /// User content on its way into a Markdown line. Three things it must survive being given: a pipe,
     /// which would open an extra table cell and shift every number one column to the right in a table
-    /// a teacher reads scores from; and a newline, which would end the list item and let whatever
+    /// a teacher reads scores from; a newline, which would end the list item and let whatever
     /// followed become report prose — a line beginning "## " arrived as a heading, in the report's own
-    /// voice, from a filename or an extractor's error message.
+    /// voice, from a filename or an extractor's error message; and a <c>&lt;</c>.
     ///
-    /// Matched text is user content by definition, and so is anything a community rule pack matches,
-    /// which is JSON anybody can contribute.
+    /// The last one is why the Markdown form needs escaping at all. <see cref="ToHtml"/> escapes on
+    /// its way out, so the HTML was never at risk — but Markdown is the form this file documents for
+    /// pasting into an LMS comment box or a GitHub issue, and both of those render raw HTML embedded
+    /// in Markdown. A document containing <c>&lt;img src=x onerror=…&gt;</c> reached them intact, and
+    /// the person pasting it is a teacher who has been told the report is the safe thing to forward.
+    /// Backslash rather than an entity, so the character survives one escaping and exactly one:
+    /// <see cref="Inline"/> undoes it before escaping for HTML, and the reader sees what the document
+    /// actually said. Reproducing the matched text exactly is the claim this product rests on.
+    ///
+    /// Matched text is user content by definition, and so is anything a community rule pack matches
+    /// or names, which is JSON anybody can contribute.
     /// </summary>
     private static string Cell(string? text) =>
         string.IsNullOrEmpty(text)
             ? ""
-            : text.ReplaceLineEndings(" ").Replace("|", "\\|").Trim();
+            // The backslash goes first, and it is not decoration. Escaping only the bracket turns a
+            // document that already contains \< into \\< , which Markdown reads as an escaped
+            // backslash followed by a live bracket — the escape defeated with one extra character.
+            : text.ReplaceLineEndings(" ")
+                  .Replace("\\", "\\\\")
+                  .Replace("|", "\\|")
+                  .Replace("<", "\\<")
+                  .Trim();
 
     private static string Escape(string s) =>
         s.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
@@ -716,11 +796,39 @@ public static class EvidenceReport
     /// <summary>Bold, italic and code, applied after escaping so a document cannot inject markup.</summary>
     private static string Inline(string text)
     {
-        var s = Escape(text);
+        var s = Escape(Unescape(text));
         s = Wrap(s, "**", "<strong>", "</strong>");
         s = Wrap(s, "`", "<code>", "</code>");
         s = Wrap(s, "*", "<em>", "</em>");
         return s;
+    }
+
+    /// <summary>
+    /// Undoes what <see cref="Cell"/> wrote, so the HTML shows the character and not the backslash
+    /// that protected it in the Markdown. Only the three escapes this file emits: a backslash before
+    /// anything else came from the document and stays.
+    ///
+    /// Table cells already lose their <c>\|</c> in <see cref="SplitRow"/>, which has to resolve them
+    /// before it can tell a real column boundary from a pipe inside a filename; the list items and
+    /// paragraphs had no such step, so a citation message containing a pipe used to reach the HTML
+    /// page as <c>\|</c>.
+    /// </summary>
+    private static string Unescape(string text)
+    {
+        if (!text.Contains('\\')) return text;
+
+        var sb = new StringBuilder(text.Length);
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (text[i] == '\\' && i + 1 < text.Length
+                && (text[i + 1] is '|' or '<' or '\\'))
+            {
+                sb.Append(text[++i]);
+                continue;
+            }
+            sb.Append(text[i]);
+        }
+        return sb.ToString();
     }
 
     private static string Wrap(string text, string marker, string open, string close)
@@ -762,6 +870,12 @@ public sealed record ReportOptions
     /// <summary>
     /// Where each list stops. A report meant to be read by a person is worth less at four hundred rows
     /// than at forty, and the count of what was left out is printed rather than the rows themselves.
+    ///
+    /// Every list that this cuts is sorted strongest first before it is cut, and every one of them
+    /// says how many it left out. Truncating a list the analyser returns in document order silently
+    /// discards the evidence with the most claim to be on the page — see the signals section. The
+    /// folder table is deliberately exempt and prints every file: a scan of two hundred essays that
+    /// omitted the low scorers would be withholding the result that settles a suspicion.
     /// </summary>
     public int MaxRows { get; init; } = 40;
 
