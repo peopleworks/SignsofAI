@@ -42,6 +42,14 @@
       "text": "Señales contabilizadas",
       "sourceHash": "078671a3b913dc8d830dc433445ca4b4cc401debf4b6fb8829ea9376ab658cc2"
     },
+    "signals.ordered": {
+      "text": "Ordenadas por cuánto movió cada una la puntuación, de mayor a menor, y no por el lugar que ocupan en el texto.",
+      "sourceHash": "6328aa4d5b8ee1e8742dad32fd9d8a92fe928d606938710e706be22d0be26f15"
+    },
+    "signals.more": {
+      "text": "… y {0} más, ninguna de las cuales movió la puntuación tanto como las de arriba.",
+      "sourceHash": "754e025aefdb15ea0b58eb55aecaa82c9da6799259ed0f2c64d33ccac3cfb558"
+    },
     "section.observations": {
       "text": "Encontrado, pero a una frecuencia habitual en textos humanos",
       "sourceHash": "828c9cc6ac44b392c9e7a358d18a7c9771519012e0c878ac3c02e367c5f75338"

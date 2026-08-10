@@ -1,5 +1,6 @@
 using SignsOfAI.Core;
 using SignsOfAI.Core.Calibration;
+using SignsOfAI.Core.Model;
 using SignsOfAI.Core.Reporting;
 using System.Text.RegularExpressions;
 
@@ -375,6 +376,168 @@ public class EvidenceReportTests
 
         Assert.DoesNotContain("not available in", report);
         Assert.DoesNotContain("no está disponible en", report);
+    }
+
+    /// <summary>
+    /// A result assembled by hand. The ordering defects need a document with more findings than the
+    /// report prints and a known strongest one, and building that out of real prose would make the
+    /// test a statement about which rules happen to fire rather than about what the report keeps.
+    /// </summary>
+    private static AnalysisResult Synthetic(IReadOnlyList<Finding> findings) => new()
+    {
+        Language = "en",
+        RulePackLanguage = "en",
+        Findings = findings,
+        CategoryScores = [],
+        OverallScore = 30,
+        Statistics = new TextStatistics { WordCount = 4000, SentenceCount = 200 },
+    };
+
+    private static Finding Signal(string id, double weight, int start, string matched) => new()
+    {
+        RuleId = id,
+        Category = SignCategory.Lexical,
+        Severity = Severity.Medium,
+        Span = new TextSpan(start, matched.Length),
+        MatchedText = matched,
+        Message = "Reads as a machine tell.",
+        Suggestion = "Say it another way.",
+        Weight = weight,
+    };
+
+    [Fact]
+    public void The_strongest_evidence_survives_a_document_longer_than_the_report()
+    {
+        // The defect this replaces: findings arrive in the order they occur in the text, the report
+        // cut the list at forty, and so a long document spent the whole list on weak hits in its
+        // opening pages while the finding that did most to produce the headline number — in the last
+        // paragraph — was dropped. The reader was handed a score the visible evidence could not
+        // account for, in the document this project builds for a room where somebody is judged.
+        var findings = Enumerable.Range(0, 60)
+            .Select(i => Signal("lex.weak", 1.0, i * 100, $"weak-{i:000}"))
+            .Append(Signal("lex.strong", 9.0, 99_000, "unmistakable-tell"))
+            .ToList();
+
+        var report = EvidenceReport.ToMarkdown(Synthetic(findings));
+
+        Assert.Contains("unmistakable-tell", report);
+        Assert.DoesNotContain("weak-059", report);
+    }
+
+    [Fact]
+    public void Says_what_it_left_out_and_that_none_of_it_outweighed_what_is_shown()
+    {
+        // "… and 21 more" over a list in document order says the report stopped reading. Over a list
+        // in weight order it can say something stronger and true: there is more, and none of it is
+        // heavier than what you are looking at. The claim is only earned by sorting first.
+        var findings = Enumerable.Range(0, 61)
+            .Select(i => Signal("lex.weak", 1.0, i * 100, $"weak-{i:000}"))
+            .ToList();
+
+        var report = EvidenceReport.ToMarkdown(Synthetic(findings));
+
+        Assert.Contains("Ordered by how much each one moved the score", report);
+        Assert.Contains("21 more, none of which moved the score as much as any of the above", report);
+    }
+
+    [Fact]
+    public void A_spanish_reader_is_told_the_order_in_Spanish()
+    {
+        // The line that explains why the list is not in the order of their student's document is the
+        // one a reader most needs in their own language, and a stale pin would drop it back to
+        // English without saying anything was wrong with it.
+        var findings = Enumerable.Range(0, 61)
+            .Select(i => Signal("lex.weak", 1.0, i * 100, $"weak-{i:000}"))
+            .ToList();
+
+        var report = EvidenceReport.ToMarkdown(Synthetic(findings),
+            new ReportOptions { InterfaceLanguage = "es" });
+
+        Assert.Contains("Ordenadas por cuánto movió cada una la puntuación", report);
+        Assert.Contains("21 más, ninguna de las cuales movió la puntuación", report);
+    }
+
+    [Fact]
+    public void A_strong_character_is_not_pushed_out_of_the_table_by_soft_hyphens()
+    {
+        // Word inserts soft hyphens unprompted, so a real file can hold hundreds of them and one
+        // letter borrowed from another alphabet. In file order the innocent ones fill the table and
+        // the one occurrence that is hard to arrive at by accident falls off the end — of the table
+        // this project points at when it says a character is a fact rather than an opinion.
+        var text = string.Concat(Enumerable.Repeat("sepa­ration of the parts. ", 60))
+                   + "The final delveе stands alone.";
+
+        var report = EvidenceReport.ToMarkdown(new AiWritingAnalyzer().Analyze(text, "en"));
+
+        Assert.Contains("Letter from another alphabet", report);
+    }
+
+    [Fact]
+    public void The_markdown_form_does_not_carry_live_html_into_a_comment_box()
+    {
+        // Markdown is the form documented here for pasting into an LMS comment box or a GitHub issue,
+        // and both render raw HTML embedded in Markdown. ToHtml escaped on its way out so the HTML
+        // page was never at risk; the Markdown was, and it is the one a teacher is told to forward.
+        var findings = new[] { Signal("lex.x", 3.0, 0, "<img src=x onerror=alert(1)>") };
+
+        var markdown = EvidenceReport.ToMarkdown(Synthetic(findings));
+
+        // Neutralised where a renderer reads it, and still legible where a person does: the escape
+        // is a backslash, so the teacher reading the raw file sees what the document actually said.
+        Assert.Contains(@"\<img src=x onerror=alert(1)>", markdown);
+
+        // And no bracket that opens a tag survived unescaped anywhere on the page.
+        Assert.DoesNotContain("<img", markdown.Replace(@"\<", ""));
+    }
+
+    [Fact]
+    public void A_backslash_in_the_document_cannot_defeat_the_escape()
+    {
+        // Escaping only the bracket is escaping that one extra character defeats: a document already
+        // containing \<script> becomes \\<script>, which Markdown reads as an escaped backslash and
+        // then a live tag. The backslash has to be escaped first or the rest is theatre.
+        var findings = new[] { Signal("lex.x", 3.0, 0, @"\<script>alert(1)</script>") };
+
+        var markdown = EvidenceReport.ToMarkdown(Synthetic(findings));
+
+        Assert.DoesNotContain("<script", markdown.Replace(@"\\", "").Replace(@"\<", ""));
+
+        // And the document's own backslash is still on the page: it was protected, not deleted.
+        Assert.Contains(@"\\\<script>", markdown);
+
+        // The HTML resolves both escapes and shows exactly what the document said, once.
+        var html = EvidenceReport.ToHtml(Synthetic(findings));
+        Assert.Contains(@"\&lt;script&gt;alert(1)&lt;/script&gt;", html);
+        Assert.DoesNotContain("<script", html);
+    }
+
+    [Fact]
+    public void The_html_page_still_reproduces_the_matched_text_exactly()
+    {
+        // The escaping must survive one pass and exactly one. Reproducing the matched text as the
+        // document wrote it is the claim this product rests on, and a page showing "\<img" or
+        // "&amp;lt;img" has corrupted the evidence in the course of protecting it.
+        var findings = new[] { Signal("lex.x", 3.0, 0, "<img src=x>") };
+
+        var html = EvidenceReport.ToHtml(Synthetic(findings));
+
+        Assert.Contains("&lt;img src=x&gt;", html);
+        Assert.DoesNotContain("\\&lt;", html);
+        Assert.DoesNotContain("&amp;lt;", html);
+    }
+
+    [Fact]
+    public void A_pipe_in_a_list_item_is_shown_as_a_pipe()
+    {
+        // Table cells lost their backslash in SplitRow, which has to resolve it before it can tell a
+        // column boundary from a pipe inside a filename. List items had no such step, so the escape
+        // that protected the table leaked onto the page everywhere else.
+        var findings = new[] { Signal("lex.x", 3.0, 0, "either|or") };
+
+        var html = EvidenceReport.ToHtml(Synthetic(findings));
+
+        Assert.Contains("either|or", html);
+        Assert.DoesNotContain("either\\|or", html);
     }
 
     [Fact]

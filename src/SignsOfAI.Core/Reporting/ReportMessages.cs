@@ -82,6 +82,20 @@ public static class ReportMessages
     public const string CitationsIssuesNote = "citations.issues-note";
     public const string CitationsNoIssuesNote = "citations.no-issues-note";
     public const string SignalsNone = "signals.none";
+
+    /// <summary>
+    /// Why the list is not in the order of the text. Printed whenever there are signals at all, not
+    /// only when the list is cut: the order changed for every reader, and one following the report
+    /// through their student's document would otherwise think the tool had lost its place.
+    /// </summary>
+    public const string SignalsOrdered = "signals.ordered";
+
+    /// <summary>
+    /// What the cut left out. Separate from <see cref="MoreRows"/> because here it can say something
+    /// the generic line cannot: not merely that there is more, but that none of it outweighs what is
+    /// on the page. That is only true because the list is sorted first.
+    /// </summary>
+    public const string SignalsMore = "signals.more";
     public const string ObservationsIntro = "observations.intro";
     public const string ObservationsRowOne = "observations.row.one";
     public const string ObservationsRowOther = "observations.row.other";
@@ -158,6 +172,8 @@ public static class ReportMessages
         [CitationsIssuesNote] = 0,
         [CitationsNoIssuesNote] = 0,
         [SignalsNone] = 0,
+        [SignalsOrdered] = 0,
+        [SignalsMore] = 1,         // {0} how many were left out
         [ObservationsIntro] = 0,
         [ObservationsRowOne] = 2,
         [ObservationsRowOther] = 2,
@@ -244,6 +260,8 @@ public static class ReportMessages
         [CitationsIssuesNote] = "> None of this needed the internet: the document disagrees with itself. It is a question to ask, not a conclusion — the answer is usually one sentence.",
         [CitationsNoIssuesNote] = "> Nothing here is a finding. It describes what could and could not be checked.",
         [SignalsNone] = "None.",
+        [SignalsOrdered] = "Ordered by how much each one moved the score, strongest first, rather than by where it appears in the text.",
+        [SignalsMore] = "… and {0} more, none of which moved the score as much as any of the above.",
         [ObservationsIntro] = "Measured against writing published before generative models existed. Shown because they are real, and counted for nothing because they are ordinary.",
         [ObservationsRowOne] = "- {0} — {1} occurrence",
         [ObservationsRowOther] = "- {0} — {1} occurrences",
