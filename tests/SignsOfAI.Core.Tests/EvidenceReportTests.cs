@@ -436,8 +436,8 @@ public class EvidenceReportTests
 
         var report = EvidenceReport.ToMarkdown(Synthetic(findings));
 
-        Assert.Contains("Ordered by how much each one moved the score", report);
-        Assert.Contains("21 more, none of which moved the score as much as any of the above", report);
+        Assert.Contains("Ordered by how much weight each one carries", report);
+        Assert.Contains("21 more, none of them carrying more weight than what is shown above", report);
     }
 
     [Fact]
@@ -453,8 +453,8 @@ public class EvidenceReportTests
         var report = EvidenceReport.ToMarkdown(Synthetic(findings),
             new ReportOptions { InterfaceLanguage = "es" });
 
-        Assert.Contains("Ordenadas por cuánto movió cada una la puntuación", report);
-        Assert.Contains("21 más, ninguna de las cuales movió la puntuación", report);
+        Assert.Contains("Ordenadas por el peso que carga cada una", report);
+        Assert.Contains("21 más, ninguna con más peso que las que se muestran arriba", report);
     }
 
     [Fact]

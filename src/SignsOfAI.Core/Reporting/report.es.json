@@ -43,12 +43,12 @@
       "sourceHash": "078671a3b913dc8d830dc433445ca4b4cc401debf4b6fb8829ea9376ab658cc2"
     },
     "signals.ordered": {
-      "text": "Ordenadas por cuánto movió cada una la puntuación, de mayor a menor, y no por el lugar que ocupan en el texto.",
-      "sourceHash": "6328aa4d5b8ee1e8742dad32fd9d8a92fe928d606938710e706be22d0be26f15"
+      "text": "Ordenadas por el peso que carga cada una, de mayor a menor, y no por el lugar que ocupan en el texto.",
+      "sourceHash": "5a270776bb1082eb80960b1a1b431b1a56fd4d6dd3f422544cd5959eeaf18c04"
     },
     "signals.more": {
-      "text": "… y {0} más, ninguna de las cuales movió la puntuación tanto como las de arriba.",
-      "sourceHash": "754e025aefdb15ea0b58eb55aecaa82c9da6799259ed0f2c64d33ccac3cfb558"
+      "text": "… y {0} más, ninguna con más peso que las que se muestran arriba.",
+      "sourceHash": "621da36ba6fb9cadbc5a4ded4368137d9bc81254ae34678cc98e0a8978aa2212"
     },
     "section.observations": {
       "text": "Encontrado, pero a una frecuencia habitual en textos humanos",

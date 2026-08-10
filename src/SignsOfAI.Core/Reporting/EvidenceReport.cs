@@ -226,7 +226,17 @@ public static class EvidenceReport
             // the visible evidence could not account for — in the one document this project builds
             // for somebody to take into a room where a decision is made about a person.
             //
-            // Weight is the finding's own contribution to the score. Ties are broken by how many
+            // The line says weight and not "how much it moved the score", which was the first
+            // wording and is false for one finding. Every non-statistical finding pools into a
+            // single weighted density that Map turns into the pattern score, and Map is monotone,
+            // so among those the order by weight *is* the order by contribution. The burstiness
+            // finding is not one of those: Scorer excludes the Statistical category from that sum
+            // and derives its share from the sentence-length distribution instead, so the weight it
+            // carries ranks it on this page without being what moved the number. It sorted to the
+            // top of the first report generated from this code, which is where the claim would have
+            // been read and where it would have been wrong.
+            //
+            // Ties are broken by how many
             // times that rule has already appeared, and only then by position: sixteen English rules
             // share the weight 3.5, and in a tie the reader is better served by one occurrence of
             // each before any second occurrence than by one rule's run. It reorders strictly within
