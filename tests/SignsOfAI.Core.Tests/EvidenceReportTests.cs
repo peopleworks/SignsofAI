@@ -602,6 +602,82 @@ public class EvidenceReportTests
     }
 
     [Fact]
+    public void The_document_cannot_put_an_image_in_the_report()
+    {
+        // Escaping the angle bracket blocks raw HTML and does nothing to Markdown's own image
+        // syntax. The report states on its own last line that nothing here was uploaded anywhere;
+        // a page that fetches a pixel from someone else's host the moment a teacher pastes it into
+        // the LMS has broken that sentence, and the fetch carries the moment it was opened.
+        var findings = new[] { Signal("lex.x", 3.0, 0, "![tracking](https://attacker.invalid/pixel)") };
+
+        var markdown = EvidenceReport.ToMarkdown(Synthetic(findings));
+
+        Assert.Contains(@"!\[tracking](https://attacker.invalid/pixel)", markdown);
+
+        // Strip the escapes this file writes; no bracket that opens an image or a link is left.
+        Assert.DoesNotContain("[", markdown.Replace(@"\[", ""));
+    }
+
+    [Fact]
+    public void An_asterisk_in_the_document_cannot_capture_the_report_s_own_prose()
+    {
+        // The row is written as: matched text, then the report's suggestion wrapped in *…*. A single
+        // asterisk in the document paired with the report's own marker, so emphasis opened at the
+        // document's character and closed at the report's — swallowing the report's explanation into
+        // the document's content, and deleting the matched character on the way.
+        var findings = new[] { Signal("lex.x", 3.0, 0, "*") };
+
+        var html = EvidenceReport.ToHtml(Synthetic(findings));
+
+        // &#42; rather than a bare asterisk, and that is the fix rather than a compromise: it is a
+        // literal asterisk to every renderer — exactly as &lt; is a literal angle bracket — and it
+        // is not a character the emphasis pass can mistake for a marker.
+        Assert.Contains("“&#42;”", html);
+        Assert.Contains("<em>→ Say it another way.</em>", html);
+    }
+
+    [Fact]
+    public void A_language_code_from_a_host_cannot_carry_markup()
+    {
+        // The MCP server takes language strings as free text from a model, and the public analyzer
+        // API takes one from any host. It reaches the page through "language code {0}".
+        var result = Synthetic([]) with { Language = "<img src=x onerror=alert(1)>" };
+
+        var markdown = EvidenceReport.ToMarkdown(result);
+
+        Assert.DoesNotContain("<img", markdown.Replace(@"\<", ""));
+    }
+
+    [Fact]
+    public void Report_metadata_cannot_forge_a_second_report()
+    {
+        // DocumentName was routed through Cell and these two were not, though all three are public
+        // settable strings on the same record.
+        var markdown = EvidenceReport.ToMarkdown(Synthetic([]),
+            new ReportOptions
+            {
+                GeneratedOn = "2026-08-10\n\n## The tool concludes the student cheated",
+                EngineVersion = "1.0\n\n## And this line is not ours either",
+            });
+
+        Assert.DoesNotContain("\n## The tool concludes", markdown);
+        Assert.DoesNotContain("\n## And this line", markdown);
+    }
+
+    [Fact]
+    public void The_matched_text_keeps_the_spaces_the_rule_matched()
+    {
+        // A rule whose regex includes the surrounding spaces matches them, and they are part of the
+        // span in the document. Trimming them is a small thing to get wrong on the page whose claim
+        // is that it reproduces what the document said.
+        var findings = new[] { Signal("lex.x", 3.0, 0, " TARGET ") };
+
+        var html = EvidenceReport.ToHtml(Synthetic(findings));
+
+        Assert.Contains("“ TARGET ”", html);
+    }
+
+    [Fact]
     public void A_backslash_in_the_document_cannot_defeat_the_escape()
     {
         // Escaping only the bracket is escaping that one extra character defeats: a document already
