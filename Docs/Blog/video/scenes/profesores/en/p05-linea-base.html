@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(47,210,122,.14),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(109,124,255,.18),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+.brand{position:absolute;left:48px;top:40px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.bmark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+@keyframes rv{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes bandin{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes drop{0%{opacity:0;transform:translateY(-160px)}70%{opacity:1;transform:translateY(12px)}100%{opacity:1;transform:none}}
+@keyframes halo{0%{box-shadow:0 0 0 0 rgba(47,210,122,.7)}100%{box-shadow:0 0 0 24px rgba(47,210,122,0)}}
+.kick{position:absolute;top:88px;width:100%;text-align:center;font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#2fd27a;font-weight:800;opacity:0;animation:rv .6s .2s forwards}
+.title{position:absolute;top:118px;width:100%;text-align:center;font-size:40px;font-weight:800;opacity:0;animation:rv .7s .4s forwards}
+.plot{position:absolute;left:150px;top:250px;width:980px;height:300px;border-left:2px solid rgba(255,255,255,.18);
+ border-bottom:2px solid rgba(255,255,255,.18)}
+.band{position:absolute;left:0;right:0;top:96px;height:120px;border-radius:14px;
+ background:linear-gradient(180deg,rgba(47,210,122,.16),rgba(47,210,122,.08));
+ border:1px dashed rgba(47,210,122,.5);transform-origin:left;transform:scaleX(0);animation:bandin .9s 1.4s forwards}
+.band span{position:absolute;right:14px;top:10px;font-size:19px;font-weight:800;color:#2fd27a;letter-spacing:1px}
+.dot{position:absolute;width:26px;height:26px;border-radius:50%;background:#6d7cff;border:3px solid #eaf1fb;
+ opacity:0;animation:rv .5s forwards}
+.dot i{position:absolute;top:-36px;left:50%;transform:translateX(-50%);font-style:normal;font-size:17px;color:#9fb0cc;white-space:nowrap;font-weight:700}
+.t1{left:150px;top:150px;animation-delay:2.4s}
+.t2{left:360px;top:120px;animation-delay:2.8s}
+.t3{left:570px;top:168px;animation-delay:3.2s}
+.new{position:absolute;left:800px;top:138px;width:34px;height:34px;border-radius:50%;background:#2fd27a;border:4px solid #eaf1fb;
+ opacity:0;animation:drop .9s 4.6s cubic-bezier(.3,.7,.3,1.2) forwards, halo 1.6s 5.6s ease-out 2}
+.new i{position:absolute;top:44px;left:50%;transform:translateX(-50%);font-style:normal;font-size:20px;color:#2fd27a;white-space:nowrap;font-weight:800}
+.foot{position:absolute;left:0;bottom:52px;width:100%;text-align:center;font-size:26px;font-weight:800;color:#cdd8ec;
+ opacity:0;animation:rv .6s 7.0s forwards}
+.foot b{color:#2fd27a}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="kick">Third &middot; the baseline</div>
+<div class="title">Compared with their own writing</div>
+
+<div class="plot">
+ <div class="band"><span>THEIR USUAL RANGE</span></div>
+ <div class="dot t1"><i>paper 1</i></div>
+ <div class="dot t2"><i>paper 2</i></div>
+ <div class="dot t3"><i>paper 3</i></div>
+ <div class="new"><i>new submission &middot; inside the range</i></div>
+</div>
+
+<div class="foot">A suspicion that ends <b>before it becomes a meeting</b></div>
+</body></html>

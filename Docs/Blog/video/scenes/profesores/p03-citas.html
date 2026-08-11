@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(245,158,11,.15),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(109,124,255,.18),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+.brand{position:absolute;left:48px;top:40px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.bmark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+@keyframes rv{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes mark{from{background:rgba(255,255,255,.05)}to{background:rgba(245,158,11,.16)}}
+.kick{position:absolute;top:88px;width:100%;text-align:center;font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#f59e0b;font-weight:800;opacity:0;animation:rv .6s .2s forwards}
+.title{position:absolute;top:118px;width:100%;text-align:center;font-size:40px;font-weight:800;opacity:0;animation:rv .7s .4s forwards}
+.score{position:absolute;left:110px;top:288px;width:280px;text-align:center;opacity:0;animation:rv .7s 1.2s forwards}
+.score .n{font-size:96px;font-weight:900;color:#2fd27a;line-height:1}
+.score .l{font-size:22px;font-weight:800;color:#9fb0cc;margin-top:8px}
+.score .z{margin-top:18px;font-size:20px;color:#b9c6de}
+.bib{position:absolute;left:470px;top:242px;width:700px;background:rgba(255,255,255,.04);
+ border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:22px 26px}
+.bh{font-size:19px;letter-spacing:2px;text-transform:uppercase;color:#9fb0cc;font-weight:800;margin-bottom:14px}
+.ref{font-size:20.5px;line-height:1.42;padding:9px 12px;border-radius:10px;margin-bottom:6px;color:#cdd8ec;
+ opacity:0;animation:rv .45s forwards}
+.ref b{color:#eaf1fb}
+.ref .flag{display:inline-block;margin-left:10px;font-size:16.5px;font-weight:800;color:#f59e0b;
+ border:1px solid rgba(245,158,11,.55);border-radius:8px;padding:2px 10px;vertical-align:2px;opacity:0;animation:rv .4s forwards}
+.r1{animation-delay:2.0s}.r1 .flag{animation-delay:4.2s}
+.r2{animation-delay:2.4s}.r2 .flag{animation-delay:5.2s}
+.r3{animation-delay:2.8s}.r3 .flag{animation-delay:5.2s}
+.r4{animation-delay:3.2s}.r4 .flag{animation-delay:6.2s}
+.r1.hot{animation:rv .45s 2.0s forwards, mark .6s 4.2s forwards}
+.r2.hot{animation:rv .45s 2.4s forwards, mark .6s 5.2s forwards}
+.r3.hot{animation:rv .45s 2.8s forwards, mark .6s 5.2s forwards}
+.r4.hot{animation:rv .45s 3.2s forwards, mark .6s 6.2s forwards}
+.doi{font-family:'Cascadia Code',Consolas,monospace;font-size:18.5px;color:#22b8cf}
+.badge{position:absolute;left:470px;top:560px;font-size:24px;font-weight:900;color:#f59e0b;opacity:0;animation:rv .6s 7.0s forwards}
+.ask{position:absolute;left:110px;top:560px;width:300px;font-size:23px;font-weight:700;color:#eaf1fb;opacity:0;animation:rv .6s 8.0s forwards}
+.ask b{color:#f59e0b}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="kick">Primero &middot; la bibliograf&iacute;a</div>
+<div class="title">La bibliograf&iacute;a se contradice sola</div>
+
+<div class="score">
+ <div class="n">0/100</div>
+ <div class="l">CERO SE&Ntilde;ALES DE ESTILO</div>
+ <div class="z">y sin embargo&hellip;</div>
+</div>
+
+<div class="bib">
+ <div class="bh">Referencias del propio documento</div>
+ <div class="ref r1 hot"><b>Garc&iacute;a-Mendoza (2019)</b>, citado en la p&aacute;g. 3<span class="flag">no est&aacute; en esta lista</span></div>
+ <div class="ref r2 hot">Torres, L. — Rev. Educaci&oacute;n &middot; <span class="doi">doi:10.1234/rev.81.2</span><span class="flag">mismo DOI</span></div>
+ <div class="ref r3 hot">Kim, S. — Learning &amp; Media &middot; <span class="doi">doi:10.1234/rev.81.2</span><span class="flag">mismo DOI</span></div>
+ <div class="ref r4 hot">Duarte, P. — <b>(2027)</b> Pedagog&iacute;a digital<span class="flag">a&ntilde;o que no ha llegado</span></div>
+</div>
+
+<div class="badge">5 contradicciones &middot; sin salir del documento</div>
+<div class="ask">Usted no acusa. Usted pregunta: <b>&laquo;&iquest;me manda el art&iacute;culo?&raquo;</b></div>
+</body></html>

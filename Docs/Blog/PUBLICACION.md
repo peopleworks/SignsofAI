@@ -97,6 +97,104 @@ signsofai, ai detector, ai writing detector, ai text detector, how to detect ai 
 
 ---
 
+## 2b. VIDEO BIENVENIDA A PROFESORES — Español  (`signsofai-profesores-es.mp4` · 3:03 · 1280×720 · voz Marcela)
+
+> **El video evergreen para profesores**: sirve como bienvenida en presentaciones, en la cabecera de
+> los artículos nuevos, y como respuesta fija a "¿y esto qué hace por mí?". Miniatura:
+> `video/thumb/thumb-profesores-es.png`. Números verificados contra `Docs/CALIBRATION.md`
+> (motor 0.4.0): si la calibración se re-corre, revisar la escena `p06` antes de re-publicar.
+
+**Título:**
+```
+Profesor: usted no puede actuar sobre un porcentaje. Esto es lo que sí puede hacer | SignsOfAI
+```
+
+**Descripción (pegar tal cual):**
+```
+Cuarenta ensayos, un domingo, y un detector que solo dice "87% IA". Con eso usted no puede acusar, ni sancionar, ni siquiera abrir la conversación.
+
+SignsOfAI no le entrega un veredicto: le entrega evidencia que usted puede comprobar sin confiar en nadie. Una bibliografía que se contradice sola (autores citados que no están en la lista, el mismo DOI en dos artículos, fuentes con fecha imposible). Caracteres que no se producen escribiendo, con línea y columna exactas. Y la línea base del propio estudiante: cada entrega comparada con su propia forma de escribir, no con una población — la mayoría de las veces, el resultado es tranquilidad.
+
+Y la pregunta que ningún detector contesta —"¿cuántas veces te equivocas?"— aquí está publicada, con su intervalo y con la regla nuestra que más se equivoca.
+
+Todo corre en su máquina: navegador o app de escritorio (lee PDF y Word, escanea carpetas completas). Sin servidor, sin cuenta, sin telemetría. Gratis, código abierto, en español e inglés.
+
+▶ Pruébelo: https://peopleworks.github.io/SignsofAI/
+⭐ Código: https://github.com/peopleworks/SignsofAI
+
+No vendo nada — es un proyecto educativo, por y para la comunidad educativa.
+
+CAPÍTULOS
+00:00  Bienvenida
+00:03  Un profesor no puede actuar sobre un porcentaje
+00:21  Evidencia, no veredicto
+00:38  La bibliografía se contradice sola
+01:03  Un carácter está o no está
+01:28  La línea base del propio estudiante
+01:51  ¿Cuántas veces nos equivocamos? — publicado
+02:17  Nada sale de su laptop
+02:41  El paquete del profesor
+
+#IA #IntegridadAcadémica #Profesores #DetectorDeIA #EdTech #OpenSource
+```
+
+**Hashtags:** `#IA #IntegridadAcadémica #Profesores #DocenciaUniversitaria #DetectorDeIA #EdTech #OpenSource #EvaluaciónAcadémica`
+
+**Etiquetas / Tags (bloque para el campo de YouTube):**
+```
+signsofai, detector de ia para profesores, integridad academica, como detectar ia en ensayos, evidencia no veredicto, falsos positivos detector ia, bibliografia inventada, referencias alucinadas, linea base estilometrica, calibracion detector ia, herramienta para docentes, evaluacion academica, open source, deteccion de ia en español
+```
+
+---
+
+## 2c. TEACHER WELCOME VIDEO — English  (`signsofai-profesores-en.mp4` · 2:51 · 1280×720 · voice Rachel)
+
+> **The evergreen teacher video**: use it in presentations, atop new articles, and as the standing
+> answer to "what does this do for me?". Thumbnail: `video/thumb/thumb-profesores-en.png`.
+> Numbers verified against `Docs/CALIBRATION.md` (engine 0.4.0): if calibration is re-run, review
+> scene `p06` before republishing.
+
+**Title:**
+```
+Professor: you can't act on a percentage. Here's what you CAN do | SignsOfAI
+```
+
+**Description (paste as-is):**
+```
+Forty essays, one Sunday, and a detector that only says "87% AI". You can't accuse on that, can't sanction on that — can't even open the conversation with it.
+
+SignsOfAI doesn't hand you a verdict: it hands you evidence you can verify without trusting anyone. A bibliography that contradicts itself (authors cited who aren't in the list, the same DOI on two papers, sources dated in the future). Characters that typing doesn't produce, with exact line and column. And the student's own baseline: each submission compared with their own writing, not with a population — most of the time, the answer is relief.
+
+And the question no detector answers —"how often are you wrong?"— is published here, with its interval, and with the one rule of ours that misfires most.
+
+Everything runs on your machine: browser or desktop app (reads PDF and Word, scans whole folders). No server, no account, no telemetry. Free, open source, in English and Spanish.
+
+▶ Try it: https://peopleworks.github.io/SignsofAI/
+⭐ Code: https://github.com/peopleworks/SignsofAI
+
+I'm not selling anything — it's an education-first project.
+
+CHAPTERS
+00:00  Welcome
+00:03  A teacher can't act on a percentage
+00:18  Evidence, not a verdict
+00:36  The bibliography contradicts itself
+01:01  A character is there or it isn't
+01:25  The student's own baseline
+01:44  How often are you wrong? — published
+02:08  Nothing leaves your laptop
+02:31  The teacher package
+```
+
+**Hashtags:** `#AI #AcademicIntegrity #Teachers #HigherEd #AIDetection #EdTech #OpenSource #Assessment`
+
+**Tags (YouTube field block):**
+```
+signsofai, ai detector for teachers, academic integrity, how to detect ai in essays, evidence not verdict, ai detector false positives, hallucinated references, invented bibliography, stylometric baseline, ai detector calibration, teacher tools, assessment, open source, bilingual ai detection
+```
+
+---
+
 ## 3. SHORTS — Español (9:16, 1080×1920, voz Marcela)
 
 Formato corto: título con `#Shorts`, descripción de 1–2 líneas + hashtags. Suben a YouTube Shorts, Reels y TikTok (el `.srt` da los subtítulos para verlos sin sonido).

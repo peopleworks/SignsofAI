@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(109,124,255,.20),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(47,210,122,.12),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+.brand{position:absolute;left:48px;top:40px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.bmark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+@keyframes rv{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes lock{0%{transform:translateY(-14px);opacity:0}100%{transform:none;opacity:1}}
+.kick{position:absolute;top:88px;width:100%;text-align:center;font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#6d7cff;font-weight:800;opacity:0;animation:rv .6s .2s forwards}
+.title{position:absolute;top:118px;width:100%;text-align:center;font-size:40px;font-weight:800;opacity:0;animation:rv .7s .4s forwards}
+.laptop{position:absolute;left:140px;top:268px;width:360px;opacity:0;animation:rv .7s 1.4s forwards}
+.zeros{position:absolute;left:120px;top:548px;width:400px;text-align:center;font-size:22px;font-weight:800;color:#b9c6de;
+ opacity:0;animation:rv .6s 4.6s forwards}
+.zeros b{color:#2fd27a}
+.chips{position:absolute;left:600px;top:262px;width:570px}
+.chip{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:14px;
+ padding:16px 22px;margin-bottom:16px;font-size:23px;font-weight:700;color:#cdd8ec;opacity:0;animation:rv .5s forwards;
+ display:flex;align-items:center;gap:14px}
+.chip svg{flex:0 0 30px}
+.chip b{color:#eaf1fb}
+.h1{animation-delay:2.2s}.h2{animation-delay:2.9s}.h3{animation-delay:3.6s}
+.es{background:rgba(219,39,119,.10);border-color:rgba(219,39,119,.5);animation-delay:6.2s}
+.es b{color:#db2777}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="kick">Your machine &middot; your judgment</div>
+<div class="title">Your students' work never leaves your laptop</div>
+
+<div class="laptop">
+ <svg viewBox="0 0 360 240" fill="none">
+  <rect x="40" y="18" width="280" height="170" rx="12" stroke="#8fa0c0" stroke-width="6"/>
+  <rect x="54" y="32" width="252" height="142" rx="6" fill="rgba(109,124,255,.10)"/>
+  <path d="M18 196 h324 l-16 26 H34 Z" fill="#2a3a5c" stroke="#8fa0c0" stroke-width="4"/>
+  <g style="animation:lock .7s 2s forwards;opacity:0">
+   <rect x="150" y="86" width="60" height="48" rx="10" fill="#2fd27a"/>
+   <path d="M162 86 v-12 a18 18 0 0 1 36 0 v12" stroke="#2fd27a" stroke-width="8" fill="none"/>
+   <circle cx="180" cy="108" r="7" fill="#0b1020"/>
+  </g>
+ </svg>
+</div>
+<div class="zeros"><b>0</b> servers &middot; <b>0</b> accounts &middot; <b>0</b> telemetry</div>
+
+<div class="chips">
+ <div class="chip h1">
+  <svg viewBox="0 0 30 30"><rect x="4" y="3" width="18" height="24" rx="3" fill="none" stroke="#22b8cf" stroke-width="2.4"/><path d="M9 10h8M9 15h8M9 20h5" stroke="#22b8cf" stroke-width="2.4" stroke-linecap="round"/></svg>
+  <span>Reads <b>PDF &middot; Word &middot; ODT &middot; EPUB</b> on desktop</span>
+ </div>
+ <div class="chip h2">
+  <svg viewBox="0 0 30 30"><path d="M3 8a2 2 0 0 1 2-2h6l3 3h11a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" fill="none" stroke="#f59e0b" stroke-width="2.4"/></svg>
+  <span>Scans a <b>whole folder</b> of submissions</span>
+ </div>
+ <div class="chip h3">
+  <svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="11" fill="none" stroke="#6d7cff" stroke-width="2.4"/><path d="M4 15h22M15 4c4 4 4 18 0 22M15 4c-4 4-4 18 0 22" stroke="#6d7cff" stroke-width="2.2" fill="none"/></svg>
+  <span>In your <b>browser</b> or the <b>desktop</b> app</span>
+ </div>
+ <div class="chip es">
+  <svg viewBox="0 0 30 30"><path d="M6 24 V6 h12 l-3 5 3 5 H9" fill="none" stroke="#db2777" stroke-width="2.6" stroke-linejoin="round"/></svg>
+  <span>Spanish <b>written from scratch</b>, not translated</span>
+ </div>
+</div>
+</body></html>

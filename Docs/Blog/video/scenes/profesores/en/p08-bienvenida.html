@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(219,39,119,.18),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(109,124,255,.20),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+.brand{position:absolute;left:48px;top:40px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.bmark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+@keyframes rv{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.kick{position:absolute;top:88px;width:100%;text-align:center;font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#db2777;font-weight:800;opacity:0;animation:rv .6s .2s forwards}
+.title{position:absolute;top:118px;width:100%;text-align:center;font-size:40px;font-weight:800;opacity:0;animation:rv .7s .4s forwards}
+.docs{position:absolute;left:0;top:238px;width:100%;display:flex;justify-content:center;gap:34px}
+.card{width:300px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:18px;
+ padding:24px;opacity:0;animation:rv .55s forwards}
+.c1{animation-delay:1.4s}.c2{animation-delay:2.1s}.c3{animation-delay:2.8s}
+.card svg{width:44px;height:44px}
+.card .t{font-size:25px;font-weight:800;margin-top:14px}
+.card .d{font-size:19px;color:#9fb0cc;margin-top:6px;line-height:1.35}
+.c1 .t{color:#f59e0b}.c2 .t{color:#22b8cf}.c3 .t{color:#2fd27a}
+.url{position:absolute;left:0;bottom:120px;width:100%;text-align:center;font-size:34px;font-weight:800;
+ opacity:0;animation:rv .6s 4.6s forwards}
+.url b{background:linear-gradient(90deg,#db2777,#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.foot{position:absolute;left:0;bottom:56px;width:100%;text-align:center;font-size:24px;font-weight:800;color:#cdd8ec;
+ opacity:0;animation:rv .6s 5.4s forwards}
+.foot .dot{color:#4a5772;margin:0 12px}
+.foot b{color:#2fd27a}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="kick">Start tomorrow</div>
+<div class="title">The teacher package &mdash; nothing to install to begin</div>
+
+<div class="docs">
+ <div class="card c1">
+  <svg viewBox="0 0 44 44"><rect x="7" y="4" width="30" height="36" rx="4" fill="none" stroke="#f59e0b" stroke-width="2.8"/><path d="M14 14h16M14 21h16M14 28h10" stroke="#f59e0b" stroke-width="2.8" stroke-linecap="round"/></svg>
+  <div class="t">Syllabus</div>
+  <div class="d">language ready to paste into your course program</div>
+ </div>
+ <div class="card c2">
+  <svg viewBox="0 0 44 44"><circle cx="22" cy="15" r="7" fill="none" stroke="#22b8cf" stroke-width="2.8"/><path d="M8 38c2-8 8-12 14-12s12 4 14 12" fill="none" stroke="#22b8cf" stroke-width="2.8" stroke-linecap="round"/></svg>
+  <div class="t">Student sheet</div>
+  <div class="d">one page: what is looked at and what isn't, said upfront</div>
+ </div>
+ <div class="card c3">
+  <svg viewBox="0 0 44 44"><path d="M22 5 8 11v10c0 9 6 15 14 18 8-3 14-9 14-18V11Z" fill="none" stroke="#2fd27a" stroke-width="2.8" stroke-linejoin="round"/><polyline points="15,22 20,27 30,16" fill="none" stroke="#2fd27a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="t">Committee</div>
+  <div class="d">a step-by-step procedure for academic integrity</div>
+ </div>
+</div>
+
+<div class="url">peopleworks.github.io/<b>SignsofAI</b></div>
+<div class="foot"><b>Free</b><span class="dot">&bull;</span>Open source &middot; MIT<span class="dot">&bull;</span>English &amp; Spanish</div>
+</body></html>
