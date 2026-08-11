@@ -2,7 +2,7 @@
 title: "I built an AI-writing detector that shows its work — and speaks Spanish"
 description: "Most AI detectors are black boxes that spit out a number. I built one that shows you the evidence, runs entirely in your browser, and treats Spanish as a first-class language. Here's how, and why."
 canonical_url: "https://peopleworksgpt.com/i-built-an-ai-writing-detector-that-shows-its-work/"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/maker-story-cover.png"
 tags: [dotnet, blazor, ai, webassembly]
 author: "Pedro Hernández (PeopleWorks)"
 lang: en
