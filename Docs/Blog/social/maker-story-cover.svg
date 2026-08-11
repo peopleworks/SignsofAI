@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <!-- The first article's argument in one frame: the black box that answers with a number you
+       cannot argue with, refused; and the same text answered instead with marked lines — one per
+       signal family, each carrying its fix. The number is the only token because a percentage is
+       the whole product being rejected, and it reads identically in English and Spanish.
+
+       Wordless on purpose, like the fourth and seventh covers: one cover serves both editions. -->
+  <defs>
+    <radialGradient id="vignette" cx="50%" cy="44%" r="80%">
+      <stop offset="0%" stop-color="#111a2e"/>
+      <stop offset="100%" stop-color="#0b1020"/>
+    </radialGradient>
+    <radialGradient id="evGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#6d7cff" stop-opacity=".20"/>
+      <stop offset="100%" stop-color="#6d7cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lex" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#db2777" stop-opacity=".85"/><stop offset="100%" stop-color="#db2777" stop-opacity=".35"/>
+    </linearGradient>
+    <linearGradient id="rhe" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity=".85"/><stop offset="100%" stop-color="#f59e0b" stop-opacity=".35"/>
+    </linearGradient>
+    <linearGradient id="syn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22b8cf" stop-opacity=".85"/><stop offset="100%" stop-color="#22b8cf" stop-opacity=".35"/>
+    </linearGradient>
+    <linearGradient id="sta" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f0556f" stop-opacity=".85"/><stop offset="100%" stop-color="#f0556f" stop-opacity=".35"/>
+    </linearGradient>
+    <linearGradient id="brandg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#db2777"/><stop offset="50%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#22b8cf"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <rect width="1280" height="720" fill="url(#vignette)"/>
+
+  <!-- ── Left: the black box. It answers with a number and shows nothing. Struck through. ──── -->
+  <g>
+    <rect x="120" y="200" width="400" height="320" rx="20" fill="#0d1226"
+          stroke="#4a5772" stroke-width="3"/>
+    <!-- the lid seam and rivets: it is sealed, that is its whole character -->
+    <path d="M120 268 h400" stroke="#4a5772" stroke-width="3"/>
+    <circle cx="152" cy="234" r="6" fill="#4a5772"/>
+    <circle cx="488" cy="234" r="6" fill="#4a5772"/>
+    <!-- a keyhole instead of reasoning -->
+    <circle cx="320" cy="330" r="18" fill="none" stroke="#7c8aa6" stroke-width="5"/>
+    <path d="M320 344 l-10 34 h20 Z" fill="#7c8aa6"/>
+    <text x="320" y="480" text-anchor="middle" font-family="'Segoe UI', Arial, Helvetica, sans-serif"
+          font-size="96" font-weight="700" fill="#7c8aa6">87%</text>
+    <!-- refused: one clean diagonal, the color reserved for the statistical family everywhere else -->
+    <path d="M104 536 L 536 184" stroke="#f0556f" stroke-width="10" stroke-linecap="round" opacity=".9"/>
+  </g>
+
+  <!-- it forks rightward: same text, the opposite answer -->
+  <g fill="none" stroke="#8b97b5" stroke-opacity=".5" stroke-width="3" stroke-linecap="round">
+    <path d="M560 360 h96"/>
+    <path d="M632 336 l30 24 -30 24"/>
+  </g>
+
+  <!-- ── Right: the same document, answered with marked lines. One highlight per family,
+       each with its fix tick at the margin: evidence you can act on. ─────────────────────── -->
+  <circle cx="900" cy="360" r="300" fill="url(#evGlow)"/>
+  <g>
+    <rect x="700" y="140" width="400" height="440" rx="18" fill="#141d33"
+          stroke="#8b97b5" stroke-opacity=".55" stroke-width="2.5"/>
+    <g fill="#8b97b5" fill-opacity=".4">
+      <rect x="736" y="184" width="270" height="12" rx="6"/>
+      <rect x="736" y="298" width="328" height="12" rx="6"/>
+      <rect x="736" y="412" width="296" height="12" rx="6"/>
+      <rect x="736" y="526" width="180" height="12" rx="6"/>
+    </g>
+    <rect x="736" y="222" width="328" height="20" rx="10" fill="url(#lex)"/>
+    <rect x="736" y="336" width="252" height="20" rx="10" fill="url(#rhe)"/>
+    <rect x="736" y="450" width="310" height="20" rx="10" fill="url(#syn)"/>
+    <rect x="736" y="488" width="214" height="20" rx="10" fill="url(#sta)"/>
+    <!-- each finding carries its fix: small ticks in the margin, one per highlight -->
+    <g fill="none" stroke="#2fd27a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="1076,228 1084,238 1098,218"/>
+      <polyline points="1000,342 1008,352 1022,332"/>
+      <polyline points="1058,456 1066,466 1080,446"/>
+      <polyline points="962,494 970,504 984,484"/>
+    </g>
+  </g>
+
+  <!-- brand chip, quiet, bottom right -->
+  <g transform="translate(1176 648)">
+    <rect width="44" height="44" rx="12" fill="url(#brandg)"/>
+    <rect width="44" height="44" rx="12" fill="none" stroke="#ffffff" stroke-opacity=".2" stroke-width="1.5"/>
+  </g>
+</svg>

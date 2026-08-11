@@ -1,0 +1,64 @@
+{
+  "id": "signsofai-profesores-en",
+  "title": "SignsOfAI — A welcome for teachers (EN)",
+  "voice": "Rachel",
+  "intro": { "html": "scenes/profesores/en/intro.html", "seconds": 3.5 },
+  "scenes": [
+    {
+      "id": "p01-domingo",
+      "html": "scenes/profesores/en/p01-domingo.html",
+      "minSeconds": 14,
+      "voice": "Rachel",
+      "narration": "Forty essays, one Sunday, and a suspicion. The detector hands you a number: eighty-seven percent. Now what? A teacher can't act on a percentage: you can't accuse, you can't sanction, you can't even open the conversation."
+    },
+    {
+      "id": "p02-hechos",
+      "html": "scenes/profesores/en/p02-hechos.html",
+      "minSeconds": 12,
+      "voice": "Rachel",
+      "narration": "So SignsOfAI doesn't hand you a verdict. It hands you evidence: concrete facts, marked in the text, that you can verify one by one without trusting us. Welcome, professor. Here is what you can do."
+    },
+    {
+      "id": "p03-citas",
+      "html": "scenes/profesores/en/p03-citas.html",
+      "minSeconds": 16,
+      "voice": "Rachel",
+      "narration": "First: the bibliography. An essay can score zero out of one hundred and still contradict itself five times in its own references: authors cited who are not in the list, the same D O I on two different papers, a source dated in a year that has not arrived. You don't accuse. You ask: could you send me that paper?"
+    },
+    {
+      "id": "p04-caracteres",
+      "html": "scenes/profesores/en/p04-caracteres.html",
+      "minSeconds": 16,
+      "voice": "Rachel",
+      "narration": "Second: the characters. Some tools hide machine text by swapping letters for invisible look-alikes. SignsOfAI gives you the exact position: line fourteen, column three, that a is Cyrillic, not Latin. A score can be argued with. A character is there or it isn't, and you can check it in any editor."
+    },
+    {
+      "id": "p05-linea-base",
+      "html": "scenes/profesores/en/p05-linea-base.html",
+      "minSeconds": 15,
+      "voice": "Rachel",
+      "narration": "Third: the baseline. With three earlier papers, each new submission is compared against that student's own way of writing, not against a population. Most of the time the answer is relief: this falls inside their range. A suspicion that ends before it becomes a meeting."
+    },
+    {
+      "id": "p06-calibracion",
+      "html": "scenes/profesores/en/p06-calibracion.html",
+      "minSeconds": 16,
+      "voice": "Rachel",
+      "narration": "And the question you should ask any detector: how often are you wrong? Nobody answers it. We publish the page: zero of ninety human texts flagged, at the one threshold where the tool speaks, with its statistical interval. And we publish which of our own rules misfires most. If we don't measure it, nobody will."
+    },
+    {
+      "id": "p07-privacidad",
+      "html": "scenes/profesores/en/p07-privacidad.html",
+      "minSeconds": 16,
+      "voice": "Rachel",
+      "narration": "All of it runs on your machine: in the browser, or in the desktop app that reads P D F and Word and scans a whole folder of submissions. No server, no account, no telemetry. Your students' work never leaves your laptop. And Spanish is not a translation: those rules were written from scratch."
+    },
+    {
+      "id": "p08-bienvenida",
+      "html": "scenes/profesores/en/p08-bienvenida.html",
+      "minSeconds": 13,
+      "voice": "Rachel",
+      "narration": "There is also a starter pack for tomorrow morning: syllabus language, a one-page sheet for your students, and a procedure for the integrity committee. Free, open source, bilingual. SignsOfAI. The evidence is yours; so is the judgment."
+    }
+  ]
+}

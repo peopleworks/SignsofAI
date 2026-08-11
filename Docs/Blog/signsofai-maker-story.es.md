@@ -2,7 +2,7 @@
 title: "Construí un detector de escritura con IA que muestra sus pruebas — y habla español"
 description: "Casi todos los detectores de IA son cajas negras que escupen un número. Construí uno que te muestra la evidencia, corre entero en tu navegador y trata el español como idioma de primera. Aquí está cómo, y por qué."
 canonical_url: "https://peopleworks.com.do/2026/07/24/detector-de-escritura-con-ia/"
-cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/social-preview.png"
+cover_image: "https://raw.githubusercontent.com/peopleworks/SignsofAI/main/Docs/Blog/social/maker-story-cover.png"
 tags: [dotnet, blazor, ia, webassembly]
 author: "Pedro Hernández (PeopleWorks)"
 lang: es

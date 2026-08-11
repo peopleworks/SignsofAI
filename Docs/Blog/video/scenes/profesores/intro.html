@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+ background:radial-gradient(680px 420px at 82% -12%,rgba(219,39,119,.20),transparent 60%),
+   radial-gradient(680px 420px at 12% -8%,rgba(109,124,255,.22),transparent 60%),
+   linear-gradient(160deg,#0b1020,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+@keyframes pop{0%{opacity:0;transform:scale(.5) rotate(-12deg)}60%{transform:scale(1.08) rotate(3deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes rv{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.15),0 0 40px rgba(109,124,255,.35)}50%{box-shadow:0 0 0 1px rgba(255,255,255,.2),0 0 70px rgba(219,39,119,.5)}}
+.ring{position:absolute;border-radius:50%;border:1px dashed rgba(255,255,255,.10)}
+.r1{width:520px;height:520px;animation:spin 40s linear infinite}
+.r2{width:720px;height:720px;animation:spin 60s linear infinite reverse}
+.mark{width:110px;height:110px;border-radius:28px;
+ background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);
+ animation:pop 1s cubic-bezier(.2,.7,.2,1) forwards, glow 3.4s ease-in-out 1s infinite}
+.name{font-size:68px;font-weight:800;letter-spacing:-1px;margin-top:30px;opacity:0;animation:rv .8s .5s forwards}
+.name b{color:#fff}
+.tag{font-size:34px;color:#eaf1fb;margin-top:14px;font-weight:700;opacity:0;animation:rv .8s .9s forwards}
+.sub{font-size:24px;color:#b9c6de;margin-top:8px;opacity:0;animation:rv .8s 1.3s forwards}
+.sub .ev{background:linear-gradient(90deg,#db2777,#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:700}
+</style></head><body>
+<div class="ring r1"></div><div class="ring r2"></div>
+<div class="mark"></div>
+<div class="name">Signs<b>OfAI</b></div>
+<div class="tag">Bienvenido, profesor.</div>
+<div class="sub"><span class="ev">Evidencia</span>, no veredictos.</div>
+</body></html>

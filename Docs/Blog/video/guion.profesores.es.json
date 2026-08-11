@@ -1,0 +1,55 @@
+{
+  "id": "signsofai-profesores-es",
+  "title": "SignsOfAI — Bienvenida a profesores (ES)",
+  "intro": { "html": "scenes/profesores/intro.html", "seconds": 3.5 },
+  "scenes": [
+    {
+      "id": "p01-domingo",
+      "html": "scenes/profesores/p01-domingo.html",
+      "minSeconds": 14,
+      "narration": "Cuarenta ensayos, un domingo, y una sospecha. El detector le devuelve un numero: ochenta y siete por ciento. Y ahora que. Un profesor no puede actuar sobre un porcentaje: no puede acusar, no puede sancionar, no puede ni abrir la conversacion."
+    },
+    {
+      "id": "p02-hechos",
+      "html": "scenes/profesores/p02-hechos.html",
+      "minSeconds": 12,
+      "narration": "Por eso SignsOfAI no le entrega un veredicto. Le entrega evidencia: hechos concretos, senalados en el texto, que usted puede comprobar uno por uno sin creernos nada. Bienvenido, profesor. Esto es lo que puede hacer."
+    },
+    {
+      "id": "p03-citas",
+      "html": "scenes/profesores/p03-citas.html",
+      "minSeconds": 16,
+      "narration": "Primero: la bibliografia. Un ensayo puede puntuar cero sobre cien y aun asi contradecirse cinco veces en sus propias referencias: autores citados que no estan en la lista, el mismo D O I en dos articulos distintos, una fuente publicada en un ano que no ha llegado. Usted no acusa. Usted pregunta: me manda el articulo."
+    },
+    {
+      "id": "p04-caracteres",
+      "html": "scenes/profesores/p04-caracteres.html",
+      "minSeconds": 16,
+      "narration": "Segundo: los caracteres. Hay herramientas que esconden texto de maquina cambiando letras por gemelas invisibles. SignsOfAI le da la posicion exacta: linea catorce, columna uno, esa a es cirilica, no latina. Una puntuacion se discute. Un caracter esta o no esta, y usted lo comprueba en cualquier editor."
+    },
+    {
+      "id": "p05-linea-base",
+      "html": "scenes/profesores/p05-linea-base.html",
+      "minSeconds": 15,
+      "narration": "Tercero: la linea base. Con tres trabajos anteriores, cada entrega nueva se compara contra la forma de escribir de ese estudiante, no contra una poblacion. La mayoria de las veces el resultado es tranquilidad: esto cae dentro de su rango. Una sospecha que termina antes de ser una reunion."
+    },
+    {
+      "id": "p06-calibracion",
+      "html": "scenes/profesores/p06-calibracion.html",
+      "minSeconds": 16,
+      "narration": "Y la pregunta que usted deberia hacerle a cualquier detector: cuantas veces te equivocas. Nadie la contesta. Nosotros publicamos la pagina: cero de noventa textos humanos marcados, en el unico umbral en el que la herramienta habla, con su intervalo estadistico. Y publicamos tambien cual de nuestras reglas se equivoca mas. Si no lo medimos nosotros, no lo mide nadie."
+    },
+    {
+      "id": "p07-privacidad",
+      "html": "scenes/profesores/p07-privacidad.html",
+      "minSeconds": 16,
+      "narration": "Todo esto corre en su maquina: en el navegador, o en la aplicacion de escritorio que lee P D F y Word y escanea la carpeta entera de entregas. Sin servidor, sin cuenta, sin telemetria. El trabajo de sus estudiantes nunca sale de su laptop. Y el espanol no es una traduccion: las reglas se escribieron desde cero."
+    },
+    {
+      "id": "p08-bienvenida",
+      "html": "scenes/profesores/p08-bienvenida.html",
+      "minSeconds": 13,
+      "narration": "Hay ademas un paquete para empezar manana: lenguaje para su silabo, una hoja de una pagina para sus estudiantes, y un procedimiento para el comite de integridad. Gratis, codigo abierto, bilingue. SignsOfAI. La evidencia es suya; el juicio tambien."
+    }
+  ]
+}
