@@ -40,3 +40,8 @@ temp/
 
 # Calibration texts are fetched, not redistributed: the manifest is the repo artefact.
 Docs/Calibration/texts/
+# Paraphrase-study passages are derivatives of the same licensed sources, and are excluded for the
+# same reason: the manifest with both halves' hashes is the repo artefact.
+Docs/Paraphrase/human/
+Docs/Paraphrase/rewritten/
+
