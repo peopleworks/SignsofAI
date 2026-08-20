@@ -36,6 +36,12 @@ _work/
 # Working notes, session handoffs, screenshots, drafts. Local scratch, never the repository's
 # business — and one `git add -A` from the repository root is all it takes to publish it, which is
 # exactly how it got in once.
+# Where the state of play lives between sessions: status, the manual publication queue, task
+# briefs for other models, and committee verdicts. Deliberately outside the repository — it is a
+# working desk for the author and his assistants, not a public artefact, and it names unpublished
+# work and unfixed defects before either is ready to be read by a stranger.
+AI_Tasks/
+
 temp/
 
 # Calibration texts are fetched, not redistributed: the manifest is the repo artefact.
