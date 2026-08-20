@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quise demostrar que el watermark de Claude no nos afectaba. Me equivoqué, y encontré un fallo peor en mi propia herramienta · SignsOfAI</title>
+<meta name="description" content="Anthropic empezó a marcar lo que Claude escribe. Medí qué le pasa a un texto cuando alguien borra esa marca — y la respuesta fue que no pasa nada detectable. Lo que sí encontré: mi detector cambia de opinión según qué cuatrocientas palabras le pegues.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Historia de taller · Ingeniería</div>
+  <h1>Quise demostrar que el watermark de Claude no nos afectaba. Me equivoqué, y encontré un fallo peor en mi propia herramienta</h1>
+  <p class="lead">Anthropic empezó a marcar lo que Claude escribe. Medí qué le pasa a un texto cuando alguien borra esa marca — y la respuesta fue que no pasa nada detectable. Lo que sí encontré: mi detector cambia de opinión según qué cuatrocientas palabras le pegues.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Descárgalo o pruébalo</b> — gratis, MIT, web y Windows.</a>
+
+  <hr>
+
+  <p>Los modelos de Claude publicados desde el 2 de agosto de 2026 llevan una marca legible por máquina. Anthropic dice que los anteriores la tendrán durante un periodo de transición. Y la pregunta llegó en menos de una semana, en foros, en LinkedIn, en mi bandeja: <em>¿esto no deja obsoleto a un detector como el tuyo?</em></p>
+  <p>Construí <a href="https://github.com/peopleworks/SignsofAI">SignsOfAI</a> para profesores, y la respuesta corta es incómoda para todos los bandos. La escribí midiendo, no opinando, y salió lo contrario de lo que esperaba.</p>
+  <h2>La mitad de la respuesta está en la documentación del proveedor</h2>
+  <p>Antes de medir nada conviene leer. La marca no es un carácter escondido: vive en <strong>qué palabra eligió el modelo</strong> entre varias igual de válidas, sesgando la elección con una clave. Es una versión de SynthID-Text, que Google DeepMind publicó en 2024 — o sea, esto no es una invención de Anthropic, es una práctica de industria llegando a un proveedor más.</p>
+  <p>De ahí salen tres cosas que ya se pueden afirmar sin medir:</p>
+  <p><strong>Hoy nadie fuera del proveedor puede comprobar nada.</strong> La clave es suya. Prometen una API de detección "pronto". Cuando llegue, comprobar significará subir el ensayo de un estudiante al servidor de una empresa — justo la línea que este proyecto se niega a cruzar, porque todo corre en la máquina del profesor.</p>
+  <p><strong>Marca solo a Claude.</strong> Ni GPT, ni un Llama local, ni ninguno de los envoltorios que venden "humanización". Y de ahí la frase que se va a malusar en las dos direcciones: <strong>la ausencia de marca no es prueba de autoría humana</strong>. Ni <em>"no tiene marca, está limpio"</em>, ni el error contrario y peor, <em>"no tiene marca de Claude, usó otra cosa, culpable"</em>.</p>
+  <p><strong>El propio centro de ayuda lista qué la derrota</strong>: edición fuerte, parafraseo, traducción, mezclar con otro texto, y pasajes muy cortos. Esas son, exactamente, las condiciones de un trabajo de estudiante.</p>
+  <h2>La mitad que sí había que medir</h2>
+  <p>Queda una pregunta que no se resuelve leyendo: <strong>¿qué le hace a la prosa el borrado de la marca?</strong></p>
+  <p>Como la marca vive en la elección de palabras, ningún limpiador de caracteres invisibles la toca. Solo una reescritura. Y ya hay servicios que la venden. Mi hipótesis era cómoda: una reescritura de máquina aplana el ritmo de las frases, así que quien borra el watermark se vuelve <em>más</em> visible para mi herramienta, no menos.</p>
+  <p>El problema de medir eso es que hace falta texto de máquina para comparar, y este proyecto tiene una página entera argumentando por qué nunca hay que reunir un corpus así: es una muestra de los modelos que estaban de moda ese mes, envejece mal, y halaga a quien lo ensambla.</p>
+  <p>La salida fue el <strong>par</strong>. Cada unidad del estudio es un mismo pasaje medido dos veces: como lo escribió su autor, y después de que un modelo lo reescribiera. Mismo texto, mismo autor, mismo tema, casi la misma longitud. La línea base no se estima a partir de una población — <em>es el propio texto</em>. Y los pasajes humanos salen del corpus de calibración, todos publicados antes de que existieran los modelos generativos, que es la única base honesta para llamar humano a un texto.</p>
+  <p>Treinta y dos pares. Ocho de cada estrato, en los dos idiomas.</p>
+  <h2>La respuesta: no</h2>
+  <p>Cinco pasajes cruzaron el umbral que antes no lo cruzaban. Dos lo cruzaron de vuelta. Test exacto de McNemar: <strong>p = 0,453</strong>.</p>
+  <p>Eso no es un resultado. Con siete pares cambiando de lado, solo un barrido limpio habría alcanzado significación. La afirmación honesta es que <strong>este estudio no puede demostrar que reescribir cambie si un pasaje se marca, en ninguna de las dos direcciones</strong>. Ni que reescribir sea seguro, ni que lo cacemos.</p>
+  <p>Mi hipótesis se retira, y así está escrito en negrita en la página.</p>
+  <p>Lo que sí sobrevive es más estrecho y sigue siendo útil: una reescritura <strong>no repara una bibliografía que se contradice sola</strong>, y <strong>no devuelve la prosa de un estudiante a la forma de sus trabajos anteriores</strong>. Esas dos comprobaciones no corren sobre el estilo, así que el parafraseo no las toca.</p>
+  <h2>Lo que encontré sin buscarlo</h2>
+  <p>Al montar el control salió un número que no cuadraba. Mi página de calibración publica que <strong>cero de noventa</strong> textos humanos cruzan el umbral. Pero seis de mis treinta y dos pasajes ya lo cruzaban antes de tocarlos.</p>
+  <p>La diferencia era la longitud. Los pasajes tienen unas cuatrocientas palabras; los documentos de los que salieron, varios miles.</p>
+  <p>Así que medí lo mismo escrito por la misma gente, de tres formas:</p>
+  <table>
+    <thead><tr><th>La misma escritura, medida como</th><th>Marcada a 25/100</th><th>Intervalo 95%</th></tr></thead>
+    <tbody>
+      <tr><td>documentos completos</td><td>0 / 32</td><td>0% – 10,7%</td></tr>
+      <tr><td>ventanas de 400 palabras, tres posiciones</td><td><strong>13 / 89</strong></td><td>8,7% – 23,4%</td></tr>
+    </tbody>
+  </table>
+  <p>Y el número que más dice: <strong>once de treinta documentos están marcados en una posición del texto y no en otra, y ninguno lo está en las tres.</strong> Que a uno de esos autores se le acuse depende de qué cuatrocientas palabras le tocó pegar a alguien.</p>
+  <p>El mecanismo no tiene misterio. La <em>burstiness</em> es la dispersión del largo de las frases, y una ventana corta contiene pocas frases: la larga de tres cláusulas y el fragmento de dos palabras que juntos hacen que un párrafo parezca humano puede que no quepan los dos dentro. La medida no se vuelve <em>incierta</em> — eso un lector lo podría compensar. Se <strong>mueve, en una sola dirección, hacia la máquina</strong>.</p>
+  <p>Mi umbral de 25/100 se midió sobre documentos de mediana 3.241 palabras y se aplica hoy a un párrafo pegado, sin que nada en la interfaz lo advierta. Es un defecto, está publicado en la propia página, y es el <a href="https://github.com/peopleworks/SignsofAI/issues/59">issue #59</a>.</p>
+  <p>Hay una simetría que me dejó pensando: Anthropic dice que su marca falla en muestras cortas porque hay pocas elecciones de palabra. La mía falla porque hay pocas frases. Dos métodos sin ninguna relación, el mismo suelo — y un profesor con un solo párrafo en la mano está por debajo de los dos.</p>
+  <h2>Tres revisores y tres frases falsas</h2>
+  <p>En este proyecto hay una regla de la casa: nada que cambie el comportamiento o un número publicado se publica sin revisión adversarial. Esta vez fueron tres revisores independientes, cada uno con instrucción explícita de <strong>no leer el veredicto de los otros</strong> — si lo lee, la segunda opinión es un eco.</p>
+  <p>La aritmética sobrevivió entera. Los tres recalcularon McNemar, los intervalos de Wilson, los cuantiles, los recuentos; uno regeneró el informe byte a byte idéntico desde los datos.</p>
+  <p>La prosa no sobrevivió. Tres frases publicadas eran falsas:</p>
+  <p><strong>«Una ventana del medio del documento».</strong> Mi código corta desde el principio. Describí mal mi propio código. Y no es cosmético: el principio de un artículo científico es su resumen, y el de una entrada de enciclopedia su entradilla — la prosa más comprimida y formulaica que produce cada género. Medí un efecto de género y lo llamé efecto de longitud. Al medirlo en tres posiciones, el titular cayó de 18,8% a 14,6%.</p>
+  <p><strong>«Es el único caso».</strong> Había escrito a mano que un solo pasaje conservaba una cita literal, rompiendo la regla de la instrucción de no dejar sobrevivir ocho palabras seguidas. Al medirlo: <strong>veinte de treinta y dos pares</strong>, el tramo más largo de 86 palabras. Casi todos son citas — una sentencia del Tribunal Constitucional, un panfleto político, una definición publicada — que no se pueden reescribir sin falsificarlas. La instrucción exigía preservar cada dato <em>y</em> reemplazar cada palabra, y nunca dijo cuál mandaba.</p>
+  <p><strong>«Sí aplana el ritmo, en 20 de 32 pares».</strong> Test de signos sobre 20 contra 12: p = 0,215. Tres párrafos más arriba yo mismo había aplicado el test exacto a otro recuento y dictaminado "no es un resultado". Apliqué dos raseros distintos en la misma página.</p>
+  <p>Las tres son el mismo fallo: <strong>números comprobados a máquina junto a un método comprobado a mano</strong>. Así que la herramienta ahora mide su propio cumplimiento en cada corrida y lo imprime, favorezca o no al estudio.</p>
+  <p>Hubo una cuarta, que solo vio el revisor que leyó el español línea por línea: <strong>la reescritura corrigió los originales en silencio</strong>, cosa que la instrucción prohíbe con esas palabras. <em>Intercesión</em> → <em>se cruza</em>. <em>Teoría de juego</em> → <em>teoría de juegos</em>. <em>Costa</em> → <em>consta</em>. El tratamiento entregado no fue "parafrasear", fue "parafrasear y corregir estilo", así que parte de cada cambio de puntuación es reparación de errores. Y eso golpea justo el estrato que existe para medir el daño a quien escribe en su segunda lengua.</p>
+  <h2>El conflicto que hay que decir en voz alta</h2>
+  <p>El modelo que reescribió los pasajes es el mismo que escribió las reglas contra las que se reescribía. Nombrar el modelo es procedencia, no es tratar el conflicto.</p>
+  <p>Lo que juega a favor está en los datos: la reescritura <strong>introdujo</strong> señales además de quitarlas, y empujó más pasajes por encima del umbral que los que rescató. Un modelo haciendo trampa no haría eso. Pero la objeción es legítima, es la primera que levantará cualquier lector hostil, y la única respuesta real es que otro proveedor lo repita. Hasta entonces, la página lo dice sin rodeos: <strong>estos números no deben citarse donde un profesor vaya a actuar sobre ellos.</strong></p>
+  <h2>Qué se lleva un profesor de aquí</h2>
+  <p>Cuatro cosas, y ninguna es un titular tranquilizador:</p>
+  <p>1. <strong>El watermark no le sirve a usted hoy.</strong> No hay detector público, y cuando lo haya implicará mandar el trabajo del estudiante a un servidor ajeno. 2. <strong>Que no haya marca no significa nada.</strong> Ni a favor ni en contra. 3. <strong>Ninguna herramienta, la mía incluida, sabe distinguir</strong> a quien borró un watermark de quien pasó su propio párrafo honesto por un modelo para mejorar el estilo, o porque el inglés no es su lengua. 4. <strong>Desconfíe de cualquier veredicto sobre un texto corto</strong>, incluido el mío, hasta que arregle el #59.</p>
+  <p>Todo esto — el método, los datos, los intervalos y los fallos — está publicado en <a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/PARAPHRASE.md"><code>Docs/PARAPHRASE.md</code></a>, y se regenera con un comando desde el mismo repositorio.</p>
+  <p>Un estudio que sale como esperabas es agradable. Uno que retira tu hipótesis, te encuentra tres frases falsas y te descubre un defecto peor del que ibas buscando vale bastante más. Y si un proyecto lleva ocho artículos exigiéndoles a los demás que publiquen sus errores, publicar los propios no es humildad. Es el precio.</p>
+  <p><em>Hecho por Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5">Microsoft MVP para .NET</a>. Por y para la comunidad educativa.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

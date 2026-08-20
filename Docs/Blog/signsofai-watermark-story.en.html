@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I tried to prove Claude's watermark didn't threaten my detector. I was wrong, and found a worse fault in my own tool · SignsOfAI</title>
+<meta name="description" content="Anthropic started watermarking what Claude writes. I measured what happens to a text when somebody strips that mark — and the answer was nothing detectable. What I did find: my detector changes its mind depending on which four hundred words you paste.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Maker story · Engineering</div>
+  <h1>I tried to prove Claude's watermark didn't threaten my detector. I was wrong, and found a worse fault in my own tool</h1>
+  <p class="lead">Anthropic started watermarking what Claude writes. I measured what happens to a text when somebody strips that mark — and the answer was nothing detectable. What I did find: my detector changes its mind depending on which four hundred words you paste.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Download or try it</b> — free, MIT, web and Windows.</a>
+
+  <hr>
+
+  <p>Claude models released on or after 2 August 2026 carry a machine-readable watermark, and Anthropic says earlier ones will follow during a transition period. The question arrived inside a week, in forums, on LinkedIn, in my inbox. <em>Doesn't that make a detector like yours obsolete?</em></p>
+  <p>I built <a href="https://github.com/peopleworks/SignsofAI">SignsOfAI</a> for teachers, and the short answer is uncomfortable for everybody. I wrote it by measuring rather than opining, and it came out the opposite of what I expected.</p>
+  <h2>Half the answer is in the vendor's own documentation</h2>
+  <p>Before measuring anything, read. The mark is not a hidden character: it lives in <strong>which word the model chose</strong> among several equally valid ones, biasing that choice with a key. It is a version of SynthID-Text, published by Google DeepMind in 2024. This is not an Anthropic invention; it is an industry practice arriving at one more vendor.</p>
+  <p>Three things follow without measuring anything:</p>
+  <p><strong>Nobody outside the vendor can check anything today.</strong> The key is theirs. A detection API is promised "soon". When it arrives, checking will mean uploading a student's essay to a company's server. That is precisely the line this project refuses to cross, since everything runs on the teacher's own machine.</p>
+  <p><strong>It marks only Claude.</strong> Not GPT, not a local Llama, not any of the wrappers selling "humanisation". Which gives us the sentence that will be misused in both directions: <strong>the absence of a mark is not evidence that a person wrote something</strong>. Neither <em>"no mark, it's clean"</em> nor the worse inverse, <em>"no Claude mark, so they used something else, guilty"</em>.</p>
+  <p><strong>The vendor's own help centre lists what defeats it</strong>: heavy editing, paraphrasing, translation, mixing into other writing, and very short passages. Those are, exactly, the conditions of a piece of student work.</p>
+  <h2>The half that had to be measured</h2>
+  <p>One question is not settled by reading: <strong>what does removing the mark do to the prose?</strong></p>
+  <p>Because the mark lives in word choice, no invisible-character cleaner touches it. Only a rewrite does. Services already sell that rewrite. My hypothesis was comfortable: a machine rewrite flattens sentence rhythm, so somebody stripping a watermark becomes <em>more</em> visible to my tool, not less.</p>
+  <p>The trouble with measuring that is you seem to need machine-written text to compare against, and this project has a whole page arguing why such a corpus should never be assembled: it is a sample of whichever models were convenient that month, it ages badly, and it flatters whoever put it together.</p>
+  <p>The way out was the <strong>pair</strong>. Each unit of the study is one passage measured twice: as its author wrote it, and after a model rewrote it. Same text, same author, same subject, nearly the same length. The baseline is not estimated from a population. <em>It is the text itself</em>. And the human halves come from the calibration corpus, every one published before generative models existed, which remains the only honest basis for calling writing human.</p>
+  <p>Thirty-two pairs. Eight from each stratum, in both languages.</p>
+  <h2>The answer: no</h2>
+  <p>Five passages crossed the boundary that had not. Two crossed back. McNemar's exact test: <strong>p = 0.453</strong>.</p>
+  <p>That is not a result. With seven pairs changing side at all, only a clean sweep would have reached significance. The honest statement is that <strong>this study cannot show that rewriting changes whether a passage is flagged, in either direction</strong>. Not that rewriting is safe, and not that we catch it.</p>
+  <p>My hypothesis is withdrawn, and it says so in bold on the page.</p>
+  <p>What survives is narrower and still useful: a rewrite <strong>does not repair a bibliography that contradicts itself</strong>, and <strong>does not return a student's prose to the shape of their own earlier work</strong>. Neither of those checks runs on prose style, so paraphrasing leaves them alone.</p>
+  <h2>What I found without looking for it</h2>
+  <p>Building the control turned up a number that did not fit. My calibration page publishes that <strong>zero of ninety</strong> human texts cross the boundary. Yet six of my thirty-two passages already crossed it before anybody touched them.</p>
+  <p>The difference was length. The passages run about four hundred words; the documents they came from, several thousand.</p>
+  <p>So I measured the same writing by the same people, three ways:</p>
+  <table>
+    <thead><tr><th>The same writing, measured as</th><th>Flagged at 25/100</th><th>95% interval</th></tr></thead>
+    <tbody>
+      <tr><td>whole documents</td><td>0 / 32</td><td>0% – 10.7%</td></tr>
+      <tr><td>400-word windows, three positions each</td><td><strong>13 / 89</strong></td><td>8.7% – 23.4%</td></tr>
+    </tbody>
+  </table>
+  <p>And the number that says the most: <strong>eleven of thirty documents are flagged at one position in the text and not at another, and none is flagged at all three.</strong> Whether one of those authors gets accused depends on which four hundred words somebody happened to paste.</p>
+  <p>The mechanism is not mysterious. <em>Burstiness</em> is the spread of sentence lengths, and a short window holds few sentences: the long one with three clauses and the two-word fragment that together make a paragraph read as human may not both be inside it. The measurement does not become <em>uncertain</em>, which a reader could allow for. It <strong>moves, in one direction, toward the machine</strong>.</p>
+  <p>My boundary of 25/100 was measured on documents with a median of 3,241 words, and today it is applied to a pasted paragraph with nothing in the interface saying so. It is a defect, it is published on the page itself, and it is <a href="https://github.com/peopleworks/SignsofAI/issues/59">issue #59</a>.</p>
+  <p>There is a symmetry here I keep turning over: Anthropic says its mark is unreliable on short samples because there are too few word choices. Mine is unreliable on short samples because there are too few sentences. Two unrelated methods, the same floor, and a teacher holding a single paragraph is below both of them.</p>
+  <h2>Three reviewers and three false sentences</h2>
+  <p>This project has a house rule: nothing that changes behaviour or a published number ships without adversarial review. This time it was three independent reviewers, each told explicitly <strong>not to read the others' verdicts</strong>, because reading one turns the second opinion into an echo.</p>
+  <p>The arithmetic survived intact. All three recomputed McNemar, the Wilson intervals, the quantiles, the counts; one regenerated the report byte-identical from the committed data.</p>
+  <p>The prose did not survive. Three published sentences were false:</p>
+  <p><strong>"A window from the middle of the document."</strong> My code cuts from the beginning. I had described my own code wrongly. And it is not cosmetic: the beginning of a research article is its abstract, the beginning of an encyclopedia entry its lead, which is the most compressed and most formulaic prose either genre produces. I measured a genre effect and called it a length effect. Measured at three positions, the headline fell from 18.8% to 14.6%.</p>
+  <p><strong>"It is the only such case."</strong> I had written by hand that one passage preserved a verbatim quotation, breaking the instruction's rule against leaving eight consecutive words alive. Measured: <strong>twenty of thirty-two pairs</strong>, the longest run 86 words. Nearly all are quotations — a constitutional court ruling, a political pamphlet, a published definition, and none can be reworded without falsifying it. The instruction demanded preserving every fact <em>and</em> replacing every word, and never said which wins.</p>
+  <p><strong>"It does flatten, in 20 of 32 pairs."</strong> Sign test on 20 against 12: p = 0.215. Three paragraphs above, I had applied the exact test to another count and ruled it "not a result". I applied two different standards on the same page.</p>
+  <p>All three are the same failure: <strong>machine-checked numbers beside a hand-waved method</strong>. So the tool now measures its own compliance on every run and prints it, whether or not it flatters the study.</p>
+  <p>There was a fourth, caught only by the reviewer who read the Spanish line by line: <strong>the rewrite silently corrected the originals</strong>, which the instruction forbids in those words. <em>Intercesión</em> → <em>se cruza</em>. <em>Teoría de juego</em> → <em>teoría de juegos</em>. <em>Costa</em> → <em>consta</em>. The delivered treatment was not "paraphrase", it was "paraphrase and copy-edit", so part of every score change is error repair. And that lands squarely on the stratum which exists to measure the harm done to people writing in a second language.</p>
+  <h2>The conflict that has to be said out loud</h2>
+  <p>The model that rewrote the passages is the same model that wrote the rules it was being rewritten against. Naming the model is provenance; it is not handling the conflict.</p>
+  <p>What argues in favour is in the data: the rewrite <strong>introduced</strong> signals as well as removing them, and pushed more passages over the boundary than it pulled back. A model gaming the measurement would not do that. But the objection is legitimate, it is the first one any hostile reader will raise, and the only real answer is another vendor's model repeating it. Until then the page says it plainly: <strong>these numbers should not be quoted anywhere a teacher will act on them.</strong></p>
+  <h2>What a teacher takes away</h2>
+  <p>Four things, and none of them is a reassuring headline:</p>
+  <p>1. <strong>The watermark is no use to you today.</strong> There is no public detector, and when there is, it will mean sending a student's work to somebody else's server. 2. <strong>The absence of a mark means nothing.</strong> In either direction. 3. <strong>No tool, mine included, can tell apart</strong> somebody who stripped a watermark from somebody who ran their own honest paragraph through a model for style, or because English is not their first language. 4. <strong>Distrust any verdict on a short text</strong>, mine included, until I fix #59.</p>
+  <p>All of it — the method, the data, the intervals and the faults — is published in <a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/PARAPHRASE.md"><code>Docs/PARAPHRASE.md</code></a>, and regenerates with one command from the same repository.</p>
+  <p>A study that comes out the way you expected is pleasant. One that withdraws your hypothesis, finds three false sentences in your writing and uncovers a worse defect than the one you went looking for is worth considerably more. And when a project has spent eight articles demanding that everyone else publish their errors, publishing your own is not humility. It is the price.</p>
+  <p><em>Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5">Microsoft MVP for .NET</a>. By and for the education community.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

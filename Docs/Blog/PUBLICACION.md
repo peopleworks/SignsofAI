@@ -408,6 +408,8 @@ de los seis (video / voz / cola en segundos):
 | `signsofai-calibration-story.{en,es}.html` | WordPress · Blogger — **generados** |
 | `signsofai-verdict-story.{en,es}.md` | dev.to · Hashnode · Medium — **séptimo artículo**, sin publicar |
 | `signsofai-verdict-story.{en,es}.html` | WordPress · Blogger — **generados** |
+| `signsofai-watermark-story.{en,es}.md` | dev.to · Hashnode · Medium — **octavo artículo**, sin publicar |
+| `signsofai-watermark-story.{en,es}.html` | WordPress · Blogger — **generados** |
 
 **Generar el HTML.** Los dos primeros artículos se escribieron como HTML a mano. Transcribir 1.500
 palabras dos veces más, en dos idiomas, es la forma segura de corregir un párrafo en una copia y no
@@ -499,6 +501,34 @@ resultó falsa al comprobarla antes de publicar (la regla de tres no disparó aq
 Y trae una petición concreta que conviene repetir en cada plataforma: **escritura académica en
 español**. SciELO y Redalyc no eran alcanzables, así que el lado español descansa hoy solo en prosa
 enciclopédica.
+
+**Octavo artículo — el watermark, y el fallo propio que destapó.** El más oportuno de los ocho y
+también el más incómodo, porque la noticia tiene días: Claude marca su salida desde el 2 de agosto.
+El ángulo **no** es «el watermark no nos afecta». Es que salí a demostrar eso, no pude, y de camino
+encontré un defecto peor en mi propia herramienta.
+
+Tres resultados, en este orden y sin invertirlo:
+
+1. **Reescribir para borrar la marca no cambia si marcamos el texto.** Cinco pasajes cruzaron, dos
+   volvieron, McNemar exacto **p = 0,453**. La hipótesis se retira en negrita.
+2. **La longitud sí.** Los mismos treinta y dos documentos: **0 de 32** completos cruzan el umbral,
+   **13 de 89** ventanas de 400 palabras lo cruzan, y **once de treinta documentos están marcados en
+   una posición del texto y no en otra**. Es el issue #59.
+3. **Tres revisores independientes encontraron tres frases falsas mías**, una de ellas describiendo
+   mal mi propio código. Están contadas en el artículo con nombre y apellido.
+
+Al publicar, la trampa a evitar es que un lector se lleve *«esta herramienta caza el trabajo
+parafraseado con IA»* — que es exactamente lo que el estudio **no** pudo demostrar. Por eso el
+titular lleva la negación delante y por eso el copy de redes también. Si hay que recortar algo, que
+no sea eso.
+
+Puntajes en su propio pie: **ES 7/100 · variabilidad 0,66 · ~1.850 palabras**, **EN 7/100 ·
+variabilidad 0,66 · ~1.780 palabras**. El inglés disparó nuestra propia regla de rayas (19 en 1.775
+palabras) y se corrigió antes de generar el HTML, que es el mismo gesto que el sexto artículo.
+
+Portada: `social/watermark-story-cover.png`, sin palabras salvo dos puntajes, así que **sirve para
+las dos ediciones**. Dibuja el hallazgo en vez de decorarlo — una página, tres ventanas, tres
+veredictos, y el tramo marcado es el de líneas parejas.
 
 ### Publicado hasta ahora
 
