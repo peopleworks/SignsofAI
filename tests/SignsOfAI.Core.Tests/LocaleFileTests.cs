@@ -29,6 +29,8 @@ public class LocaleFileTests
         .. Enum.GetValues<SignCategory>().Select(c => "cat." + c.ToString().ToLowerInvariant()),
         .. Enum.GetValues<Severity>().Select(s => "sev." + s.ToString().ToLowerInvariant()),
         "verdict.signs", "verdict.none",
+        // Loc.Verdict picks one of four by asking VerdictBands, so a text search cannot see them.
+        "verdict.unmeasured.length", "verdict.unmeasured.language",
         "lang.english", "lang.spanish",
         // TaskEntry builds these from its own list, so a plain text search cannot see them and a
         // deleted one would render as the raw key on the front door.

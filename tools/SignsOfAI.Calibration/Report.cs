@@ -43,6 +43,8 @@ public static class Report
         sb.AppendLine();
         sb.AppendLine($"- **Corpus** `{manifest.Id}`, fingerprint `{r.CorpusHash}`");
         sb.AppendLine($"- **Texts** {r.Overall.Count:N0} ({r.Overall.TotalWords:N0} words)");
+        sb.AppendLine($"- **Lengths measured** {r.Overall.ShortestWords:N0} – {r.Overall.LongestWords:N0} words " +
+                      $"(median {r.Overall.MedianWords:N0})");
         sb.AppendLine($"- **Engine** {version}");
         sb.AppendLine($"- **Run** {generatedOn}");
         sb.AppendLine($"- **Target false-positive rate** {Pct(r.TargetFalsePositiveRate)}");
@@ -65,6 +67,16 @@ public static class Report
         sb.AppendLine("## The headline");
         sb.AppendLine();
         sb.AppendLine(Headline(r.Overall, r.TargetFalsePositiveRate));
+        sb.AppendLine();
+        sb.AppendLine(
+            $"**It covers documents of {r.Overall.ShortestWords:N0} words and up, because that is what was " +
+            "measured.** Nothing shorter was: the corpus has no text below that length, so the boundary " +
+            "below is not supported there and the tool withholds its verdict rather than extrapolating. " +
+            "That is a statement about coverage, not about where the tool breaks — though the direction " +
+            "of the length effect *has* been measured, and it goes the wrong way: the same documents " +
+            "flagged 0 of 32 whole and 6 of 32 as 400-word excerpts of themselves " +
+            "(`Docs/PARAPHRASE.md`, section *Length*). Lowering this floor means measuring short writing " +
+            "people actually composed at that length, not slicing long documents into pieces.");
         sb.AppendLine();
         sb.AppendLine(
             "Read the interval, not the percentage. On a small corpus an observed rate is compatible " +

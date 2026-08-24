@@ -80,7 +80,9 @@ public class VerdictAgreementTests
         // translation whose pin no longer matches is treated as stale — the whole report silently
         // falls back to English. That is the correct behaviour and a silent way to undo #36, so the
         // wording change and the pins have to travel together. This is the test that says they did.
-        var result = new AiWritingAnalyzer().Analyze(ObviouslyMachine, "en");
+        // Long enough to earn a verdict at all: since #59 a paragraph gets none, and this test is
+        // about which language the verdict arrives in, not about whether one is given.
+        var result = new AiWritingAnalyzer().Analyze(Fixtures.LongEnough(ObviouslyMachine), "en");
         var spanish = EvidenceReport.ToMarkdown(result, new ReportOptions { InterfaceLanguage = "es" });
 
         Assert.Contains("Señales de escritura con IA", spanish);

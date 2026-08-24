@@ -10,6 +10,7 @@ It is **not an accuracy figure**. Accuracy needs machine-written text to measure
 
 - **Corpus** `signsofai-human-baseline`, fingerprint `123fa5b9ebca3f29`
 - **Texts** 90 (280,221 words)
+- **Lengths measured** 662 – 9,328 words (median 2,772)
 - **Engine** SignsOfAI.Core 0.4.0
 - **Run** 2026-08-24
 - **Target false-positive rate** 5%
@@ -19,6 +20,8 @@ Every text here was published before generative models could have written it. Th
 ## The headline
 
 **At a threshold of 25/100, this tool flags at most 5% of writing known to be human** — 0 of 90 texts in this corpus, an observed 0% with a 95% interval of 0% – 4.1%.
+
+**It covers documents of 662 words and up, because that is what was measured.** Nothing shorter was: the corpus has no text below that length, so the boundary below is not supported there and the tool withholds its verdict rather than extrapolating. That is a statement about coverage, not about where the tool breaks — though the direction of the length effect *has* been measured, and it goes the wrong way: the same documents flagged 0 of 32 whole and 6 of 32 as 400-word excerpts of themselves (`Docs/PARAPHRASE.md`, section *Length*). Lowering this floor means measuring short writing people actually composed at that length, not slicing long documents into pieces.
 
 Read the interval, not the percentage. On a small corpus an observed rate is compatible with a much wider range, and the recommendation below is made from the **upper** end of that range rather than the flattering one — so it stays cautious while the corpus is thin and tightens on its own as it grows.
 

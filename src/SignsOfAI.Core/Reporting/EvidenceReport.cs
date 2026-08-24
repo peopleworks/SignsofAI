@@ -81,7 +81,15 @@ public static class EvidenceReport
         sb.AppendLine();
         if (!VerdictHolds(result))
         {
-            AppendBlock(sb, text, ReportMessages.AnalysisNoVerdict);
+            // Which of the reasons, because they are not the same statement. "Below the threshold"
+            // is a reading — the tool looked and found little. "Shorter than anything measured" is
+            // a refusal to read at all, and a reader who is told the first when the second is true
+            // will take away a reassurance nobody offered.
+            AppendBlock(sb, text,
+                VerdictBands.Measured(result.Statistics.WordCount)
+                    ? ReportMessages.AnalysisNoVerdict
+                    : ReportMessages.AnalysisNoVerdictShort,
+                Num(result.Statistics.WordCount), Num(VerdictBands.MinimumWords ?? 0));
             sb.AppendLine();
         }
 
@@ -491,8 +499,12 @@ public static class EvidenceReport
     /// it decides when the tool speaks, and it is published, measured and printed on the page beside
     /// the language's own figure. See issue #32.
     /// </summary>
-    private static bool VerdictHolds(AnalysisResult result) =>
-        VerdictBands.Holds(result.OverallScore, result.Language);
+    /// <remarks>
+    /// Length joined score and language in #59, and it arrives through <see cref="AnalysisResult"/>
+    /// rather than being asked here, so that the CLI's JSON, the MCP payload, the interface and this
+    /// page cannot drift into disagreeing about the same document.
+    /// </remarks>
+    private static bool VerdictHolds(AnalysisResult result) => result.HasVerdict;
 
     /// <summary>
     /// The sentence that has to appear on every report. Written from the embedded calibration so it

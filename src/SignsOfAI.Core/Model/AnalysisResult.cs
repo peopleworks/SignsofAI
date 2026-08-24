@@ -86,14 +86,32 @@ public sealed record AnalysisResult
     public CitationReport Citations { get; init; } = CitationReport.Empty;
 
     /// <summary>
+    /// Whether this build will say anything at all about this document — score, language and length
+    /// together.
+    ///
+    /// Derived here so that every surface asks the same question of the same three facts. The last
+    /// time each host decided for itself, one engine gave three answers about the same text; see
+    /// <see cref="VerdictBands"/>, whose whole existence is that failure.
+    /// </summary>
+    public bool HasVerdict =>
+        VerdictBands.Holds(OverallScore, Language, Statistics.WordCount);
+
+    /// <summary>
     /// Human-readable one-line verdict derived from <see cref="OverallScore"/>, in English.
     ///
     /// English-only on purpose: this is what a machine consumer gets — the CLI's `--json`, the MCP
     /// tool's payload — where a stable string is more use than a translated one. Anything shown to a
     /// person goes through the interface's localiser or the report's own resources, both of which
     /// take their boundary from <see cref="VerdictBands"/> exactly as this does.
+    ///
+    /// Four states, not two, and the order matters: the reasons this build cannot speak are checked
+    /// before the reading it would otherwise give. Collapsing "we did not measure anything this
+    /// short" into "no signs above the measured boundary" would turn a refusal into a finding, which
+    /// is the failure this whole property exists to avoid.
     /// </summary>
-    public string Verdict => VerdictBands.Holds(OverallScore)
-        ? "Signs of AI writing"
+    public string Verdict =>
+        !VerdictBands.Measured(Statistics.WordCount) ? "No verdict: below the measured length"
+        : !VerdictBands.Measured(Language) ? "No verdict: language not measured"
+        : VerdictBands.Holds(OverallScore) ? "Signs of AI writing"
         : "No signs above the measured boundary";
 }
