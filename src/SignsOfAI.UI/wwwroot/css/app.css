@@ -435,7 +435,8 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     padding-bottom: .9rem; border-bottom: 1px solid var(--border);
 }
 .brand { font-weight: 700; font-size: 1.1rem; text-decoration: none; color: var(--text); letter-spacing: -.01em; }
-.nav-links { display: flex; gap: .35rem; }
+/* Wraps: the nav gained a sixth link and a narrow window must not push the language switch off. */
+.nav-links { display: flex; flex-wrap: wrap; gap: .35rem; }
 .nav-link {
     text-decoration: none; color: var(--text-muted); font-size: .92rem; font-weight: 600;
     padding: .35rem .75rem; border-radius: 8px;
@@ -1089,3 +1090,69 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
 .ppl-progress { margin-top: .6rem; }
 .ppl-bar { height: 6px; border-radius: 999px; background: var(--border); overflow: hidden; }
 .ppl-bar > span { display: block; height: 100%; background: var(--accent, #2563eb); transition: width .25s ease; }
+
+/* ---- Windows app download (/download) ----
+   Deliberately shares the visual language of the front-door task cards: somebody who learned to
+   read those four cards reads these four the same way. */
+.dl-h2 { font-size: 1.02rem; margin: 0 0 .35rem; }
+.dl-h2 svg { vertical-align: -2px; }
+
+/* The call to action. A link, not a button, because it is a download and the browser should be
+   allowed to say so — right-click, copy address, resume, all of it. */
+.dl-cta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "icon main" "icon sub";
+    column-gap: .8rem;
+    align-items: center;
+    padding: .9rem 1.2rem;
+    background: var(--brand);
+    color: var(--brand-ink);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: filter .15s, transform .15s;
+}
+.dl-cta:hover, .dl-cta:focus-visible { filter: brightness(1.08); transform: translateY(-1px); }
+.dl-cta svg { grid-area: icon; width: 26px; height: 26px; }
+.dl-cta-main { grid-area: main; font-weight: 700; font-size: 1.02rem; }
+.dl-cta-sub { grid-area: sub; font-size: .78rem; opacity: .85; }
+.dl-get .hint.sub { margin: .6rem 0 0; }
+
+.dl-running-line { margin: 0 0 .3rem; font-size: 1rem; }
+.dl-running-line svg { vertical-align: -3px; color: var(--good); margin-right: .3rem; }
+
+.dl-grid {
+    list-style: none;
+    margin: .9rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: .7rem;
+}
+.dl-item {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    padding: .85rem 1rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+.dl-item h3 { margin: 0; font-size: .96rem; font-weight: 650; line-height: 1.3; }
+.dl-item p { margin: 0; font-size: .84rem; color: var(--text-muted); line-height: 1.45; }
+/* What the browser does instead. Pushed to the bottom so the four line up however long the
+   description above happens to be. */
+.dl-item .dl-vs {
+    margin-top: auto;
+    padding-top: .45rem;
+    border-top: 1px dashed var(--border);
+    font-size: .78rem;
+}
+
+/* Said before the download, not after it. Bordered like a notice rather than an error: the
+   warning is correct, and the page is explaining it rather than apologising for it. */
+.dl-warn { border-color: color-mix(in srgb, var(--notice) 45%, var(--border)); }
+.dl-warn .dl-h2 svg { color: var(--notice); }
+.dl-steps { margin: .6rem 0 .8rem; padding-left: 1.2rem; font-size: .88rem; line-height: 1.6; }
+.dl-steps li { margin-bottom: .2rem; }
+.dl-steps code { font-size: .84em; }

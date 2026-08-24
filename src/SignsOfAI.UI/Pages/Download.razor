@@ -1,0 +1,97 @@
+@* The page a teacher can be sent to.
+
+   Until this existed the only route to the Windows app was a GitHub releases *search* URL, buried
+   in the notice on /batch: a wall of tags, assets and checksums, in English, for somebody whose
+   question was "how do I open my PDFs". Half of the desktop app's reason to exist was therefore
+   invisible to every web visitor.
+
+   It also renders for the desktop host itself, where the honest content is the opposite: not an
+   offer to download what you already have, but the one fact the app never told anybody — which
+   build you are running. That is the same page answering the question each host actually raises,
+   which is what HostCapabilities is for. *@
+@page "/download"
+@inherits LocalizedComponent
+@inject HostCapabilities Host
+
+<PageTitle>@L["dl.pagetitle"]</PageTitle>
+
+<header class="hero">
+    <h1>@L["dl.h1"]</h1>
+    <p class="tagline">@L["dl.tagline"]</p>
+</header>
+
+@if (Host.Version is { } running)
+{
+    <section class="card dl-running">
+        <p class="dl-running-line"><Icon Name="check-circle" /> @L.F("dl.running", running)</p>
+        @if (running != DesktopRelease.Version)
+        {
+            @* Deliberately not a claim that the newer one is better, and deliberately not an
+               auto-update: this app is unsigned, and a program that downloads and runs code on its
+               own is exactly the behaviour we would tell a teacher to be suspicious of. *@
+            <p class="hint">@L.F("dl.newer", DesktopRelease.Version)</p>
+        }
+        <p class="hint sub">
+            <a href="@DesktopRelease.AllReleasesUrl" target="_blank" rel="noopener">@L["dl.all"]</a>
+        </p>
+    </section>
+}
+else
+{
+    <section class="card dl-get">
+        <a class="dl-cta" href="@DesktopRelease.ZipUrl">
+            <Icon Name="download" />
+            <span class="dl-cta-main">@L.F("dl.get", DesktopRelease.Version)</span>
+            <span class="dl-cta-sub">@L["dl.for"]</span>
+        </a>
+        <p class="hint sub">
+            <a href="@DesktopRelease.ReleaseUrl" target="_blank" rel="noopener">@L["dl.notes"]</a>
+            ·
+            <a href="@DesktopRelease.AllReleasesUrl" target="_blank" rel="noopener">@L["dl.all"]</a>
+        </p>
+    </section>
+}
+
+<section class="card">
+    <h2 class="dl-h2">@L["dl.adds.title"]</h2>
+    <p class="hint">@L["dl.adds.lede"]</p>
+
+    <ul class="dl-grid">
+        @foreach (var add in Adds)
+        {
+            <li class="dl-item">
+                <h3>@L[$"dl.add.{add}.name"]</h3>
+                <p>@L[$"dl.add.{add}.what"]</p>
+                @* The contrast is the argument. Saying what the browser does instead keeps this from
+                   reading as a list of features the web version is quietly missing. *@
+                <p class="dl-vs">@L[$"dl.add.{add}.browser"]</p>
+            </li>
+        }
+    </ul>
+</section>
+
+<section class="card">
+    <h2 class="dl-h2">@L["dl.same.title"]</h2>
+    <p class="hint">@L.M("dl.same.body")</p>
+</section>
+
+<section class="card dl-warn">
+    <h2 class="dl-h2"><Icon Name="alert" /> @L["dl.warn.title"]</h2>
+    @* Said here, before the download, rather than left for the user to meet on their own. The app is
+       unsigned because a code-signing certificate is the one thing this project cannot fund — that
+       is also the open ask in the .NET Foundation application — and a warning nobody warned you
+       about is how people learn to click through warnings. *@
+    <p>@L.M("dl.warn.body")</p>
+    <ol class="dl-steps">
+        <li>@L["dl.warn.step1"]</li>
+        <li>@L["dl.warn.step2"]</li>
+        <li>@L.M("dl.warn.step3")</li>
+    </ol>
+    <p class="hint">@L.M("dl.zip.body")</p>
+</section>
+
+@code {
+    // Same order as the argument they make: the two a teacher meets first, then the two about
+    // measuring locally. Keys are built from these, so LocaleFileTests lists them by hand.
+    private static readonly string[] Adds = ["documents", "folder", "perplexity", "ollama"];
+}

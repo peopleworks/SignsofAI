@@ -2,11 +2,13 @@
 @implements IDisposable
 @inject Loc L
 @inject IFolderBatch Folders
+@inject HostCapabilities Host
 
 <div class="app-shell">
     <nav class="app-nav">
         <a class="brand" href=""><Icon Name="pen" /> Signs of AI Writing</a>
-        <span class="dotnet-badge" title="@L["nav.builtwith.title"]">
+        @* The tooltip used to say "Blazor WebAssembly" in both hosts, which is only true in one. *@
+        <span class="dotnet-badge" title="@L[Host.RuntimeKey]">
             <span class="dot"></span> @L["nav.builtwith"]
         </span>
         <div class="nav-links">
@@ -20,6 +22,15 @@
             <NavLink class="nav-link" href="baseline">@L["nav.baseline"]</NavLink>
             <NavLink class="nav-link" href="originality">@L["nav.originality"]</NavLink>
             <NavLink class="nav-link" href="catalog">@L["nav.catalog"]</NavLink>
+            @* Only where there is something to gain by downloading it. The same signal as the
+               folder link above, and for the same reason: this host cannot open a folder, so a
+               better host exists for this machine and hiding that would be the lowest-common-
+               denominator answer. The desktop still has the page — it answers a different
+               question there — but nothing points at it from its own chrome. *@
+            @if (!Folders.IsAvailable)
+            {
+                <NavLink class="nav-link" href="download">@L["nav.download"]</NavLink>
+            }
             <a class="nav-link" href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">GitHub</a>
             <LanguageSwitch />
         </div>
@@ -34,7 +45,11 @@
                claim about its own author. *@
             <strong>PeopleWorks — Pedro Hernández</strong> · @L.M("footer.role")
         </p>
-        <p>Signs of AI Writing · @L.M("footer.line") ·
+        @* The version is here because a support message arrived reading "desktop 0.4.0 is not
+           published" from somebody who could not tell which build they had — the app said its name
+           and nothing else. A browser tab has no version to report: it is always what was last
+           deployed. *@
+        <p>Signs of AI Writing@(Host.Version is { } v ? $" {v}" : "") · @L.M(Host.RuntimeKey) ·
             <a href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">@L["footer.opensource"]</a>
         </p>
     </footer>

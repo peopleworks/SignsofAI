@@ -49,6 +49,30 @@ jobs:
           "name=$name"       >> $env:GITHUB_OUTPUT
           Write-Host "Building $name"
 
+      # The web app's download page has the version written into a constant, because GitHub's
+      # /releases/latest points at whichever release is newest overall and this repository publishes
+      # two independent tag lines — half the time "latest" is a NuGet release with no zip on it.
+      #
+      # Writing it down means it can go stale, so it is checked here rather than left to memory: a
+      # release that forgets to update the page does not ship, and the page can never offer a
+      # version that was never published.
+      - name: The download page must offer this version
+        if: github.event_name == 'release'
+        shell: pwsh
+        run: |
+          $file = 'src/SignsOfAI.UI/Services/DesktopRelease.cs'
+          $declared = (Select-String -Path $file -Pattern 'Version\s*=\s*"([^"]+)"').Matches[0].Groups[1].Value
+          $tagged = "${{ steps.version.outputs.version }}"
+          if ($declared -ne $tagged) {
+            Write-Error @"
+          The tag says $tagged but $file says $declared.
+          Update DesktopRelease.Version, merge it, then re-run this release — otherwise the download
+          button on the site points at a release that does not exist.
+          "@
+            exit 1
+          }
+          Write-Host "Download page offers $declared, which is what this tag builds."
+
       # A release that crashes is worse than a release that never shipped, and a GitHub Release
       # cannot be un-downloaded once people have it.
       - name: Test

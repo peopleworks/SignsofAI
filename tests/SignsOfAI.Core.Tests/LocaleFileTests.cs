@@ -35,6 +35,12 @@ public class LocaleFileTests
         .. new[] { "text", "folder", "person", "overlap" }
             .SelectMany(t => new[] { $"task.{t}.name", $"task.{t}.what" }),
         "task.folder.desktop",
+        // Download.razor builds these from its own list, the same way.
+        .. new[] { "documents", "folder", "perplexity", "ollama" }
+            .SelectMany(a => new[] { $"dl.add.{a}.name", $"dl.add.{a}.what", $"dl.add.{a}.browser" }),
+        // Chosen by the host at startup — HostCapabilities.RuntimeKey — so the footer and the
+        // .NET badge's tooltip describe the runtime the reader is actually looking at.
+        "footer.runtime.browser", "footer.runtime.desktop",
     ];
 
     [Fact]
