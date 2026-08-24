@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+/* Short 13 — "94 sobre 100, y no dice nada".
+
+   Los tiempos van en FRACCIONES de --dur, no en segundos absolutos como los shorts 1–11. El motivo
+   es que este se escribió antes de narrarlo: cue-times.mjs reparte la duración medida entre las
+   palabras del guion, así que la posición relativa de cada frase se conoce sin oír el audio, y solo
+   falta el total. Tras narrar, se cambia --dur por la duración real y todo cae donde caería.
+
+   Fracciones tomadas de la posición de palabra de cada frase en el guion ES:
+   0.179 "Y se niega" · 0.295 "La frontera" · 0.475 "y el más corto" · 0.639 "Este tiene sesenta"
+   0.803 "Las veintitrés" · 0.885 "Lo que se retira" */
+html,body{margin:0;padding:0}
+body{--dur:27s;
+ width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 80% 10%,rgba(109,124,255,.16),transparent 60%),
+   radial-gradient(760px 760px at 12% 66%,rgba(245,158,11,.13),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+/* El sello lleva su propio keyframe porque va centrado con translateX(-50%): un keyframe que
+   escriba `transform` lo reemplaza entero y la pieza se va a un lado. Pasó, y solo se ve en un snap. */
+@keyframes stampin{0%{opacity:0;transform:translateX(-50%) scale(.5) rotate(-9deg)}60%{transform:translateX(-50%) scale(1.1) rotate(-2deg)}100%{opacity:1;transform:translateX(-50%) scale(1) rotate(-4deg)}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes drop{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}
+@keyframes fade{to{opacity:1}}
+.brand{position:absolute;top:78px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+
+/* El número, en gris. Ese gris es el argumento entero: la puntuación existe y no acusa. */
+.score{position:absolute;top:230px;width:100%;font-size:250px;font-weight:900;line-height:1;
+ font-variant-numeric:tabular-nums;color:#9aa8bd;opacity:0;animation:rv .7s calc(var(--dur)*.04) forwards}
+.score span{font-size:80px;font-weight:700;opacity:.55}
+.stamp{position:absolute;top:520px;left:50%;transform:translateX(-50%) rotate(-4deg);
+ padding:18px 46px;border:5px solid #7c8aa6;border-radius:20px;color:#c3ccdb;
+ font-size:56px;font-weight:900;letter-spacing:.02em;opacity:0;animation:stampin .5s calc(var(--dur)*.179) forwards}
+
+/* La regla: dónde se midió la frontera y dónde cae este texto. */
+.ruler{position:absolute;top:730px;left:64px;right:64px;height:420px;opacity:0;animation:rv .7s calc(var(--dur)*.286) forwards}
+.track{position:absolute;top:196px;left:0;right:0;height:12px;border-radius:4px;background:rgba(255,255,255,.12)}
+.void{position:absolute;top:112px;left:0;width:31%;height:180px;border-radius:16px;
+ background:linear-gradient(90deg,rgba(124,138,166,.22),rgba(124,138,166,.05));border:2px dashed rgba(124,138,166,.4)}
+.wall{position:absolute;top:88px;left:31%;width:6px;height:228px;background:#f59e0b;
+ transform:scaleY(0);transform-origin:bottom;animation:grow .5s calc(var(--dur)*.464) forwards}
+.wall-lab{position:absolute;top:24px;left:31%;transform:translateX(-50%);white-space:nowrap;
+ font-family:Consolas,monospace;font-size:46px;font-weight:800;color:#f59e0b;opacity:0;animation:fade .4s calc(var(--dur)*.464) forwards}
+.void-lab{position:absolute;top:312px;left:0;width:31%;font-size:32px;color:#8a93a6;line-height:1.3;
+ opacity:0;animation:fade .4s calc(var(--dur)*.49) forwards}
+.corpus{position:absolute;top:312px;left:33%;right:0;font-size:32px;color:#8a93a6;text-align:left;
+ opacity:0;animation:fade .4s calc(var(--dur)*.49) forwards}
+.here{position:absolute;top:176px;left:8%;width:52px;height:52px;border-radius:50%;
+ background:#eaf1fb;box-shadow:0 0 0 10px rgba(234,241,251,.18);opacity:0;animation:pop .5s calc(var(--dur)*.625) forwards}
+.here-lab{position:absolute;top:110px;left:8%;transform:translateX(-50%);white-space:nowrap;
+ font-family:Consolas,monospace;font-size:40px;font-weight:800;color:#eaf1fb;opacity:0;animation:fade .4s calc(var(--dur)*.625) forwards}
+
+/* La evidencia no se retira: las señales siguen encendidas. */
+.sig{position:absolute;top:1198px;width:100%;font-size:52px;font-weight:800;color:#c3ccdb;opacity:0;
+ animation:rv .6s calc(var(--dur)*.804) forwards}
+.sig b{font-size:68px;color:#eaf1fb}
+.chips{position:absolute;top:1306px;width:100%;display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.c{padding:14px 34px;border-radius:999px;font-size:38px;font-weight:800;opacity:0}
+.c1{background:rgba(219,39,119,.16);color:#f472b6;border:2px solid rgba(219,39,119,.5);animation:drop .4s calc(var(--dur)*.812) forwards}
+.c2{background:rgba(245,158,11,.16);color:#fbbf24;border:2px solid rgba(245,158,11,.5);animation:drop .4s calc(var(--dur)*.828) forwards}
+.c3{background:rgba(34,184,207,.16);color:#67e8f9;border:2px solid rgba(34,184,207,.5);animation:drop .4s calc(var(--dur)*.845) forwards}
+
+.punch{position:absolute;top:1438px;width:100%;font-size:62px;font-weight:900;line-height:1.2;opacity:0;
+ animation:rv .7s calc(var(--dur)*.88) forwards}
+.punch b{background:linear-gradient(90deg,#6d7cff,#22b8cf);-webkit-background-clip:text;background-clip:text;color:transparent}
+.foot{position:absolute;bottom:96px;width:100%;opacity:0;animation:rv .8s calc(var(--dur)*.92) forwards}
+.foot .big{font-size:44px;font-weight:900;line-height:1.26;color:#c3ccdb}
+.foot .sub{margin-top:14px;font-size:34px;color:#7c8aa6;font-family:Consolas,monospace}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+
+<div class="score">94<span>/100</span></div>
+<div class="stamp">NO VERDICT</div>
+
+<div class="ruler">
+  <div class="track"></div>
+  <div class="void"></div>
+  <div class="wall"></div>
+  <div class="wall-lab">662 words</div>
+  <div class="void-lab">nothing this short<br>was ever measured</div>
+  <div class="corpus">the corpus's 90 texts live here</div>
+  <div class="here"></div>
+  <div class="here-lab">66</div>
+</div>
+
+<div class="sig">all <b>23 signals</b> still there</div>
+<div class="chips"><span class="c c1">Lexical</span><span class="c c2">Rhetorical</span><span class="c c3">Syntactic</span></div>
+
+<div class="punch">The <b>accusation</b> is withheld,<br>not the evidence</div>
+
+<div class="foot">
+  <div class="big">A threshold is valid over the population<br>it was measured on. Nowhere else.</div>
+  <div class="sub">github.com/peopleworks/SignsofAI</div>
+</div>
+</body></html>

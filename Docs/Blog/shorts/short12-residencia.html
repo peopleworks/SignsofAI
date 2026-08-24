@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+/* Short 12 — "la señal más fiable no es una palabra".
+
+   Tiempos en FRACCIONES de --dur, no en segundos absolutos: se escribió antes de narrar. Al narrar,
+   se pone --dur a la duración medida y todo cae donde cue-times.mjs lo pondría.
+
+   Fracciones por posición de palabra en el guion ES:
+   0.268 "Es esto" · 0.482 "Es la otra mitad" · 0.661 "No dice quién" · 0.750 "Dice por dónde"
+   0.857 "SignsOfAI"
+
+   La idea visual es una sola: el ensayo en gris, y la frase del asistente con burbuja y color de
+   chat. No hay que explicar que es de otro sitio — se ve que es de otro sitio. */
+html,body{margin:0;padding:0}
+body{--dur:25s;
+ width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 78% 12%,rgba(34,184,207,.14),transparent 60%),
+   radial-gradient(760px 760px at 14% 70%,rgba(109,124,255,.15),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes bub{0%{opacity:0;transform:translateY(30px) scale(.9)}70%{transform:translateY(0) scale(1.03)}100%{opacity:1;transform:none}}
+@keyframes strike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes drop{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}
+.brand{position:absolute;top:78px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.title{position:absolute;top:184px;width:100%;font-size:70px;font-weight:900;line-height:1.16;opacity:0;animation:rv .7s calc(var(--dur)*.03) forwards}
+.title b{color:#22b8cf}
+
+/* El ensayo. Deliberadamente ilegible: no es texto, es una superficie de la que algo desentona. */
+.doc{position:absolute;top:396px;left:80px;right:80px;border-radius:22px;padding:44px 46px 40px;
+ background:rgba(255,255,255,.035);border:2px solid rgba(255,255,255,.09);text-align:left;opacity:0;
+ animation:rv .7s calc(var(--dur)*.1) forwards}
+.doc .lab{font-size:30px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7c8aa6;margin-bottom:26px}
+.ln{height:20px;border-radius:10px;background:rgba(234,241,251,.17);margin-bottom:22px}
+.ln.w9{width:94%}.ln.w8{width:86%}.ln.w7{width:78%}.ln.w5{width:54%}
+
+/* La otra mitad de la conversación. Burbuja, color de chat, y la cola apuntando fuera del documento. */
+.bubble{position:absolute;left:104px;right:150px;border-radius:26px 26px 26px 8px;padding:30px 38px;
+ background:linear-gradient(135deg,rgba(34,184,207,.22),rgba(109,124,255,.18));
+ border:3px solid rgba(34,184,207,.55);text-align:left;font-size:46px;font-weight:800;line-height:1.28;
+ color:#c8f4fb;opacity:0}
+.b1{top:872px;animation:bub .55s calc(var(--dur)*.268) forwards}
+.b2{top:1012px;animation:bub .55s calc(var(--dur)*.482) forwards}
+.who{position:absolute;left:104px;right:150px;top:832px;text-align:right;font-size:32px;font-weight:800;
+ color:#67e8f9;opacity:0;animation:rv .5s calc(var(--dur)*.268) forwards}
+
+/* Lo que la señal dice y lo que no. */
+.claims{position:absolute;top:1204px;left:80px;right:80px;text-align:left}
+.cl{position:relative;font-size:48px;font-weight:800;line-height:1.3;padding-left:70px;margin-bottom:26px;opacity:0}
+.cl::before{position:absolute;left:0;top:-2px;font-size:52px}
+.no{color:#7c8aa6;animation:rv .6s calc(var(--dur)*.661) forwards}
+.no::before{content:"✕";color:#f0556f}
+.cl .t{position:relative;display:inline-block}
+.no .bar{position:absolute;left:0;right:0;top:52%;height:5px;border-radius:3px;background:rgba(124,138,166,.7);
+ transform:scaleX(0);transform-origin:left;animation:strike .45s calc(var(--dur)*.7) forwards}
+.yes{color:#eaf1fb;animation:rv .6s calc(var(--dur)*.75) forwards}
+.yes::before{content:"✓";color:#3ecf8e}
+
+.langs{position:absolute;top:1452px;width:100%;display:flex;gap:24px;justify-content:center}
+.lg{padding:14px 40px;border-radius:999px;font-size:40px;font-weight:800;opacity:0;
+ background:rgba(109,124,255,.16);color:#9aa8ff;border:2px solid rgba(109,124,255,.5)}
+.lg1{animation:drop .4s calc(var(--dur)*.857) forwards}
+.lg2{animation:drop .4s calc(var(--dur)*.878) forwards}
+.foot{position:absolute;bottom:96px;width:100%;opacity:0;animation:rv .8s calc(var(--dur)*.90) forwards}
+.foot .big{font-size:46px;font-weight:900;line-height:1.26}
+.foot .big b{background:linear-gradient(90deg,#22b8cf,#6d7cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.foot .sub{margin-top:14px;font-size:34px;color:#7c8aa6;font-family:Consolas,monospace}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+<div class="title">La señal más fiable<br>no es una <b>palabra</b></div>
+
+<div class="doc">
+  <div class="lab">ensayo entregado</div>
+  <div class="ln w9"></div><div class="ln w8"></div><div class="ln w9"></div>
+  <div class="ln w7"></div><div class="ln w8"></div><div class="ln w5"></div>
+</div>
+
+<div class="who">esto no es del ensayo ↓</div>
+<div class="bubble b1">Espero que esto te ayude.</div>
+<div class="bubble b2">¿Quieres que lo amplíe?</div>
+
+<div class="claims">
+  <div class="cl no"><span class="t">no dice quién escribe bien<span class="bar"></span></span></div>
+  <div class="cl yes"><span class="t">dice por dónde pasó el archivo</span></div>
+</div>
+
+<div class="langs"><span class="lg lg1">español</span><span class="lg lg2">inglés</span></div>
+
+<div class="foot">
+  <div class="big">Te enseña la frase.<br><b>No acusa a nadie.</b></div>
+  <div class="sub">github.com/peopleworks/SignsofAI</div>
+</div>
+</body></html>

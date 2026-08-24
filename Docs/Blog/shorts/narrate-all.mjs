@@ -20,6 +20,22 @@ const HERE = path.dirname(new URL(import.meta.url).pathname.replace(/^\//, ''));
 const RACHEL = '21m00Tcm4TlvDq8ikWAM';
 
 const SCRIPTS = {
+  'short12-residencia-es': {
+    voice: 'Marcela',
+    text: "La señal más fiable de que lo escribió una IA no es una palabra rara. Es esto, al pie de un ensayo: espero que esto te ayude. Es la otra mitad de una conversación, pegada sin querer. No dice quién escribe bien. Dice por dónde pasó el archivo. SignsOfAI las detecta, en español y en inglés.",
+  },
+  'short12-residencia-en': {
+    voice: RACHEL,
+    text: "The most reliable sign that an A I wrote something isn't a fancy word. It's this, at the foot of an essay: I hope this helps. That's the other half of a conversation, pasted in by mistake. It doesn't say who writes well. It says where the file has been. SignsOfAI catches them, in English and Spanish.",
+  },
+  'short13-longitud-es': {
+    voice: 'Marcela',
+    text: "Mi detector le puso noventa y cuatro sobre cien a este párrafo. Y se niega a decir nada. La frontera con la que juzga se midió sobre noventa textos, y el más corto tiene seiscientas sesenta y dos palabras. Este tiene sesenta y seis. Nunca medimos nada tan corto. Las veintitrés señales siguen ahí. Lo que se retira es la acusación.",
+  },
+  'short13-longitud-en': {
+    voice: RACHEL,
+    text: "My detector scored this paragraph ninety-four out of a hundred. And it refuses to say anything. The boundary it judges by was measured on ninety texts, and the shortest is six hundred and sixty-two words. This one is sixty-six. We never measured anything that short. All twenty-three signals are still there. What's withheld is the accusation.",
+  },
   'short4-traduccion-es': {
     voice: 'Marcela',
     text: 'SignsOfAI habla inglés y español. ¿Y el tuyo? Las traducciones no están compiladas: son un archivo JSON. Copias el inglés, traduces las frases y mandas un pull request. Sin C sharp, sin compilar, sin saber programar. Si falta una clave, cae al inglés: una traducción a medias ya sirve. Tu idioma, en un archivo.',

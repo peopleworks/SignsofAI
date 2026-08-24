@@ -20,6 +20,8 @@ Paleta SignsOfAI: `--bg:#0b1020` · léxico `#db2777` · retórico `#f59e0b` · 
 | 9 | Bibliografía inventada | ✅ | ✅ | ✅ 36,3 s · 35,5 s |
 | 10 | 61% / línea base | ✅ | ✅ | ✅ 40,2 s · 37,4 s |
 | 11 | El veredicto que nunca se dio | ✅ | ✅ | ✅ 35,5 s · 32,4 s |
+| 12 | La señal más fiable no es una palabra | ✅ | ⬜ | ⬜ |
+| 13 | 94/100 y sin veredicto | ✅ | ⬜ | ⬜ |
 
 Los renders están en `out/<id>.mp4` + `.srt`.
 
@@ -30,6 +32,27 @@ es lo que hay que recortar, no la animación.
 **Orden del pipeline:** narrar primero (`narrate-all.mjs`), sacar los tiempos de cue
 (`cue-times.mjs`) y **después** escribir el HTML alrededor de la duración medida, porque los
 retardos de animación son absolutos. `build-short.mjs` reutiliza el mp3 salvo `--revoice`.
+
+**Los shorts 12 y 13 rompen ese orden a propósito, y se puede copiar.** Sus tiempos no van en
+segundos sino en **fracciones de `--dur`**, una variable CSS al principio del archivo. Funciona
+porque `cue-times.mjs` reparte la duración medida entre las palabras del guion: la posición
+*relativa* de cada frase se conoce sin oír el audio, y lo único que falta es el total. Así que se
+escribió el HTML antes de narrar, y al narrar solo hay que poner `--dur` a la duración real:
+
+    node narrate-all.mjs short12-residencia-es short12-residencia-en short13-longitud-es short13-longitud-en
+    # anota la duración que imprime cada uno, y ponla en --dur del HTML correspondiente
+    node build-short.mjs scenes/short13-longitud-es.json
+
+Las fracciones están escritas en el comentario de cada HTML, con la frase a la que corresponden.
+
+**Comprobar la maqueta antes de renderizar**, con el `snap.mjs` del kit y **un `t` mayor que la
+duración total**, o el cierre no ha entrado todavía y parece que falta:
+
+    node snap.mjs <html> _work/snap.png 30
+
+Dos fallos de estos shorts solo aparecieron así, y ninguno se ve leyendo el CSS: un sello centrado
+con `translateX(-50%)` al que el keyframe le reescribía el `transform` entero y se iba a un lado, y
+una tachadura cuyo contenedor era el bloque y no la frase, así que llegaba hasta el borde.
 
 ---
 
@@ -163,3 +186,24 @@ node snap.mjs <html> _work/snap.png 20          # validar visual (sin gasto de v
 node build-short.mjs scenes/short1-gancho-es.json   # voz + record + mux + srt
 ```
 Requiere: Node, ffmpeg/ffprobe, Playwright, clave ElevenLabs. **Ver nota de seguridad sobre la clave.**
+
+## Short 12 — "La señal más fiable no es una palabra" (la residencia del chat)
+**Visual:** un ensayo entregado en gris; al pie aparecen dos burbujas con color de chat —"Espero que
+esto te ayude", "¿Quieres que lo amplíe?"— y una etiqueta que dice que eso no es del ensayo; luego
+las dos afirmaciones, una tachada y otra no; cierre con los dos idiomas.
+- **ES:** "La señal más fiable de que lo escribió una IA no es una palabra rara. Es esto, al pie de un ensayo: espero que esto te ayude. Es la otra mitad de una conversación, pegada sin querer. No dice quién escribe bien. Dice por dónde pasó el archivo. SignsOfAI las detecta, en español y en inglés."
+- **EN:** "The most reliable sign that an A I wrote something isn't a fancy word. It's this, at the foot of an essay: I hope this helps. That's the other half of a conversation, pasted in by mistake. It doesn't say who writes well. It says where the file has been. SignsOfAI catches them, in English and Spanish."
+
+**Lo que no se puede recortar:** que la señal **no dice quién escribe bien**. Es la única regla del
+catálogo que habla del archivo y no del estilo, y es lo que la separa de un detector que acusa.
+
+## Short 13 — "94 sobre 100, y no dice nada" (el suelo de longitud)
+**Visual:** el 94 enorme **en gris**, sello "SIN VEREDICTO", una regla donde los 90 textos del corpus
+viven a la derecha de 662 palabras y este párrafo de 66 cae en la zona vacía; luego las 23 señales
+siguen encendidas; cierre con la frase general.
+- **ES:** "Mi detector le puso noventa y cuatro sobre cien a este párrafo. Y se niega a decir nada. La frontera con la que juzga se midió sobre noventa textos, y el más corto tiene seiscientas sesenta y dos palabras. Este tiene sesenta y seis. Nunca medimos nada tan corto. Las veintitrés señales siguen ahí. Lo que se retira es la acusación."
+- **EN:** "My detector scored this paragraph ninety-four out of a hundred. And it refuses to say anything. The boundary it judges by was measured on ninety texts, and the shortest is six hundred and sixty-two words. This one is sixty-six. We never measured anything that short. All twenty-three signals are still there. What's withheld is the accusation."
+
+**El gris del 94 es el short entero.** Si en el render sale rojo o verde, está mal: verde dice
+"limpio" y rojo dice "culpable", y lo que el producto hace ahí es callarse. Acompaña al noveno
+artículo y comparte su frase de cierre.
