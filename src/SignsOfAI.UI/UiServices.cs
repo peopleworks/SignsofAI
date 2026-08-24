@@ -43,8 +43,14 @@ public static class UiServices
         // runtime and a half-gigabyte of weights — so the browser keeps offering the optional server.
         services.AddScoped<ILocalPerplexity, NoLocalPerplexity>();
 
+        // Telling the user a newer build exists. Nothing to tell in a browser tab, which always
+        // serves whatever was last deployed; a host that gets downloaded replaces this.
+        services.AddScoped<IUpdateCheck, NoUpdateCheck>();
+
         // Local persistence (localStorage in the browser, the WebView's own store on the desktop).
         services.AddScoped<BrowserStorage>();
+        // Whether the user agreed to version checks, and when the last one was.
+        services.AddScoped<UpdatePreference>();
         // User-defined catalogs (custom rule-packs), kept in that same local store.
         services.AddScoped<CatalogStore>();
         // Interface language (EN/ES/…), remembered locally.
