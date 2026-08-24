@@ -916,6 +916,66 @@
       "severity": "Info",
       "message": "Negrita a media frase — ruido de formato.",
       "suggestion": "El énfasis rara vez ayuda a la prosa; quita la negrita."
+    },
+    {
+      "id": "chat.model-self-reference",
+      "category": "Rhetorical",
+      "regex": "\\bcomo (una? )?(modelo de lenguaje|IA|inteligencia artificial|asistente de (IA|inteligencia artificial))\\b|\\bsoy una (IA|inteligencia artificial)\\b",
+      "weight": 6.0,
+      "severity": "High",
+      "message": "Una frase que el asistente dice sobre sí mismo, no una frase del documento.",
+      "suggestion": "Bórrala. Si el texto se redactó con una herramienta, dilo en los agradecimientos.",
+      "evidence": "0 occurrences in the 39,712-word es half of the human calibration corpus (pre-2022, 25 texts)"
+    },
+    {
+      "id": "chat.training-cutoff",
+      "category": "Rhetorical",
+      "regex": "\\bhasta mi última actualización\\b|\\bmis datos de entrenamiento\\b|\\bhasta donde (llega|alcanza) mi entrenamiento\\b|\\bmi conocimiento (llega|alcanza) hasta\\b",
+      "weight": 6.0,
+      "severity": "High",
+      "message": "Una advertencia sobre los datos de entrenamiento de un modelo, olvidada en el texto.",
+      "suggestion": "Bórrala, y comprueba la afirmación que estaba matizando.",
+      "evidence": "0 occurrences in the 39,712-word es half of the human calibration corpus (pre-2022, 25 texts)"
+    },
+    {
+      "id": "chat.signoff",
+      "category": "Rhetorical",
+      "regex": "\\bespero que (esto |te |le )?(te |le )?(ayude|sirva|haya servido)\\b|¿(quieres|deseas|te gustaría) que (te )?(lo |la |los |las )?(reescriba|amplíe|resuma|ayude|prepare)\\b|\\bavísame si (quieres|necesitas|te)\\b|¿(hay )?algo más en lo que pueda ayudar",
+      "weight": 6.0,
+      "severity": "High",
+      "message": "La línea de cierre de una respuesta de asistente, dentro del documento.",
+      "suggestion": "Bórrala. El documento no tiene a quién ofrecerle más ayuda.",
+      "evidence": "0 occurrences in the 39,712-word es half of the human calibration corpus (pre-2022, 25 texts)"
+    },
+    {
+      "id": "chat.capability-disclaimer",
+      "category": "Rhetorical",
+      "regex": "\\bno (tengo|puedo) (acceso a |navegar por |consultar )?(internet|la web|información en tiempo real)\\b|\\bno tengo acceso en tiempo real\\b",
+      "weight": 5.0,
+      "severity": "High",
+      "message": "Una declaración sobre lo que la herramienta de escritura no puede hacer.",
+      "suggestion": "Bórrala, y pon la fuente que estaba sustituyendo.",
+      "evidence": "0 occurrences in the 39,712-word es half of the human calibration corpus (pre-2022, 25 texts)"
+    },
+    {
+      "id": "chat.answer-preamble",
+      "category": "Rhetorical",
+      "regex": "\\baquí (tienes|está|te dejo) (el|la|una|tu) (versión|texto|párrafo|redacción|artículo) (reescrit[ao]|revisad[ao]|corregid[ao]|mejorad[ao]|actualizad[ao])\\b|\\baquí (tienes|está) (el|la) (versión|texto) (reescrit[ao]|revisad[ao])\\b",
+      "weight": 5.0,
+      "severity": "High",
+      "message": "La línea que imprime una herramienta antes de entregar su respuesta.",
+      "suggestion": "Bórrala. El documento debería empezar por el documento.",
+      "evidence": "0 occurrences in the 39,712-word es half of the human calibration corpus (pre-2022, 25 texts)"
+    },
+    {
+      "id": "chat.eager-opener",
+      "category": "Rhetorical",
+      "regex": "(?m)(?:^|(?<=[.!?¡])\\s)¡?(Por supuesto|Claro|Excelente pregunta|Desde luego)[!,]",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "Apertura entusiasta de asistente («¡Por supuesto!», «¡Excelente pregunta!»).",
+      "suggestion": "Bórrala. Nadie le ha hecho una pregunta al documento.",
+      "evidence": "0 occurrences in the 39,712-word es half of the human calibration corpus (pre-2022, 25 texts)"
     }
   ],
   "functionWords": [

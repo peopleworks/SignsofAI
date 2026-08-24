@@ -384,3 +384,9 @@ The optional server is a normal ASP.NET Core app (`dotnet publish` the `SignsOfA
 
 Created by **Pedro Hernández — PeopleWorks**, [Microsoft MVP for .NET](https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5). Detection markers are grounded in
 linguistics research on AI stylometry — see `Docs/GoogleResearch.md`.
+
+The `chat.*` rules — the assistant's own turn, left in the document — were adapted from the pattern
+set of [amanmaqsood/prose-humanizer](https://github.com/amanmaqsood/prose-humanizer) (MIT), a writing
+skill rather than a detector. They entered the packs the way everything here does: screened against
+the calibration corpus first, where all six scored zero. Twelve other candidates from the same source
+did not enter, because they fire on writing published before generative models existed.
