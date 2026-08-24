@@ -1,0 +1,29 @@
+{
+  "name": "signs-of-ai",
+  "version": "0.4.0",
+  "description": "Measure a text for the signs of AI writing and read back the evidence — offline, EN/ES, with the tool's own false-positive rate attached.",
+  "author": {
+    "name": "Pedro Hernández — PeopleWorks",
+    "url": "https://github.com/peopleworks"
+  },
+  "homepage": "https://github.com/peopleworks/SignsofAI",
+  "repository": "https://github.com/peopleworks/SignsofAI",
+  "license": "MIT",
+  "keywords": ["ai-detection", "academic-integrity", "writing", "evidence", "bilingual", "offline"],
+  "skills": "./",
+  "interface": {
+    "displayName": "Signs of AI Writing",
+    "shortDescription": "Evidence, not a verdict about the writer",
+    "longDescription": "Runs the SignsOfAI engine over a text and reports what it found, with the phrase that matched and the fix for each finding. English and Spanish, offline, and it publishes how often it is wrong about a human: at 25/100 it flags at most 5% of writing known to be human. It cannot tell you who wrote something and refuses to imply it.",
+    "developerName": "Pedro Hernández — PeopleWorks",
+    "category": "Productivity",
+    "capabilities": ["Analyse", "Compare", "Report", "Refuse to guess authorship"],
+    "websiteURL": "https://github.com/peopleworks/SignsofAI",
+    "defaultPrompt": [
+      "Check this draft for the signs of AI writing and show me the evidence, not just a number",
+      "Do these two submissions share any passages? Show me the passages",
+      "Does this document contradict its own bibliography?"
+    ],
+    "brandColor": "#2563EB"
+  }
+}

@@ -218,20 +218,34 @@ already generated — copy it into `.vscode/mcp.json` and you're done.
 
 ## 5. Use it as an agent skill — `/signs-of-ai`
 
-Prefer to work inside your editor? `skill/signs-of-ai` is a drop-in **Claude Code / Codex / agent skill**
-that de-slops a draft — or judges whether text reads as AI-written — in **English and Spanish**. It's a
-human-readable distillation of the same `rules.en.json` / `rules.es.json` taxonomy, so it edits by the
-same rules the engine scores by. Install by pasting the repo link into your AI harness, or copy the
-folder into `~/.claude/skills/`, then:
+Prefer to work inside your editor? [`SKILL.md`](SKILL.md) is a drop-in **agent skill** that de-slops a
+draft — or reports the tells a text carries — in **English and Spanish**. It is a human-readable
+distillation of the same `rules.en.json` / `rules.es.json` taxonomy, so it edits by the same rules the
+engine scores by.
+
+```bash
+# Claude Code, Codex, Gemini CLI, Cursor and the rest, in one command
+npx skills add peopleworks/SignsofAI -g
+```
+
+```
+# …or as a Claude Code plugin, from the marketplace manifest in this repository
+/plugin marketplace add peopleworks/SignsofAI
+/plugin install signs-of-ai
+```
+
+Then:
 
 ```
 /signs-of-ai            <your draft>          # edit mode: rewrite + change summary
-/signs-of-ai is this AI slop?  <the text>     # detect mode: quoted verdict, no rewrite
+/signs-of-ai is this AI slop?  <the text>     # examine mode: the tells, quoted, no rewrite
 ```
 
-The skill deliberately **never fakes a numeric score** — for a calibrated 0–100 verdict, burstiness,
-originality, or perplexity it hands off to this engine (web app, CLI, or the MCP tools above). See
-`skill/README.md`.
+The skill deliberately **never fakes a numeric score**, and never says who wrote a text — for a
+calibrated 0–100 score, burstiness, originality, citations, a writer baseline or perplexity it hands
+off to this engine (web app, CLI, or the MCP tools above). It carries the same six rules about what a
+finding may claim that the report does, including the error rate that has to travel with any score.
+See `skill/README.md`.
 
 ---
 
