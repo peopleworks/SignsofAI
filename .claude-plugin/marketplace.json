@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace-manifest.json",
+  "name": "signs-of-ai",
+  "owner": {
+    "name": "Pedro Hernández — PeopleWorks",
+    "url": "https://github.com/peopleworks"
+  },
+  "description": "Install Signs of AI Writing as a Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "signs-of-ai",
+      "source": "./",
+      "description": "Examine writing for the signs of AI, compare documents, and produce evidence a person can act on — never a verdict about who wrote it.",
+      "license": "MIT",
+      "keywords": ["ai-detection", "academic-integrity", "writing", "evidence", "bilingual", "offline"]
+    }
+  ]
+}

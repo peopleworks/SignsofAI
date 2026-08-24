@@ -2,23 +2,33 @@
 
 A drop-in **Claude Code / Codex / agent skill** that detects and removes the tells of AI-generated
 writing — in **English and Spanish**. Paste a draft, get it back sounding human, with a summary of what
-changed. Ask "is this AI slop?" and get a concrete, quoted verdict.
+changed. Ask "is this AI slop?" and get the tells it carries, quoted, with what that does and does not
+support — never a claim about who wrote it.
 
 It is the fast, human-judgment front end of **[SignsOfAI](https://github.com/peopleworks/SignsofAI)** — a
 real, explainable, privacy-first writing-integrity engine. The skill edits; the engine *measures*.
 
 ## Install
 
-Paste this into Claude Code, Codex, or your favorite AI harness:
-
-> Install this skill globally: https://github.com/peopleworks/SignsofAI (the skill lives in
-> `skill/signs-of-ai`).
-
-Or copy the folder yourself:
+The skill itself is [`SKILL.md`](../SKILL.md) in the repository root, which is where every installer
+looks for it.
 
 ```bash
-# clone, then copy the skill into your Claude Code skills directory
-cp -r skill/signs-of-ai ~/.claude/skills/signs-of-ai
+# one command, and it offers Claude Code, Codex, Gemini CLI, Cursor and the rest
+npx skills add peopleworks/SignsofAI -g
+```
+
+As a Claude Code plugin, from the marketplace manifest in this repository:
+
+```
+/plugin marketplace add peopleworks/SignsofAI
+/plugin install signs-of-ai
+```
+
+Or copy the one file yourself:
+
+```bash
+mkdir -p ~/.claude/skills/signs-of-ai && cp SKILL.md ~/.claude/skills/signs-of-ai/
 ```
 
 Then use it:
@@ -57,9 +67,11 @@ markdown file cannot compute — escalate to the engine, same taxonomy, but hone
   `dotnet tool install --global SignsOfAI.Cli && signsofai check draft.md`.
 - **Originality** — verbatim copies, reworded paraphrases (even across languages), and a whole-cohort
   overlap heatmap, shown as evidence a human judges. A skill cannot do this.
-- **MCP server** — connect `signs-of-ai` as tools (`analyze_ai_writing`, `check_originality`,
-  `search_catalog`, `extract_distinctive_phrases`, `measure_predictability`, `check_paraphrase`) so an
-  agent calls the real engine directly.
+- **MCP server** — `dnx SignsOfAI.Mcp --yes` connects `signs-of-ai` as ten tools, so an agent calls
+  the real engine directly: `analyze_ai_writing`, `check_originality`, `inspect_characters`,
+  `check_citations`, `compare_to_baseline`, `search_catalog`, `extract_distinctive_phrases`,
+  `write_report`, and — the two that send text to a server, and say so — `measure_predictability`
+  and `check_paraphrase`.
 
 See the [main README](https://github.com/peopleworks/SignsofAI) for the web app, CLI, and MCP setup.
 

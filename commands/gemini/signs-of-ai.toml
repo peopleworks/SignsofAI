@@ -1,0 +1,10 @@
+description = "Measure a text for the signs of AI writing and report the evidence, never a verdict about the writer"
+prompt = """
+Activate and follow the `signs-of-ai` skill. Apply it to the request or document below.
+
+{{args}}
+
+If no text was supplied, ask the user to paste or identify it. Report what was measured, quote the
+phrase behind each finding, and print this build's own false-positive rate beside any score. Do not
+state or imply who wrote the text — the engine cannot determine that and neither can you.
+"""
