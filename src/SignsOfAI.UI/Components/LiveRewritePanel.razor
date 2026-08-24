@@ -269,11 +269,16 @@
         if (cursor < Text.Length) yield return new Seg(Text[cursor..], null);
     }
 
-    private static string ScoreClass(double score) => VerdictBands.Emphasis(score) switch
-    {
-        VerdictEmphasis.High => "danger",
-        VerdictEmphasis.Elevated => "warn",
-        VerdictEmphasis.Present => "notice",
-        _ => "good",
-    };
+    // The document's own language and length, so the two numbers here are coloured by the same rule
+    // as the score above them. Below the measured length neither band means anything, and a green
+    // "after" number would read as this panel certifying a rewrite the engine declines to judge.
+    private string ScoreClass(double score) =>
+        VerdictBands.Emphasis(score, Result?.Language, Result?.Statistics.WordCount ?? 0) switch
+        {
+            VerdictEmphasis.High => "danger",
+            VerdictEmphasis.Elevated => "warn",
+            VerdictEmphasis.Present => "notice",
+            VerdictEmphasis.Unmeasured => "unmeasured",
+            _ => "good",
+        };
 }

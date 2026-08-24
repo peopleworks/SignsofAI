@@ -27,6 +27,23 @@ exist, which is a stronger guarantee than any classifier can offer about anythin
 No text is admitted on the grounds that it "reads human". That judgement is the thing being measured
 and cannot also be the thing doing the measuring.
 
+## What the corpus does not cover, and what it costs
+
+Every text here is **662 words or longer** — that is the shortest one, and the Wikipedia fetcher skips
+anything under 700 by design. The threshold is therefore supported over that range and nowhere else,
+so since #59 the engine **withholds its verdict below 662 words** rather than extrapolating onto a
+population it never sampled.
+
+That is not a small exclusion. It is most of how the tool is used: somebody pastes a paragraph. And
+the direction of the error is known — the same documents flag 0 of 32 whole and 6 of 32 as 400-word
+excerpts of themselves (`Docs/PARAPHRASE.md`, section *Length*), so short text drifts toward the
+machine rather than merely getting noisier.
+
+**The most wanted contribution is therefore short complete texts published before 2022**: encyclopedia
+stubs, short news pieces, abstracts — writing somebody *composed* at that length. A window cut out of
+a longer document is not the same population and must not be used: it has the sentence rhythm of a
+fragment, which is the very thing being measured. See issue #66.
+
 ## The texts are not in this repository
 
 `Docs/Calibration/texts/` is git-ignored. Licences differ per source, the bulk would dwarf the code,

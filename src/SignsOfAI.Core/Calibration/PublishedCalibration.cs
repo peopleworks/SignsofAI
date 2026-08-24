@@ -51,6 +51,25 @@ public sealed record PublishedCalibration
     public double RateHigh { get; init; }
 
     /// <summary>
+    /// The length of the shortest and longest text the threshold above was measured on, in words as
+    /// the analyzer counts them.
+    ///
+    /// Recorded because a bound measured on one population must not be spent on another, and length
+    /// is such a population: the shipped boundary was fitted on texts of 662 words and up, and was
+    /// being applied to a pasted paragraph. <see cref="Model.VerdictBands.Measured(int)"/> reads
+    /// <see cref="ShortestWords"/> and withholds the verdict below it; nothing reads
+    /// <see cref="LongestWords"/> yet, and it is here so the range on the page is a range rather
+    /// than half of one. See issue #59.
+    ///
+    /// Null in snapshots written before this field existed. That case does not gate — see
+    /// <see cref="Model.VerdictBands.Measured(int)"/> for why it differs from the language rule.
+    /// </summary>
+    public int? ShortestWords { get; init; }
+
+    /// <inheritdoc cref="ShortestWords"/>
+    public int? LongestWords { get; init; }
+
+    /// <summary>
     /// The rules most often seen on human writing, worst first. Printed alongside a report's findings
     /// so a reader can see whether the evidence they are holding leans on a rule that is known to be
     /// noisy.

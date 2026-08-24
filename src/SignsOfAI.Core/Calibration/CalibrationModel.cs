@@ -77,6 +77,25 @@ public sealed record StratumCalibration
 
     public required int TotalWords { get; init; }
 
+    /// <summary>
+    /// The length of the shortest and longest text in this group, in words.
+    ///
+    /// Not decoration on the table. The threshold below is only supported over the lengths that were
+    /// actually measured, and this group's shortest text is where that support stops — the whole of
+    /// issue #59 is that a boundary fitted here was being spent on a pasted paragraph a quarter of
+    /// its length.
+    /// </summary>
+    public required int ShortestWords { get; init; }
+
+    /// <inheritdoc cref="ShortestWords"/>
+    public required int LongestWords { get; init; }
+
+    /// <summary>
+    /// The median length, which is the honest middle of a range this skewed: the corpus runs from 712
+    /// words to 9,772, and quoting the mean would put the centre where few of the texts actually are.
+    /// </summary>
+    public required double MedianWords { get; init; }
+
     public required double MedianScore { get; init; }
 
     /// <summary>The score nine in ten of these human texts stay below.</summary>

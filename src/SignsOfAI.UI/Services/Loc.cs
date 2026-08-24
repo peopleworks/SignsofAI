@@ -246,14 +246,19 @@ public sealed class Loc(IJSRuntime js, BrowserStorage storage)
     public string Sev(Severity severity) => this["sev." + severity.ToString().ToLowerInvariant()];
 
     /// <summary>
-    /// The one-line verdict for an overall score, in the interface's language. The boundary comes
-    /// from <see cref="VerdictBands"/>; this only chooses the words for it.
+    /// The one-line verdict for a document, in the interface's language. The boundary comes from
+    /// <see cref="VerdictBands"/>; this only chooses the words for it.
+    ///
+    /// It takes the result rather than the score because two of the four answers are not about the
+    /// score at all: a language the corpus never contained and a document shorter than anything the
+    /// boundary was measured on both mean *this build has nothing to say*, which is a different
+    /// sentence from "no signs above the boundary" and must not borrow its reassurance. See #59.
     /// </summary>
-    public string Verdict(double score) => VerdictBands.Holds(score) switch
-    {
-        true => this["verdict.signs"],
-        false => this["verdict.none"],
-    };
+    public string Verdict(AnalysisResult result) =>
+        !VerdictBands.Measured(result.Statistics.WordCount) ? this["verdict.unmeasured.length"]
+        : !VerdictBands.Measured(result.Language) ? this["verdict.unmeasured.language"]
+        : VerdictBands.Holds(result.OverallScore) ? this["verdict.signs"]
+        : this["verdict.none"];
 
     /// <summary>How to name the language the analyzer settled on. The engine only knows EN and ES.</summary>
     public string TextLanguageName(string code) => this[code == "es" ? "lang.spanish" : "lang.english"];

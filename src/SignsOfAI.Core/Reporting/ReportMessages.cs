@@ -53,6 +53,13 @@ public static class ReportMessages
     public const string AnalysisScoreWithVerdict = "analysis.score.with-verdict";
     public const string AnalysisScoreWithoutVerdict = "analysis.score.without-verdict";
     public const string AnalysisNoVerdict = "analysis.no-verdict";
+
+    /// <summary>
+    /// The other reason a verdict is withheld: the document is shorter than anything the
+    /// boundary was measured on. A different sentence from <see cref="AnalysisNoVerdict"/> on
+    /// purpose — that one reports a reading, this one reports a refusal to give one.
+    /// </summary>
+    public const string AnalysisNoVerdictShort = "analysis.no-verdict-short";
     public const string AnalysisFactsCitationOne = "analysis.facts.citation.one";
     public const string AnalysisFactsCitationOther = "analysis.facts.citation.other";
     public const string AnalysisFactsArtifactOne = "analysis.facts.artifact.one";
@@ -150,6 +157,7 @@ public static class ReportMessages
         [AnalysisScoreWithVerdict] = 2,
         [AnalysisScoreWithoutVerdict] = 1,
         [AnalysisNoVerdict] = 0,
+        [AnalysisNoVerdictShort] = 2,   // {0} words here, {1} shortest measured
         [AnalysisFactsCitationOne] = 1,
         [AnalysisFactsCitationOther] = 1,
         [AnalysisFactsArtifactOne] = 1,
@@ -239,6 +247,7 @@ public static class ReportMessages
         [AnalysisScoreWithVerdict] = "**{0}/100 — {1}**",
         [AnalysisScoreWithoutVerdict] = "**{0}/100**",
         [AnalysisNoVerdict] = "*Below the threshold this build can support, so no verdict is given. A low score is not evidence that a person wrote this.*",
+        [AnalysisNoVerdictShort] = "*No verdict is given: this document is {0} words, and the boundary above was measured only on texts of {1} words and longer. Nothing this short was measured, so the score below stands on its own — it is neither evidence that a machine wrote this nor evidence that a person did.*",
         [AnalysisFactsCitationOne] = "**Checkable facts found: {0} source contradiction. These did not move the score.**",
         [AnalysisFactsCitationOther] = "**Checkable facts found: {0} source contradictions. These did not move the score.**",
         [AnalysisFactsArtifactOne] = "**Checkable facts found: {0} unusual character. These did not move the score.**",
@@ -305,7 +314,7 @@ public static class ReportMessages
         SectionAnalysis, SectionCheckable, SectionCharacters, SectionCitations, SectionSignals,
         SectionObservations, SectionErrorRate, SectionUnreadable,
         VerdictSigns, VerdictNone,
-        AnalysisNoVerdict,
+        AnalysisNoVerdict, AnalysisNoVerdictShort,
         LanguageEnglish, LanguageSpanish, LanguageOther,
         CaveatUncalibrated, CaveatAggregateNoThreshold, CaveatLanguageUnmeasured,
         CaveatLanguageNoThreshold, CaveatLanguageMeasured, CaveatAggregateMeasured,

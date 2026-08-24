@@ -364,10 +364,13 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
     string Col(string s, int code) => useColor ? $"[{code}m{s}[0m" : s;
     string Bold(string s) => useColor ? $"[1m{s}[0m" : s;
 
-    int scoreColor = VerdictBands.Emphasis(r.OverallScore) switch
+    // Green says "nothing here"; the terminal has no way to un-say it four lines later. A document
+    // outside what was measured gets grey, because the honest colour for a refusal is not a result.
+    int scoreColor = VerdictBands.Emphasis(r.OverallScore, r.Language, r.Statistics.WordCount) switch
     {
         VerdictEmphasis.High => 31,
         VerdictEmphasis.Elevated or VerdictEmphasis.Present => 33,
+        VerdictEmphasis.Unmeasured => 90,
         _ => 32,
     };
     Console.WriteLine();
@@ -376,6 +379,11 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
                       $"({Counted(r)} signal{(Counted(r) == 1 ? "" : "s")}{AtRate(r)}, {(r.Language == "es" ? "Español" : "English")})");
     Console.WriteLine($"     words {r.Statistics.WordCount} · sentences {r.Statistics.SentenceCount} · " +
                       $"burstiness {r.Statistics.Burstiness:0.00} · lexical diversity {r.Statistics.LexicalDiversity:0.00}");
+
+    if (!VerdictBands.Measured(r.Statistics.WordCount))
+        Console.WriteLine(Col(
+            $"     The boundary was measured only on texts of {VerdictBands.MinimumWords:N0} words and " +
+            "longer, so no verdict is given here. The findings below are unaffected.", 90));
 
     var cats = r.CategoryScores.Where(c => c.FindingCount > 0).ToList();
     if (cats.Count > 0)

@@ -214,6 +214,9 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .score-ring.notice { --ring: var(--notice); }
 .score-ring.warn { --ring: var(--warn); }
 .score-ring.danger { --ring: var(--danger); }
+/* Outside what was measured. Grey rather than green: the page is refusing to answer, and green is
+   an answer. See VerdictEmphasis.Unmeasured. */
+.score-ring.unmeasured { --ring: var(--text-muted); }
 .score-inner {
     width: 88px; height: 88px; border-radius: 50%; background: var(--surface);
     display: grid; place-items: center; text-align: center;
@@ -226,6 +229,8 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .verdict h2.notice { color: var(--notice); }
 .verdict h2.warn { color: var(--warn); }
 .verdict h2.danger { color: var(--danger); }
+.verdict h2.unmeasured { color: var(--text-muted); }
+.hint.unmeasured { margin-top: .4rem; max-width: 46rem; }
 .verdict p { margin: 0 0 .6rem; color: var(--text-muted); font-size: .9rem; }
 
 .cat-chips { display: flex; gap: .4rem; flex-wrap: wrap; }
@@ -1084,6 +1089,7 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
 .score-pill.high   { background: color-mix(in srgb, var(--danger) 16%, transparent); color: var(--danger); }
 .score-pill.medium { background: color-mix(in srgb, var(--warn) 18%, transparent);   color: var(--warn); }
 .score-pill.low    { background: color-mix(in srgb, var(--ok) 16%, transparent);     color: var(--ok); }
+.score-pill.unmeasured { background: var(--surface-2); color: var(--text-muted); }
 
 /* One-time model download (desktop). The bar only appears once a total is known; when the server
    sends no Content-Length the megabytes counter carries the message on its own. */
@@ -1156,3 +1162,6 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
 .dl-steps { margin: .6rem 0 .8rem; padding-left: 1.2rem; font-size: .88rem; line-height: 1.6; }
 .dl-steps li { margin-bottom: .2rem; }
 .dl-steps code { font-size: .84em; }
+
+/* The before/after pair of the rewriter, and the folder-scan pill, share the refusal colour. */
+.sc-num.unmeasured { color: var(--text-muted); }

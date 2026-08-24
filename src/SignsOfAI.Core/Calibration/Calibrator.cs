@@ -72,6 +72,7 @@ public static class Calibrator
             return new StratumCalibration
             {
                 Name = name, Count = 0, TotalWords = 0,
+                ShortestWords = 0, LongestWords = 0, MedianWords = 0,
                 MedianScore = 0, NinetiethScore = 0, HighestScore = 0,
                 Thresholds = [], ThresholdForTarget = null,
             };
@@ -98,6 +99,9 @@ public static class Calibrator
             Name = name,
             Count = samples.Count,
             TotalWords = samples.Sum(s => s.WordCount),
+            ShortestWords = samples.Min(s => s.WordCount),
+            LongestWords = samples.Max(s => s.WordCount),
+            MedianWords = Quantile([.. samples.Select(s => (double)s.WordCount).Order()], 0.50),
             MedianScore = Quantile(scores, 0.50),
             NinetiethScore = Quantile(scores, 0.90),
             HighestScore = scores[^1],

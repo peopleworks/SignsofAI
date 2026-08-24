@@ -553,6 +553,12 @@ var published = new PublishedCalibration
     FlaggedAtThreshold = atThreshold?.Flagged ?? 0,
     RateLow = atThreshold?.RateLow ?? 0,
     RateHigh = atThreshold?.RateHigh ?? 1,
+
+    // The lengths the boundary was actually fitted on. The engine withholds its verdict below the
+    // shorter of the two rather than extrapolating a bound onto a population nobody measured — the
+    // same rule the language condition follows, applied to the other dimension. See issue #59.
+    ShortestWords = overall.ShortestWords,
+    LongestWords = overall.LongestWords,
     NoisiestRules = [.. calibration.RuleFalsePositives.Take(8)
         .Select(r => new PublishedRuleRate { RuleId = r.RuleId, TextShare = r.TextShare })],
 
@@ -586,6 +592,8 @@ Console.WriteLine($"  {samples.Count} texts measured" + (missing > 0 ? $", {miss
 Console.WriteLine($"  corpus fingerprint  {calibration.CorpusHash}");
 Console.WriteLine($"  median score        {calibration.Overall.MedianScore:0.0}");
 Console.WriteLine($"  90th percentile     {calibration.Overall.NinetiethScore:0.0}");
+Console.WriteLine($"  lengths measured    {calibration.Overall.ShortestWords:N0}–{calibration.Overall.LongestWords:N0} words" +
+                  $"  (median {calibration.Overall.MedianWords:N0}) — below the shortest, no verdict");
 Console.WriteLine(calibration.Overall.ThresholdForTarget is { } t
     ? $"  threshold for {calibration.TargetFalsePositiveRate:P0}   {t:0}/100"
     : $"  threshold for {calibration.TargetFalsePositiveRate:P0}   not supported by this corpus yet");

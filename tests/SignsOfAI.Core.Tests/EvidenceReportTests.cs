@@ -333,7 +333,10 @@ public class EvidenceReportTests
         // A verdict printed above "treat the score as saying nothing" is a page arguing with itself,
         // and the reader keeps whichever half suits them. Below the boundary the report prints the
         // score and the reason, and no verdict line of either kind.
-        var report = Report();
+        // Long enough that the reason for the silence is the threshold and not the length — the two
+        // are different sentences since #59, and this test is about the first one.
+        var report = EvidenceReport.ToMarkdown(
+            new AiWritingAnalyzer().Analyze(Fixtures.LongEnough(Essay), "en"));
 
         Assert.DoesNotContain("No signs above the measured boundary", report);
         Assert.DoesNotContain("Signs of AI writing", report);

@@ -207,7 +207,7 @@
     var r = _result;
     <section class="results">
         <div class="summary card">
-            <div class="score-ring @ScoreClass(r.OverallScore)"
+            <div class="score-ring @ScoreClass(r)"
                  style="--pct:@r.OverallScore.ToString(System.Globalization.CultureInfo.InvariantCulture)">
                 <div class="score-inner">
                     <span class="score-num">@Math.Round(r.OverallScore)</span>
@@ -215,9 +215,17 @@
                 </div>
             </div>
             <div class="verdict">
-                <h2 class="@ScoreClass(r.OverallScore)">@L.Verdict(r.OverallScore)</h2>
+                <h2 class="@ScoreClass(r)">@L.Verdict(r)</h2>
                 <p>@L.P(r.Signals.Count, "home.signals") · @L["home.analyzedas"]
                     <strong>@L.TextLanguageName(r.Language)</strong></p>
+                @* Why nothing is being claimed, at the moment the reader would otherwise assume the
+                   silence means "clean". The evidence below is unaffected: only the claim is. *@
+                @if (!VerdictBands.Measured(r.Statistics.WordCount))
+                {
+                    <p class="hint unmeasured">
+                        @L.F("home.unmeasured.length", r.Statistics.WordCount, VerdictBands.MinimumWords ?? 0)
+                    </p>
+                }
                 <div class="cat-chips">
                     @foreach (var c in r.CategoryScores.Where(c => c.FindingCount > 0))
                     {
@@ -308,9 +316,9 @@
                         @if (_humanizedResult is not null)
                         {
                             <span class="score-compare">
-                                <span class="sc-num @ScoreClass(r.OverallScore)">@Math.Round(r.OverallScore)</span>
+                                <span class="sc-num @ScoreClass(r)">@Math.Round(r.OverallScore)</span>
                                 <span class="sc-arrow">→</span>
-                                <span class="sc-num @ScoreClass(_humanizedResult.OverallScore)">@Math.Round(_humanizedResult.OverallScore)</span>
+                                <span class="sc-num @ScoreClass(_humanizedResult)">@Math.Round(_humanizedResult.OverallScore)</span>
                                 @{ var delta = r.OverallScore - _humanizedResult.OverallScore; }
                                 @if (delta > 0.5) { <span class="sc-delta">−@Math.Round(delta)</span> }
                             </span>
@@ -684,8 +692,8 @@ else
     {
         var data = new ShareCardData(
             Score: r.OverallScore,
-            ScoreColor: ScoreHex(r.OverallScore),
-            Verdict: L.Verdict(r.OverallScore),
+            ScoreColor: ScoreHex(r),
+            Verdict: L.Verdict(r),
             Signals: r.Signals.Count,
             Language: L.TextLanguageName(r.Language),
             Categories: r.CategoryScores.Where(c => c.FindingCount > 0)
@@ -720,21 +728,27 @@ else
             $"signsofai-report-{stamp}.html", EvidenceReport.ToHtml(r, options));
     }
 
-    private static string ScoreClass(double score) => VerdictBands.Emphasis(score) switch
-    {
-        VerdictEmphasis.High => "danger",
-        VerdictEmphasis.Elevated => "warn",
-        VerdictEmphasis.Present => "notice",
-        _ => "good",
-    };
+    // Colour is part of the verdict. Painting a 72/100 passage green because the verdict was
+    // withheld would state the opposite of what was withheld, in the loudest channel on the page.
+    private static string ScoreClass(AnalysisResult r) =>
+        VerdictBands.Emphasis(r.OverallScore, r.Language, r.Statistics.WordCount) switch
+        {
+            VerdictEmphasis.High => "danger",
+            VerdictEmphasis.Elevated => "warn",
+            VerdictEmphasis.Present => "notice",
+            VerdictEmphasis.Unmeasured => "unmeasured",
+            _ => "good",
+        };
 
-    private static string ScoreHex(double score) => VerdictBands.Emphasis(score) switch
-    {
-        VerdictEmphasis.High => "#dc2626",
-        VerdictEmphasis.Elevated => "#ea580c",
-        VerdictEmphasis.Present => "#ca8a04",
-        _ => "#16a34a",
-    };
+    private static string ScoreHex(AnalysisResult r) =>
+        VerdictBands.Emphasis(r.OverallScore, r.Language, r.Statistics.WordCount) switch
+        {
+            VerdictEmphasis.High => "#dc2626",
+            VerdictEmphasis.Elevated => "#ea580c",
+            VerdictEmphasis.Present => "#ca8a04",
+            VerdictEmphasis.Unmeasured => "#6b7280",
+            _ => "#16a34a",
+        };
 
     private const string SampleEn =
         "In today's digital age, we must delve into the rich tapestry of modern innovation. It's worth " +

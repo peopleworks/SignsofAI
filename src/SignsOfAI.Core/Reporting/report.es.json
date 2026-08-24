@@ -1,6 +1,8 @@
 {
   "language": "es",
-  "translators": ["Equipo de SignsOfAI"],
+  "translators": [
+    "Equipo de SignsOfAI"
+  ],
   "messages": {
     "fallback.marker": {
       "text": "Este bloque aún no está traducido; se muestra en inglés.",
@@ -77,6 +79,10 @@
     "analysis.no-verdict": {
       "text": "*Por debajo del umbral que esta compilación puede respaldar, no se emite ningún veredicto. Una puntuación baja no demuestra que una persona haya escrito este texto.*",
       "sourceHash": "b249a9a70a6e6c6acbd87df70e9eb60558eddb6bb39e8ac49af95db5c44811e8"
+    },
+    "analysis.no-verdict-short": {
+      "text": "*No se da veredicto: este documento tiene {0} palabras, y la frontera de arriba se midió solo sobre textos de {1} palabras o más. Nada tan corto se midió, así que la puntuación de abajo queda sola — no es prueba de que lo escribiera una máquina ni de que lo escribiera una persona.*",
+      "sourceHash": "ec90d082e44b2e0eec6defaae43905deb0bb90ee53884fb4e40ff06dc4a92f35"
     },
     "language.en": {
       "text": "inglés",

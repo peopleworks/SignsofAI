@@ -83,7 +83,8 @@ else
                             <td class="num">
                                 @if (r.Score is { } s)
                                 {
-                                    <span class="score-pill @BandClass(s)">@s</span>
+                                    <span class="score-pill @BandClass(s, r.Words, r.Language)"
+                                          title="@(VerdictBands.Measured(r.Words ?? int.MaxValue) ? null : L["batch.unmeasured"])">@s</span>
                                 }
                                 else
                                 {
@@ -101,7 +102,12 @@ else
 }
 
 @code {
-    private sealed record Row(string Name, string Path, int? Words, int? Score, int? Findings, string? Error);
+    private sealed record Row(
+        string Name, string Path, int? Words, int? Score, int? Findings, string? Error,
+        // Carried so the pill can be coloured by the same rule as every other surface: a language the
+        // corpus never contained and a document below the measured length both mean "no verdict", and
+        // Measured(null) is false, so passing nothing here would grey out the whole table.
+        string? Language = null);
 
     private readonly List<Row> _rows = [];
 
@@ -195,7 +201,7 @@ else
                         file.Name, file.Path,
                         result.Statistics.WordCount,
                         (int)Math.Round(result.OverallScore),
-                        result.Signals.Count, null));
+                        result.Signals.Count, null, result.Language));
                 }
 
                 // Render each row as it lands. Two hundred files behind one silent await looks
@@ -216,10 +222,16 @@ else
 
     // This said 40 where every other surface said 45 — the drift the single source exists to stop,
     // and it had already happened: one document could be coloured two ways by the same build.
-    private static string BandClass(int score) => VerdictBands.Emphasis(score) switch
-    {
-        VerdictEmphasis.High => "high",
-        VerdictEmphasis.Elevated => "medium",
-        _ => "low",
-    };
+    //
+    // The row carries its own word count because a folder of submissions is exactly where short ones
+    // turn up, and a triage list that paints an unmeasured document green has answered a question it
+    // was not asked.
+    private static string BandClass(int score, int? words, string? language) =>
+        VerdictBands.Emphasis(score, language, words ?? int.MaxValue) switch
+        {
+            VerdictEmphasis.High => "high",
+            VerdictEmphasis.Elevated => "medium",
+            VerdictEmphasis.Unmeasured => "unmeasured",
+            _ => "low",
+        };
 }
