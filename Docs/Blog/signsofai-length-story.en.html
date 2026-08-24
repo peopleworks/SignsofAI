@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My AI detector scored a passage 94 out of 100, and I made it refuse to say anything · SignsOfAI</title>
+<meta name="description" content="The boundary it judges by was measured on documents of 662 words and up. It was being applied to a pasted paragraph, and the error runs one way: the same writing flags 0 of 32 whole and 6 of 32 as excerpts of itself. The fix was not a better model. It was to say less.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Maker story · Engineering</div>
+  <h1>My AI detector scored a passage 94 out of 100, and I made it refuse to say anything</h1>
+  <p class="lead">The boundary it judges by was measured on documents of 662 words and up. It was being applied to a pasted paragraph, and the error runs one way: the same writing flags 0 of 32 whole and 6 of 32 as excerpts of itself. The fix was not a better model. It was to say less.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Download or try it</b> — free, MIT, web and Windows.</a>
+
+  <hr>
+
+  <p>Someone wrote to me last week about a version number. They thought the Windows app was out of date, and they were right, for a reason neither of us expected. Chasing it, I ended up looking at what my own tool says about the thing people do with it more than anything else: paste a paragraph in and press nothing.</p>
+  <p>It says a lot. It should not.</p>
+  <p>Here is what it does now, on a passage stuffed with every tell the rule pack knows:</p>
+  <blockquote><strong>No verdict at this length</strong> 23 signals found · analysed as English This text is 66 words. The boundary was measured only on texts of 662 words and longer, so no verdict is given. The score is neither evidence that a machine wrote this nor evidence that a person did.</blockquote>
+  <p>The score is still there, in grey: <strong>94 out of 100</strong>. All 23 signals are still listed with the phrase that matched each one. What disappeared is the sentence that accuses.</p>
+  <h2>What the boundary was measured on</h2>
+  <p>This project publishes how often it is wrong about a human. Ninety texts, all published before generative models existed, and at a threshold of 25 out of 100 it flags none of them, with a 95% interval reaching 4.1%. That number is the reason anyone should take the rest of it seriously.</p>
+  <p>I had never looked at the <em>shape</em> of those ninety texts. So I did.</p>
+  <pre><code> shortest      662 words
+ median      2,772 words
+ longest     9,328 words
+ below 600         none</code></pre>
+  <p>There it is. The boundary was fitted on documents, and it was being applied to paragraphs. Every verdict about a pasted excerpt was extrapolation onto a population the corpus does not contain.</p>
+  <h2>And the extrapolation runs one way</h2>
+  <p>If the error were symmetric, a reader could allow for it. It is not, and I know that because I measured it a week earlier while studying something else.</p>
+  <p>Take the same documents. Cut 400-word windows out of them. No author changes, no subject, not a single sentence rewritten. Only the scissors.</p>
+  <pre><code> Window position   Windows   Flagged   Rate     95% interval
+ opening           32        6         18.8%    8.9% – 35.3%
+ middle            30        4         13.3%    5.3% – 29.7%
+ late              27        3         11.1%    3.9% – 28.1%</code></pre>
+  <p>Whole, those same documents flag zero of the thirty-two.</p>
+  <p>The obvious objection is that the windows are shorter and also cleaner: a whole article carries figure captions and boilerplate that an excerpt has stripped. So there is a control row. Apply the same filter, cut nothing, and it is still 0 of 32. The difference is length.</p>
+  <h2>The sentence I keep coming back to</h2>
+  <p>Counted by document rather than by window, of the 30 documents that produced more than one window: <strong>11 are flagged at one position and not at another. None is flagged wherever the window falls.</strong></p>
+  <p>Whether one of those authors gets accused depends on which four hundred words somebody happened to paste.</p>
+  <p>They are all human. Every one of them was published before any of this existed.</p>
+  <h2>Why it happens, which is not mysterious</h2>
+  <p>The strongest signal this tool has is burstiness: the spread of sentence lengths. Human prose is uneven. Unprompted model output tends to find a width and stay there, and no word list is needed to see it.</p>
+  <p>A 400-word window holds perhaps twenty sentences. The long one with three clauses and the two-word fragment that together make a paragraph read like a person may not both fall inside it. So the estimate does not merely get noisier as the text gets shorter. It moves, in one direction, toward the machine.</p>
+  <h2>The fix was to say less</h2>
+  <p>The instrument is a floor. Below it the score appears with an explicit statement that the boundary was never measured at that length, and no verdict is given at all.</p>
+  <p>The interesting decision was where to put it, and I want to be exact about this because the first design was wrong and a review caught it.</p>
+  <p>The tempting move is to <em>fit</em> one: cut windows at 150, 300, 600, 1200 words, measure the flag rate at each, and pick the length where it drops under the target. Every version of that idea failed for the same underlying reason. Windows sliced out of a long document are not the population the floor is meant to protect. A student's four-hundred-word answer was <em>composed</em> at that length, and its sentence lengths are a whole distribution rather than a truncated one. A floor fitted on truncations and enforced against compositions repeats, in a new dimension, exactly the mistake it exists to prevent.</p>
+  <p>So the floor is not fitted at all. It is an <em>observation</em>: the shortest text the boundary was measured on. 662 words. The calibration tool computes it and writes it into the snapshot the engine carries, next to the error rate.</p>
+  <p>That makes the claim weaker than it looks, and deliberately so. It does not say the tool breaks below 662 words. It says nothing that short was ever measured, which is the only thing the evidence supports. There is no grid, no sliced windows, no subset chosen until a number came out, and nothing to argue about except a fact anyone can recompute.</p>
+  <p>There is also no ceiling, and the asymmetry is measured rather than assumed. Shortening a text moves its score toward the machine. Nothing suggests a thesis longer than the corpus is at risk, so silencing the long end for the sake of symmetry would withhold a verdict for a reason nobody has evidence for.</p>
+  <h2>Colour is part of the verdict</h2>
+  <p>One detail that nearly shipped wrong, and that I suspect is wrong in other people's tools right now.</p>
+  <p>When the verdict is withheld, what colour is the score? In my code a withheld verdict fell through to the same state as "below the threshold", which every surface paints green. So the page would have refused to accuse in words, and certified the passage as clean in the loudest channel it has.</p>
+  <p>A 94 out of 100 in green is a claim. It is the opposite of the claim being withheld, made larger. The score is grey now, and there is a test that says so.</p>
+  <h2>What this does not fix</h2>
+  <p>A 900-word essay is above the floor and still far below the median of the corpus. The floor is a coverage gate, not a correction. Making the boundary depend on length needs short complete texts published before 2022, writing that somebody composed at that length rather than a long document cut down, and that corpus does not exist yet. It is open as an issue, and it is now the most wanted contribution to this project.</p>
+  <p>And the honest headline: <strong>this does not make the tool more accurate. It makes it quieter.</strong> It answers fewer questions than it did last week. I think that is an improvement, and I understand why a product manager would disagree.</p>
+  <h2>The part that connects to last week</h2>
+  <p>I spent the previous week measuring whether Anthropic's watermark makes this project obsolete, and it does not. Buried in that work was a line I did not fully absorb at the time: the watermark is unreliable on short samples, because few word choices carry little information.</p>
+  <p>My tool is unreliable on short samples, because few sentences carry little rhythm.</p>
+  <p>Two unrelated methods, built by people with very different resources, arriving at the same floor from opposite directions. A teacher holding one paragraph of a student's work is below it either way. That is not a coincidence about implementations. It is what happens when the thing you are measuring is a distribution and you are handed too little of it.</p>
+  <h2>The general version, for people who do not care about AI detection</h2>
+  <p>A threshold is valid over the population it was fitted on, and nowhere else.</p>
+  <p>That sentence is not controversial. What is remarkable is how rarely anyone writes down what their population was. Every detector in this category will give you a percentage about a paragraph. Not one of them tells you the lengths, the languages, or the genres of the writing that percentage was calibrated on, which means you cannot tell whether the number applies to the thing you pasted.</p>
+  <p>I had that defect too, in a project whose entire argument is that this category overclaims. It shipped for months. The corpus was sitting in the repository the whole time with its shortest text right there in the manifest, and I had never asked it the question.</p>
+  <p>Publishing the method is what made it findable. Not by anybody else, in the end. By me, a year later, reading my own numbers with a different question in my head.</p>
+  <hr>
+  <p><em>Signs of AI Writing is free and open source: rules, calibration corpus and method in the repository. It runs in the browser, on the command line, as an MCP server, and as a Windows app. The floor described here ships in 0.5.0. If you want the shortest thing you can hand a teacher, the false-positive rate lives in <code>Docs/CALIBRATION.md</code>, and the length range it covers is now printed on the same page.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>
