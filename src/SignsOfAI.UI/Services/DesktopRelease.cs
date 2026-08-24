@@ -20,7 +20,7 @@ namespace SignsOfAI.UI.Services;
 public static class DesktopRelease
 {
     /// <summary>The published version, without the <c>desktop-v</c> prefix its tag carries.</summary>
-    public const string Version = "0.4.0";
+    public const string Version = "0.5.0";
 
     /// <summary>
     /// The .zip itself, so the button downloads rather than starting a scavenger hunt through a
