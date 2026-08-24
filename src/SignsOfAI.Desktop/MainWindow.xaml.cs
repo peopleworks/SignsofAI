@@ -36,7 +36,9 @@ public partial class MainWindow : Window
         services.AddSingleton<ILocalPerplexity, DesktopPerplexity>();
 
         // Native HTTP: Ollama on localhost is simply reachable, with no CORS workaround to explain.
-        services.AddSingleton(HostCapabilities.Desktop);
+        // The build number travels with it, because a downloaded app is the kind that can be out of
+        // date and this one used to have no way of saying which it was.
+        services.AddSingleton(HostCapabilities.Desktop(DesktopVersion.Running()));
 
         // The XAML binds Services="{DynamicResource services}", so the provider has to be in
         // Resources before InitializeComponent builds the visual tree.

@@ -21,9 +21,34 @@ public sealed class HostCapabilities
     /// </summary>
     public bool ReachesLocalServices { get; init; }
 
+    /// <summary>
+    /// The build the user is looking at, when the host is a thing that gets downloaded and can
+    /// therefore be out of date. Null in a browser tab, which always serves what was last deployed
+    /// and has no version to report.
+    ///
+    /// It exists because of a support message: somebody reported "desktop 0.4.0 is not published"
+    /// when what they meant was "I cannot tell which build I have". The app said its name in the
+    /// title bar and nothing else, so neither could anyone helping them.
+    /// </summary>
+    public string? Version { get; init; }
+
+    /// <summary>
+    /// The locale key describing how this host runs, for the footer.
+    ///
+    /// Not decoration: the shared footer claimed "Blazor WebAssembly · runs 100% in your browser"
+    /// inside a WPF window, where both halves are false. A tool that asks people to show evidence
+    /// cannot be careless about a claim on every one of its own pages.
+    /// </summary>
+    public string RuntimeKey { get; init; } = "footer.runtime.browser";
+
     /// <summary>The browser: sandboxed, and the one that has to ask the user for CORS help.</summary>
     public static HostCapabilities Browser { get; } = new() { ReachesLocalServices = false };
 
     /// <summary>A desktop window: native HTTP, no preflight, localhost included.</summary>
-    public static HostCapabilities Desktop { get; } = new() { ReachesLocalServices = true };
+    public static HostCapabilities Desktop(string? version) => new()
+    {
+        ReachesLocalServices = true,
+        RuntimeKey = "footer.runtime.desktop",
+        Version = version,
+    };
 }
