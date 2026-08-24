@@ -35,6 +35,10 @@ public partial class MainWindow : Window
         // Singleton: loading the weights is expensive and the engine unloads itself when idle.
         services.AddSingleton<ILocalPerplexity, DesktopPerplexity>();
 
+        // There is no auto-update and there will not be, so the app has to be able to say that a
+        // newer build exists. It asks before its first check — see IUpdateCheck.
+        services.AddScoped<IUpdateCheck, GitHubUpdateCheck>();
+
         // Native HTTP: Ollama on localhost is simply reachable, with no CORS workaround to explain.
         // The build number travels with it, because a downloaded app is the kind that can be out of
         // date and this one used to have no way of saying which it was.

@@ -1,0 +1,112 @@
+@* The one thing a downloaded app has to be able to say: there is a newer one.
+
+   There is no auto-update and there will not be — the Windows build is unsigned, and a program that
+   fetches and runs code on its own is the behaviour this project tells teachers to be suspicious of.
+   So this reports a number and links to the notes. The person decides.
+
+   It asks before it checks. That is the whole reason this is a strip and not a silent background
+   task: it would be the first network call the app makes without being asked, and a tool whose case
+   rests on "nothing leaves your machine" does not get to make an exception quietly, even one that
+   sends no text and no identifier. Asked once, remembered, changeable on /download.
+
+   Nothing renders in a browser tab, which is always whatever was last deployed. *@
+@inherits LocalizedComponent
+@inject IUpdateCheck Updates
+@inject UpdatePreference Preference
+@inject HostCapabilities Host
+
+@if (_state is State.Asking)
+{
+    <div class="update-strip ask" role="status">
+        <div>
+            <strong>@L["update.ask"]</strong>
+            <span class="update-detail">@L["update.ask.detail"]</span>
+        </div>
+        <div class="update-actions">
+            <button class="ghost small" @onclick="@(() => Answer(true))">@L["update.yes"]</button>
+            <button class="ghost small" @onclick="@(() => Answer(false))">@L["update.no"]</button>
+        </div>
+    </div>
+}
+else if (_state is State.Available && _found is { Latest: { } latest, Url: { } url })
+{
+    <div class="update-strip found" role="status">
+        <div>
+            <strong>@L.F("update.available", latest)</strong>
+            @* Only when there is a build number to name. A host that cannot say which version it is
+               has nothing useful to put in that sentence, and "you are running —" is worse than
+               saying less. *@
+            @if (Host.Version is { } running)
+            {
+                <span class="update-detail">@L.F("update.available.detail", running)</span>
+            }
+        </div>
+        <div class="update-actions">
+            <a class="ghost small" href="@url" target="_blank" rel="noopener">@L["update.see"]</a>
+            <button class="ghost small" @onclick="Dismiss" title="@L["common.close"]">@L["update.dismiss"]</button>
+        </div>
+    </div>
+}
+
+@code {
+    private enum State { Idle, Asking, Available }
+
+    private State _state = State.Idle;
+    private UpdateStatus? _found;
+
+    /// <summary>
+    /// After the first render, never during it: reading the preference is a JavaScript call, and the
+    /// check that may follow is a network one. Neither belongs in the path that puts the page on
+    /// screen — a page that waits on GitHub before drawing has made somebody's essay wait on GitHub.
+    /// </summary>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || !Updates.IsAvailable) return;
+
+        var consent = await Preference.ConsentAsync();
+        if (consent is null)
+        {
+            _state = State.Asking;
+            StateHasChanged();
+            return;
+        }
+
+        if (consent is true) await Check();
+    }
+
+    private async Task Answer(bool agreed)
+    {
+        await Preference.SetConsentAsync(agreed);
+        _state = State.Idle;
+
+        // Checking straight away, so saying yes does something visible rather than promising to do
+        // something tomorrow.
+        if (agreed) await Check();
+        else StateHasChanged();
+    }
+
+    private async Task Check()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        if (!await Preference.DueAsync(today)) return;
+
+        var status = await Updates.CheckAsync();
+        await Preference.MarkCheckedAsync(today);
+
+        // A failed check and an up-to-date build are the same answer here, and both are silence.
+        if (!status.IsNewer || status.Latest is null) return;
+
+        // Told once per version, not once per launch.
+        if (await Preference.DismissedAsync() == status.Latest) return;
+
+        _found = status;
+        _state = State.Available;
+        StateHasChanged();
+    }
+
+    private async Task Dismiss()
+    {
+        if (_found?.Latest is { } latest) await Preference.DismissAsync(latest);
+        _state = State.Idle;
+    }
+}

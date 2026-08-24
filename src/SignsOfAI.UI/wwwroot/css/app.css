@@ -1165,3 +1165,26 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
 
 /* The before/after pair of the rewriter, and the folder-scan pill, share the refusal colour. */
 .sc-num.unmeasured { color: var(--text-muted); }
+
+/* ---- new-version strip (desktop host only) ----
+   Quiet on purpose. It is about the app, not about the document on the page, and a downloaded tool
+   that shouts about itself over somebody's essay has misjudged whose afternoon it is. */
+.update-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem 1rem;
+    margin: 0 0 1rem;
+    padding: .6rem .9rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-size: .88rem;
+}
+.update-strip.found { border-color: color-mix(in srgb, var(--brand) 35%, var(--border)); }
+.update-strip strong { display: block; color: var(--text); }
+.update-detail { color: var(--text-muted); font-size: .82rem; }
+.update-actions { display: flex; gap: .4rem; flex-shrink: 0; }
+.update-actions .small { font-size: .82rem; padding: .3rem .7rem; }
+.update-actions a.small { text-decoration: none; display: inline-flex; align-items: center; }

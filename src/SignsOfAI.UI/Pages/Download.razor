@@ -12,6 +12,8 @@
 @page "/download"
 @inherits LocalizedComponent
 @inject HostCapabilities Host
+@inject IUpdateCheck Updates
+@inject UpdatePreference Preference
 
 <PageTitle>@L["dl.pagetitle"]</PageTitle>
 
@@ -34,6 +36,20 @@
         <p class="hint sub">
             <a href="@DesktopRelease.AllReleasesUrl" target="_blank" rel="noopener">@L["dl.all"]</a>
         </p>
+
+        @* Where the answer given on first run can be changed, since that is the only place the
+           question is ever asked. It is a checkbox and not a button because the choice is standing,
+           not an action. *@
+        @if (Updates.IsAvailable)
+        {
+            <label class="inline dl-updates">
+                <input type="checkbox" checked="@_checkForUpdates" @onchange="ToggleUpdates" />
+                <span>
+                    @L["dl.updates.label"]
+                    <span class="hint sub">@L["dl.updates.detail"]</span>
+                </span>
+            </label>
+        }
     </section>
 }
 else
@@ -91,6 +107,23 @@ else
 </section>
 
 @code {
+    private bool _checkForUpdates;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || !Updates.IsAvailable) return;
+
+        // Unanswered reads as off here, which is what it is: nothing has been checked.
+        _checkForUpdates = await Preference.ConsentAsync() is true;
+        StateHasChanged();
+    }
+
+    private async Task ToggleUpdates(ChangeEventArgs e)
+    {
+        _checkForUpdates = e.Value is true;
+        await Preference.SetConsentAsync(_checkForUpdates);
+    }
+
     // Same order as the argument they make: the two a teacher meets first, then the two about
     // measuring locally. Keys are built from these, so LocaleFileTests lists them by hand.
     private static readonly string[] Adds = ["documents", "folder", "perplexity", "ollama"];

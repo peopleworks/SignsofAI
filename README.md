@@ -46,6 +46,12 @@ A free, privacy-first toolkit for **academic and writing integrity**. It does tw
 > Everything else — every rule, the score, the character scan, the citation cross-check, the writer
 > baseline, the report — is computed locally and stays there. In the desktop app, the perplexity
 > measurement is local too.
+>
+> The Windows app can also **check whether a newer version has been published**, because it has no
+> auto-update and never will. That is not one of the four: it sends no text, no account and no
+> identifier — one request to GitHub's public release list, the same one a browser would make. It
+> **asks before its first check**, at most one a day, and it never downloads or runs anything for
+> you.
 
 Built with **.NET 10** and **Blazor WebAssembly** by **Pedro Hernández (PeopleWorks)**, [Microsoft MVP for .NET](https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5) — for the .NET and Microsoft developer community, *por y para la comunidad educativa*.
 

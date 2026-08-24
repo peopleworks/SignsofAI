@@ -35,6 +35,9 @@
             <LanguageSwitch />
         </div>
     </nav>
+    @* Above the content, below the navigation: it is about the app, not about the document. Renders
+       nothing at all in a host that cannot be out of date. *@
+    <UpdateNotice />
     <main>
         @Body
     </main>
