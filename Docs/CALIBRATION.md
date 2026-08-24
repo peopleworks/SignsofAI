@@ -11,7 +11,7 @@ It is **not an accuracy figure**. Accuracy needs machine-written text to measure
 - **Corpus** `signsofai-human-baseline`, fingerprint `123fa5b9ebca3f29`
 - **Texts** 90 (280,221 words)
 - **Engine** SignsOfAI.Core 0.4.0
-- **Run** 2026-08-05
+- **Run** 2026-08-24
 - **Target false-positive rate** 5%
 
 Every text here was published before generative models could have written it. That is the whole basis for calling it human, and it is a stronger guarantee than any classifier offers about anything. The manifest names each source, its licence and its year, so the claim can be traced rather than trusted.

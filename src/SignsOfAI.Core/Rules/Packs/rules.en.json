@@ -1114,6 +1114,66 @@
       "severity": "Info",
       "message": "Mid-sentence bold — formatting slop.",
       "suggestion": "Emphasis rarely helps prose; cut the bold."
+    },
+    {
+      "id": "chat.model-self-reference",
+      "category": "Rhetorical",
+      "regex": "\\bas an? (AI|artificial intelligence)( language)?( model| assistant)?\\b|\\bas a large language model\\b|\\bI(’|')?m an AI\\b",
+      "weight": 6.0,
+      "severity": "High",
+      "message": "A sentence the assistant says about itself, not a sentence in a document.",
+      "suggestion": "Delete it. If the text was drafted with a tool, say so in the acknowledgements instead.",
+      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+    },
+    {
+      "id": "chat.training-cutoff",
+      "category": "Rhetorical",
+      "regex": "\\bas of my (last )?(training|knowledge)[- ](update|cutoff|cut-off|data)\\b|\\bmy training data (only )?(goes|extends|runs) up to\\b|\\bas of my last update\\b",
+      "weight": 6.0,
+      "severity": "High",
+      "message": "A disclaimer about a model’s training data, left in the text.",
+      "suggestion": "Delete it, and check the claim it was hedging.",
+      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+    },
+    {
+      "id": "chat.signoff",
+      "category": "Rhetorical",
+      "regex": "\\bI hope th(is|at) helps\\b|\\bhope th(is|at) helps\\b|\\bwould you like me to\\b|\\blet me know if you(’|')?(d| would) like\\b|\\bis there anything else (I can|you(’|')?d like)\\b",
+      "weight": 6.0,
+      "severity": "High",
+      "message": "The closing line of an assistant’s reply, inside the document.",
+      "suggestion": "Delete it. The document has no reader to offer further help to.",
+      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+    },
+    {
+      "id": "chat.capability-disclaimer",
+      "category": "Rhetorical",
+      "regex": "\\bI (can(’|')?t|cannot|do not|don(’|')?t) (browse|access) (the )?(internet|web|real-?time)\\b|\\bI (do not|don(’|')?t) have (access to )?real-?time (data|information|access)\\b|\\bI(’|')?m unable to browse\\b",
+      "weight": 5.0,
+      "severity": "High",
+      "message": "A statement about what the writing tool cannot do.",
+      "suggestion": "Delete it, and supply the source it was standing in for.",
+      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+    },
+    {
+      "id": "chat.answer-preamble",
+      "category": "Rhetorical",
+      "regex": "\\bhere(’|')?s (the|a|your) (rewritten|revised|edited|updated|improved|polished) (version|text|draft|paragraph|essay|article)\\b|\\bhere is (the|a|your) (rewritten|revised|edited|updated|improved|polished) (version|text|draft|paragraph|essay|article)\\b",
+      "weight": 5.0,
+      "severity": "High",
+      "message": "The line a tool prints before handing back its answer.",
+      "suggestion": "Delete it. The document should start with the document.",
+      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+    },
+    {
+      "id": "chat.eager-opener",
+      "category": "Rhetorical",
+      "regex": "(?m)(?:^|(?<=[.!?])\\s)(Certainly|Of course|Absolutely|Sure thing|Great question)[!,]",
+      "weight": 3.5,
+      "severity": "Medium",
+      "message": "An assistant’s eager opener (“Certainly!”, “Great question!”).",
+      "suggestion": "Delete it. Nobody asked the document a question.",
+      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
     }
   ],
   "functionWords": [
