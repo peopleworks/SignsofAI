@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi detector de IA le puso 94 sobre 100 a un pasaje, y le prohibí decir nada · SignsOfAI</title>
+<meta name="description" content="La frontera con la que juzga se midió sobre documentos de 662 palabras en adelante. Se estaba aplicando a un párrafo pegado, y el error va en una sola dirección: la misma escritura marca 0 de 32 entera y 6 de 32 como extractos de sí misma. El arreglo no fue un modelo mejor. Fue callar.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Historia de taller · Ingeniería</div>
+  <h1>Mi detector de IA le puso 94 sobre 100 a un pasaje, y le prohibí decir nada</h1>
+  <p class="lead">La frontera con la que juzga se midió sobre documentos de 662 palabras en adelante. Se estaba aplicando a un párrafo pegado, y el error va en una sola dirección: la misma escritura marca 0 de 32 entera y 6 de 32 como extractos de sí misma. El arreglo no fue un modelo mejor. Fue callar.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Descárgalo o pruébalo</b> — gratis, MIT, web y Windows.</a>
+
+  <hr>
+
+  <p>La semana pasada alguien me escribió por un número de versión. Creía que la app de Windows estaba desactualizada, y tenía razón, por un motivo que ninguno de los dos esperaba. Persiguiéndolo acabé mirando qué dice mi propia herramienta sobre lo que la gente hace con ella más que ninguna otra cosa: pegar un párrafo y no tocar nada más.</p>
+  <p>Dice bastante. No debería.</p>
+  <p>Esto es lo que hace ahora, con un pasaje cargado de todas las señales que el catálogo conoce:</p>
+  <blockquote><strong>Sin veredicto a esta longitud</strong> 23 señales encontradas · analizado como Inglés Este texto tiene 66 palabras. La frontera se midió solo sobre textos de 662 palabras o más, así que no se da veredicto. La puntuación no es prueba de que lo escribiera una máquina ni de que lo escribiera una persona.</blockquote>
+  <p>La puntuación sigue ahí, en gris: <strong>94 sobre 100</strong>. Las 23 señales siguen listadas, cada una con la frase que la disparó. Lo que desapareció es la oración que acusa.</p>
+  <h2>Sobre qué se midió la frontera</h2>
+  <p>Este proyecto publica con qué frecuencia se equivoca sobre una persona. Noventa textos, todos publicados antes de que existieran los modelos generativos, y con un umbral de 25 sobre 100 no marca ninguno, con un intervalo del 95% que llega al 4,1%. Ese número es la razón por la que alguien debería tomarse en serio todo lo demás.</p>
+  <p>Nunca había mirado la <em>forma</em> de esos noventa textos. Así que la miré.</p>
+  <pre><code> el más corto      662 palabras
+ mediana         2.772 palabras
+ el más largo    9.328 palabras
+ por debajo de 600       ninguno</code></pre>
+  <p>Ahí está. La frontera se ajustó sobre documentos y se estaba aplicando a párrafos. Cada veredicto sobre un extracto pegado era una extrapolación hacia una población que el corpus no contiene.</p>
+  <h2>Y la extrapolación va en una sola dirección</h2>
+  <p>Si el error fuera simétrico, un lector podría descontarlo. No lo es, y lo sé porque lo medí una semana antes estudiando otra cosa.</p>
+  <p>Toma los mismos documentos. Recorta ventanas de 400 palabras. No cambia el autor, ni el tema, ni una sola oración. Solo las tijeras.</p>
+  <pre><code> Posición de la ventana   Ventanas   Marcadas   Tasa     Intervalo 95%
+ apertura                 32         6          18,8%    8,9% – 35,3%
+ medio                    30         4          13,3%    5,3% – 29,7%
+ final                    27         3          11,1%    3,9% – 28,1%</code></pre>
+  <p>Enteros, esos mismos documentos marcan cero de treinta y dos.</p>
+  <p>La objeción evidente es que las ventanas son más cortas y también más limpias: un artículo completo arrastra pies de figura y texto de trámite que un extracto ya se dejó por el camino. Por eso hay una fila de control. Aplica el mismo filtro, no recortes nada, y sigue siendo 0 de 32. La diferencia es la longitud.</p>
+  <h2>La frase a la que sigo volviendo</h2>
+  <p>Contado por documento y no por ventana, de los 30 documentos que dieron más de una ventana: <strong>11 quedan marcados en una posición y no en otra. Ninguno queda marcado en todas.</strong></p>
+  <p>Que uno de esos autores acabe acusado depende de qué cuatrocientas palabras le tocó pegar a alguien.</p>
+  <p>Todos son humanos. Todos se publicaron antes de que nada de esto existiera.</p>
+  <h2>Por qué pasa, que no tiene misterio</h2>
+  <p>La señal más fuerte de esta herramienta es la variabilidad del ritmo: cuánto se separan entre sí las longitudes de las oraciones. La prosa humana es desigual. La salida de un modelo sin instrucciones tiende a encontrar un ancho y quedarse ahí, y para verlo no hace falta ninguna lista de palabras.</p>
+  <p>Una ventana de 400 palabras contiene quizá veinte oraciones. La larga de tres cláusulas y el fragmento de dos palabras que juntos hacen que un párrafo suene a persona pueden no caer las dos dentro. Así que la estimación no se vuelve solo más ruidosa cuando el texto se acorta. Se mueve, en una dirección, hacia la máquina.</p>
+  <h2>El arreglo fue callar</h2>
+  <p>El instrumento es un suelo. Por debajo, la puntuación aparece con una declaración explícita de que la frontera nunca se midió a esa longitud, y no se da veredicto alguno.</p>
+  <p>La decisión interesante era dónde ponerlo, y quiero ser preciso aquí porque el primer diseño estaba mal y una revisión lo cazó.</p>
+  <p>Lo tentador es <em>ajustarlo</em>: recortar ventanas a 150, 300, 600 y 1200 palabras, medir la tasa en cada una y elegir la longitud donde baja del objetivo. Todas las versiones de esa idea fallaban por el mismo motivo de fondo. Una ventana rebanada de un documento largo no es la población que el suelo debe proteger. La respuesta de cuatrocientas palabras de un estudiante fue <em>compuesta</em> a esa longitud, y sus oraciones forman una distribución entera y no una truncada. Un suelo ajustado sobre truncamientos y aplicado contra composiciones repite, en otra dimensión, justo el error que viene a prevenir.</p>
+  <p>Así que el suelo no se ajusta. Es una <em>observación</em>: el texto más corto sobre el que se midió la frontera. 662 palabras. La herramienta de calibración lo calcula y lo escribe en la instantánea que el motor lleva dentro, al lado de la tasa de error.</p>
+  <p>Eso hace la afirmación más débil de lo que parece, y a propósito. No dice que la herramienta falle por debajo de 662 palabras. Dice que nada tan corto se midió nunca, que es lo único que la evidencia sostiene. No hay rejilla, ni ventanas recortadas, ni subconjunto elegido hasta que saliera un número, y no queda nada que discutir salvo un dato que cualquiera puede recalcular.</p>
+  <p>Tampoco hay techo, y la asimetría está medida y no supuesta. Acortar un texto mueve su puntuación hacia la máquina. Nada sugiere que una tesis más larga que el corpus corra peligro, así que silenciar el extremo largo por simetría sería retirar un veredicto por un motivo del que nadie tiene pruebas.</p>
+  <h2>El color también es el veredicto</h2>
+  <p>Un detalle que estuvo a punto de salir mal, y que sospecho está mal ahora mismo en herramientas de otros.</p>
+  <p>Cuando el veredicto se retira, ¿de qué color queda la puntuación? En mi código un veredicto retirado caía en el mismo estado que "por debajo del umbral", que todas las superficies pintan de verde. Así que la página se habría negado a acusar con palabras y habría certificado el pasaje como limpio en el canal más ruidoso que tiene.</p>
+  <p>Un 94 sobre 100 en verde es una afirmación. Es la contraria de la que se estaba reteniendo, y más grande. Ahora la puntuación sale en gris, y hay un test que lo vigila.</p>
+  <h2>Lo que esto no arregla</h2>
+  <p>Un ensayo de 900 palabras está por encima del suelo y sigue muy por debajo de la mediana del corpus. El suelo es una compuerta de cobertura, no una corrección. Que la frontera dependa de la longitud necesita textos cortos completos publicados antes de 2022, escritura que alguien compuso a esa longitud y no un documento largo recortado, y ese corpus todavía no existe. Está abierto como issue, y es ahora la contribución más buscada del proyecto.</p>
+  <p>Y el titular honesto: <strong>esto no hace la herramienta más precisa. La hace más callada.</strong> Responde menos preguntas que la semana pasada. Yo creo que es una mejora, y entiendo por qué un responsable de producto opinaría lo contrario.</p>
+  <h2>La parte que enlaza con la semana pasada</h2>
+  <p>Me pasé la semana anterior midiendo si la marca de agua de Anthropic deja obsoleto a este proyecto, y no lo deja. Enterrada en ese trabajo había una línea que entonces no asimilé del todo: la marca es poco fiable en muestras cortas, porque pocas elecciones de palabra llevan poca información.</p>
+  <p>Mi herramienta es poco fiable en muestras cortas, porque pocas oraciones llevan poco ritmo.</p>
+  <p>Dos métodos sin relación, construidos por gente con recursos muy distintos, llegando al mismo suelo desde direcciones opuestas. Un profesor con un párrafo del trabajo de un alumno está por debajo de ese suelo en los dos casos. Eso no es una casualidad de implementaciones. Es lo que pasa cuando lo que mides es una distribución y te entregan demasiado poca.</p>
+  <h2>La versión general, para quien no le interese la detección de IA</h2>
+  <p>Un umbral vale sobre la población en la que se ajustó, y en ninguna otra.</p>
+  <p>Esa frase no es polémica. Lo llamativo es lo poco que alguien escribe cuál fue su población. Todos los detectores de esta categoría te darán un porcentaje sobre un párrafo. Ninguno te dice las longitudes, los idiomas ni los géneros de la escritura con la que calibró ese porcentaje, lo que significa que no puedes saber si el número aplica a lo que acabas de pegar.</p>
+  <p>Yo tenía ese mismo defecto, en un proyecto cuyo argumento entero es que esta categoría promete de más. Estuvo meses publicado. El corpus llevaba todo ese tiempo en el repositorio con su texto más corto ahí escrito en el manifiesto, y yo nunca le había hecho la pregunta.</p>
+  <p>Publicar el método es lo que lo hizo encontrable. Al final no lo encontró nadie de fuera. Lo encontré yo, un año después, leyendo mis propios números con otra pregunta en la cabeza.</p>
+  <hr>
+  <p><em>Señales de escritura IA es libre y de código abierto: reglas, corpus de calibración y método en el repositorio. Funciona en el navegador, en la línea de comandos, como servidor MCP y como app de Windows. El suelo que describe este artículo sale en la 0.5.0. Si quieres lo más corto que puedes ponerle delante a un profesor, la tasa de falsos positivos vive en <code>Docs/CALIBRATION.md</code>, y el rango de longitudes que cubre ya está impreso en esa misma página.</em></p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -410,6 +410,8 @@ de los seis (video / voz / cola en segundos):
 | `signsofai-verdict-story.{en,es}.html` | WordPress · Blogger — **generados** |
 | `signsofai-watermark-story.{en,es}.md` | dev.to · Hashnode · Medium — **octavo artículo**, sin publicar |
 | `signsofai-watermark-story.{en,es}.html` | WordPress · Blogger — **generados** |
+| `signsofai-length-story.{en,es}.md` | dev.to · Hashnode · Medium — **noveno artículo**, sin publicar |
+| `signsofai-length-story.{en,es}.html` | WordPress · Blogger — **generados** |
 
 **Generar el HTML.** Los dos primeros artículos se escribieron como HTML a mano. Transcribir 1.500
 palabras dos veces más, en dos idiomas, es la forma segura de corregir un párrafo en una copia y no
@@ -529,6 +531,46 @@ palabras) y se corrigió antes de generar el HTML, que es el mismo gesto que el 
 Portada: `social/watermark-story-cover.png`, sin palabras salvo dos puntajes, así que **sirve para
 las dos ediciones**. Dibuja el hallazgo en vez de decorarlo — una página, tres ventanas, tres
 veredictos, y el tramo marcado es el de líneas parejas.
+
+**Noveno artículo — el suelo de longitud, y lo que salió de un número de versión.** Nace del defecto
+que el octavo destapó (#59) y lo cierra, así que **publícalo después** y enlázalo desde aquel: la
+pareja cuenta una historia completa —encontrar el fallo, arreglarlo— y por separado cada mitad se
+queda corta.
+
+El ángulo **no** es «arreglamos un bug». Es que la herramienta ahora **responde menos preguntas que
+antes**, y eso es la mejora. Si al recortar se pierde esa frase, se pierde el artículo.
+
+Lo que carga el peso, en este orden:
+
+1. **La imagen**: 94 sobre 100, veintitrés señales listadas, y ningún veredicto. Un detector que se
+   niega a acusar es lo contrario de lo que hace la categoría entera.
+2. **El corpus mirado por su forma, no por su tamaño**: el texto más corto son 662 palabras, la
+   mediana 2.772, y por debajo de 600 no hay ninguno. La frontera se ajustó sobre documentos y se
+   estaba aplicando a párrafos.
+3. **El suelo es una observación, no un parámetro ajustado.** Es el detalle técnico que un lector
+   exigente va a buscar, y es lo que hace que la afirmación se sostenga: no decimos que la
+   herramienta falle por debajo de 662 palabras, decimos que nada tan corto se midió.
+4. **La versión general**, que es la que viaja fuera del nicho: *un umbral vale sobre la población en
+   la que se ajustó, y en ninguna otra* — y casi nadie publica cuál fue la suya.
+
+Tres trampas al editar, escritas para no repetirlas:
+
+- **No insinuar que la herramienta es más precisa.** Es más callada. La frase está en los dos
+  idiomas y es la que un editor recorta primero.
+- **No decir que arregla el ensayo de 900 palabras.** No lo arregla; sigue muy por debajo de la
+  mediana del corpus.
+- **No presentarlo como un fallo de la detección de IA en general.** Es un fallo nuestro, publicado
+  por nosotros. Esa distinción es exactamente lo que le da valor.
+
+Puntajes en su propio pie, verificados antes de generar el HTML: **EN 0/100 · 0 señales ·
+variabilidad 0,59 · 1.588 palabras**, **ES 0/100 · 0 señales · variabilidad 0,60 · 1.647 palabras**.
+La primera pasada del inglés dio 6/100 por tres intensificadores y tres negritas a media frase, y se
+corrigió.
+
+Portada: `social/length-story-cover.png`. **Los noventa puntos son reales** — cada texto del corpus
+en su longitud y su puntuación medidas por el motor que se publica, no una distribución dibujada a
+ojo. El vacío de la izquierda no está estilizado: está vacío porque el corpus no tiene nada ahí. Sin
+palabras que traducir salvo el rótulo, así que **sirve para las dos ediciones**.
 
 ### Publicado hasta ahora
 
@@ -1333,6 +1375,262 @@ la persona. Era el último sitio donde el producto decía algo sobre un ser huma
 propio instrumento.
 
 El artículo completo, y el comando que regenera cada número que contiene:
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — octavo artículo (EN)
+```
+Claude started watermarking its output on 2 August. Within days somebody asked whether that makes my
+AI-writing detector obsolete.
+
+I set out to prove it does not. I could not prove it either way — and on the way I found something
+worse in my own tool.
+
+Rewriting a passage to strip the mark does not change whether I flag it: 5 crossed the boundary, 2
+came back, exact McNemar p = 0.453. The hypothesis is withdrawn.
+
+What did matter was length. The same 32 documents: 0 of 32 flagged whole, 13 of 89 as 400-word
+windows. Eleven of thirty are flagged at one position in the text and not at another.
+
+That one is my defect, not Anthropic's.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — octavo artículo (ES)
+```
+Claude marca su salida desde el 2 de agosto. En días alguien preguntó si eso deja obsoleto a mi
+detector de escritura con IA.
+
+Salí a demostrar que no. No pude demostrarlo en ninguna dirección — y de camino encontré algo peor
+en mi propia herramienta.
+
+Reescribir un pasaje para borrar la marca no cambia si lo marco: 5 cruzaron la frontera, 2
+volvieron, McNemar exacto p = 0,453. La hipótesis se retira.
+
+Lo que sí importaba era la longitud. Los mismos 32 documentos: 0 de 32 marcados enteros, 13 de 89
+como ventanas de 400 palabras. Once de treinta quedan marcados en una posición del texto y no en
+otra.
+
+Ese fallo es mío, no de Anthropic.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — octavo artículo (EN)
+```
+I spent a week trying to prove that Anthropic's watermark does not make my project obsolete.
+
+I failed, in both directions, and the failure is the article.
+
+THE DESIGN
+
+The same passage measured twice: as its author wrote it, and after a model rewrote it. No corpus of
+machine text needed — the baseline is the writing itself. 32 pairs, eight per stratum, two languages.
+
+RESULT 1 — the hypothesis fell over
+
+Rewriting to strip the mark does not change whether I flag the text. Five passages crossed the
+boundary, two came back, exact McNemar p = 0.453. Anyone hoping I would announce "we catch
+paraphrased AI work" should stop reading here, because that is precisely what this could not show.
+
+RESULT 2 — and this one is mine
+
+Length matters, and I had not been treating it as anything. The same 32 documents flag 0 of 32 when
+measured whole, and 13 of 89 as 400-word windows. Eleven of thirty documents are flagged at one
+position in the text and not at another. None is flagged wherever the window falls.
+
+Whether one of those authors gets accused depends on which four hundred words somebody happened to
+paste. They are all human: every text predates generative models.
+
+RESULT 3 — three reviewers found three false sentences of mine
+
+Independent reviews of the draft caught three claims that were not true, one of them describing my
+own code wrongly. All three were the same failure: machine-checked numbers sitting next to
+hand-checked prose. The tool now measures its own compliance on every run and prints it, whether or
+not that flatters me.
+
+Method, data and the 64 passages: Docs/PARAPHRASE.md in the repository.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — octavo artículo (ES)
+```
+Pasé una semana intentando demostrar que la marca de agua de Anthropic no deja obsoleto a mi
+proyecto.
+
+Fracasé, en las dos direcciones, y ese fracaso es el artículo.
+
+EL DISEÑO
+
+El mismo pasaje medido dos veces: como lo escribió su autor, y después de que un modelo lo
+reescribiera. No hace falta corpus de máquina — la línea base es el propio texto. 32 pares, ocho por
+estrato, dos idiomas.
+
+RESULTADO 1 — la hipótesis se cayó
+
+Reescribir para borrar la marca no cambia si marco el texto. Cinco pasajes cruzaron la frontera, dos
+volvieron, McNemar exacto p = 0,453. Quien esperara que yo anunciara «cazamos el trabajo parafraseado
+con IA» puede dejar de leer aquí, porque es exactamente lo que esto no pudo demostrar.
+
+RESULTADO 2 — y este es mío
+
+La longitud importa, y yo no la estaba tratando como nada. Los mismos 32 documentos marcan 0 de 32
+medidos enteros, y 13 de 89 como ventanas de 400 palabras. Once de treinta documentos quedan marcados
+en una posición del texto y no en otra. Ninguno queda marcado en todas.
+
+Que uno de esos autores acabe acusado depende de qué cuatrocientas palabras le tocó pegar a alguien.
+Todos son humanos: cada texto es anterior a los modelos generativos.
+
+RESULTADO 3 — tres revisores encontraron tres frases falsas mías
+
+Revisiones independientes del borrador cazaron tres afirmaciones que no eran ciertas, una de ellas
+describiendo mal mi propio código. Las tres eran el mismo fallo: números comprobados a máquina al
+lado de prosa comprobada a mano. La herramienta ahora mide su propio cumplimiento en cada corrida y
+lo imprime, la favorezca o no.
+
+Método, datos y los 64 pasajes: Docs/PARAPHRASE.md en el repositorio.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — noveno artículo (EN)
+```
+My AI detector scored a 66-word passage 94 out of 100. It now refuses to say anything about it.
+
+The boundary it judges by was measured on 90 texts published before generative models existed. I had
+never looked at their shape:
+
+  shortest      662 words
+  median      2,772 words
+  below 600         none
+
+So every verdict about a pasted paragraph was extrapolation onto a population the corpus does not
+contain. And the error runs one way: the same writing flags 0 of 32 whole and 6 of 32 as 400-word
+excerpts of itself.
+
+The fix was not a better model. It was to say less.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — noveno artículo (ES)
+```
+Mi detector de IA le puso 94 sobre 100 a un pasaje de 66 palabras. Ahora se niega a decir nada de él.
+
+La frontera con la que juzga se midió sobre 90 textos publicados antes de que existieran los modelos
+generativos. Nunca había mirado su forma:
+
+  el más corto      662 palabras
+  mediana         2.772 palabras
+  por debajo de 600     ninguno
+
+Así que cada veredicto sobre un párrafo pegado era una extrapolación hacia una población que el
+corpus no contiene. Y el error va en una sola dirección: la misma escritura marca 0 de 32 entera y 6
+de 32 como extractos de 400 palabras de sí misma.
+
+El arreglo no fue un modelo mejor. Fue callar.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — noveno artículo (EN)
+```
+Someone wrote to me about a version number. It ended with my AI detector answering fewer questions
+than it did the week before, and I think that is the best thing I shipped this month.
+
+WHAT I FOUND
+
+This project publishes how often it is wrong about a human: 90 texts written before generative models
+existed, none flagged at 25 out of 100, with a 95% interval reaching 4.1%.
+
+I had never looked at the shape of those 90 texts. The shortest is 662 words. The median is 2,772.
+Below 600 there is nothing at all.
+
+The boundary was fitted on documents. It was being applied to paragraphs — which is what people
+actually do with a tool like this.
+
+THE ERROR RUNS ONE WAY
+
+Cut 400-word windows out of those same documents, changing no author, no subject and not one
+sentence: 0 of 32 flagged whole, 6 of 32 as opening excerpts. Apply the same cleanup without cutting
+and it is still 0 of 32, so it is length and not composition.
+
+The reason is not mysterious. The strongest signal here is the spread of sentence lengths, and a
+short window may not contain both the long clause-heavy sentence and the two-word fragment that make
+a paragraph read like a person.
+
+THE FIX WAS TO SAY LESS
+
+Below the shortest text the boundary was measured on, the score appears in grey with an explicit
+statement that nothing that short was ever measured, and no verdict is given. All the evidence stays:
+a 66-word passage scoring 94 still lists all 23 of its signals.
+
+The floor is not a fitted parameter. It is an observation — the shortest text in the corpus — because
+every attempt to fit one used windows sliced out of long documents, and a student's four-hundred-word
+answer was composed at that length rather than cut down to it.
+
+THE GENERAL VERSION
+
+A threshold is valid over the population it was fitted on, and nowhere else. Every detector in this
+category will give you a percentage about a paragraph. Not one publishes the lengths, languages or
+genres it calibrated that percentage on.
+
+I had the same defect, in a project whose whole argument is that this category overclaims. It shipped
+for months. Publishing the method is what eventually made it findable — by me, reading my own numbers
+with a different question in my head.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — noveno artículo (ES)
+```
+Alguien me escribió por un número de versión. Terminó con mi detector de IA respondiendo menos
+preguntas que la semana anterior, y creo que es lo mejor que he publicado este mes.
+
+LO QUE ENCONTRÉ
+
+Este proyecto publica con qué frecuencia se equivoca sobre una persona: 90 textos escritos antes de
+que existieran los modelos generativos, ninguno marcado a 25 sobre 100, con un intervalo del 95% que
+llega al 4,1%.
+
+Nunca había mirado la forma de esos 90 textos. El más corto tiene 662 palabras. La mediana, 2.772.
+Por debajo de 600 no hay absolutamente nada.
+
+La frontera se ajustó sobre documentos. Se estaba aplicando a párrafos, que es lo que la gente hace
+de verdad con una herramienta así.
+
+EL ERROR VA EN UNA SOLA DIRECCIÓN
+
+Recorta ventanas de 400 palabras de esos mismos documentos, sin cambiar autor, ni tema, ni una sola
+oración: 0 de 32 marcados enteros, 6 de 32 como extractos de apertura. Aplica la misma limpieza sin
+recortar y sigue siendo 0 de 32, así que es la longitud y no la composición.
+
+El motivo no tiene misterio. La señal más fuerte aquí es cuánto se separan las longitudes de las
+oraciones, y una ventana corta puede no contener a la vez la oración larga de tres cláusulas y el
+fragmento de dos palabras que hacen que un párrafo suene a persona.
+
+EL ARREGLO FUE CALLAR
+
+Por debajo del texto más corto sobre el que se midió la frontera, la puntuación sale en gris con una
+declaración explícita de que nada tan corto se midió, y no se da veredicto. La evidencia se queda
+entera: un pasaje de 66 palabras con 94 sigue listando sus 23 señales.
+
+El suelo no es un parámetro ajustado. Es una observación —el texto más corto del corpus— porque todos
+los intentos de ajustarlo usaban ventanas rebanadas de documentos largos, y la respuesta de
+cuatrocientas palabras de un estudiante fue compuesta a esa longitud, no recortada hasta ella.
+
+LA VERSIÓN GENERAL
+
+Un umbral vale sobre la población en la que se ajustó, y en ninguna otra. Todos los detectores de
+esta categoría te darán un porcentaje sobre un párrafo. Ninguno publica las longitudes, los idiomas
+ni los géneros con los que calibró ese porcentaje.
+
+Yo tenía el mismo defecto, en un proyecto cuyo argumento entero es que esta categoría promete de más.
+Estuvo meses publicado. Publicar el método es lo que acabó haciéndolo encontrable: lo encontré yo,
+leyendo mis propios números con otra pregunta en la cabeza.
+
 https://github.com/peopleworks/SignsofAI
 ```
 
