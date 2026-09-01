@@ -37,7 +37,10 @@
     </div>
     <script src="_content/SignsOfAI.UI/js/lang.js"></script>
     <script src="_content/SignsOfAI.UI/js/share-card.js"></script>
-    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+    <!-- autostart="false" so boot.js can start Blazor itself: it retries a boot file the
+         server fails to hand over, and explains the failure if it still will not come. -->
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js" autostart="false"></script>
+    <script src="js/boot.js"></script>
 </body>
 
 </html>
