@@ -71,6 +71,40 @@ public class VerdictAgreementTests
         }
     }
 
+    [Fact]
+    public void A_language_with_its_own_threshold_quotes_the_bound_at_that_threshold_not_its_best_one()
+    {
+        // The best bound a group supports belongs to whichever threshold flags nothing — usually a
+        // higher one than the product uses. Printing it beside the recommended threshold overstated
+        // English by half the day it first earned its own threshold: "at 30/100, under 1.4%" when the
+        // bound at 30 was 2.7%. The report must quote the bound at the threshold it names.
+        var calibration = PublishedCalibration.Current;
+        Assert.NotNull(calibration);
+
+        var own = calibration!.Languages.Where(l => l.RecommendedThreshold is not null).ToList();
+        Assert.True(own.Count > 0,
+            "No language supports its own threshold any more; this test has nothing to check.");
+
+        foreach (var language in own)
+        {
+            Assert.NotNull(language.RateHighAtThreshold);
+            var report = EvidenceReport.ToMarkdown(new AiWritingAnalyzer().Analyze(
+                Fixtures.LongEnough(SampleIn(language.Language)), language.Language));
+
+            Assert.Contains($"{Num(language.RecommendedThreshold!.Value)}/100 was under {Pct(language.RateHighAtThreshold!.Value)}", report);
+            if (Math.Abs(language.RateHighAtThreshold.Value - language.BestBound) > 0.0005)
+                Assert.DoesNotContain($"was under {Pct(language.BestBound)}", report);
+        }
+    }
+
+    // The report's own formatting, so the assertion reads the page the way a person would.
+    private static string Num(double value) =>
+        Math.Round(value, 1).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture);
+
+    private static string Pct(double fraction) =>
+        (fraction * 100).ToString(fraction is > 0 and < 0.1 ? "0.0" : "0.#",
+                                  System.Globalization.CultureInfo.InvariantCulture) + "%";
+
     private static string SampleIn(string language) => language switch
     {
         "es" => "En el panorama actual, es importante destacar que la inteligencia artificial ha " +

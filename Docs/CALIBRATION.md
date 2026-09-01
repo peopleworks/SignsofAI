@@ -17,6 +17,16 @@ It is **not an accuracy figure**. Accuracy needs machine-written text to measure
 
 Every text here was written before generative models could have written it — articles and encyclopedia revisions with a date, and classroom essays from a learner corpus collected years earlier. That is the whole basis for calling it human, and it is a stronger guarantee than any classifier offers about anything. The manifest names each source, its licence and its year, so the claim can be traced rather than trusted.
 
+### Sources
+
+| Group | Texts | Licence | Source |
+|---|---|---|---|
+| **en-anglophone-affiliation** | 21 | CC BY 4.0 | 21 open-access research articles from PLOS; each DOI is in the manifest |
+| **en-other-affiliation** | 19 | CC BY 4.0 | 19 open-access research articles from PLOS; each DOI is in the manifest |
+| **en-second-language-learner** | 206 | CC BY-NC-ND 4.0 | Juffs, A., Han, N.-R. & Naismith, B. (2020). *The University of Pittsburgh English Language Institute Corpus (PELIC)*, v1.0. doi:10.5281/zenodo.3991977 — classroom essays, first submitted version, one per student |
+| **en-wikipedia** | 25 | CC BY-SA 3.0 | revisions of en.wikipedia.org; each revision URL is in the manifest |
+| **es-wikipedia** | 25 | CC BY-SA 3.0 | revisions of es.wikipedia.org; each revision URL is in the manifest |
+
 ## The headline
 
 **At a threshold of 30/100, this tool flags at most 5% of writing known to be human** — 2 of 296 texts in this corpus, an observed 0.7% with a 95% interval of 0.2% – 2.4%.
@@ -50,7 +60,7 @@ The reason the whole exercise exists. If this project cannot show a rate for sec
 
 A dash means this group has too few texts to bound that rate at all — with nothing flagged it still takes roughly seventy-five before the interval alone gets under 5%. That is a statement about the corpus, not the tool.
 
-Across these groups the median score runs from 9.6 (**en-second-language-learner**) down to 4.9 (**en-wikipedia**), a spread of 4.7 points on a scale of a hundred. The longest tail belongs to **en-second-language-learner** at 19.7 for the ninetieth percentile. At the boundary this page recommends, 30/100, **en-second-language-learner** is flagged 2 of 206 (1%, interval 0.3% – 3.5%); every other group is flagged nothing at all. It also sits highest in median and ninetieth percentile. That is the shape of the defect this project criticises, and it is reported here rather than averaged away — smaller than the figures published for other tools, which is a comparison, not an excuse. The groups run from tens of texts to a couple of hundred, and the numbers move as the corpus grows, in whichever direction they move.
+Across these groups the median score runs from 9.6 (**en-second-language-learner**) down to 4.9 (**en-wikipedia**), a spread of 4.7 points on a scale of a hundred. The longest tail belongs to **en-second-language-learner** at 19.7 for the ninetieth percentile. At the boundary this page recommends, 30/100, **en-second-language-learner** is flagged 2 of 206 (1%, interval 0.3% – 3.5%); the other 4 groups measured there are flagged nothing at all. It also sits highest in median and ninetieth percentile. One step down, at 25/100, **en-second-language-learner** would be flagged 9 of 206 (4.4%, interval 2.3% – 8.1%); that step is why the boundary sits where it does. That is the shape of the defect this project criticises, and it is reported here rather than averaged away — smaller than the figures published for other tools, which is a comparison, not an excuse. The groups run from tens of texts to a couple of hundred, and the numbers move as the corpus grows, in whichever direction they move.
 
 ## Every threshold
 

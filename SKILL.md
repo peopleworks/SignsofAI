@@ -49,7 +49,8 @@ a measurement into an accusation.
 5. **Length matters, and the engine knows where its knowledge stops.** The boundary was measured on
    documents of 649 words and up (median about 830). Below that the engine withholds its verdict and
    shows the evidence only; a pasted paragraph has never been validated — say so.
-6. **A tell is not a tally.** Human academic writing carries a median of seven of these. The engine
+6. **A tell is not a tally.** Published academic writing carries a median of seven of these, and a
+   learner's essay five. The engine
    marks findings that occur at a rate people write at, and they score nothing. "Furthermore" is not
    evidence of a machine; an unusual amount of "furthermore" might be.
 

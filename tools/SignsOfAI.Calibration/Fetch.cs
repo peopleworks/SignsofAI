@@ -314,9 +314,12 @@ public static partial class Fetch
     /// picked by score, level or first language; the same file yields the same texts on any machine,
     /// which makes this group reproducible in a way the article fetchers cannot be.</para>
     ///
-    /// <para><b>Licence: CC BY-NC-ND 4.0.</b> Measuring against the texts and publishing the numbers
-    /// is use; redistributing the texts would be a derivative. So, like every other source here, they
-    /// stay on the machine that fetched them and only the manifest is committed.</para>
+    /// <para><b>Licence: CC BY-NC-ND 4.0</b> on the GitHub release this fetches (the Zenodo record,
+    /// doi:10.5281/zenodo.3991977, says CC BY-ND; the stricter reading is the one honoured). Measuring
+    /// against the texts and publishing the numbers is use; redistributing the texts would be a
+    /// derivative. So, like every other source here, they stay on the machine that fetched them and
+    /// only the manifest is committed — and the BY clause is met by naming the creators on every page
+    /// that quotes the numbers: Juffs, Han and Naismith (2020).</para>
     /// </summary>
     public static async Task<List<CorpusEntry>> PelicAsync(string textsDir)
     {
@@ -329,10 +332,19 @@ public static partial class Fetch
         Directory.CreateDirectory(sourceDir);
         var csvPath = Path.Combine(sourceDir, "PELIC_compiled.csv");
 
+        // A cached file that is not the CSV — an LFS outage answered with 200 and an HTML page, say —
+        // would otherwise be kept for ever and fail every run after the first. Validate what is
+        // there, and validate what arrives, before either gets the name every later run trusts.
+        if (File.Exists(csvPath) && !LooksLikePelic(csvPath))
+        {
+            Console.Error.WriteLine("  cached PELIC_compiled.csv is not the dataset; discarding it");
+            File.Delete(csvPath);
+        }
+
         if (!File.Exists(csvPath))
         {
             Console.WriteLine("  downloading PELIC_compiled.csv (about 180 MB, once)…");
-            await DownloadAsync(csvUrl, csvPath);
+            await DownloadAsync(csvUrl, csvPath, LooksLikePelic);
         }
 
         // Every candidate first: "one per student" has to be decided over the whole file in answer-id
@@ -347,6 +359,10 @@ public static partial class Fetch
                 semester = Column("semester"), level = Column("level_id"), classId = Column("class_id"),
                 version = Column("version"), text = Column("text");
 
+            // The dataset's README defines answer_id as unique. The selection below relies on it —
+            // "lowest answer id per student" is only a rule if ids are not shared — so a duplicate
+            // is treated as a different file rather than resolved by whichever row came first.
+            var ids = new HashSet<int>();
             while (ReadCsvRecord(reader) is { } row)
             {
                 if (row.Length <= text) continue;
@@ -355,7 +371,11 @@ public static partial class Fetch
                 var body = row[text].Replace("\r\n", "\n").Trim();
                 if (CountWords(body) < minimumWords) continue;
 
-                candidates.Add((int.Parse(row[answerId]), row[student], row[l1], row[semester], row[level], body));
+                var id = int.Parse(row[answerId]);
+                if (!ids.Add(id))
+                    throw new InvalidDataException($"PELIC_compiled.csv repeats answer_id {id}; the selection rule needs unique ids.");
+
+                candidates.Add((id, row[student], row[l1], row[semester], row[level], body));
             }
         }
 
@@ -378,9 +398,10 @@ public static partial class Fetch
                 Year = int.Parse(c.Semester[..4]),
                 License = "CC BY-NC-ND 4.0",
                 Url = repo,
+                Doi = "10.5281/zenodo.3991977",
                 File = file,
                 Sha256 = CorpusManifest.HashText(content),
-                Note = $"PELIC answer_id {c.AnswerId}, student {c.Student}, L1 {c.L1}, level {c.Level}, {c.Semester}. " +
+                Note = $"PELIC (Juffs, Han & Naismith 2020) answer_id {c.AnswerId}, student {c.Student}, L1 {c.L1}, level {c.Level}, {c.Semester}. " +
                        "Writing class, first submitted version, one text per student (lowest answer_id).",
             });
         }
@@ -389,14 +410,20 @@ public static partial class Fetch
         return entries;
     }
 
-    /// <summary>Streams a large file to disk with progress; a 180 MB string is nobody's friend.</summary>
-    private static async Task DownloadAsync(string url, string path)
+    /// <summary>
+    /// Streams a large file to disk with progress — a 180 MB string is nobody's friend — and hands
+    /// it its final name only once <paramref name="accept"/> has looked at it. A 200 with the wrong
+    /// body is the failure this guards: without the check it would be cached as the real thing.
+    /// </summary>
+    private static async Task DownloadAsync(string url, string path, Func<string, bool> accept)
     {
-        using var response = await Http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-        response.EnsureSuccessStatusCode();
-        await using var source = await response.Content.ReadAsStreamAsync();
-        await using (var target = File.Create(path + ".part"))
+        var part = path + ".part";
+        using (var response = await Http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
         {
+            response.EnsureSuccessStatusCode();
+            await using var source = await response.Content.ReadAsStreamAsync();
+            await using var target = File.Create(part);
+
             var buffer = new byte[1 << 16];
             long done = 0, reported = 0;
             int read;
@@ -412,7 +439,22 @@ public static partial class Fetch
             }
         }
 
-        File.Move(path + ".part", path, overwrite: true);
+        if (!accept(part))
+        {
+            File.Delete(part);
+            throw new InvalidDataException(
+                $"{url} answered with something that is not the expected file; nothing was kept.");
+        }
+
+        File.Move(part, path, overwrite: true);
+    }
+
+    /// <summary>The CSV's own header, which an error page cannot imitate by accident.</summary>
+    private static bool LooksLikePelic(string path)
+    {
+        using var reader = new StreamReader(path, Encoding.UTF8);
+        var header = reader.ReadLine() ?? "";
+        return header.StartsWith("answer_id,", StringComparison.Ordinal) && header.Contains(",text,");
     }
 
     /// <summary>

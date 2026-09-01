@@ -39,9 +39,9 @@ about their work instead.
 ## Why this project is entitled to say any of it
 
 Because it publishes how often it is wrong, which almost nothing in this category does:
-[`Docs/CALIBRATION.md`](../CALIBRATION.md). Ninety texts published before generative models existed,
-zero flagged at the recommended threshold, and the honest reading is the interval rather than the
-zero — under 4.1%.
+[`Docs/CALIBRATION.md`](../CALIBRATION.md). 296 texts written before generative models existed —
+90 published, 206 classroom essays by adult learners of English — two flagged at the recommended
+threshold, and the honest reading is the interval rather than the count: under 2.4%.
 
 Read further down that page and it says something less flattering, which is the part that matters
 here: **no threshold is supported for English or Spanish on its own.** The corpus is too thin per

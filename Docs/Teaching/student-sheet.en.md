@@ -28,7 +28,7 @@ category will state about itself. On its test corpus of 296 texts written before
 number itself.
 
 Of those 296, 271 were in English. This sheet quotes the **English** figure, which is the one that
-applies to you: somewhere **under about 2 in 100**. If you learned English as a second language, the
+applies to you: somewhere **under about 3 in 100**. If you learned English as a second language, the
 figure measured on writers like you is under about 4 in 100 — higher than for everyone else, and the
 tool says so on its own page rather than hiding it in an average. The pooled figure that mixes both
 languages would credit the tool with a precision nobody measured on writing in your language.

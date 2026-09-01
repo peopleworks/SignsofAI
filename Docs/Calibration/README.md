@@ -94,14 +94,19 @@ direction: a paper with *any* anglophone affiliation counts as anglophone, which
 second-language group and makes any gap found an understatement rather than an exaggeration. Every
 entry records the affiliation used, so each classification can be argued with individually.
 
-**The learner group is the one that is not a proxy.** [PELIC](https://github.com/ELI-Data-Mining-Group/PELIC-dataset)
-records each writer's first language — Arabic, Korean, Chinese, Japanese, Spanish, Thai and Turkish
+**The learner group is the one that is not a proxy.** PELIC — Juffs, A., Han, N.-R. & Naismith, B.
+(2020), *The University of Pittsburgh English Language Institute Corpus*, v1.0,
+[doi:10.5281/zenodo.3991977](https://doi.org/10.5281/zenodo.3991977), fetched from
+[its GitHub release](https://github.com/ELI-Data-Mining-Group/PELIC-dataset) — records each writer's
+first language — Arabic, Korean, Chinese, Japanese, Spanish, Thai and Turkish
 make up most of it — and every essay was written years before generative models, in a classroom,
 under a prompt. The selection is a rule rather than a choice: first submitted version, writing
 classes only, at least 662 words so the group enters at the floor the corpus already had, one text
 per student so nobody prolific counts twice. Nothing is picked by score. The licence is
-CC BY-NC-ND 4.0, which permits measuring and publishing the numbers and forbids redistributing the
-texts — the same arrangement every other source here already has.
+CC BY-NC-ND 4.0 on the GitHub release (the Zenodo record says CC BY-ND; the stricter one is honoured),
+which permits measuring and publishing the numbers and forbids redistributing the texts — the same
+arrangement every other source here already has — and asks that the creators be named wherever the
+numbers are quoted, which the generated page now does for every group.
 
 What it found is on `Docs/CALIBRATION.md` and it is the reason the boundary moved from 25 to 30: at
 25, 9 of the 206 essays were flagged and none of the 90 published texts. The rules doing it are the

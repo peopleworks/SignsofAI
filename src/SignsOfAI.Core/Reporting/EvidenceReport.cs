@@ -533,8 +533,10 @@ public static class EvidenceReport
                 return text.Get(ReportMessages.CaveatLanguageNoThreshold,
                     group.Texts, Pct(group.BestBound));
 
+            // The bound at the threshold, never the best bound: the latter belongs to a higher
+            // threshold the product does not use, and quoting it here overstated English by half.
             return text.Get(ReportMessages.CaveatLanguageMeasured,
-                group.Texts, Num(languageThreshold), Pct(group.BestBound));
+                group.Texts, Num(languageThreshold), Pct(group.RateHighAtThreshold ?? group.BestBound));
         }
 
         // Measured, but on too little text to support any threshold. Saying "not calibrated" here
@@ -572,7 +574,8 @@ public static class EvidenceReport
 
             if (group.RecommendedThreshold is { } languageThreshold)
                 AppendBlock(sb, text, ReportMessages.HowLanguageMeasured,
-                    group.Texts, Num(languageThreshold), Pct(group.BestBound), c.MeasuredOn, c.Engine);
+                    group.Texts, Num(languageThreshold), Pct(group.RateHighAtThreshold ?? group.BestBound),
+                    c.MeasuredOn, c.Engine);
             else
                 AppendBlock(sb, text, ReportMessages.HowLanguageNoThreshold,
                     group.Texts, Pct(group.BestBound), c.MeasuredOn, c.Engine);
