@@ -50,11 +50,13 @@ public static class Report
         sb.AppendLine($"- **Target false-positive rate** {Pct(r.TargetFalsePositiveRate)}");
         sb.AppendLine();
         sb.AppendLine(
-            "Every text here was published before generative models could have written it. That is the " +
-            "whole basis for calling it human, and it is a stronger guarantee than any classifier offers " +
-            "about anything. The manifest names each source, its licence and its year, so the claim can " +
-            "be traced rather than trusted.");
+            "Every text here was written before generative models could have written it — articles and " +
+            "encyclopedia revisions with a date, and classroom essays from a learner corpus collected " +
+            "years earlier. That is the whole basis for calling it human, and it is a stronger guarantee " +
+            "than any classifier offers about anything. The manifest names each source, its licence and " +
+            "its year, so the claim can be traced rather than trusted.");
         sb.AppendLine();
+        AppendSources(sb, manifest);
 
         if (r.Overall.Count == 0)
         {
@@ -100,7 +102,7 @@ public static class Report
                       "the same defect as every tool it criticises, and should say so.");
         sb.AppendLine();
         AppendGroups(sb, r.ByStratum, r.TargetFalsePositiveRate);
-        sb.AppendLine(Spread(r.ByStratum));
+        sb.AppendLine(Spread(r.ByStratum, r.Overall.ThresholdForTarget));
         sb.AppendLine();
 
         // ---- the curve ---------------------------------------------------------------------------
@@ -186,13 +188,15 @@ public static class Report
         sb.AppendLine("- **Nothing about how much AI writing it catches.** That is the other half of the " +
                       "picture and it is not measured here, deliberately. A tool that flags nothing has a " +
                       "perfect false-positive rate.");
-        sb.AppendLine("- **Nothing about text unlike this corpus.** These are published articles. A " +
-                      "first-year essay is shorter, looser and differently edited, and the rate on one " +
+        sb.AppendLine("- **Nothing about text unlike this corpus.** These are published articles and " +
+                      "the essays of adult learners in a university English programme. A first-year " +
+                      "essay by a native speaker is a different population again, and the rate on one " +
                       "does not transfer to the other. Calibrating on your own students' pre-2022 work is " +
                       "the fix, and the same tool does it.");
-        sb.AppendLine("- **The grouping of writers is a proxy, not a fact.** Nobody's first language is " +
-                      "recorded in a DOI. The manifest states the reasoning per text so it can be " +
-                      "argued with; where it is wrong, the number moves.");
+        sb.AppendLine("- **The affiliation groups are a proxy, not a fact.** Nobody's first language is " +
+                      "recorded in a DOI. The learner group is the exception — its corpus records each " +
+                      "writer's first language — which is why it exists. Elsewhere the manifest states " +
+                      "the reasoning per text so it can be argued with; where it is wrong, the number moves.");
         sb.AppendLine("- **Hashes prove what *this* run measured**, not that another person extracting the " +
                       "same articles would get identical text. They would not: PDF and HTML extraction " +
                       "differ. Reproducing this needs the extracted texts, not just the manifest.");
@@ -232,11 +236,50 @@ public static class Report
     }
 
     /// <summary>
+    /// <summary>
+    /// Who wrote the corpus, by group, with the citation each licence asks for. Attribution is not a
+    /// courtesy here: three of the four sources are CC BY of some flavour, and a page that quotes
+    /// numbers measured on somebody's corpus without naming them is in breach of the one condition
+    /// they set.
+    /// </summary>
+    private static void AppendSources(StringBuilder sb, CorpusManifest manifest)
+    {
+        sb.AppendLine("### Sources");
+        sb.AppendLine();
+        sb.AppendLine("| Group | Texts | Licence | Source |");
+        sb.AppendLine("|---|---|---|---|");
+        foreach (var group in manifest.Texts.GroupBy(t => t.Stratum).OrderBy(g => g.Key, StringComparer.Ordinal))
+        {
+            var licences = string.Join(", ", group.Select(t => t.License).Distinct().OrderBy(l => l, StringComparer.Ordinal));
+            sb.AppendLine($"| **{group.Key}** | {group.Count()} | {licences} | {Describe(group.ToList())} |");
+        }
+        sb.AppendLine();
+    }
+
+    /// <summary>
+    /// The citation for a group, from what the manifest records. Sources that are one work with one
+    /// DOI get the work's citation; sources that are many works get the pointer to where each one is.
+    /// </summary>
+    private static string Describe(IReadOnlyList<CorpusEntry> entries)
+    {
+        var dois = entries.Select(e => e.Doi).Where(d => !string.IsNullOrEmpty(d)).Distinct().ToList();
+        if (dois.Count == 1 && dois[0] == "10.5281/zenodo.3991977")
+            return "Juffs, A., Han, N.-R. & Naismith, B. (2020). *The University of Pittsburgh English " +
+                   "Language Institute Corpus (PELIC)*, v1.0. doi:10.5281/zenodo.3991977 — classroom " +
+                   "essays, first submitted version, one per student";
+        if (dois.Count > 1)
+            return $"{dois.Count} open-access research articles from PLOS; each DOI is in the manifest";
+        var hosts = entries.Select(e => e.Url is null ? null : new Uri(e.Url).Host).Where(h => h is not null).Distinct().ToList();
+        return hosts.Count == 1
+            ? $"revisions of {hosts[0]}; each revision URL is in the manifest"
+            : "see the manifest";
+    }
+
     /// States, from the numbers rather than from hope, whether any group is being treated worse. A
     /// systematic penalty against second-language writers would show as one group sitting clearly
-    /// above the others — that is what this sentence is for, and it will say so if it ever happens.
+    /// above the others — that is what this paragraph is for, and it says so when it happens.
     /// </summary>
-    private static string Spread(IReadOnlyList<StratumCalibration> groups)
+    private static string Spread(IReadOnlyList<StratumCalibration> groups, double? boundary)
     {
         var usable = groups.Where(g => g.Count > 0).ToList();
         if (usable.Count < 2) return "";
@@ -245,17 +288,74 @@ public static class Report
         var highMedian = usable.MaxBy(g => g.MedianScore)!;
         var highTail = usable.MaxBy(g => g.NinetiethScore)!;
 
-        return
-            $"Across these groups the median score runs from {highMedian.MedianScore.ToString("0.0", Inv)} " +
-            $"(**{highMedian.Name}**) down to {lowMedian.MedianScore.ToString("0.0", Inv)} " +
-            $"(**{lowMedian.Name}**), a spread of " +
-            $"{(highMedian.MedianScore - lowMedian.MedianScore).ToString("0.0", Inv)} points on a scale " +
-            "of a hundred. The longest tail belongs to **" + highTail.Name + "** at " +
-            $"{highTail.NinetiethScore.ToString("0.0", Inv)} for the ninetieth percentile. " +
-            "A tool with the defect this project criticises would show one group sitting well above the " +
-            "rest; on this corpus none does. It is a first indication rather than a finding — these are " +
-            "tens of texts, not hundreds — and the numbers move as the corpus grows, in whichever " +
-            "direction they move.";
+        var sb = new StringBuilder();
+        sb.Append($"Across these groups the median score runs from {highMedian.MedianScore.ToString("0.0", Inv)} " +
+                  $"(**{highMedian.Name}**) down to {lowMedian.MedianScore.ToString("0.0", Inv)} " +
+                  $"(**{lowMedian.Name}**), a spread of " +
+                  $"{(highMedian.MedianScore - lowMedian.MedianScore).ToString("0.0", Inv)} points on a scale " +
+                  "of a hundred. The longest tail belongs to **" + highTail.Name + "** at " +
+                  $"{highTail.NinetiethScore.ToString("0.0", Inv)} for the ninetieth percentile. ");
+
+        // The sentence that matters is decided at the boundary the page recommends, because that is
+        // the only place a difference between groups turns into a different verdict for a person.
+        // A group with no row at the boundary was not measured there, which is not the same as
+        // being flagged nothing — a reviewer produced the wrong sentence with a synthetic group.
+        var measured = boundary is { } b
+            ? usable.Select(g => (Group: g, Row: g.Thresholds.FirstOrDefault(t => Math.Abs(t.Threshold - b) < 0.001)))
+                    .Where(x => x.Row is not null)
+                    .Select(x => (x.Group, Row: x.Row!))
+                    .ToList()
+            : [];
+        var unmeasured = usable.Where(g => measured.All(m => m.Group != g)).ToList();
+        var flagged = measured.Where(x => x.Row.Flagged > 0).OrderByDescending(x => x.Row.Rate).ToList();
+
+        if (boundary is { } bound && flagged.Count > 0)
+        {
+            var (top, row) = flagged[0];
+            var also = top == highMedian && top == highTail
+                ? " It also sits highest in median and ninetieth percentile."
+                : "";
+            sb.Append($"At the boundary this page recommends, {bound:0}/100, ");
+            sb.Append(string.Join(" and ", flagged.Select(f =>
+                $"**{f.Group.Name}** is flagged {f.Row.Flagged} of {f.Group.Count} " +
+                $"({Pct(f.Row.Rate)}, interval {Pct(f.Row.RateLow)} – {Pct(f.Row.RateHigh)})")));
+            var clean = measured.Count - flagged.Count;
+            sb.Append(clean == 0
+                ? "."
+                : clean == 1
+                    ? "; the one other group measured there is flagged nothing at all."
+                    : $"; the other {clean} groups measured there are flagged nothing at all.");
+            if (unmeasured.Count > 0)
+                sb.Append(" " + string.Join(", ", unmeasured.Select(g => $"**{g.Name}**")) +
+                          (unmeasured.Count == 1 ? " has" : " have") + " no row at that boundary and cannot be compared.");
+            sb.Append(also);
+
+            // The boundary is where it is because of what happens one step below it; a page that
+            // shows only the recommended step hides the very thing that moved it.
+            var below = top.Thresholds.Where(t => t.Threshold < bound).OrderByDescending(t => t.Threshold).FirstOrDefault();
+            if (below is not null && below.Flagged > row.Flagged)
+                sb.Append($" One step down, at {below.Threshold:0}/100, **{top.Name}** would be flagged " +
+                          $"{below.Flagged} of {top.Count} ({Pct(below.Rate)}, interval {Pct(below.RateLow)} – " +
+                          $"{Pct(below.RateHigh)}); that step is why the boundary sits where it does.");
+            sb.Append(" That is the shape of the defect this project criticises, and it is reported here " +
+                      "rather than averaged away — smaller than the figures published for other tools, " +
+                      "which is a comparison, not an excuse.");
+        }
+        else if (boundary is { } noneAt && measured.Count > 0)
+        {
+            sb.Append($"At the boundary this page recommends, {noneAt:0}/100, no group measured there is " +
+                      "flagged at all. A tool with the defect this project criticises would show one group " +
+                      "sitting well above the rest; on this corpus none does.");
+        }
+        else
+        {
+            sb.Append("No boundary is recommended yet, so the groups cannot be compared where it would " +
+                      "matter; the medians above are the only comparison available.");
+        }
+
+        sb.Append(" The groups run from tens of texts to a couple of hundred, and the numbers move as " +
+                  "the corpus grows, in whichever direction they move.");
+        return sb.ToString();
     }
 
     private static string Headline(StratumCalibration overall, double target)

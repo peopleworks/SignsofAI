@@ -39,10 +39,10 @@ understand. If you cannot, there is no case yet. *"The score was high"* is not a
 the six sources cited do not appear in the bibliography, and two share a DOI"* is.
 
 **Check the tool's error rate for the language the work is written in.** This matters more than it
-sounds. This tool's corpus supports **no threshold for Spanish or English separately** — its best
-bounds are 5.6% and 13.3% by language, against an aggregate of 4.1%. Quoting an aggregate measured
-mostly on one language, at a student writing in another, is the exact error the tool's own
-documentation warns against. If you cite a figure in a finding, cite the one for that language, and
+sounds. This tool's corpus supports **a threshold for English on its own (30/100, upper bound 2.7%)
+and none for Spanish**, whose 25 texts bound it no tighter than 13.3% — against a pooled figure of
+2.4% that is mostly English. Quoting the pooled figure, or the English one, at a student writing in
+Spanish is the exact error the tool's own documentation warns against. If you cite a figure in a finding, cite the one for that language, and
 if there is none, say there is none.
 
 **Decide who is in the room.** For the student: someone they choose. The power difference is the
@@ -99,7 +99,7 @@ not, in the finding itself:
 **Copy the figure from the report in front of you, not from here.** The tool measures a separate rate
 per language and the report prints the one that applies to the work being judged. Quoting the pooled
 figure instead is the single easiest way to overstate this tool at a hearing: on the current corpus
-the pooled rate is under 4.1%, while Spanish on its own supports only 13.3% — three times worse. A
+the pooled rate is under 2.4%, while Spanish on its own supports only 13.3% — five times worse. A
 committee handed the flattering number about a Spanish essay has been given a better tool than the
 one that was actually used, and the difference is the sort of thing that surfaces on appeal.
 

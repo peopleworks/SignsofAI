@@ -37,15 +37,20 @@ a measurement into an accusation.
 2. **Finding nothing is not evidence a human wrote it.** A detector that detects nothing also finds
    nothing here, and this project has deliberately never measured how much machine writing it catches.
    Report what you found and stop.
-3. **If you quote the engine's score, quote its error rate too.** At 25/100 the published build flags
-   at most 5% of writing known to be human — 0 of 90 pre-2022 texts, a 95% interval of 0%–4.1%. The
-   interval is the honest half. Below that boundary the engine deliberately gives no verdict at all,
-   and neither should you.
+3. **If you quote the engine's score, quote its error rate too.** At 30/100 the published build flags
+   at most 5% of writing known to be human — 2 of 296 pre-2022 texts, a 95% interval of 0.2%–2.4%.
+   The interval is the honest half. Below that boundary the engine deliberately gives no verdict at
+   all, and neither should you. 206 of those texts are essays by adult learners of English; on them
+   alone the rate is 2 of 206, and at the boundary the corpus supported before they joined (25) it
+   was 9 of 206. If the writer learned English second, say that this is the population the tool is
+   most likely to be wrong about.
 4. **Only English and Spanish have a measured rate.** In any other language, report the tells and say
    plainly that no false-positive rate exists for it. Never borrow one.
-5. **Length matters, and the engine does not yet know it.** The boundary was measured on documents
-   averaging about 3,100 words. On a pasted paragraph it has never been validated — say so.
-6. **A tell is not a tally.** Human academic writing carries a median of seven of these. The engine
+5. **Length matters, and the engine knows where its knowledge stops.** The boundary was measured on
+   documents of 649 words and up (median about 830). Below that the engine withholds its verdict and
+   shows the evidence only; a pasted paragraph has never been validated — say so.
+6. **A tell is not a tally.** Published academic writing carries a median of seven of these, and a
+   learner's essay five. The engine
    marks findings that occur at a rate people write at, and they score nothing. "Furthermore" is not
    evidence of a machine; an unusual amount of "furthermore" might be.
 

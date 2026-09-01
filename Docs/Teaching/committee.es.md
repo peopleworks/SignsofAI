@@ -42,10 +42,11 @@ no puede, todavía no hay caso. *«La puntuación era alta»* no es un motivo. *
 fuentes citadas no aparecen en la bibliografía, y dos comparten el mismo DOI»* sí lo es.
 
 **Consulte la tasa de error para el idioma en que está escrito el trabajo.** Esto importa más de lo
-que parece. El corpus de esta herramienta **no respalda ningún umbral para el español ni para el
-inglés por separado**: sus mejores cotas por idioma son 5,6% y 13,3%, frente a un agregado de 4,1%.
-Citar un agregado medido mayoritariamente en un idioma, frente a un estudiante que escribe en otro,
-es exactamente el error contra el que advierte la propia documentación de la herramienta. Si cita una
+que parece. El corpus de esta herramienta **respalda un umbral propio para el inglés (30/100, cota
+superior 2,7%) y ninguno para el español**, cuyos 25 textos no acotan mejor que un 13,3%, frente a
+una cifra agregada del 2,4% que es casi toda inglés. Citar la agregada, o la del inglés, frente a un
+estudiante que escribe en español es exactamente el error contra el que advierte la propia
+documentación de la herramienta. Si cita una
 cifra en una resolución, cite la de ese idioma; y si no existe, diga que no existe.
 
 **Decida quién está en la sala.** Por parte del estudiante, alguien elegido por él. La diferencia de
@@ -103,8 +104,8 @@ resolución qué es y qué no es:
 **Copie la cifra del informe que tiene delante, no de aquí.** La herramienta mide una tasa distinta
 por idioma y el informe imprime la que corresponde al trabajo que se está juzgando. Citar la cifra
 agregada es la forma más fácil de exagerar esta herramienta en una audiencia: en el corpus actual la
-agregada queda por debajo del 4,1%, mientras que el español por separado solo respalda un 13,3% —
-tres veces peor. A un comité al que se le entrega el número halagador sobre un ensayo en español se
+agregada queda por debajo del 2,4%, mientras que el español por separado solo respalda un 13,3% —
+cinco veces peor. A un comité al que se le entrega el número halagador sobre un ensayo en español se
 le ha dado una herramienta mejor que la que realmente se usó, y esa diferencia es de las que salen a
 la luz en una apelación.
 

@@ -293,6 +293,213 @@ public static partial class Fetch
         return string.Join("\n\n", paragraphs);
     }
 
+    // ---- PELIC -----------------------------------------------------------------------------------
+
+    /// <summary>
+    /// Classroom essays by learners of English, from the University of Pittsburgh's PELIC corpus:
+    /// 1,177 students of its Intensive English Program, first languages recorded, written between
+    /// 2006 and 2012. The date is the whole basis for calling them human, exactly as with the
+    /// articles — and a second-language essay from 2008 could not have been polished by a model that
+    /// did not exist.
+    ///
+    /// This is the group the affiliation proxy was standing in for. Detectors flag 61% of essays by
+    /// non-native English speakers (Liang et al., 2023); this project criticises that number and had
+    /// never measured its own on that population, because the articles it calibrated on are written
+    /// by people who write for a living. These are not. They are the writers the harm lands on, at
+    /// the length the corpus already covers.
+    ///
+    /// <para><b>The selection is a rule, not a choice.</b> First submitted version only, writing
+    /// classes only, at least 662 words so the group enters at the floor the corpus already has, and
+    /// one text per student — the lowest answer id — so no prolific writer counts twice. Nothing is
+    /// picked by score, level or first language; the same file yields the same texts on any machine,
+    /// which makes this group reproducible in a way the article fetchers cannot be.</para>
+    ///
+    /// <para><b>Licence: CC BY-NC-ND 4.0</b> on the GitHub release this fetches (the Zenodo record,
+    /// doi:10.5281/zenodo.3991977, says CC BY-ND; the stricter reading is the one honoured). Measuring
+    /// against the texts and publishing the numbers is use; redistributing the texts would be a
+    /// derivative. So, like every other source here, they stay on the machine that fetched them and
+    /// only the manifest is committed — and the BY clause is met by naming the creators on every page
+    /// that quotes the numbers: Juffs, Han and Naismith (2020).</para>
+    /// </summary>
+    public static async Task<List<CorpusEntry>> PelicAsync(string textsDir)
+    {
+        const string repo = "https://github.com/ELI-Data-Mining-Group/PELIC-dataset";
+        const string csvUrl = "https://media.githubusercontent.com/media/ELI-Data-Mining-Group/PELIC-dataset/master/PELIC_compiled.csv";
+        const int minimumWords = 662;
+
+        Directory.CreateDirectory(textsDir);
+        var sourceDir = Path.Combine(textsDir, "pelic-source");
+        Directory.CreateDirectory(sourceDir);
+        var csvPath = Path.Combine(sourceDir, "PELIC_compiled.csv");
+
+        // A cached file that is not the CSV — an LFS outage answered with 200 and an HTML page, say —
+        // would otherwise be kept for ever and fail every run after the first. Validate what is
+        // there, and validate what arrives, before either gets the name every later run trusts.
+        if (File.Exists(csvPath) && !LooksLikePelic(csvPath))
+        {
+            Console.Error.WriteLine("  cached PELIC_compiled.csv is not the dataset; discarding it");
+            File.Delete(csvPath);
+        }
+
+        if (!File.Exists(csvPath))
+        {
+            Console.WriteLine("  downloading PELIC_compiled.csv (about 180 MB, once)…");
+            await DownloadAsync(csvUrl, csvPath, LooksLikePelic);
+        }
+
+        // Every candidate first: "one per student" has to be decided over the whole file in answer-id
+        // order, not in whatever order the rows happen to arrive.
+        var candidates = new List<(int AnswerId, string Student, string L1, string Semester, string Level, string Text)>();
+        using (var reader = new StreamReader(csvPath, Encoding.UTF8))
+        {
+            var header = ReadCsvRecord(reader) ?? throw new InvalidDataException("PELIC_compiled.csv is empty.");
+            int Column(string name) => Array.IndexOf(header, name) is var i and >= 0
+                ? i : throw new InvalidDataException($"PELIC_compiled.csv has no '{name}' column.");
+            int answerId = Column("answer_id"), student = Column("anon_id"), l1 = Column("L1"),
+                semester = Column("semester"), level = Column("level_id"), classId = Column("class_id"),
+                version = Column("version"), text = Column("text");
+
+            // The dataset's README defines answer_id as unique. The selection below relies on it —
+            // "lowest answer id per student" is only a rule if ids are not shared — so a duplicate
+            // is treated as a different file rather than resolved by whichever row came first.
+            var ids = new HashSet<int>();
+            while (ReadCsvRecord(reader) is { } row)
+            {
+                if (row.Length <= text) continue;
+                if (row[version] != "1" || row[classId] != "w") continue;
+
+                var body = row[text].Replace("\r\n", "\n").Trim();
+                if (CountWords(body) < minimumWords) continue;
+
+                var id = int.Parse(row[answerId]);
+                if (!ids.Add(id))
+                    throw new InvalidDataException($"PELIC_compiled.csv repeats answer_id {id}; the selection rule needs unique ids.");
+
+                candidates.Add((id, row[student], row[l1], row[semester], row[level], body));
+            }
+        }
+
+        var entries = new List<CorpusEntry>();
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var c in candidates.OrderBy(c => c.AnswerId))
+        {
+            if (!seen.Add(c.Student)) continue;
+
+            var id = $"pelic-{c.AnswerId:D6}";
+            var file = id + ".txt";
+            var content = c.Text + "\n";
+            await File.WriteAllTextAsync(Path.Combine(textsDir, file), content);
+
+            entries.Add(new CorpusEntry
+            {
+                Id = id,
+                Language = "en",
+                Stratum = "en-second-language-learner",
+                Year = int.Parse(c.Semester[..4]),
+                License = "CC BY-NC-ND 4.0",
+                Url = repo,
+                Doi = "10.5281/zenodo.3991977",
+                File = file,
+                Sha256 = CorpusManifest.HashText(content),
+                Note = $"PELIC (Juffs, Han & Naismith 2020) answer_id {c.AnswerId}, student {c.Student}, L1 {c.L1}, level {c.Level}, {c.Semester}. " +
+                       "Writing class, first submitted version, one text per student (lowest answer_id).",
+            });
+        }
+
+        Console.WriteLine($"  {candidates.Count:N0} candidate texts of {minimumWords}+ words; {entries.Count} students, one text each");
+        return entries;
+    }
+
+    /// <summary>
+    /// Streams a large file to disk with progress — a 180 MB string is nobody's friend — and hands
+    /// it its final name only once <paramref name="accept"/> has looked at it. A 200 with the wrong
+    /// body is the failure this guards: without the check it would be cached as the real thing.
+    /// </summary>
+    private static async Task DownloadAsync(string url, string path, Func<string, bool> accept)
+    {
+        var part = path + ".part";
+        using (var response = await Http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
+        {
+            response.EnsureSuccessStatusCode();
+            await using var source = await response.Content.ReadAsStreamAsync();
+            await using var target = File.Create(part);
+
+            var buffer = new byte[1 << 16];
+            long done = 0, reported = 0;
+            int read;
+            while ((read = await source.ReadAsync(buffer)) > 0)
+            {
+                await target.WriteAsync(buffer.AsMemory(0, read));
+                done += read;
+                if (done - reported >= 20L << 20)
+                {
+                    Console.WriteLine($"    {done >> 20} MB…");
+                    reported = done;
+                }
+            }
+        }
+
+        if (!accept(part))
+        {
+            File.Delete(part);
+            throw new InvalidDataException(
+                $"{url} answered with something that is not the expected file; nothing was kept.");
+        }
+
+        File.Move(part, path, overwrite: true);
+    }
+
+    /// <summary>The CSV's own header, which an error page cannot imitate by accident.</summary>
+    private static bool LooksLikePelic(string path)
+    {
+        using var reader = new StreamReader(path, Encoding.UTF8);
+        var header = reader.ReadLine() ?? "";
+        return header.StartsWith("answer_id,", StringComparison.Ordinal) && header.Contains(",text,");
+    }
+
+    /// <summary>
+    /// One RFC 4180 record. Quoted fields may hold newlines and doubled quotes — PELIC's essays hold
+    /// both, so a line-based reader would shred them.
+    /// </summary>
+    private static string[]? ReadCsvRecord(TextReader reader)
+    {
+        if (reader.Peek() < 0) return null;
+
+        var fields = new List<string>();
+        var field = new StringBuilder();
+        bool quoted = false;
+
+        while (true)
+        {
+            int c = reader.Read();
+            if (c < 0)
+            {
+                fields.Add(field.ToString());
+                return fields.ToArray();
+            }
+
+            char ch = (char)c;
+            if (quoted)
+            {
+                if (ch != '"') field.Append(ch);
+                else if (reader.Peek() == '"') { reader.Read(); field.Append('"'); }
+                else quoted = false;
+                continue;
+            }
+
+            switch (ch)
+            {
+                case '"': quoted = true; break;
+                case ',': fields.Add(field.ToString()); field.Clear(); break;
+                case '\r': break;
+                case '\n':
+                    fields.Add(field.ToString());
+                    return fields.ToArray();
+                default: field.Append(ch); break;
+            }
+        }
+    }
+
     // ---- shared ----------------------------------------------------------------------------------
 
     private static int CountWords(string text) =>

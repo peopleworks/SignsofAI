@@ -141,9 +141,13 @@ public sealed record PatternRule
     /// single occurrence: they essentially never appear in the human corpus.
     ///
     /// A caveat that belongs next to the numbers rather than in a commit message: these are fitted on
-    /// the same ninety texts the project reports its false-positive rate against. The improvement is
-    /// therefore quoted leave-one-out — each text judged against thresholds derived from the other
-    /// eighty-nine — which is a smaller number than the in-sample one and the only honest version.
+    /// the ninety published texts the project first reported its false-positive rate against. The
+    /// improvement is therefore quoted leave-one-out — each text judged against thresholds derived
+    /// from the other eighty-nine — which is a smaller number than the in-sample one and the only
+    /// honest version. They were deliberately <b>not</b> refitted when 206 learner essays joined the
+    /// corpus in September 2026: with learners as the majority, twelve rules lost their gate and the
+    /// connector gates inflated up to seven-fold — learner rates spent on everyone, which is the
+    /// population trap #59 documents. A gate per group is the open question in issue #75.
     /// </summary>
     public double? HumanRatePer1000 { get; init; }
 }

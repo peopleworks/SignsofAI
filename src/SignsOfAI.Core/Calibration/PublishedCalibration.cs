@@ -55,8 +55,8 @@ public sealed record PublishedCalibration
     /// the analyzer counts them.
     ///
     /// Recorded because a bound measured on one population must not be spent on another, and length
-    /// is such a population: the shipped boundary was fitted on texts of 662 words and up, and was
-    /// being applied to a pasted paragraph. <see cref="Model.VerdictBands.Measured(int)"/> reads
+    /// is such a population: the boundary shipped at the time was fitted on texts of 662 words and
+    /// up, and was being applied to a pasted paragraph. <see cref="Model.VerdictBands.Measured(int)"/> reads
     /// <see cref="ShortestWords"/> and withholds the verdict below it; nothing reads
     /// <see cref="LongestWords"/> yet, and it is here so the range on the page is a range rather
     /// than half of one. See issue #59.
@@ -155,8 +155,21 @@ public sealed record PublishedLanguage
 
     public double? RecommendedThreshold { get; init; }
 
-    /// <summary>The best upper bound this group can support, as a fraction.</summary>
+    /// <summary>The best upper bound this group can support at any threshold, as a fraction.</summary>
     public required double BestBound { get; init; }
+
+    /// <summary>
+    /// The upper bound at <see cref="RecommendedThreshold"/> itself, as a fraction; null when the
+    /// group supports no threshold.
+    ///
+    /// Not the same number as <see cref="BestBound"/>, and the difference bit: the report used to
+    /// print the best bound next to the recommended threshold. While nothing was flagged at any
+    /// threshold the two coincided, so the defect was invisible — until English became the first
+    /// language with its own threshold and two texts flagged there, and the page would have said
+    /// "at 30/100, under 1.4%" when the bound at 30 is 2.7%. The tighter figure belongs to a
+    /// threshold five points higher that the product does not use.
+    /// </summary>
+    public double? RateHighAtThreshold { get; init; }
 }
 
 /// <summary>One rule and how often it appeared in writing no machine wrote.</summary>

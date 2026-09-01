@@ -486,11 +486,12 @@ public static class EvidenceReport
     ///
     /// This asked for the threshold measured for the language actually analysed, refusing to borrow
     /// the aggregate. That reading was too strict by a wide margin, and the cost was not theoretical:
-    /// no language in the corpus supports its own threshold — English has 65 texts and Spanish 25,
-    /// against the ~75 the interval needs — so the condition was false for every document in every
-    /// language, and the exported report never carried a verdict at all. A tool that renders nothing
-    /// has not been careful, it has been switched off, and Spanish would have stayed switched off
-    /// for years while the page still promised a reading.
+    /// at the time no language in the corpus supported its own threshold — English had 65 texts and
+    /// Spanish 25, against the ~75 the interval needs — so the condition was false for every document
+    /// in every language, and the exported report never carried a verdict at all. A tool that renders
+    /// nothing has not been careful, it has been switched off, and Spanish would have stayed switched
+    /// off for years while the page still promised a reading. English crossed the line in September
+    /// 2026 with the learner essays; Spanish still borrows.
     ///
     /// The distinction that resolves it: borrowing the aggregate *error rate* would misstate how
     /// often this build is wrong about Spanish (13.3% measured, against 5.6% for English and 4.1%
@@ -532,8 +533,10 @@ public static class EvidenceReport
                 return text.Get(ReportMessages.CaveatLanguageNoThreshold,
                     group.Texts, Pct(group.BestBound));
 
+            // The bound at the threshold, never the best bound: the latter belongs to a higher
+            // threshold the product does not use, and quoting it here overstated English by half.
             return text.Get(ReportMessages.CaveatLanguageMeasured,
-                group.Texts, Num(languageThreshold), Pct(group.BestBound));
+                group.Texts, Num(languageThreshold), Pct(group.RateHighAtThreshold ?? group.BestBound));
         }
 
         // Measured, but on too little text to support any threshold. Saying "not calibrated" here
@@ -571,7 +574,8 @@ public static class EvidenceReport
 
             if (group.RecommendedThreshold is { } languageThreshold)
                 AppendBlock(sb, text, ReportMessages.HowLanguageMeasured,
-                    group.Texts, Num(languageThreshold), Pct(group.BestBound), c.MeasuredOn, c.Engine);
+                    group.Texts, Num(languageThreshold), Pct(group.RateHighAtThreshold ?? group.BestBound),
+                    c.MeasuredOn, c.Engine);
             else
                 AppendBlock(sb, text, ReportMessages.HowLanguageNoThreshold,
                     group.Texts, Pct(group.BestBound), c.MeasuredOn, c.Engine);

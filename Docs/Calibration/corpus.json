@@ -4,6 +4,2478 @@
   "targetFalsePositiveRate": 0.05,
   "texts": [
     {
+      "id": "pelic-000663",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2006,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-000663.txt",
+      "sha256": "64e991fa9fe4863a6218eb92369e5826acb5feab18bd56bfc18a187c8725fe2f",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 663, student fe5, L1 Arabic, level 5, 2006_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-000713",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2006,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-000713.txt",
+      "sha256": "0d4eadced116bec2a99b32a74c01c62fbf43af6ae31319032e25df0f53afc174",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 713, student al9, L1 Arabic, level 5, 2006_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-000856",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2006,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-000856.txt",
+      "sha256": "5dd16028285b01f43f09961a8bea2e4f42fa9d7478a2e0897dd78820c072154d",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 856, student fv6, L1 French, level 4, 2006_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-000986",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2006,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-000986.txt",
+      "sha256": "ae6d760f11a66c5b7b4cceb662d904c1d3ad16f07b932d851c1aa3354d8813fe",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 986, student fx9, L1 Japanese, level 5, 2006_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-000987",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2006,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-000987.txt",
+      "sha256": "cd716c114957346e0a31f2eb5782f664417e6ac599566319295b6b19f26ba1f3",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 987, student fg8, L1 Chinese, level 5, 2006_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-001300",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2006,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-001300.txt",
+      "sha256": "f3665f513a69f7e66ecb7b0ecddbcd15d61b9ff623a02f6ddc77406461744160",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 1300, student dr5, L1 Arabic, level 4, 2006_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-001955",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2006,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-001955.txt",
+      "sha256": "ae58b21f18bf16e2602952b3e737ad5c7dfa4df2ab3fc0713e325a9a6ddf03ec",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 1955, student cs3, L1 Japanese, level 4, 2006_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-001976",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2006,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-001976.txt",
+      "sha256": "96bee0d1016bc7aad12cf0aa4a99c8d7f0e1aef9a919906bb9164625b0fdc0d3",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 1976, student dh9, L1 Chinese, level 4, 2006_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-002131",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2006,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-002131.txt",
+      "sha256": "9d4426a5373b7c7b7d7247f996335316a17427f74b6a121206ad22e23868a3de",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 2131, student gl6, L1 Arabic, level 4, 2006_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-002515",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-002515.txt",
+      "sha256": "ef98f76304d85a29234c58bb85f758feb59b860c71b4f102eacda079d1cf8d36",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 2515, student bp8, L1 Arabic, level 5, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-003042",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-003042.txt",
+      "sha256": "4d2c9207d632fad3121068ef2797f7e2257fdafe8b800294acc6ca244eeace4c",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 3042, student ci3, L1 Taiwanese, level 4, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-003540",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-003540.txt",
+      "sha256": "caa0f829525dad2b3412ce8b607000be13781ff44d135dc9bd8f6105e39a1813",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 3540, student gg2, L1 Korean, level 4, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-003731",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-003731.txt",
+      "sha256": "d7bee9adb2bc8ad7af564daa10e103c3cec51d3e4a73c430d96f88ff3638376b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 3731, student ft2, L1 Korean, level 4, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-003944",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-003944.txt",
+      "sha256": "1556129cc0d749b9e6e8a1613ba14fdb95fb990bc91ba183310734bd35d2347b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 3944, student bt1, L1 Korean, level 4, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-004402",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-004402.txt",
+      "sha256": "2c6f2d411ac86e165cfd16f42fb7e973fa953ebaa852dd42cddad03eaddf35a2",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 4402, student ca4, L1 Chinese, level 4, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-004471",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-004471.txt",
+      "sha256": "f50e74c872e01654aded3c80e2583316b8fa4a287dba54e11c1f1a0140c348d2",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 4471, student bs1, L1 Japanese, level 4, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-004710",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-004710.txt",
+      "sha256": "45fdfb86be64533b1d81641be9f6c33c50578449220edcd7ad8f553f55ba6fca",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 4710, student ah1, L1 Thai, level 5, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-005215",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-005215.txt",
+      "sha256": "c3deef065b280d71268c4e47c827deb9ee14e56065d284c7e6feaf514e8579de",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 5215, student fi5, L1 Korean, level 4, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-005228",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-005228.txt",
+      "sha256": "3ded1ef84a962ae8cc0c8238c71d5e6e8be96e3afb4657d1551d922ef98e30dd",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 5228, student bx3, L1 Korean, level 4, 2007_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-007060",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-007060.txt",
+      "sha256": "766c70cf2f1a81ac63a3940bbe9370d2069908830c988d13e5038f9d1f24b343",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 7060, student gx2, L1 Japanese, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-007654",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-007654.txt",
+      "sha256": "cf9d91fa8d5647eafc1579f4311b4ee8afb6618d4bf7b18875c6988f37071730",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 7654, student dy7, L1 Korean, level 5, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-007702",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-007702.txt",
+      "sha256": "46b18c3ac2f6f6203c634e11c0a1b560b51e0c5a9e6e768690416765c87a63dc",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 7702, student bi6, L1 Arabic, level 5, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-007724",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-007724.txt",
+      "sha256": "7dfa289524c33bb98e4c6460731875a498885d631d02415dfc12c5e9656f4d64",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 7724, student ec9, L1 Korean, level 5, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-007750",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-007750.txt",
+      "sha256": "fc6535f9eb5694a07a332f6ab3df6f68d3cc6782645ae832b2635269b85ce5d9",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 7750, student aa8, L1 Korean, level 5, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-007763",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-007763.txt",
+      "sha256": "3579d74612e9c0158990053dea7435abad0a0429da08cf20f5fc0dff7b04e3e8",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 7763, student ei2, L1 Chinese, level 5, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-007767",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-007767.txt",
+      "sha256": "f596d938b2e76973bae1d94831e05be84248288ab21dc71fe593b1138ec42fab",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 7767, student cb8, L1 Arabic, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-007938",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-007938.txt",
+      "sha256": "3efb711bbd4859337dd2c04d73086efe364b8ae756cba7937976da7e4cf6b2fd",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 7938, student fh9, L1 Japanese, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-008530",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-008530.txt",
+      "sha256": "2224055344ce894375d531295b9ca7aa73361f74f5fb33d3fed55c3a1ade0acd",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 8530, student cg3, L1 Japanese, level 5, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-008562",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-008562.txt",
+      "sha256": "ea816e4629aba7863565cde833c002f2d016ea8c25fe589fc30918969bbc1c8b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 8562, student dz9, L1 Japanese, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-009260",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-009260.txt",
+      "sha256": "e015ed426a68b5075c0c8c4510a739635170e7b7aafbe7c15ecb5c19e5a5cfa7",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 9260, student cw0, L1 Korean, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-009593",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-009593.txt",
+      "sha256": "079e3ad53bd97d8352986ed2df98dc8f9670d7f46330a0e40c65820f0ae3574f",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 9593, student dc6, L1 Spanish, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-009677",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-009677.txt",
+      "sha256": "7b2ffbf03f15523f118d41d9b4a808c74c7de1db5aabb1fc777f0b5b3d194516",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 9677, student de5, L1 Turkish, level 5, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-010656",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-010656.txt",
+      "sha256": "ad2e07fc40b5595c4fdc024138e89826d90ad99964fc43e96efb4fdb8137ac15",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 10656, student co2, L1 Japanese, level 5, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-010688",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-010688.txt",
+      "sha256": "57820547fef70d1f01050996b97948812198daa43b073379b0fadb1f66f70ca7",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 10688, student fu6, L1 Korean, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-010725",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-010725.txt",
+      "sha256": "52de640e0d0c2ce3101543e3c6e8eb2a0f10d50cfe373198a8099f097f410463",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 10725, student cn9, L1 Spanish, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-010820",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-010820.txt",
+      "sha256": "7e8f07d964cc0c2e5064e1b972e8d3b4158df5bbc83027c3d3c2f5894db15473",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 10820, student dg3, L1 Japanese, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-011168",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-011168.txt",
+      "sha256": "9acea9f5d9926923c06babb7bc3b3360bd906c191a01d22cd695f1f94584cdb5",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 11168, student ff2, L1 Chinese, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-011578",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-011578.txt",
+      "sha256": "d6483595f4bb369df8ffd2741191c038708e2c7a4092df720627387b498716be",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 11578, student fg2, L1 Japanese, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-011642",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-011642.txt",
+      "sha256": "59aed13e896448cc14aca877b16e4d086674d0c5f00a3ab88bd176bd85fcdc1c",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 11642, student bz1, L1 Chinese, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-011686",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-011686.txt",
+      "sha256": "fd4dac72b794dfa8c22069bcf5b08db408b6d71b4a1c3f33f063f44ac34f6a2e",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 11686, student fj4, L1 Chinese, level 4, 2007_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-011738",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-011738.txt",
+      "sha256": "e5bfcc261c33bdeb8347ed05a7fd94b574fdd261a579b0a7439c3c94e74a3a41",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 11738, student bl7, L1 Chinese, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-011744",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-011744.txt",
+      "sha256": "0db64ba0fdc17148991455a4888d75dd171404367e0289ff3bcd8f160dd667db",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 11744, student bl2, L1 Thai, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-011746",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-011746.txt",
+      "sha256": "38197002b3c1a23178487c2addfa1dee735612de798583068c3044f3b567eaf3",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 11746, student fk3, L1 Chinese, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-011780",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-011780.txt",
+      "sha256": "f2fdb99c9b818c010ed81da0f95b4896a0fe83c1000c9e6a8974f86194c48849",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 11780, student cc4, L1 Korean, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-012028",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-012028.txt",
+      "sha256": "e6acba096b6d5987f264928f8ffaf68ecb83b3761925536fdd00b0234695654c",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 12028, student ei8, L1 Chinese, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-012478",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-012478.txt",
+      "sha256": "3cf91421264b14292096b450b9dec29fa40f250a44b36b74ca73d40f3d76f999",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 12478, student fj0, L1 Spanish, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-012533",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-012533.txt",
+      "sha256": "4b0d8ad36618eb75063e4c95a2d4cc190e38a829bcfeb9c13009c1ea951f4e92",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 12533, student bu4, L1 Korean, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-012577",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-012577.txt",
+      "sha256": "272e692fad8f7743949ac76abc1f0cba4f299772ae85af4f9ee3b5efd3f64f79",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 12577, student dd9, L1 Korean, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-012602",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-012602.txt",
+      "sha256": "a9b501b9f65ff376172bbc4b5f5258912043558e7882d90ba5ddef1fa8375309",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 12602, student gl9, L1 Japanese, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-012603",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-012603.txt",
+      "sha256": "5d1fe67e32f5b7d4c96e522dacebf23d6bb8ea609b8c6419408a8e31754f5fb4",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 12603, student bm6, L1 Arabic, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-013097",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-013097.txt",
+      "sha256": "d5d9d3c40ff36775e47a6b78b1916f27074cc14002b16419f1362568635f1719",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 13097, student ap4, L1 Korean, level 4, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-013347",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-013347.txt",
+      "sha256": "c8a07bd32278ceec491609a6a07b9f4e035c33f37f215b96db450133ecb7ae0d",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 13347, student bm7, L1 Portuguese, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-013658",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2007,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-013658.txt",
+      "sha256": "abd9f267c3dacc4ab3424a01324a9cadd1058961c96106188549dc9fec7a8494",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 13658, student eq8, L1 Korean, level 5, 2007_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-015496",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-015496.txt",
+      "sha256": "3198c6a1f8ba87ef3346b858175ead51446dac0556fcf92f8e42879c0f3b1441",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 15496, student by9, L1 Italian, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-015518",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-015518.txt",
+      "sha256": "cb4ad23e927411326ebebba351eeda971f4f607fa4087527c6156f6263c97756",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 15518, student br7, L1 Chinese, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-015526",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-015526.txt",
+      "sha256": "9c21467fce87276c61782a25c53bac1c01e1b49a7d5a9fff8d56ae882118b85e",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 15526, student dp9, L1 Other, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-015536",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-015536.txt",
+      "sha256": "8c0f18398b1122c6fc29dbe22a54ae48525988f086beae2a9bad4fd450bc62eb",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 15536, student es4, L1 Chinese, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016031",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016031.txt",
+      "sha256": "051cfa819cb1a0005fad75406ca28129aaaa17c6db0bd8e05c52a9ffb493784f",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16031, student ae2, L1 Chinese, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016035",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016035.txt",
+      "sha256": "7b3f0a9246f3011889f7001a448f2550764199b09585320d642f178d1d68aebe",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16035, student ck9, L1 Chinese, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016272",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016272.txt",
+      "sha256": "d805161c99d2283c82c487d8748083a45648aa1ff477b199db04e0ef67fe22f9",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16272, student aj9, L1 Italian, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016414",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016414.txt",
+      "sha256": "fa4ff87e3d73bb292c8d235d50f5942d7db321c0fc8340fd2547228483320df0",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16414, student da3, L1 Korean, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016563",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016563.txt",
+      "sha256": "8b923e44922bec7ae654f1bc9eb2802b5d7e5671c0f73a4b12e6ca52d6055a0b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16563, student cx0, L1 Chinese, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016591",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016591.txt",
+      "sha256": "acde7df6071360e38f2cdceb9c215c949527533ff9e18cd945869b5f0c6d877c",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16591, student bv0, L1 Arabic, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016605",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016605.txt",
+      "sha256": "6dcfe04fe4cae62958683a9228a6dc241a09932c334ae9a986e82e73e8198d51",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16605, student co4, L1 Arabic, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016608",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016608.txt",
+      "sha256": "4857645229782798be62fd0ed1f012ea5a802f14600e8ac38a53ede8a131bc57",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16608, student ff4, L1 French, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016614",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016614.txt",
+      "sha256": "5487da9915e8b30112227c3af3f50db01a98005898274bcb780a863588701c24",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16614, student gu0, L1 Korean, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016656",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016656.txt",
+      "sha256": "e4c29106441f6b778f7be5680aa2ab56c15e615b88b84d76f80af03d208867ab",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16656, student cu2, L1 Spanish, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-016688",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-016688.txt",
+      "sha256": "3fe20998bce782755bfa6634de0d7545de235c953aed0961055a92e60ae182e9",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 16688, student ac5, L1 Korean, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-018350",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-018350.txt",
+      "sha256": "d1949eae98d9b8025de7b7bf89acb2d147f6911460ad80f61e4deb4ae3bc6807",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 18350, student ci2, L1 Chinese, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-018351",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-018351.txt",
+      "sha256": "2d2e7e520aa848895d84e7b0a02bcf68424a9fce9d83cfce5b457556e8002013",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 18351, student bm5, L1 Other, level 5, 2008_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-019653",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-019653.txt",
+      "sha256": "036b868e4e69d8f4e6fb9c4fed221b99ff994cf61d570c2cb3b9f4f4eeb15345",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 19653, student aq5, L1 Korean, level 4, 2008_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-020780",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-020780.txt",
+      "sha256": "63040464cc33dd0212d4796ebf2822e0eea3c401b2d0d599f71351279d425555",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 20780, student di2, L1 Arabic, level 4, 2008_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-020794",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-020794.txt",
+      "sha256": "a9500b85fdbc4f072d334ecf32f9bd51ddde05007f4958dc616b0f6be89f7eb1",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 20794, student ac7, L1 Japanese, level 4, 2008_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-020906",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-020906.txt",
+      "sha256": "df5ea92cdad181b1eca8c2eae9d4107cfdd62f05193e5df636162ffda94a8da5",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 20906, student en3, L1 Spanish, level 4, 2008_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-021970",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-021970.txt",
+      "sha256": "2f73a60a60ed267be0732a5013e8f66e3e5699d28bf0279502fdf2528ece4aa3",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 21970, student er5, L1 Spanish, level 4, 2008_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-022178",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-022178.txt",
+      "sha256": "e278e90b3f8e8a0013f878843ee89a4e3ddd029f6c069666ddc7595a166974c0",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 22178, student do3, L1 Arabic, level 4, 2008_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-022321",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2008,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-022321.txt",
+      "sha256": "0b028f910cd12f577b5b88603379eaac4a773d38b54d866349dd1b1a1b739689",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 22321, student ed3, L1 Arabic, level 4, 2008_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023283",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023283.txt",
+      "sha256": "7b86ea6f2fe5da3f7b6b3f19cd77440dd52cbbd9b5dd65af3ce5c8a6623b3c23",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23283, student du9, L1 Chinese, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023313",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023313.txt",
+      "sha256": "578ae454cb4e6dfe94f21248b0f21ac669f07ca1b62096875afb4e23ff0f95a5",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23313, student gs6, L1 Spanish, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023534",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023534.txt",
+      "sha256": "ed319d51b4b06ff1a2147a059fc79751acacebd78d28926b6f0a16d9b289b954",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23534, student cm8, L1 Russian, level 4, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023568",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023568.txt",
+      "sha256": "e0bc86a548492b3714b41daff01947f71c4f393e2733e3a69142e4a712238556",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23568, student ai1, L1 Arabic, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023696",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023696.txt",
+      "sha256": "e2956e701538d1e96e5835d0abaa7c965c7790726204accd226c16d5566276d1",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23696, student ck4, L1 Arabic, level 4, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023697",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023697.txt",
+      "sha256": "57044f14482aa4326c122f32c7c9931fe4c7ad2cca44d4179e9ace0baca3633b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23697, student bf5, L1 Polish, level 4, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023803",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023803.txt",
+      "sha256": "edcd8e6b63b1b84f595151b322212023785d48642570c51f486a72fff0b12f2e",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23803, student fu5, L1 Chinese, level 4, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023868",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023868.txt",
+      "sha256": "90cebf2fee929cf4f3cf3a6aa75fa9f1fa772287dc1c16119eb2e6b314dceaa7",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23868, student ch1, L1 Turkish, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023881",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023881.txt",
+      "sha256": "b41438e20eec51d7817ca352e19cb56f6a595f8c90f3d66054aa3d99bcd3585f",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23881, student ek6, L1 Arabic, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-023924",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-023924.txt",
+      "sha256": "8bf261f22d9aafdef0ce139fd80a316dc123ab95e99dcc3b2f71862dc90f3e0a",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 23924, student fw1, L1 Japanese, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-024015",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-024015.txt",
+      "sha256": "bcae618a36a08052c6f84714c9d6d6c2e4281d31c59b96ea0e9df634f454e542",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 24015, student gd7, L1 Arabic, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-024019",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-024019.txt",
+      "sha256": "e3a67b8493b37ae7de1db96be462a449ecb200f24a5271209a5a32323ccd93ea",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 24019, student aj5, L1 Arabic, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-024036",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-024036.txt",
+      "sha256": "0c25f8775812bdb7719e7b901eb570f7009498034ace234a479ebb75c17919c1",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 24036, student af0, L1 Thai, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-024072",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-024072.txt",
+      "sha256": "0531ff026649ce9fb650d9b9a8c8dff48abaf7bca121091b3c71d894ede5f142",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 24072, student bw6, L1 Arabic, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-024076",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-024076.txt",
+      "sha256": "d8ca928ef5154295856143e4c42e316f15feda68b5651331ab24e76b8f4ca6c8",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 24076, student fd6, L1 Korean, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-024077",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-024077.txt",
+      "sha256": "35f09aee9a1cc52a770a747ab9b883084f7d424dacea2497101fa312129a0604",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 24077, student fo0, L1 Arabic, level 5, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-024084",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-024084.txt",
+      "sha256": "549d7556f9cbbb8a0b3acf1d2ce193f04344f448182db3d7dced5ef45f19767b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 24084, student df3, L1 Korean, level 4, 2009_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-024600",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-024600.txt",
+      "sha256": "5089d0c0587842e67701ff9146d33e5cf2c6f5e500c09e84ba3301cbda2d81ef",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 24600, student al5, L1 Korean, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-025945",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-025945.txt",
+      "sha256": "8d89040ce4ed874e6f13befe94158ea255d01914b13901c4d0265adf3c36f209",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 25945, student et3, L1 Korean, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-026534",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-026534.txt",
+      "sha256": "61b36731f2f479b8a28bb92c945f38a2a8231ecf219d54da88cee4b0662854db",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 26534, student an1, L1 Turkish, level 4, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-026814",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-026814.txt",
+      "sha256": "e96441ddfd557501f34efb6d55cf40072899d764efea3d71acee35b27d5b4845",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 26814, student fr2, L1 Korean, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-026945",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-026945.txt",
+      "sha256": "89173dc8e69d987ac12d705e9229fe22095c053d4d93ce29c7fba7a0b7a3a2f2",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 26945, student cz9, L1 Arabic, level 4, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-027003",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-027003.txt",
+      "sha256": "f5d9ddef1b3028e0f501d6bbe133eff8c65c9c40bbb363240b49e8d20f25d106",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 27003, student dq9, L1 Chinese, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-027279",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-027279.txt",
+      "sha256": "930fda333ae68a964aaab76cef7c449d33501e50b6a094a0c20ebbbc4689eb11",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 27279, student ef6, L1 Arabic, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-027332",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-027332.txt",
+      "sha256": "961071522d06f65e7c2f0fe93e93c1f4ae508ebddaf2cd0b1c441022e60b311b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 27332, student af3, L1 Arabic, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-027375",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-027375.txt",
+      "sha256": "77e84007e4b11c95e7ec74cf2dc4dab11fdb62acd215b752f6c851952cb24f30",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 27375, student dv1, L1 Arabic, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-027380",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-027380.txt",
+      "sha256": "ea463bd77ca790a1ee1d93987b54cd6e270b65dfe9fd829d633f10abfc64ea86",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 27380, student df4, L1 Spanish, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-027391",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-027391.txt",
+      "sha256": "37315e07a2d0d74ce99310f1971d62bab0e1f6a9ccf91bbe7de001512b299334",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 27391, student gb4, L1 Chinese, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-027604",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-027604.txt",
+      "sha256": "65e2cd79908a41d097d88e44eacfc8d0e1ee99c87c486d090e487f747ba40271",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 27604, student ay3, L1 Japanese, level 5, 2009_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-028130",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-028130.txt",
+      "sha256": "d6f56fc3e41a7f6fb6e6f37e5d041cd6e12b34e38cb88ce1cc194c2de66f1a61",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 28130, student fq1, L1 Hebrew, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-028133",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-028133.txt",
+      "sha256": "4567a86cce9857fce29facb00bae31f4748f3258561d03c9cb4be1ba86201098",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 28133, student bu1, L1 Japanese, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-028155",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-028155.txt",
+      "sha256": "697850437baf6976f71cd3043264bc8ccdb55b755ab3b0ba2960007d21f10e10",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 28155, student at4, L1 Japanese, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-028159",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-028159.txt",
+      "sha256": "c3129d3ca03b9cf7c442ee60017a97faabeb7c548303ca444359707ff1137e41",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 28159, student ce2, L1 Arabic, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-028160",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-028160.txt",
+      "sha256": "7244eca2f738d68ac805e3a178afb7c661d82b02647a5536291af687c9b4f8ac",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 28160, student dn8, L1 Thai, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-028169",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-028169.txt",
+      "sha256": "3a3c7db31ad49b1a710d67fdf36735c854f5760423b98078a2d17cddc2db5cda",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 28169, student ea9, L1 Arabic, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-028407",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-028407.txt",
+      "sha256": "a5f30e169486a6ddb0c8f287689b808e2a006b4ceedce1bd2ac3e860ccce6e44",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 28407, student ar9, L1 Chinese, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-028519",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-028519.txt",
+      "sha256": "b3c7ab259d140243c688e9e1c27ebf104be1d39e45e5ab044b74978341d0ef37",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 28519, student ff1, L1 Korean, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-028627",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-028627.txt",
+      "sha256": "40d0f2d6b4048f970bf0a365e70d20f88f8a2bab6f141f6318e5012c04c3e6a0",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 28627, student cx4, L1 Japanese, level 4, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-029308",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-029308.txt",
+      "sha256": "4827b52f029d1a862082fc90ff3948a72cd19452e9362f5146b88eff45cb3cea",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 29308, student br2, L1 Spanish, level 4, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-029331",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-029331.txt",
+      "sha256": "8c6fc2d63679aea5c27b69dd9589f75932f88c77e89ca10a6bc332777f733a89",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 29331, student gv7, L1 Korean, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-029758",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-029758.txt",
+      "sha256": "ca4f4cb4f1d2bf68e9d117277312dd63726f9b9b36758d0c7f4cb198c419c8d2",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 29758, student ed8, L1 Thai, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-029772",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-029772.txt",
+      "sha256": "edd3f5deff34fef1530434fedf922cde3861ce0b8cc8c0534ccf830b7392549a",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 29772, student ag9, L1 Korean, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-030030",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-030030.txt",
+      "sha256": "a5f6fc5ccce13304048a3b3b0b9ee35bb7d71fbef1068cf2b1fa185a121bc5a2",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 30030, student gg1, L1 Turkish, level 4, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-030036",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-030036.txt",
+      "sha256": "a974d1bf635e5f3240336b32115af6c3edca84e00a4fc5e31e1c2385b8852ee4",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 30036, student ci5, L1 Arabic, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-030161",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-030161.txt",
+      "sha256": "4e05d337b49cc57e9ce815945d99e2e1e2519ce66cbbddff572c33754d73251a",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 30161, student ax9, L1 Russian, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-030453",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-030453.txt",
+      "sha256": "3e947ff2426490ba0827479014c251dc14060b80cf5d2a0c4cf93180dd186280",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 30453, student ch2, L1 Korean, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-031268",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-031268.txt",
+      "sha256": "105e59d3e2f6f9dca2edb3a5c16b098666619826b622b3e80f53422308c85bdd",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 31268, student gp8, L1 Chinese, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-031269",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-031269.txt",
+      "sha256": "8f79fd9049255237fdb0a02c353db42bf8bb823c3f88bfde12744efbe0900052",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 31269, student gj2, L1 Arabic, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-031364",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2009,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-031364.txt",
+      "sha256": "82f62f012412d4d8463cdae5aef5b9696805e1439168cabe4e4900c296420566",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 31364, student fw9, L1 Other, level 5, 2009_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-031658",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-031658.txt",
+      "sha256": "c79f26c4162c287b24312c0ab38832a62967240f6fb5657d44a29084466fa42a",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 31658, student dd3, L1 Arabic, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-032528",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-032528.txt",
+      "sha256": "4dfed0efdf9245b14ed4094021e480058c7c5dc3ce00bbf041abdeff72d221fe",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 32528, student fx4, L1 Korean, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-033229",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-033229.txt",
+      "sha256": "93801d022c2ace5548309f8bebd5272b9660ad067c9271800fc825458dedbdcc",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 33229, student gc3, L1 Spanish, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-033271",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-033271.txt",
+      "sha256": "0b8cea21295a6deb989a36ded8ad16877ec4ed24c737b23d4ddc5fa373d086a3",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 33271, student ha2, L1 Korean, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-034152",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-034152.txt",
+      "sha256": "0b103987d3a15432567296d4ad3a1dec158d76598d057d60020769fe39828dbc",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 34152, student ah5, L1 Portuguese, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-034155",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-034155.txt",
+      "sha256": "23296c3b134bd66d28ec2172270a4fc913250bdc0648d8101def372b242f52ea",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 34155, student az3, L1 Taiwanese, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-034178",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-034178.txt",
+      "sha256": "aca2a73db8d5f1f5d5890ae86ade1fc8094dc9c427c92ffb61d91ac904275060",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 34178, student ep4, L1 Thai, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-034531",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-034531.txt",
+      "sha256": "73268292818ed99d21ab6598eba8e9c3f8a9b5985dface1ee0108bf497951410",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 34531, student bd1, L1 Italian, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-034815",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-034815.txt",
+      "sha256": "62963b8ab1eca06b1225c17099fdc181e0809e18deb1097a01eae715c159a5bd",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 34815, student dc0, L1 Chinese, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-035161",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-035161.txt",
+      "sha256": "66170b32e9e9062867cfdc9ba9f32e09b6350fe5c219f684ec7799b4b53330ab",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 35161, student eh0, L1 Arabic, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-035217",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-035217.txt",
+      "sha256": "fbaf065a9038f69861019c230e788d982210a76c92fe8b50517634449aa89f3f",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 35217, student ba3, L1 Chinese, level 3, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-035480",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-035480.txt",
+      "sha256": "6ebf80b24f9be21c535c7443c65632625f5a8525211f6d203e6c8eeffa2a62a2",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 35480, student dm8, L1 Chinese, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-035521",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-035521.txt",
+      "sha256": "0e06e08418f94f6ce0df10655eb651f3bc6c5cc5a9950ffd16f98e267d813a8d",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 35521, student bi5, L1 Arabic, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-035681",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-035681.txt",
+      "sha256": "a3c9c19396fa590e49296256bb13d8aa0f9d78321975534e366c4ed196bc530b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 35681, student bq8, L1 Korean, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-035749",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-035749.txt",
+      "sha256": "dfe205f2a70ffe22fcda89f325380d61535786386bc9d7e60b5b8a0433e2e0ff",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 35749, student aa0, L1 Spanish, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-035750",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-035750.txt",
+      "sha256": "c65d0b880eb071d60e890020281b14cf7b9b3b8409aa5279ae825a6b9216f79f",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 35750, student by3, L1 Thai, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-035756",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-035756.txt",
+      "sha256": "c51236bb8974b86931055249e5cf4a24366241b8e087899c5c0c16aedb2e52c8",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 35756, student dg6, L1 Spanish, level 5, 2010_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-035979",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-035979.txt",
+      "sha256": "64e0f3078fdd938a56d60981e2c0f92420d69eff19ca655761493e3f0a20970a",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 35979, student gs5, L1 Korean, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-036370",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-036370.txt",
+      "sha256": "fdc9b90542ca269b6b96939f646a58557e2874e7afac10ab7181a9284271e03b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 36370, student gx8, L1 Arabic, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-036372",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-036372.txt",
+      "sha256": "00238e0b36480a7935e57a221ee40db2c5adf06438f78e0eb6ccd38ebaf5cc0c",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 36372, student au5, L1 Korean, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-036483",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-036483.txt",
+      "sha256": "0b7770de16af11f168fee2fd933bb2c07a0ce11811e4b047dd742bd0beaaafb2",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 36483, student gy1, L1 Thai, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-036489",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-036489.txt",
+      "sha256": "7d4d4c4b00e775f96ce945e41c681533d4be7cf7b74fbdea6a6faa7c8807248a",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 36489, student cs0, L1 Arabic, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-036499",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-036499.txt",
+      "sha256": "6528f825a2f7006b0740dc7b55a5205216d3168aa86af0fbf329cdbce03a1f91",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 36499, student ao2, L1 Arabic, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-036517",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-036517.txt",
+      "sha256": "1070f53bd04080d81eb857556165019c6817e96d1133fe0e25884e8a71eb91d0",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 36517, student cp6, L1 Arabic, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037031",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037031.txt",
+      "sha256": "7a3def3bf2ce9ac4975cca7d8c07526b2d763fbca89341a556cd77f3c041aa63",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37031, student ck0, L1 Korean, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037056",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037056.txt",
+      "sha256": "2fa4723db636a6fda0afa7713d20e664624c5770492a8ea1df864dbe84d0c4fd",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37056, student ee8, L1 Swahili, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037190",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037190.txt",
+      "sha256": "16804a681106931cc668ff16d92bfd37fd3536d410335355416bb91095052ff0",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37190, student bn7, L1 Arabic, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037485",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037485.txt",
+      "sha256": "e476ca67b2f4e8dddf96400a8ce08264f6d9e1c3f3a3a216e4538da769c915e6",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37485, student bj2, L1 Spanish, level 4, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037513",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037513.txt",
+      "sha256": "8fedc36b4635298e80de89fd5f8201fe2ee75cd7ac4018e9e9004bb89d68530f",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37513, student cs7, L1 Arabic, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037543",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037543.txt",
+      "sha256": "61d205a72212ff5422d8663fc9525254e8b23b6894135102cc62d6625fc66bb3",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37543, student bq3, L1 Arabic, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037545",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037545.txt",
+      "sha256": "4de47f6bcfe84732769beeb0610570d0c7b084a33cf5569aa56b9df9ca2ebc5c",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37545, student dp2, L1 Turkish, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037546",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037546.txt",
+      "sha256": "ed8bd9a7defde77696702dff2062c8c6baa18e09318abee74231ec014ccce4c4",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37546, student ez6, L1 Arabic, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037561",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037561.txt",
+      "sha256": "784bdac64a6e143e1fbdd870776d95bbefffdf97f0e40f03f0d3fe8903187436",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37561, student ff0, L1 Azerbaijani, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037662",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037662.txt",
+      "sha256": "bb896ca5d8b6bb46127b16c2638c8067b09f923ca78ae0449e472d5719ad346c",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37662, student dj9, L1 Arabic, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037677",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037677.txt",
+      "sha256": "8a93216c71e2243e8439c9f60260d40b39d95f765cfcd893a75345e2f41640d8",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37677, student eb4, L1 Korean, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-037693",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-037693.txt",
+      "sha256": "c4e4348a30a1d1841a21080c16e3601feab7c5deb5ab2db64f087968d0bd9ff4",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 37693, student ae9, L1 Chinese, level 5, 2010_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038059",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038059.txt",
+      "sha256": "3bac12df4e8a33c79a9cca50cd6ab099f2ec4d202e3d78bbec8cafe32059bd7e",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38059, student ds0, L1 Chinese, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038065",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038065.txt",
+      "sha256": "a07dfe2b941dba2f48ff34e11b89952b26dc81402f3f700ec1a091dc3cd9ea28",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38065, student ee5, L1 Arabic, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038069",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038069.txt",
+      "sha256": "45c07ab7b0c1bfc2e70904c619a86384d641c5508741bb0cec5e50f114dd71f6",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38069, student cv1, L1 Arabic, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038070",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038070.txt",
+      "sha256": "aa69159a521b5448759220db389aeb05f931498d5ae300f4ef349d44eaee22ad",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38070, student go8, L1 Chinese, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038096",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038096.txt",
+      "sha256": "5e3f8078c4bd44a8070307234ecfb0abcc7635d115a374498c15a2853b1dd2c0",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38096, student gw1, L1 Arabic, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038109",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038109.txt",
+      "sha256": "8bdda78ec9853269ce2bc3c6cf36320790c51f627ccb64a195615cfe0e9a9637",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38109, student dm3, L1 Korean, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038110",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038110.txt",
+      "sha256": "69cede43c27748291d9a7e19a1220eb792e259686269df02cd681cc39c393757",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38110, student go4, L1 Arabic, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038111",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038111.txt",
+      "sha256": "2e693790079131a778ce9bd1b4f9511731ea0686770e96bda59ef7dde085122c",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38111, student fm5, L1 Arabic, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038117",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038117.txt",
+      "sha256": "2ffc43ab8458b7125780834a30bf28d688d076db360256a14b05f31164ca0d61",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38117, student cl9, L1 Suundi, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038275",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038275.txt",
+      "sha256": "68c232d4ab5a98c96ca5005f805dcac67e6195ee3d57c8fac9bc946f41f663b3",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38275, student fv4, L1 Arabic, level 5, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-038522",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-038522.txt",
+      "sha256": "7234a0ebb0122f4265c9cee8f4ae1e399b94b55d84cdd60cdc8f40aba6215383",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 38522, student do9, L1 Arabic, level 4, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-039537",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-039537.txt",
+      "sha256": "a7ac4a68b01a26c49a792f4d3201139fc31178d77b9dd950a6f735eec330ad54",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 39537, student gx5, L1 Chinese, level 4, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-039794",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-039794.txt",
+      "sha256": "8203ce57b23ff83887f6b16ffb1ab1a8bc821206e40c59b07d9d345e793882c5",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 39794, student fu2, L1 Japanese, level 4, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-040747",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2010,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-040747.txt",
+      "sha256": "59dd97496e758d16382e6bc46ec8ceca1d2933e3d6a5f622333658638bf35eaf",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 40747, student ao4, L1 Arabic, level 4, 2010_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-042783",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-042783.txt",
+      "sha256": "d532540010278976b61ae8e85ec073cb1590ff605b49db14ef7d41ec79a4cf63",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 42783, student db4, L1 Arabic, level 5, 2011_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-043004",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-043004.txt",
+      "sha256": "6fc38014260916291ae21d44d89d7b3005f178b2cbedce42d2791cb3688ed663",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 43004, student am0, L1 Hindi, level 5, 2011_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-043051",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-043051.txt",
+      "sha256": "36a95128a7930be38b937a46c62ccfa0dffdffa84790a231d0b97ef13e7a51b3",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 43051, student dq0, L1 Arabic, level 5, 2011_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-043085",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-043085.txt",
+      "sha256": "8a4607d6c24ad09b219da8a8e2beb84c4d01b04948cac4046aff012799a07697",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 43085, student go3, L1 Chinese, level 5, 2011_summer. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044315",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044315.txt",
+      "sha256": "2d17e04e5ba1116f784822e462e88c68784dcd92441b10581e7a8561cfb85d79",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44315, student ee4, L1 Italian, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044317",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044317.txt",
+      "sha256": "1a4f535960bd5b551edf5034c03412b80d53f13fd3172d4585d91104f9667aa8",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44317, student gs2, L1 Japanese, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044340",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044340.txt",
+      "sha256": "2dcd7e529eb95b7f1df2d6c072c408680cdba1872942c2f7cec219dff5478bb5",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44340, student as1, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044359",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044359.txt",
+      "sha256": "0dac7119bc86e4a8d1f40f29104a1e5938dbac6931671c8273ee6beb12998bce",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44359, student gh8, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044391",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044391.txt",
+      "sha256": "df2eaf0973786b8cb150ac96b01dc318c0c8d114de634c5fc504925445123f62",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44391, student gg7, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044423",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044423.txt",
+      "sha256": "da715066acc0fdcf70823373b355b3ff70dd04e78e442b75d6b32b801e5c0d3d",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44423, student bw2, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044424",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044424.txt",
+      "sha256": "6b4a1c88805249a3ba278e4aa7a79a899eae620f28652e0cf106a1bf4a4c1e3d",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44424, student dl1, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044432",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044432.txt",
+      "sha256": "bae7635efaf2bddb93e77488fd0ec2c9a6dc757e7c7586b4cb79df4f399a4784",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44432, student fd3, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044439",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044439.txt",
+      "sha256": "21fdfd77672576df7f4305711724af012c162e7030203b247cc43eb9c3f891e3",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44439, student ap7, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044440",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044440.txt",
+      "sha256": "5d0e6115ff86c6b3db836b8c3e459e26e1ff5f1a970671971afab4aaf2a2533b",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44440, student dj7, L1 Korean, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044453",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044453.txt",
+      "sha256": "54de0188cbb4e6d4b247ee2ab7339a5a613b80ab6ebd74ad2b8be65ac765a457",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44453, student bn6, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044493",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044493.txt",
+      "sha256": "361504eb4242eb17fba84cb6c657aa618ee2e43f66bde034b57e4c60ba241e01",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44493, student gx6, L1 Portuguese, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044594",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044594.txt",
+      "sha256": "353b0d33184c0b18e8a53a2fb69c6f6bbd72463f530be92165518b52beff6061",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44594, student ad4, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044782",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044782.txt",
+      "sha256": "a43eb90385cd4082cc6354069c7fe4f8cb2d38cccd18a98e8ead410b92fad2c4",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44782, student gx1, L1 Arabic, level 4, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-044848",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-044848.txt",
+      "sha256": "5f6ec1162d9c1179db01eb622516ccd60d28ca944fb130991c15dcdc4e627a4c",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 44848, student cf9, L1 Chinese, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045006",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045006.txt",
+      "sha256": "50768a8c62ef783256351c73b7c89878f21ec36e54dc21abfc40c5950522379f",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45006, student ga9, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045013",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045013.txt",
+      "sha256": "7e69bd6f1cc17e9b1104e694db1fac9bee3185fdec3d137870beaaf9da64f709",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45013, student cn0, L1 Arabic, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045170",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2011,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045170.txt",
+      "sha256": "a99a3f442c4119ba07f8793160810256c43a478f7455a196cf0e53d632fd5806",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45170, student bp4, L1 Chinese, level 5, 2011_fall. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045419",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2012,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045419.txt",
+      "sha256": "3063c475ff9b3f7dbfb6113cc8f12cce3d285b060f26fcbf2b216893bb2159c8",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45419, student ag5, L1 Arabic, level 5, 2012_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045420",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2012,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045420.txt",
+      "sha256": "5d6bc34866ef737d679228842e27e74e65f55973e583daffbbea213a8c0f6bb8",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45420, student av4, L1 French, level 4, 2012_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045424",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2012,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045424.txt",
+      "sha256": "3da7f0a14aef4213e622f527adfb4e10839b19f926c415c473729c2fb7aec8cb",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45424, student cv2, L1 Arabic, level 5, 2012_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045658",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2012,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045658.txt",
+      "sha256": "eacae62b4411a9aff3e754e9a20c07742abb8218d5b465bd7d2dfab9690c371e",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45658, student fe2, L1 Arabic, level 5, 2012_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045679",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2012,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045679.txt",
+      "sha256": "a04193e962b68c0cc35e710b6a15a5a9f7c128689749eff667f68a60624d17af",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45679, student ar2, L1 Arabic, level 5, 2012_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045681",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2012,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045681.txt",
+      "sha256": "56ee05882db6659622c9c6878c6eab34e2efd9fa5f1c77db5252202c34bd4e14",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45681, student ga1, L1 Korean, level 5, 2012_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-045706",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2012,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-045706.txt",
+      "sha256": "133fdbacd8bb4c67e10603c4ae036edee714fec22bb46b1c9400364c91fb760d",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 45706, student dk3, L1 Arabic, level 5, 2012_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
+      "id": "pelic-046295",
+      "language": "en",
+      "stratum": "en-second-language-learner",
+      "year": 2012,
+      "license": "CC BY-NC-ND 4.0",
+      "url": "https://github.com/ELI-Data-Mining-Group/PELIC-dataset",
+      "doi": "10.5281/zenodo.3991977",
+      "file": "pelic-046295.txt",
+      "sha256": "c126a9d60c90bb08815865da506a62a078eb09243c52be59f5aeebd6618bc79d",
+      "note": "PELIC (Juffs, Han & Naismith 2020) answer_id 46295, student cy2, L1 Arabic, level 5, 2012_spring. Writing class, first submitted version, one text per student (lowest answer_id)."
+    },
+    {
       "id": "plos-0007222",
       "language": "en",
       "stratum": "en-anglophone-affiliation",
@@ -13,7 +2485,7 @@
       "doi": "10.1371/journal.pntd.0007222",
       "file": "plos-0007222.txt",
       "sha256": "8221271352c7a0fec0cd9a37462a205299319ca3029b7618c8483cced54b2f0d",
-      "note": "Affiliation used for grouping: Department of Biological Sciences, University of North Carolina at \u2026"
+      "note": "Affiliation used for grouping: Department of Biological Sciences, University of North Carolina at …"
     },
     {
       "id": "plos-0007711",
@@ -25,7 +2497,7 @@
       "doi": "10.1371/journal.pntd.0007711",
       "file": "plos-0007711.txt",
       "sha256": "8dcdac790277e379e1870bf0f6ff8a3b738b88ee51bfd60b3df15aecb2c17721",
-      "note": "Affiliation used for grouping: Univ Rennes, CHU Rennes, Inserm, EHESP, IRSET (Institut de Recherch\u2026"
+      "note": "Affiliation used for grouping: Univ Rennes, CHU Rennes, Inserm, EHESP, IRSET (Institut de Recherch…"
     },
     {
       "id": "plos-0212532",
@@ -37,7 +2509,7 @@
       "doi": "10.1371/journal.pone.0212532",
       "file": "plos-0212532.txt",
       "sha256": "27cac1a5ffcd4d3d70f0d9c82638fbdcc041d226cb6c105d3e1f5123af9b124a",
-      "note": "Affiliation used for grouping: Department of Ecology \u0026 Evolution, Stony Brook University, Stony Br\u2026"
+      "note": "Affiliation used for grouping: Department of Ecology & Evolution, Stony Brook University, Stony Br…"
     },
     {
       "id": "plos-0216849",
@@ -61,7 +2533,7 @@
       "doi": "10.1371/journal.pone.0220971",
       "file": "plos-0220971.txt",
       "sha256": "19f28502e4fbe3abd029c858f978606005c2c1d6560c94ed8ffd81c899864780",
-      "note": "Affiliation used for grouping: Department of Health Policy \u0026 Management, Columbia Mailman School o\u2026"
+      "note": "Affiliation used for grouping: Department of Health Policy & Management, Columbia Mailman School o…"
     },
     {
       "id": "plos-0221125",
@@ -85,7 +2557,7 @@
       "doi": "10.1371/journal.pone.0221244",
       "file": "plos-0221244.txt",
       "sha256": "f85ef3fb5abe72d56e503016a1f217e5fe9342e810acbf3cf3c36fa049aca3a7",
-      "note": "Affiliation used for grouping: Department of Education and Support for Regional Medicine, Tohoku U\u2026"
+      "note": "Affiliation used for grouping: Department of Education and Support for Regional Medicine, Tohoku U…"
     },
     {
       "id": "plos-0221645",
@@ -97,7 +2569,7 @@
       "doi": "10.1371/journal.pone.0221645",
       "file": "plos-0221645.txt",
       "sha256": "89f77d9b0662e2930350a4d6440d97096354ee64df9cdadde52aa5b3e33e4788",
-      "note": "Affiliation used for grouping: Research Unit for Dietary Studies, The Parker Institute, Bispebjerg\u2026"
+      "note": "Affiliation used for grouping: Research Unit for Dietary Studies, The Parker Institute, Bispebjerg…"
     },
     {
       "id": "plos-0222133",
@@ -109,7 +2581,7 @@
       "doi": "10.1371/journal.pone.0222133",
       "file": "plos-0222133.txt",
       "sha256": "cf56d3ed1d4d82171d4ff057ca8027bd76b45640b07f8163f9c6d274ab26a4ad",
-      "note": "Affiliation used for grouping: School of Aerospace Engineering, Georgia Institute of Technology, A\u2026"
+      "note": "Affiliation used for grouping: School of Aerospace Engineering, Georgia Institute of Technology, A…"
     },
     {
       "id": "plos-0222215",
@@ -121,7 +2593,7 @@
       "doi": "10.1371/journal.pone.0222215",
       "file": "plos-0222215.txt",
       "sha256": "adce4790b3acdb49dc6a9303e9d397b56587ca0cd9df8dbe17ffa972ba416e6c",
-      "note": "Affiliation used for grouping: School of Industrial Management Engineering, Korea University, Seou\u2026"
+      "note": "Affiliation used for grouping: School of Industrial Management Engineering, Korea University, Seou…"
     },
     {
       "id": "plos-0222235",
@@ -133,7 +2605,7 @@
       "doi": "10.1371/journal.pone.0222235",
       "file": "plos-0222235.txt",
       "sha256": "50f7447579610a0e54108b8dc707d4a97ec45b8101e9c8289b4442c8cdcd33ee",
-      "note": "Affiliation used for grouping: Kanagawa Ward Medical Association Visiting Nursing Station, Yokoham\u2026"
+      "note": "Affiliation used for grouping: Kanagawa Ward Medical Association Visiting Nursing Station, Yokoham…"
     },
     {
       "id": "plos-0222286",
@@ -145,7 +2617,7 @@
       "doi": "10.1371/journal.pone.0222286",
       "file": "plos-0222286.txt",
       "sha256": "81dc3ae521f67111bb7b8d936dd13e88497a66985197a5c37b8b54caaeebe421",
-      "note": "Affiliation used for grouping: Paediatric Pulmonology, University Hospital Necker-Enfants Malades,\u2026"
+      "note": "Affiliation used for grouping: Paediatric Pulmonology, University Hospital Necker-Enfants Malades,…"
     },
     {
       "id": "plos-0222669",
@@ -157,7 +2629,7 @@
       "doi": "10.1371/journal.pone.0222669",
       "file": "plos-0222669.txt",
       "sha256": "6510d8b52c7ef8fe3bb288fd75c200e6c4b24532f51babd64fd60baa5a8f09ba",
-      "note": "Affiliation used for grouping: Institute for Science, Innovation and Society, University of Oxford\u2026"
+      "note": "Affiliation used for grouping: Institute for Science, Innovation and Society, University of Oxford…"
     },
     {
       "id": "plos-0222683",
@@ -169,7 +2641,7 @@
       "doi": "10.1371/journal.pone.0222683",
       "file": "plos-0222683.txt",
       "sha256": "33e33e009aef1e6133a125f917224fff51cd2485af80202046b15fc9123aedf7",
-      "note": "Affiliation used for grouping: Centre de Recherche Clinique, Grand H\u00F4pital de l\u2019Est Francilien, Me\u2026"
+      "note": "Affiliation used for grouping: Centre de Recherche Clinique, Grand Hôpital de l’Est Francilien, Me…"
     },
     {
       "id": "plos-0222700",
@@ -193,7 +2665,7 @@
       "doi": "10.1371/journal.pone.0222721",
       "file": "plos-0222721.txt",
       "sha256": "cf43bebcab59b2151a498a33ab06074d19174272ae932c73c0ba505effc1c524",
-      "note": "Affiliation used for grouping: Department of Anesthesiology and Pain Relief Center, The University\u2026"
+      "note": "Affiliation used for grouping: Department of Anesthesiology and Pain Relief Center, The University…"
     },
     {
       "id": "plos-0222766",
@@ -205,7 +2677,7 @@
       "doi": "10.1371/journal.pone.0222766",
       "file": "plos-0222766.txt",
       "sha256": "4dd06448505a3824091b0f4827946e0b227db5134d7da017e87e56dd06005e59",
-      "note": "Affiliation used for grouping: National Institute of Physics, University of the Philippines Dilima\u2026"
+      "note": "Affiliation used for grouping: National Institute of Physics, University of the Philippines Dilima…"
     },
     {
       "id": "plos-0222772",
@@ -217,7 +2689,7 @@
       "doi": "10.1371/journal.pone.0222772",
       "file": "plos-0222772.txt",
       "sha256": "74d5ab6e35470791af4e94a370f8cd233268f0265bfdffb3a41f681cf2905c38",
-      "note": "Affiliation used for grouping: Department of Epidemiology and Health Statistics, School of Public \u2026"
+      "note": "Affiliation used for grouping: Department of Epidemiology and Health Statistics, School of Public …"
     },
     {
       "id": "plos-0222913",
@@ -229,7 +2701,7 @@
       "doi": "10.1371/journal.pone.0222913",
       "file": "plos-0222913.txt",
       "sha256": "f3a71e11b4b9eaafe66df4436237d27c0350ec7b3ee8dca09ec64aec4bdf640a",
-      "note": "Affiliation used for grouping: Department of Orthopaedic Surgery, Gangnam Severance Hospital, Yons\u2026"
+      "note": "Affiliation used for grouping: Department of Orthopaedic Surgery, Gangnam Severance Hospital, Yons…"
     },
     {
       "id": "plos-0222955",
@@ -241,7 +2713,7 @@
       "doi": "10.1371/journal.pone.0222955",
       "file": "plos-0222955.txt",
       "sha256": "1ef03f834c02a16b4fa558ed46753d482b5245518b2775899e50ee14e41a2582",
-      "note": "Affiliation used for grouping: Wageningen Livestock Research, Wageningen University \u0026 Research, Wa\u2026"
+      "note": "Affiliation used for grouping: Wageningen Livestock Research, Wageningen University & Research, Wa…"
     },
     {
       "id": "plos-0222981",
@@ -265,7 +2737,7 @@
       "doi": "10.1371/journal.pone.0223038",
       "file": "plos-0223038.txt",
       "sha256": "5bb64e8a9094b7737f785e82d37e6d596ea491c83e8a6d96cfa531b48448bd80",
-      "note": "Affiliation used for grouping: School of Psychology, Illawarra Health and Medical Research Institu\u2026"
+      "note": "Affiliation used for grouping: School of Psychology, Illawarra Health and Medical Research Institu…"
     },
     {
       "id": "plos-0223039",
@@ -277,7 +2749,7 @@
       "doi": "10.1371/journal.pone.0223039",
       "file": "plos-0223039.txt",
       "sha256": "0099e6fe5d875d5bba569b0878d7aef16b9348ff5548ffa442a1e215f89684aa",
-      "note": "Affiliation used for grouping: Department of Behavioural Sciences, OsloMet\u2014Oslo Metropolitan Unive\u2026"
+      "note": "Affiliation used for grouping: Department of Behavioural Sciences, OsloMet—Oslo Metropolitan Unive…"
     },
     {
       "id": "plos-0223046",
@@ -289,7 +2761,7 @@
       "doi": "10.1371/journal.pone.0223046",
       "file": "plos-0223046.txt",
       "sha256": "b43e6046b616ddcb46d138500d613bf35d75e1e28a257b97da4f2490f57cb4d2",
-      "note": "Affiliation used for grouping: Department of Community and Global Health, Graduate School of Medic\u2026"
+      "note": "Affiliation used for grouping: Department of Community and Global Health, Graduate School of Medic…"
     },
     {
       "id": "plos-0223054",
@@ -301,7 +2773,7 @@
       "doi": "10.1371/journal.pone.0223054",
       "file": "plos-0223054.txt",
       "sha256": "2df1315bcfa053e4f1273d17bfd2f68aa052c43dc0cf70fc3f1325560a7a5181",
-      "note": "Affiliation used for grouping: Global Economic Dynamics and the Biosphere, The Royal Swedish Acade\u2026"
+      "note": "Affiliation used for grouping: Global Economic Dynamics and the Biosphere, The Royal Swedish Acade…"
     },
     {
       "id": "plos-0223057",
@@ -313,7 +2785,7 @@
       "doi": "10.1371/journal.pone.0223057",
       "file": "plos-0223057.txt",
       "sha256": "29f6564e9f3c79c9744852e9521efa629ffeba6b48542c8583adeb4c73fb027d",
-      "note": "Affiliation used for grouping: School of Data and Computer Science, Sun Yat-sen University, Guangz\u2026"
+      "note": "Affiliation used for grouping: School of Data and Computer Science, Sun Yat-sen University, Guangz…"
     },
     {
       "id": "plos-0223093",
@@ -325,7 +2797,7 @@
       "doi": "10.1371/journal.pone.0223093",
       "file": "plos-0223093.txt",
       "sha256": "3a98d5f05a934eaa075c4772d0a692fe33af9336df60827c8f9dbf8235567379",
-      "note": "Affiliation used for grouping: Department of Environment and Geography, University of York, York, \u2026"
+      "note": "Affiliation used for grouping: Department of Environment and Geography, University of York, York, …"
     },
     {
       "id": "plos-0223139",
@@ -337,7 +2809,7 @@
       "doi": "10.1371/journal.pone.0223139",
       "file": "plos-0223139.txt",
       "sha256": "44708e7f9d20d8c7a031b943b8644b340350b65a531c8ea35a64c496744d1c6b",
-      "note": "Affiliation used for grouping: Wildlife Conservation Society, Health Program, Bronx, New York, Uni\u2026"
+      "note": "Affiliation used for grouping: Wildlife Conservation Society, Health Program, Bronx, New York, Uni…"
     },
     {
       "id": "plos-0223179",
@@ -349,7 +2821,7 @@
       "doi": "10.1371/journal.pone.0223179",
       "file": "plos-0223179.txt",
       "sha256": "108ecdcd955b4a16eede628f764432d77a98c80daa48151973afe501a8d1bf59",
-      "note": "Affiliation used for grouping: School of Medicine, University of Wollongong, Wollongong, NSW, Aust\u2026"
+      "note": "Affiliation used for grouping: School of Medicine, University of Wollongong, Wollongong, NSW, Aust…"
     },
     {
       "id": "plos-0223190",
@@ -361,7 +2833,7 @@
       "doi": "10.1371/journal.pone.0223190",
       "file": "plos-0223190.txt",
       "sha256": "1c18a9179ecfb1a2bfc5030604b174fe686fb4fcb7aa9b97f9c75066052c435c",
-      "note": "Affiliation used for grouping: Faculty of Veterinary Medicine and Animal Science, Federal Universi\u2026"
+      "note": "Affiliation used for grouping: Faculty of Veterinary Medicine and Animal Science, Federal Universi…"
     },
     {
       "id": "plos-0223192",
@@ -373,7 +2845,7 @@
       "doi": "10.1371/journal.pone.0223192",
       "file": "plos-0223192.txt",
       "sha256": "07c7966fc5fd94f7fb5b42d6b4edf1f89cd75c8fc72e6ef36f68bd1b6eaf87a4",
-      "note": "Affiliation used for grouping: Department of Psychology, University of British Columbia, Vancouver\u2026"
+      "note": "Affiliation used for grouping: Department of Psychology, University of British Columbia, Vancouver…"
     },
     {
       "id": "plos-0223233",
@@ -385,7 +2857,7 @@
       "doi": "10.1371/journal.pone.0223233",
       "file": "plos-0223233.txt",
       "sha256": "c3963f7515aaa2c0d43c1c9508b62b3f92562b431aa21b48615783bdc7607ea5",
-      "note": "Affiliation used for grouping: Centre for Child and Adolescent Mental Health, Eastern and Southern\u2026"
+      "note": "Affiliation used for grouping: Centre for Child and Adolescent Mental Health, Eastern and Southern…"
     },
     {
       "id": "plos-0223300",
@@ -397,7 +2869,7 @@
       "doi": "10.1371/journal.pone.0223300",
       "file": "plos-0223300.txt",
       "sha256": "52b4f6dfa660662cc33f4e353c8a72c438d35fa7655d93e6ff6d45fee7adbe12",
-      "note": "Affiliation used for grouping: Cell Biology Center, Institute of Innovative Research, Tokyo Instit\u2026"
+      "note": "Affiliation used for grouping: Cell Biology Center, Institute of Innovative Research, Tokyo Instit…"
     },
     {
       "id": "plos-0223338",
@@ -409,7 +2881,7 @@
       "doi": "10.1371/journal.pone.0223338",
       "file": "plos-0223338.txt",
       "sha256": "4b0801175aa89b5b0bd0b59ca637cc9074bac367b2b71148d2f07fd785798614",
-      "note": "Affiliation used for grouping: Department of Clinical Neuroscience, Institute of Neuroscience and \u2026"
+      "note": "Affiliation used for grouping: Department of Clinical Neuroscience, Institute of Neuroscience and …"
     },
     {
       "id": "plos-1002936",
@@ -421,7 +2893,7 @@
       "doi": "10.1371/journal.pmed.1002936",
       "file": "plos-1002936.txt",
       "sha256": "733132955b13ca2b553d769a562cfb9554bf8210375c34de47855660bc9c7224",
-      "note": "Affiliation used for grouping: University Hospitals\u2019 Centre for Health Research, Rigshospitalet, C\u2026"
+      "note": "Affiliation used for grouping: University Hospitals’ Centre for Health Research, Rigshospitalet, C…"
     },
     {
       "id": "plos-1007305",
@@ -433,7 +2905,7 @@
       "doi": "10.1371/journal.pcbi.1007305",
       "file": "plos-1007305.txt",
       "sha256": "ab5ab34b53e8995c8a574e330955edee7ee502988a38fa29c14c647bec1aa7ca",
-      "note": "Affiliation used for grouping: Department of Ecology and Evolutionary Biology, Princeton, New Jers\u2026"
+      "note": "Affiliation used for grouping: Department of Ecology and Evolutionary Biology, Princeton, New Jers…"
     },
     {
       "id": "plos-1007320",
@@ -445,7 +2917,7 @@
       "doi": "10.1371/journal.pcbi.1007320",
       "file": "plos-1007320.txt",
       "sha256": "f5545efce7567f1d296ae8ba1671b3bbdd4f37769a75595e3c92173b00356af9",
-      "note": "Affiliation used for grouping: Department of Physics and Astronomy, University of California, Los \u2026"
+      "note": "Affiliation used for grouping: Department of Physics and Astronomy, University of California, Los …"
     },
     {
       "id": "plos-1007329",
@@ -457,7 +2929,7 @@
       "doi": "10.1371/journal.pcbi.1007329",
       "file": "plos-1007329.txt",
       "sha256": "57aad583281d293b48f0fa09e497616f79acaf2b255964b0d06a91487cbe69d7",
-      "note": "Affiliation used for grouping: Department of Genome Sciences, University of Washington, Seattle, W\u2026"
+      "note": "Affiliation used for grouping: Department of Genome Sciences, University of Washington, Seattle, W…"
     },
     {
       "id": "plos-1007347",
@@ -469,7 +2941,7 @@
       "doi": "10.1371/journal.pcbi.1007347",
       "file": "plos-1007347.txt",
       "sha256": "2254b82922116eb52253a99523f41311ded304bc91bcf6c5bb849ec380f2a049",
-      "note": "Affiliation used for grouping: Department of Mathematics and Computer Science, University of the B\u2026"
+      "note": "Affiliation used for grouping: Department of Mathematics and Computer Science, University of the B…"
     },
     {
       "id": "plos-3000418",
@@ -481,7 +2953,7 @@
       "doi": "10.1371/journal.pbio.3000418",
       "file": "plos-3000418.txt",
       "sha256": "1b8f3d98c0947cadb929ab52e7a4fe11aec6c33fc1ec4019f7dd0acdc03bb89b",
-      "note": "Affiliation used for grouping: Department of Cell Systems \u0026 Anatomy, UT Health San Antonio, San An\u2026"
+      "note": "Affiliation used for grouping: Department of Cell Systems & Anatomy, UT Health San Antonio, San An…"
     },
     {
       "id": "wp-en-1002690535",
@@ -493,7 +2965,7 @@
       "doi": null,
       "file": "wp-en-1002690535.txt",
       "sha256": "47596bb5ad5a29a0e2542826768ac0c7756a5b184326d870e120606e5314d384",
-      "note": "Revision of \u0022Kalvan series\u0022 as of 2021-01-25T17:13:21Z, before generative models."
+      "note": "Revision of \"Kalvan series\" as of 2021-01-25T17:13:21Z, before generative models."
     },
     {
       "id": "wp-en-1004693610",
@@ -505,7 +2977,7 @@
       "doi": null,
       "file": "wp-en-1004693610.txt",
       "sha256": "b4989022ea4726ae5099b9aa290d7f5a5b2377e504bdee4b849a1a597a3d4144",
-      "note": "Revision of \u0022Breddan Aerodrome\u0022 as of 2021-02-03T22:14:38Z, before generative models."
+      "note": "Revision of \"Breddan Aerodrome\" as of 2021-02-03T22:14:38Z, before generative models."
     },
     {
       "id": "wp-en-1005496755",
@@ -517,7 +2989,7 @@
       "doi": null,
       "file": "wp-en-1005496755.txt",
       "sha256": "6047aeac206994b22c95a0dc03273adea64f27c87454af233e42877a6d7511c3",
-      "note": "Revision of \u0022Persian verbs\u0022 as of 2021-02-07T23:42:07Z, before generative models."
+      "note": "Revision of \"Persian verbs\" as of 2021-02-07T23:42:07Z, before generative models."
     },
     {
       "id": "wp-en-1010972751",
@@ -529,7 +3001,7 @@
       "doi": null,
       "file": "wp-en-1010972751.txt",
       "sha256": "ff81adf4aa2c22fd51d21a0db5dcc21e748d0282312e434fbea626f809b4d042",
-      "note": "Revision of \u0022Austin Deasy\u0022 as of 2021-03-08T09:45:40Z, before generative models."
+      "note": "Revision of \"Austin Deasy\" as of 2021-03-08T09:45:40Z, before generative models."
     },
     {
       "id": "wp-en-1016567157",
@@ -541,7 +3013,7 @@
       "doi": null,
       "file": "wp-en-1016567157.txt",
       "sha256": "4219d921559f301d15f83aade780549dbfbee81a8e716d01cdffa1a976b21e96",
-      "note": "Revision of \u0022George C. Howard\u0022 as of 2021-04-07T21:17:51Z, before generative models."
+      "note": "Revision of \"George C. Howard\" as of 2021-04-07T21:17:51Z, before generative models."
     },
     {
       "id": "wp-en-1017552036",
@@ -553,7 +3025,7 @@
       "doi": null,
       "file": "wp-en-1017552036.txt",
       "sha256": "3c9138e72ae03b3fd8c263c8d3a1fdad525421f2fa0f6b7887f1d9b70e4d2352",
-      "note": "Revision of \u0022Scott West\u0022 as of 2021-04-13T12:20:12Z, before generative models."
+      "note": "Revision of \"Scott West\" as of 2021-04-13T12:20:12Z, before generative models."
     },
     {
       "id": "wp-en-1019238083",
@@ -565,7 +3037,7 @@
       "doi": null,
       "file": "wp-en-1019238083.txt",
       "sha256": "35a95911d83abdbb2500ebc75923b14e9b7c4efed4f234af3a87796a43729c66",
-      "note": "Revision of \u0022SMS S115\u0022 as of 2021-04-22T07:05:47Z, before generative models."
+      "note": "Revision of \"SMS S115\" as of 2021-04-22T07:05:47Z, before generative models."
     },
     {
       "id": "wp-en-1020890569",
@@ -577,7 +3049,7 @@
       "doi": null,
       "file": "wp-en-1020890569.txt",
       "sha256": "e6a272432b153dd33b8f4f31fd18447c9cf41ffecc2787ca11980d0de17e1f51",
-      "note": "Revision of \u0022Hurricane Tico\u0022 as of 2021-05-01T17:06:13Z, before generative models."
+      "note": "Revision of \"Hurricane Tico\" as of 2021-05-01T17:06:13Z, before generative models."
     },
     {
       "id": "wp-en-1021715253",
@@ -589,7 +3061,7 @@
       "doi": null,
       "file": "wp-en-1021715253.txt",
       "sha256": "7a3832e8fa89f570d5a825b9040e12bb0e1bd3e72d5883f062b8b2322349a466",
-      "note": "Revision of \u0022Game farm\u0022 as of 2021-05-06T08:17:29Z, before generative models."
+      "note": "Revision of \"Game farm\" as of 2021-05-06T08:17:29Z, before generative models."
     },
     {
       "id": "wp-en-1021886472",
@@ -601,7 +3073,7 @@
       "doi": null,
       "file": "wp-en-1021886472.txt",
       "sha256": "2cae0fbc6c870867b3296cf296fc721b0e49d967afd2220c4422360f98fef512",
-      "note": "Revision of \u0022Terence Conran\u0022 as of 2021-05-07T06:39:26Z, before generative models."
+      "note": "Revision of \"Terence Conran\" as of 2021-05-07T06:39:26Z, before generative models."
     },
     {
       "id": "wp-en-1023079884",
@@ -613,7 +3085,7 @@
       "doi": null,
       "file": "wp-en-1023079884.txt",
       "sha256": "b02208659020978f7447e7911d920ff0f32c17d417bac0a90fb62b08e90ceb76",
-      "note": "Revision of \u0022Toyota Land Cruiser Prado\u0022 as of 2021-05-14T07:30:50Z, before generative models."
+      "note": "Revision of \"Toyota Land Cruiser Prado\" as of 2021-05-14T07:30:50Z, before generative models."
     },
     {
       "id": "wp-en-1023913723",
@@ -625,7 +3097,7 @@
       "doi": null,
       "file": "wp-en-1023913723.txt",
       "sha256": "05a8cfaa58a09d3424472b626bfaac345d54a42251c0dbba89943707ce4c4d21",
-      "note": "Revision of \u0022Telemetry\u0022 as of 2021-05-19T02:01:22Z, before generative models."
+      "note": "Revision of \"Telemetry\" as of 2021-05-19T02:01:22Z, before generative models."
     },
     {
       "id": "wp-en-1023959915",
@@ -637,7 +3109,7 @@
       "doi": null,
       "file": "wp-en-1023959915.txt",
       "sha256": "ad1769b8db4afab0d3f1068ec0816847e793d980211b2173b7029df5c6b51349",
-      "note": "Revision of \u0022Censorship of Facebook\u0022 as of 2021-05-19T09:20:02Z, before generative models."
+      "note": "Revision of \"Censorship of Facebook\" as of 2021-05-19T09:20:02Z, before generative models."
     },
     {
       "id": "wp-en-1024207992",
@@ -649,7 +3121,7 @@
       "doi": null,
       "file": "wp-en-1024207992.txt",
       "sha256": "06fc69dc59a803c77f456c1b4a9821bf8529e3465ad4d59ae41aa6fd2077d30e",
-      "note": "Revision of \u0022Robotron Z1013\u0022 as of 2021-05-20T19:09:54Z, before generative models."
+      "note": "Revision of \"Robotron Z1013\" as of 2021-05-20T19:09:54Z, before generative models."
     },
     {
       "id": "wp-en-1024922915",
@@ -661,7 +3133,7 @@
       "doi": null,
       "file": "wp-en-1024922915.txt",
       "sha256": "a4aa487f55553431e7305aca712c4cc6e1b5a665ec3321191058e2753c08917a",
-      "note": "Revision of \u0022Single Bullet Theory (metal band)\u0022 as of 2021-05-24T19:22:10Z, before generative models."
+      "note": "Revision of \"Single Bullet Theory (metal band)\" as of 2021-05-24T19:22:10Z, before generative models."
     },
     {
       "id": "wp-en-1025398061",
@@ -673,7 +3145,7 @@
       "doi": null,
       "file": "wp-en-1025398061.txt",
       "sha256": "b0e7ea680237eab3514f047a66d73687735f59b9f7fec503188d166e301d316a",
-      "note": "Revision of \u0022Bront\u00EB family\u0022 as of 2021-05-27T10:07:52Z, before generative models."
+      "note": "Revision of \"Brontë family\" as of 2021-05-27T10:07:52Z, before generative models."
     },
     {
       "id": "wp-en-1025409680",
@@ -685,7 +3157,7 @@
       "doi": null,
       "file": "wp-en-1025409680.txt",
       "sha256": "4bbc3e5da5263f2f2db65186953d35c90da75209ce93b9535abdfc8fd48fcb12",
-      "note": "Revision of \u0022Granada Hills, Los Angeles\u0022 as of 2021-05-27T11:41:03Z, before generative models."
+      "note": "Revision of \"Granada Hills, Los Angeles\" as of 2021-05-27T11:41:03Z, before generative models."
     },
     {
       "id": "wp-en-1025671620",
@@ -697,7 +3169,7 @@
       "doi": null,
       "file": "wp-en-1025671620.txt",
       "sha256": "c832e7064b1694f753f6cf09e4c1ee7d08117bf5a123184bed05d74eee54657d",
-      "note": "Revision of \u0022Jerry Robinson\u0022 as of 2021-05-28T21:26:15Z, before generative models."
+      "note": "Revision of \"Jerry Robinson\" as of 2021-05-28T21:26:15Z, before generative models."
     },
     {
       "id": "wp-en-1025797006",
@@ -709,7 +3181,7 @@
       "doi": null,
       "file": "wp-en-1025797006.txt",
       "sha256": "7b661474790d295eec1a9e93a5b96c063c69574106fb1ba1831251b746afd988",
-      "note": "Revision of \u0022Emerson, Lake \u0026 Palmer (album)\u0022 as of 2021-05-29T16:39:44Z, before generative models."
+      "note": "Revision of \"Emerson, Lake & Palmer (album)\" as of 2021-05-29T16:39:44Z, before generative models."
     },
     {
       "id": "wp-en-1025914326",
@@ -721,7 +3193,7 @@
       "doi": null,
       "file": "wp-en-1025914326.txt",
       "sha256": "07e12f3dc8aa3f30f8ea7d76571a5d68c27062a841f796d16811d30fdaa63fed",
-      "note": "Revision of \u0022Montenegrin Volleyball League\u0022 as of 2021-05-30T09:28:13Z, before generative models."
+      "note": "Revision of \"Montenegrin Volleyball League\" as of 2021-05-30T09:28:13Z, before generative models."
     },
     {
       "id": "wp-en-961252368",
@@ -733,7 +3205,7 @@
       "doi": null,
       "file": "wp-en-961252368.txt",
       "sha256": "3f1b0541e3ed0673c52dd7c65df7f7d927e1591bcda2ccd33e9a5deaffe6bf8a",
-      "note": "Revision of \u0022The House Behind the Cedars (book)\u0022 as of 2020-06-07T12:21:38Z, before generative models."
+      "note": "Revision of \"The House Behind the Cedars (book)\" as of 2020-06-07T12:21:38Z, before generative models."
     },
     {
       "id": "wp-en-991942346",
@@ -745,7 +3217,7 @@
       "doi": null,
       "file": "wp-en-991942346.txt",
       "sha256": "1083cc16b1be158087d1dedda6ba603f253a0ddab0227596d82a6915441f182a",
-      "note": "Revision of \u0022North Star (1996 film)\u0022 as of 2020-12-02T17:13:13Z, before generative models."
+      "note": "Revision of \"North Star (1996 film)\" as of 2020-12-02T17:13:13Z, before generative models."
     },
     {
       "id": "wp-en-995932301",
@@ -757,7 +3229,7 @@
       "doi": null,
       "file": "wp-en-995932301.txt",
       "sha256": "73efca17d609313df05ec2fbb778a11f71132faa40e93a43848368dd22414a08",
-      "note": "Revision of \u0022Mick Harvey (umpire)\u0022 as of 2020-12-23T17:18:56Z, before generative models."
+      "note": "Revision of \"Mick Harvey (umpire)\" as of 2020-12-23T17:18:56Z, before generative models."
     },
     {
       "id": "wp-en-995973289",
@@ -769,7 +3241,7 @@
       "doi": null,
       "file": "wp-en-995973289.txt",
       "sha256": "3a3db60261fc23516600a90ac163d57d17ea633315ec7477616f5f0cf1a5be71",
-      "note": "Revision of \u0022Wolves as pets and working animals\u0022 as of 2020-12-23T21:25:05Z, before generative models."
+      "note": "Revision of \"Wolves as pets and working animals\" as of 2020-12-23T21:25:05Z, before generative models."
     },
     {
       "id": "wp-en-999222770",
@@ -781,7 +3253,7 @@
       "doi": null,
       "file": "wp-en-999222770.txt",
       "sha256": "24e0ab979f8128ee2484ecc78ca154adfb9294d2ea697c9647a1c782cbfee43c",
-      "note": "Revision of \u0022Des Moines City Hall\u0022 as of 2021-01-09T02:34:19Z, before generative models."
+      "note": "Revision of \"Des Moines City Hall\" as of 2021-01-09T02:34:19Z, before generative models."
     },
     {
       "id": "wp-es-117484960",
@@ -793,7 +3265,7 @@
       "doi": null,
       "file": "wp-es-117484960.txt",
       "sha256": "edde0e13d7a3b9107ca3673956afa32c69f3ad74629641171781450daa4de5f0",
-      "note": "Revision of \u0022Sociedad Internacional Gutenberg\u0022 as of 2019-07-17T16:43:38Z, before generative models."
+      "note": "Revision of \"Sociedad Internacional Gutenberg\" as of 2019-07-17T16:43:38Z, before generative models."
     },
     {
       "id": "wp-es-117673270",
@@ -805,7 +3277,7 @@
       "doi": null,
       "file": "wp-es-117673270.txt",
       "sha256": "45f662778ea36ebb44a25d0af177db6f790d9987227aed81e4f735bab5fa920c",
-      "note": "Revision of \u0022The Fumbler Dwarf\u0022 as of 2019-07-24T19:46:00Z, before generative models."
+      "note": "Revision of \"The Fumbler Dwarf\" as of 2019-07-24T19:46:00Z, before generative models."
     },
     {
       "id": "wp-es-122876621",
@@ -817,7 +3289,7 @@
       "doi": null,
       "file": "wp-es-122876621.txt",
       "sha256": "0dd7a51debf3079a09b5cbd8a60ccb14904c400ddb2061c6b62fa331c5e89620",
-      "note": "Revision of \u0022Buey Arriba\u0022 as of 2020-01-19T00:13:10Z, before generative models."
+      "note": "Revision of \"Buey Arriba\" as of 2020-01-19T00:13:10Z, before generative models."
     },
     {
       "id": "wp-es-124179402",
@@ -829,7 +3301,7 @@
       "doi": null,
       "file": "wp-es-124179402.txt",
       "sha256": "6e0491c9e3a68f89f996b266c7b350ada784e211faef565aea89233b871fdac5",
-      "note": "Revision of \u0022El despertar de la conciencia\u0022 as of 2020-03-11T11:46:43Z, before generative models."
+      "note": "Revision of \"El despertar de la conciencia\" as of 2020-03-11T11:46:43Z, before generative models."
     },
     {
       "id": "wp-es-127727696",
@@ -841,7 +3313,7 @@
       "doi": null,
       "file": "wp-es-127727696.txt",
       "sha256": "037f9be999afdb3aeeb677ed9235a2948282f9e4272c95ebfb63f7124b390f54",
-      "note": "Revision of \u0022Hermann Grassmann\u0022 as of 2020-07-14T19:44:54Z, before generative models."
+      "note": "Revision of \"Hermann Grassmann\" as of 2020-07-14T19:44:54Z, before generative models."
     },
     {
       "id": "wp-es-128084156",
@@ -853,7 +3325,7 @@
       "doi": null,
       "file": "wp-es-128084156.txt",
       "sha256": "48e9ff9f150fe3eb22d9a2568bf58e9d6c2334d7ace53feeb4309f8e23bb15fb",
-      "note": "Revision of \u0022Papallacta\u0022 as of 2020-07-28T21:45:11Z, before generative models."
+      "note": "Revision of \"Papallacta\" as of 2020-07-28T21:45:11Z, before generative models."
     },
     {
       "id": "wp-es-130648755",
@@ -865,7 +3337,7 @@
       "doi": null,
       "file": "wp-es-130648755.txt",
       "sha256": "0206396de310bd45d3ddf0b0990790c6aeecb36b06dd61e83defe915f6f49cdd",
-      "note": "Revision of \u0022Villa Farnesina\u0022 as of 2020-11-04T19:05:22Z, before generative models."
+      "note": "Revision of \"Villa Farnesina\" as of 2020-11-04T19:05:22Z, before generative models."
     },
     {
       "id": "wp-es-130744068",
@@ -877,7 +3349,7 @@
       "doi": null,
       "file": "wp-es-130744068.txt",
       "sha256": "6ee0819d1924c56391d83d2ef926b7ef78221bd819b72bfeaf92659e70c4112e",
-      "note": "Revision of \u0022Marta Kubi\u0161ov\u00E1\u0022 as of 2020-11-08T03:59:40Z, before generative models."
+      "note": "Revision of \"Marta Kubišová\" as of 2020-11-08T03:59:40Z, before generative models."
     },
     {
       "id": "wp-es-132061884",
@@ -889,7 +3361,7 @@
       "doi": null,
       "file": "wp-es-132061884.txt",
       "sha256": "8d545a95366f160ca2fce8ab7cbbbd1faeb929593bda5df50fa0bf177916981c",
-      "note": "Revision of \u0022Ego el Planeta Viviente\u0022 as of 2020-12-31T02:37:03Z, before generative models."
+      "note": "Revision of \"Ego el Planeta Viviente\" as of 2020-12-31T02:37:03Z, before generative models."
     },
     {
       "id": "wp-es-132146383",
@@ -901,7 +3373,7 @@
       "doi": null,
       "file": "wp-es-132146383.txt",
       "sha256": "c12f6f85471114cf4afb3dcbc16171fb3fd8b4121528bc891bd3b808efb434f5",
-      "note": "Revision of \u0022Trescientos millones\u0022 as of 2021-01-04T07:18:03Z, before generative models."
+      "note": "Revision of \"Trescientos millones\" as of 2021-01-04T07:18:03Z, before generative models."
     },
     {
       "id": "wp-es-132719628",
@@ -913,7 +3385,7 @@
       "doi": null,
       "file": "wp-es-132719628.txt",
       "sha256": "69bc61dfff30ca9723b892f3f16ccfacfc5c0c1068bd4b9249dbb0884e3ccc93",
-      "note": "Revision of \u0022T\u00FCrk Mukavemet Te\u015Fkilat\u0131\u0022 as of 2021-01-26T20:05:16Z, before generative models."
+      "note": "Revision of \"Türk Mukavemet Teşkilatı\" as of 2021-01-26T20:05:16Z, before generative models."
     },
     {
       "id": "wp-es-132729236",
@@ -925,7 +3397,7 @@
       "doi": null,
       "file": "wp-es-132729236.txt",
       "sha256": "e1c10ace20fd9db70e4a6390c63b0347e32063c77fd95d7a0ae7c7003672e6d9",
-      "note": "Revision of \u0022Angiog\u00E9nesis\u0022 as of 2021-01-27T03:27:32Z, before generative models."
+      "note": "Revision of \"Angiogénesis\" as of 2021-01-27T03:27:32Z, before generative models."
     },
     {
       "id": "wp-es-132743897",
@@ -937,7 +3409,7 @@
       "doi": null,
       "file": "wp-es-132743897.txt",
       "sha256": "5f63069932cfe9a2d335008f7e6808e718619702875171c5b2231b6e41f7c9ef",
-      "note": "Revision of \u0022Nava de Campa\u00F1a\u0022 as of 2021-01-27T18:15:12Z, before generative models."
+      "note": "Revision of \"Nava de Campaña\" as of 2021-01-27T18:15:12Z, before generative models."
     },
     {
       "id": "wp-es-132851509",
@@ -949,7 +3421,7 @@
       "doi": null,
       "file": "wp-es-132851509.txt",
       "sha256": "c10ca25ddc1474eb1fb6659ec857c005e210cc5fabeee9b06d6e69d06136d15b",
-      "note": "Revision of \u0022Ua Briain\u0022 as of 2021-01-31T21:56:10Z, before generative models."
+      "note": "Revision of \"Ua Briain\" as of 2021-01-31T21:56:10Z, before generative models."
     },
     {
       "id": "wp-es-133348904",
@@ -961,7 +3433,7 @@
       "doi": null,
       "file": "wp-es-133348904.txt",
       "sha256": "bfc426384960732ca3d0fdfba15add051501efa48a3dfcbcf7c5822795bc3659",
-      "note": "Revision of \u0022Cosmopolita sin ra\u00EDces\u0022 as of 2021-02-19T09:01:17Z, before generative models."
+      "note": "Revision of \"Cosmopolita sin raíces\" as of 2021-02-19T09:01:17Z, before generative models."
     },
     {
       "id": "wp-es-134284862",
@@ -973,7 +3445,7 @@
       "doi": null,
       "file": "wp-es-134284862.txt",
       "sha256": "45896c61014d5b8e3ce2b3ac42476288c77de4ee1509a53dd1454e2a65ed1975",
-      "note": "Revision of \u002215 Big Ones\u0022 as of 2021-03-26T11:27:12Z, before generative models."
+      "note": "Revision of \"15 Big Ones\" as of 2021-03-26T11:27:12Z, before generative models."
     },
     {
       "id": "wp-es-134286913",
@@ -985,7 +3457,7 @@
       "doi": null,
       "file": "wp-es-134286913.txt",
       "sha256": "13957a5e0c999ff852ee3aa9ed67d2d807c6713cbe51c8e2c8bab758c7537273",
-      "note": "Revision of \u0022Derechos fundamentales en la Constituci\u00F3n espa\u00F1ola\u0022 as of 2021-03-26T13:35:19Z, before generative models."
+      "note": "Revision of \"Derechos fundamentales en la Constitución española\" as of 2021-03-26T13:35:19Z, before generative models."
     },
     {
       "id": "wp-es-134393696",
@@ -997,7 +3469,7 @@
       "doi": null,
       "file": "wp-es-134393696.txt",
       "sha256": "c029e76c902c423f2e23dbe20f8aaf1d10c5fb3cafc5b05ded5492dfb624f933",
-      "note": "Revision of \u0022Brenda Navarro\u0022 as of 2021-03-30T16:05:42Z, before generative models."
+      "note": "Revision of \"Brenda Navarro\" as of 2021-03-30T16:05:42Z, before generative models."
     },
     {
       "id": "wp-es-134553728",
@@ -1009,7 +3481,7 @@
       "doi": null,
       "file": "wp-es-134553728.txt",
       "sha256": "2a7f197a2357ff31e4eca13da0c512a0491d3237fef259898053abd0fda0cde9",
-      "note": "Revision of \u0022One Last Breath (canci\u00F3n de Creed)\u0022 as of 2021-04-06T03:52:36Z, before generative models."
+      "note": "Revision of \"One Last Breath (canción de Creed)\" as of 2021-04-06T03:52:36Z, before generative models."
     },
     {
       "id": "wp-es-135297216",
@@ -1021,7 +3493,7 @@
       "doi": null,
       "file": "wp-es-135297216.txt",
       "sha256": "44635a1209db35dddd0f5b35369e3905e816cab5063b1e3e65a10aa78d9f22be",
-      "note": "Revision of \u0022Beastie Boys\u0022 as of 2021-05-04T19:08:00Z, before generative models."
+      "note": "Revision of \"Beastie Boys\" as of 2021-05-04T19:08:00Z, before generative models."
     },
     {
       "id": "wp-es-135495242",
@@ -1033,7 +3505,7 @@
       "doi": null,
       "file": "wp-es-135495242.txt",
       "sha256": "c386afc56213d4107ea06d35552f51638c95497cdb2787ce494eb3c0bb352ea0",
-      "note": "Revision of \u0022Maquillaje art\u00EDstico\u0022 as of 2021-05-12T21:29:36Z, before generative models."
+      "note": "Revision of \"Maquillaje artístico\" as of 2021-05-12T21:29:36Z, before generative models."
     },
     {
       "id": "wp-es-135646104",
@@ -1045,7 +3517,7 @@
       "doi": null,
       "file": "wp-es-135646104.txt",
       "sha256": "abfa414201d6329bf47f9fede084f6a3ccdd3575ae4a6353567a577a40c9c5e6",
-      "note": "Revision of \u0022Sundome\u0022 as of 2021-05-18T23:49:07Z, before generative models."
+      "note": "Revision of \"Sundome\" as of 2021-05-18T23:49:07Z, before generative models."
     },
     {
       "id": "wp-es-135764642",
@@ -1057,7 +3529,7 @@
       "doi": null,
       "file": "wp-es-135764642.txt",
       "sha256": "57152ac662dc43b4c9e71dd5fcce2acd53fe1a0a4d10cb7763ab7504b10a20ac",
-      "note": "Revision of \u0022Ancho ib\u00E9rico\u0022 as of 2021-05-23T17:05:50Z, before generative models."
+      "note": "Revision of \"Ancho ibérico\" as of 2021-05-23T17:05:50Z, before generative models."
     },
     {
       "id": "wp-es-135854886",
@@ -1069,7 +3541,7 @@
       "doi": null,
       "file": "wp-es-135854886.txt",
       "sha256": "6fd5dd654ae329114b18faaa24960dfca3cb93e6eb476394a744624fbb7011f6",
-      "note": "Revision of \u0022Edad de Oro de la ciencia ficci\u00F3n\u0022 as of 2021-05-26T21:31:15Z, before generative models."
+      "note": "Revision of \"Edad de Oro de la ciencia ficción\" as of 2021-05-26T21:31:15Z, before generative models."
     },
     {
       "id": "wp-es-135862639",
@@ -1081,7 +3553,7 @@
       "doi": null,
       "file": "wp-es-135862639.txt",
       "sha256": "a3a7cab5ea32a79d817fa32d860a3a1816d388bdc9e553ac17fc2359434ba500",
-      "note": "Revision of \u0022Oligopolio\u0022 as of 2021-05-27T03:52:20Z, before generative models."
+      "note": "Revision of \"Oligopolio\" as of 2021-05-27T03:52:20Z, before generative models."
     }
   ]
 }

@@ -13,7 +13,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>signsofai</ToolCommandName>
     <PackageId>SignsOfAI.Cli</PackageId>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <Authors>Pedro Hernández (PeopleWorks)</Authors>
     <Company>PeopleWorks</Company>
     <Description>CLI to detect the signs of AI writing (English &amp; Spanish) and recommend fixes — lint your prose in CI.</Description>
