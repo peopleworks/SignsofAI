@@ -28,7 +28,7 @@ de adultos que aprendían inglés— marcó **dos** en su ajuste recomendado. La
 rango alrededor de esa cifra, no la cifra.
 
 Y de esos 296, solo veinticinco estaban en español. Esta hoja cita la cifra del **español**, que es
-la que te corresponde: algo **por debajo de 13 de cada 100**. La cifra agregada que mezcla los dos
+la que te corresponde: algo **por debajo de 14 de cada 100**. La cifra agregada que mezcla los dos
 idiomas es más favorable, y usarla contigo sería atribuirle a la herramienta una precisión que nadie
 midió sobre escritura en tu idioma. Las redacciones de aprendices son todas en inglés: para el
 español, esa medición todavía no existe.

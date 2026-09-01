@@ -38,8 +38,8 @@ a measurement into an accusation.
    nothing here, and this project has deliberately never measured how much machine writing it catches.
    Report what you found and stop.
 3. **If you quote the engine's score, quote its error rate too.** At 30/100 the published build flags
-   at most 5% of writing known to be human — 2 of 296 pre-2022 texts, a 95% interval of 0.2%–2.4%.
-   The interval is the honest half. Below that boundary the engine deliberately gives no verdict at
+   at most 5% of writing known to be human (95% interval 0.2%–2.4%, from 2 of 296 pre-2022 texts).
+   The interval is the honest half; never quote the 5% without it. Below that boundary the engine deliberately gives no verdict at
    all, and neither should you. 206 of those texts are essays by adult learners of English; on them
    alone the rate is 2 of 206, and at the boundary the corpus supported before they joined (25) it
    was 9 of 206. If the writer learned English second, say that this is the population the tool is
