@@ -22,13 +22,14 @@ programas detectan patrones en trabajos inocentes todo el tiempo.
 ## Qué hace y qué no hace esta herramienta en concreto
 
 Publica con qué frecuencia se equivoca sobre escritura que se sabe humana — una cifra que casi
-ninguna herramienta de esta categoría dice sobre sí misma. En su corpus de 296 textos escritos antes
-de que existiera la escritura con IA —artículos publicados, entradas de enciclopedia y 206 redacciones
-de adultos que aprendían inglés— marcó **dos** en su ajuste recomendado. La lectura honesta es el
-rango alrededor de esa cifra, no la cifra.
+ninguna otra herramienta de esta categoría publica sobre sí misma. En su corpus de 296 textos escritos antes
+de 2022 —artículos publicados, entradas de enciclopedia y 206 redacciones
+de adultos que aprendían inglés— marcó **dos** en su ajuste recomendado. La interpretación honesta es el
+rango, no la cifra en sí.
 
 Y de esos 296, solo veinticinco estaban en español. Esta hoja cita la cifra del **español**, que es
-la que te corresponde: algo **por debajo de 14 de cada 100**. La cifra agregada que mezcla los dos
+la que te corresponde: algo **por debajo de 14 de cada 100**, medida sobre solo veinticinco textos y
+todavía sin un umbral respaldado. La cifra agregada que mezcla los dos
 idiomas es más favorable, y usarla contigo sería atribuirle a la herramienta una precisión que nadie
 midió sobre escritura en tu idioma. Las redacciones de aprendices son todas en inglés: para el
 español, esa medición todavía no existe.

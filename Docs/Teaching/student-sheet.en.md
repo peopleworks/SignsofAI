@@ -21,8 +21,8 @@ patterns. Software notices patterns in innocent work constantly.
 
 ## What this particular tool does and does not do
 
-It publishes how often it is wrong about writing known to be human — a figure almost no tool in this
-category will state about itself. On its test corpus of 296 texts written before AI writing existed
+It publishes how often it is wrong about writing known to be human — a figure almost no other tool in this
+category will state about itself. On its test corpus of 296 texts written before 2022
 — published articles, encyclopedia entries, and 206 essays by adult learners of English — it flagged
 **two of them** at its recommended setting. The honest reading is the range around that, not the
 number itself.
@@ -31,7 +31,7 @@ Of those 296, 271 were in English. This sheet quotes the **English** figure, whi
 applies to you: somewhere **under about 3 in 100**. If you learned English as a second language, the
 figure measured on writers like you is under about 4 in 100 — higher than for everyone else, and the
 tool says so on its own page rather than hiding it in an average. The pooled figure that mixes both
-languages would credit the tool with a precision nobody measured on writing in your language.
+languages would credit the tool with a precision measured on a mix, not on writing in your language alone.
 
 It also does something most tools refuse to do: **below its supported threshold it prints no verdict
 at all.** A low score is not a certificate that a person wrote something, and it does not claim to be

@@ -132,7 +132,7 @@ interpretación. Es deliberado: una página que dice *parece mayormente humano* 
 puntuación como si no dijera nada* deja que el lector se quede con la mitad que ya traía decidida.
 
 **Una tasa de falsos positivos para su población estudiantil.** La cifra publicada se midió sobre
-artículos publicados antes de que existieran los modelos generativos — no sobre trabajos de primer
+artículos de antes de 2022 — no sobre trabajos de primer
 año, ni sobre su institución, ni sobre su mezcla de idiomas. Es un suelo, no una promesa. Quien la
 cite como si se aplicara directamente al ensayo de un chico de diecinueve años la está exagerando,
 nosotros incluidos.

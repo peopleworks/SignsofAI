@@ -37,13 +37,14 @@ a measurement into an accusation.
 2. **Finding nothing is not evidence a human wrote it.** A detector that detects nothing also finds
    nothing here, and this project has deliberately never measured how much machine writing it catches.
    Report what you found and stop.
-3. **If you quote the engine's score, quote its error rate too.** At 30/100 the published build flags
-   at most 5% of writing known to be human (95% interval 0.2%–2.4%, from 2 of 296 pre-2022 texts).
-   The interval is the honest half; never quote the 5% without it. Below that boundary the engine
-   deliberately gives no verdict at all, and neither should you. 206 of those texts are essays by
-   adult learners of English; on them alone the rate is 2 of 206, and at the boundary the corpus
-   supported before they joined (25) it was 9 of 206. If the writer learned English second, say that
-   this is the population the tool is most likely to be wrong about.
+3. **If you quote the engine's score, quote its error rate too.** The boundary is the lowest score
+   whose 95% interval stays under the project's 5% target for writing known to be human: at 30/100
+   the published build flagged 2 of 296 pre-2022 texts, an observed 0.7% with the interval reaching
+   2.4%. Quote the interval; never the point estimate or the target alone. Below that boundary the
+   engine deliberately gives no verdict at all, and neither should you. 206 of those texts are essays
+   by adult learners of English; on them alone the rate is 2 of 206 (1%, interval 0.3%–3.5%), and at
+   the boundary the corpus supported before they joined (25) it was 9 of 206. If the writer learned
+   English second, say that this is the population the tool is most likely to be wrong about.
 4. **Only English and Spanish have a measured rate.** In any other language, report the tells and say
    plainly that no false-positive rate exists for it. Never borrow one.
 5. **Length matters, and the engine knows where its knowledge stops.** The boundary was measured on
@@ -95,7 +96,7 @@ Replace with a plainer word, or name the actual thing:
   agilizar, sinergia, vasto
 
 Words this list deliberately leaves out, because they are ordinary formal English and appear
-throughout writing published before generative models existed: *underpin, optimize, elucidate,
+throughout writing from before 2022: *underpin, optimize, elucidate,
 paradigm, exemplify, illuminate, interplay*. Flagging them taxes every careful writer.
 
 ### Empty intensifiers (usually just delete)
