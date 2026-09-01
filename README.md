@@ -73,24 +73,25 @@ language the advice is about.
 
 ## How often is it wrong about a human?
 
-Every AI detector gets asked this and none of them answer. **[`Docs/CALIBRATION.md`](Docs/CALIBRATION.md)
-is the answer**, measured against 296 texts written before generative models existed — open-access
+Every AI detector gets asked this and almost none of them answer. **[`Docs/CALIBRATION.md`](Docs/CALIBRATION.md)
+is the answer**, measured against 296 texts written before 2022 — open-access
 research articles, pre-2022 encyclopedia revisions in both languages, and **206 classroom essays by
 adult learners of English**, one per student, from a corpus collected between 2006 and 2012.
 
 At a threshold of **30/100 it flags 2 of them**: an observed 0.7%, with a 95% interval reaching 2.4%.
 The recommendation is made from the uncertain end of the interval rather than the flattering one, so
-it stays cautious while the corpus is small and tightens on its own as it grows.
+it stays cautious while the corpus is small, and it follows the data in whichever direction they
+move as the corpus grows.
 
-The learners are the group this whole category is accused of harming — detectors flag 61% of their
-essays — and they are the reason the boundary sits at 30 rather than the 25 it sat at before they
+The learners are the group this whole category is accused of harming — studies report that other
+detectors flag 61% of their essays — and they are the reason the boundary sits at 30 rather than the 25 it sat at before they
 joined: at 25 the tool flagged 9 of their 206 essays, 4.4%, and none of the 90 published texts. That
 figure is on the page, by group, rather than averaged away. It is far below the numbers reported for
 other tools, and it is not zero.
 
 It is deliberately **not an accuracy figure**. Accuracy needs a collection of machine-written text,
 which is a sample of whichever models were around that month; a false-positive rate needs only human
-writing, and it measures the harm this category actually causes — detectors flag 61% of essays by
+writing, and it measures the harm this category actually causes — studies report that detectors flag 61% of essays by
 non-native English speakers, and none of them publish that about themselves.
 
 The report also names **which rules misfire**, ranked. That list is uncomfortable and it is the most
@@ -415,4 +416,4 @@ The `chat.*` rules — the assistant's own turn, left in the document — were a
 set of [amanmaqsood/prose-humanizer](https://github.com/amanmaqsood/prose-humanizer) (MIT), a writing
 skill rather than a detector. They entered the packs the way everything here does: screened against
 the calibration corpus first, where all six scored zero. Twelve other candidates from the same source
-did not enter, because they fire on writing published before generative models existed.
+did not enter, because they fire on writing from before 2022.

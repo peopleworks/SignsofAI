@@ -50,10 +50,9 @@ public static class Report
         sb.AppendLine($"- **Target false-positive rate** {Pct(r.TargetFalsePositiveRate)}");
         sb.AppendLine();
         sb.AppendLine(
-            "Every text here was written before generative models could have written it — articles and " +
-            "encyclopedia revisions with a date, and classroom essays from a learner corpus collected " +
-            "years earlier. That is the whole basis for calling it human, and it is a stronger guarantee " +
-            "than any classifier offers about anything. The manifest names each source, its licence and " +
+            "Every text here was written before 2022 — articles and encyclopedia revisions with a date, " +
+            "and classroom essays from a learner corpus collected years earlier. That is the whole basis " +
+            "for calling it human, and it is a stronger guarantee than any classifier offers about anything. The manifest names each source, its licence and " +
             "its year, so the claim can be traced rather than trusted.");
         sb.AppendLine();
         AppendSources(sb, manifest);
@@ -83,8 +82,8 @@ public static class Report
         sb.AppendLine(
             "Read the interval, not the percentage. On a small corpus an observed rate is compatible " +
             "with a much wider range, and the recommendation below is made from the **upper** end of " +
-            "that range rather than the flattering one — so it stays cautious while the corpus is thin " +
-            "and tightens on its own as it grows.");
+            "that range rather than the flattering one — so it stays cautious while the corpus is thin, " +
+            "and it follows the data in whichever direction they move as the corpus grows.");
         sb.AppendLine();
 
         // ---- per group ---------------------------------------------------------------------------
@@ -334,9 +333,20 @@ public static class Report
             // shows only the recommended step hides the very thing that moved it.
             var below = top.Thresholds.Where(t => t.Threshold < bound).OrderByDescending(t => t.Threshold).FirstOrDefault();
             if (below is not null && below.Flagged > row.Flagged)
+            {
+                // Whether that group carries every flag at the lower step is a fact the numbers hold;
+                // saying so only when it is true is what keeps the attribution from overreaching. The
+                // boundary itself is set on the pooled interval, so the step explains why not lower,
+                // never why exactly here.
+                var elsewhere = measured.Where(x => x.Group != top)
+                    .Sum(x => x.Group.Thresholds.FirstOrDefault(t => Math.Abs(t.Threshold - below.Threshold) < 0.001)?.Flagged ?? 0);
                 sb.Append($" One step down, at {below.Threshold:0}/100, **{top.Name}** would be flagged " +
                           $"{below.Flagged} of {top.Count} ({Pct(below.Rate)}, interval {Pct(below.RateLow)} – " +
-                          $"{Pct(below.RateHigh)}); that step is why the boundary sits where it does.");
+                          $"{Pct(below.RateHigh)})");
+                sb.Append(elsewhere == 0
+                    ? $" — the only flags anywhere in the corpus at that boundary. That step is why the boundary does not sit at {below.Threshold:0}."
+                    : $", alongside {elsewhere} elsewhere. That step is part of why the boundary does not sit at {below.Threshold:0}.");
+            }
             sb.Append(" That is the shape of the defect this project criticises, and it is reported here " +
                       "rather than averaged away — smaller than the figures published for other tools, " +
                       "which is a comparison, not an excuse.");

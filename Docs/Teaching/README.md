@@ -39,7 +39,7 @@ about their work instead.
 ## Why this project is entitled to say any of it
 
 Because it publishes how often it is wrong, which almost nothing in this category does:
-[`Docs/CALIBRATION.md`](../CALIBRATION.md). 296 texts written before generative models existed —
+[`Docs/CALIBRATION.md`](../CALIBRATION.md). 296 texts written before 2022 —
 90 published, 206 classroom essays by adult learners of English — two flagged at the recommended
 threshold, and the honest reading is the interval rather than the count: under 2.4%.
 

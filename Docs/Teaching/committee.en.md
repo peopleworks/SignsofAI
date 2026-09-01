@@ -125,7 +125,7 @@ That is deliberate: a page that says *reads mostly human* above *treat this scor
 lets the reader keep whichever half they came in wanting.
 
 **A false-positive rate for your student population.** The published figure was measured on articles
-published before generative models existed — not on first-year coursework, not on your institution,
+from before 2022 — not on first-year coursework, not on your institution,
 not on your language mix. It is a floor, not a promise. Anyone quoting it as though it applied
 directly to a nineteen-year-old's essay is overstating it, including us.
 

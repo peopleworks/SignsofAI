@@ -20,9 +20,10 @@ and not one of them publishes that figure about itself.
 
 ## What makes a text admissible
 
-**It was published before generative models could have written it.** That is the whole test. A paper
-with a 2019 DOI and a Wikipedia revision stamped 2021 were not produced by something that did not
-exist, which is a stronger guarantee than any classifier can offer about anything.
+**It was written before 2022.** That is the whole test. A paper with a 2019 DOI predates the models
+outright; a Wikipedia revision stamped 2021 predates their reaching the public, which is the weaker
+claim and the one actually made — GPT-3 existed from 2020. Either is a stronger guarantee than any
+classifier can offer about anything.
 
 No text is admitted on the grounds that it "reads human". That judgement is the thing being measured
 and cannot also be the thing doing the measuring.
@@ -99,7 +100,7 @@ entry records the affiliation used, so each classification can be argued with in
 [doi:10.5281/zenodo.3991977](https://doi.org/10.5281/zenodo.3991977), fetched from
 [its GitHub release](https://github.com/ELI-Data-Mining-Group/PELIC-dataset) — records each writer's
 first language — Arabic, Korean, Chinese, Japanese, Spanish, Thai and Turkish
-make up most of it — and every essay was written years before generative models, in a classroom,
+make up most of it — and every essay was written years before 2022, in a classroom,
 under a prompt. The selection is a rule rather than a choice: first submitted version, writing
 classes only, at least 662 words so the group enters at the floor the corpus already had, one text
 per student so nobody prolific counts twice. Nothing is picked by score. The licence is

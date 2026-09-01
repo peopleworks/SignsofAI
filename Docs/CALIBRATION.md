@@ -15,7 +15,7 @@ It is **not an accuracy figure**. Accuracy needs machine-written text to measure
 - **Run** 2026-09-01
 - **Target false-positive rate** 5%
 
-Every text here was written before generative models could have written it — articles and encyclopedia revisions with a date, and classroom essays from a learner corpus collected years earlier. That is the whole basis for calling it human, and it is a stronger guarantee than any classifier offers about anything. The manifest names each source, its licence and its year, so the claim can be traced rather than trusted.
+Every text here was written before 2022 — articles and encyclopedia revisions with a date, and classroom essays from a learner corpus collected years earlier. That is the whole basis for calling it human, and it is a stronger guarantee than any classifier offers about anything. The manifest names each source, its licence and its year, so the claim can be traced rather than trusted.
 
 ### Sources
 
@@ -33,7 +33,7 @@ Every text here was written before generative models could have written it — a
 
 **It covers documents of 649 words and up, because that is what was measured.** Nothing shorter was: the corpus has no text below that length, so the boundary below is not supported there and the tool withholds its verdict rather than extrapolating. That is a statement about coverage, not about where the tool breaks — though the direction of the length effect *has* been measured, and it goes the wrong way: the same documents flagged 0 of 32 whole and 6 of 32 as 400-word excerpts of themselves (`Docs/PARAPHRASE.md`, section *Length*). Lowering this floor means measuring short writing people actually composed at that length, not slicing long documents into pieces.
 
-Read the interval, not the percentage. On a small corpus an observed rate is compatible with a much wider range, and the recommendation below is made from the **upper** end of that range rather than the flattering one — so it stays cautious while the corpus is thin and tightens on its own as it grows.
+Read the interval, not the percentage. On a small corpus an observed rate is compatible with a much wider range, and the recommendation below is made from the **upper** end of that range rather than the flattering one — so it stays cautious while the corpus is thin, and it follows the data in whichever direction they move as the corpus grows.
 
 ## By language
 
@@ -60,7 +60,7 @@ The reason the whole exercise exists. If this project cannot show a rate for sec
 
 A dash means this group has too few texts to bound that rate at all — with nothing flagged it still takes roughly seventy-five before the interval alone gets under 5%. That is a statement about the corpus, not the tool.
 
-Across these groups the median score runs from 9.6 (**en-second-language-learner**) down to 4.9 (**en-wikipedia**), a spread of 4.7 points on a scale of a hundred. The longest tail belongs to **en-second-language-learner** at 19.7 for the ninetieth percentile. At the boundary this page recommends, 30/100, **en-second-language-learner** is flagged 2 of 206 (1%, interval 0.3% – 3.5%); the other 4 groups measured there are flagged nothing at all. It also sits highest in median and ninetieth percentile. One step down, at 25/100, **en-second-language-learner** would be flagged 9 of 206 (4.4%, interval 2.3% – 8.1%); that step is why the boundary sits where it does. That is the shape of the defect this project criticises, and it is reported here rather than averaged away — smaller than the figures published for other tools, which is a comparison, not an excuse. The groups run from tens of texts to a couple of hundred, and the numbers move as the corpus grows, in whichever direction they move.
+Across these groups the median score runs from 9.6 (**en-second-language-learner**) down to 4.9 (**en-wikipedia**), a spread of 4.7 points on a scale of a hundred. The longest tail belongs to **en-second-language-learner** at 19.7 for the ninetieth percentile. At the boundary this page recommends, 30/100, **en-second-language-learner** is flagged 2 of 206 (1%, interval 0.3% – 3.5%); the other 4 groups measured there are flagged nothing at all. It also sits highest in median and ninetieth percentile. One step down, at 25/100, **en-second-language-learner** would be flagged 9 of 206 (4.4%, interval 2.3% – 8.1%) — the only flags anywhere in the corpus at that boundary. That step is why the boundary does not sit at 25. That is the shape of the defect this project criticises, and it is reported here rather than averaged away — smaller than the figures published for other tools, which is a comparison, not an excuse. The groups run from tens of texts to a couple of hundred, and the numbers move as the corpus grows, in whichever direction they move.
 
 ## Every threshold
 
