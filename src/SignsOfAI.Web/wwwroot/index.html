@@ -37,8 +37,140 @@
     </div>
     <script src="_content/SignsOfAI.UI/js/lang.js"></script>
     <script src="_content/SignsOfAI.UI/js/share-card.js"></script>
-    <!-- autostart="false" so boot.js can start Blazor itself: it retries a boot file the
-         server fails to hand over, and explains the failure if it still will not come. -->
+
+    <!-- The panel of last resort, and the watchdog that decides to show it.
+         Both live inline, on purpose. Everything below this point is a separate request that a
+         server can fail to answer — including boot.js, which holds the retry. If the explanation
+         lived there too, the one failure it could never explain would be its own. Inline code is
+         part of this document: if the visitor can read anything at all, they can read this. -->
+    <script>
+        window.signsofaiBoot = (function () {
+            // Long, because the wrong error is worse than a slow one. A cheap phone on a bad
+            // connection is still legitimately loading; this fires only when nothing has *advanced*
+            // for this long, never merely because loading took a while.
+            var STALLED_MS = 45000;
+            var CHECK_MS = 5000;
+            var DESKTOP = 'https://github.com/peopleworks/SignsofAI/releases?q=desktop&expanded=true';
+
+            var state = { started: false, shown: false, lastProgress: Date.now() };
+
+            function spanish() {
+                // The reader's own choice wins where there is one. This renders before Blazor, so it
+                // cannot ask Loc — but the switch persists here and outlives the failed startup.
+                try {
+                    var saved = window.localStorage.getItem('signsofai.ui.lang');
+                    if (saved) return saved.toLowerCase().indexOf('es') === 0;
+                } catch (e) { /* localStorage throws outright in a locked-down browser. */ }
+                return (navigator.language || '').toLowerCase().indexOf('es') === 0;
+            }
+
+            function text(el, value) { el.textContent = value; return el; }
+
+            function render(detail) {
+                var copy = spanish() ? {
+                    title: 'No se pudo completar la carga',
+                    body: 'Uno de los archivos de la aplicación no llegó. Puede ser un problema ' +
+                          'momentáneo del servidor o de tu conexión. Tu texto no tiene nada que ver ' +
+                          'con esto — la aplicación ni siquiera llegó a arrancar.',
+                    retry: 'Reintentar',
+                    escalate: 'Si vuelve a fallar, inténtalo más tarde o comprueba tu conexión. ',
+                    desktop: 'La app de escritorio no depende de este servidor.',
+                    report: 'Si vas a avisar del problema, copia el detalle técnico de abajo.',
+                    details: 'Detalle técnico'
+                } : {
+                    title: 'Couldn’t load',
+                    body: 'One of the application files did not arrive. It may be a momentary server ' +
+                          'problem or an issue with your connection. Your text has nothing to do ' +
+                          'with this — the application never even started.',
+                    retry: 'Try again',
+                    escalate: 'If it still fails, try again later or check your connection. ',
+                    desktop: 'The desktop app does not depend on this server.',
+                    report: 'If you report this, include the technical detail below.',
+                    details: 'Technical detail'
+                };
+
+                var app = document.getElementById('app');
+                if (!app) return;
+                app.innerHTML = '';
+
+                var panel = document.createElement('div');
+                panel.setAttribute('role', 'alert');
+                // Styles itself from the app's tokens where they loaded and from their light-theme
+                // values where they did not: a page explaining a failed download must not need one.
+                panel.style.cssText =
+                    'max-width:34rem;margin:12vh auto;padding:1.5rem;border-radius:14px;' +
+                    'border:1px solid var(--border,#e2e6ea);background:var(--surface,#fff);' +
+                    'color:var(--text,#1a1d21);font:1rem/1.5 system-ui,-apple-system,Segoe UI,sans-serif;';
+
+                var title = text(document.createElement('h1'), copy.title);
+                title.style.cssText = 'margin:0 0 .6rem;font-size:1.25rem;';
+
+                var body = text(document.createElement('p'), copy.body);
+                body.style.cssText = 'margin:0 0 1.2rem;color:var(--text-muted,#5b6470);';
+
+                var retry = text(document.createElement('button'), copy.retry);
+                retry.type = 'button';
+                retry.style.cssText =
+                    'padding:.55rem 1.1rem;border:0;border-radius:8px;cursor:pointer;font:inherit;' +
+                    'background:var(--brand,#2563eb);color:var(--brand-ink,#fff);';
+                retry.addEventListener('click', function () { window.location.reload(); });
+
+                var next = document.createElement('p');
+                next.style.cssText = 'margin:1.2rem 0 0;font-size:.9rem;color:var(--text-muted,#5b6470);';
+                next.appendChild(document.createTextNode(copy.escalate));
+                var link = text(document.createElement('a'), copy.desktop);
+                // An absolute GitHub URL, never an in-app route: every route on this site is served
+                // by this same page, so a link to /download would fail to start all over again.
+                link.href = DESKTOP;
+                link.style.color = 'var(--brand,#2563eb)';
+                next.appendChild(link);
+
+                panel.appendChild(title);
+                panel.appendChild(body);
+                panel.appendChild(retry);
+                panel.appendChild(next);
+
+                if (detail) {
+                    var report = text(document.createElement('p'), copy.report);
+                    report.style.cssText = 'margin:.9rem 0 0;font-size:.82rem;color:var(--text-muted,#5b6470);';
+                    var box = document.createElement('details');
+                    box.style.cssText = 'margin-top:.4rem;font-size:.82rem;color:var(--text-muted,#5b6470);';
+                    var summary = text(document.createElement('summary'), copy.details);
+                    summary.style.cursor = 'pointer';
+                    // textContent, never innerHTML: this string comes back from the network.
+                    var pre = text(document.createElement('pre'), detail);
+                    pre.style.cssText = 'white-space:pre-wrap;word-break:break-all;margin:.5rem 0 0;';
+                    box.appendChild(summary);
+                    box.appendChild(pre);
+                    panel.appendChild(report);
+                    panel.appendChild(box);
+                }
+
+                app.appendChild(panel);
+            }
+
+            state.progress = function () { state.lastProgress = Date.now(); };
+            state.ok = function () { state.started = true; };
+            state.fail = function (detail) {
+                if (state.started || state.shown) return;
+                state.shown = true;
+                render(detail || null);
+            };
+
+            // Catches every failure the retry cannot reach: a 503 on boot.js itself, one on the
+            // runtime's ES modules (which must be left to the default loader and so get no retry),
+            // and a connection that accepts and then hangs without ever erroring.
+            setInterval(function () {
+                if (state.started || state.shown) return;
+                if (Date.now() - state.lastProgress > STALLED_MS) state.fail(null);
+            }, CHECK_MS);
+
+            return state;
+        })();
+    </script>
+
+    <!-- autostart="false" so boot.js can start Blazor itself: it retries a boot file the server
+         fails to hand over, and reports the one it could not get. -->
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js" autostart="false"></script>
     <script src="js/boot.js"></script>
 </body>
