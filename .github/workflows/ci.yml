@@ -39,6 +39,12 @@ jobs:
       - name: Test
         run: dotnet test SignsOfAI.slnx -c Release --no-build --nologo
 
+      # The web app's startup path is JavaScript, so no .NET test can execute it. These run the real
+      # boot.js against a fake network: a 503 that recovers, one that does not, a connection that
+      # hangs, and the integrity hash it must keep handing to fetch. Node's own runner, no packages.
+      - name: Test boot script
+        run: node --test tests/boot/boot.test.mjs
+
   # The desktop app is WPF, so it needs a Windows runner and it is not in SignsOfAI.slnx — see the
   # comment at the top of that file. Its own job keeps the build above on Linux, where it stays fast
   # for the translation PRs that are the reason this workflow exists.

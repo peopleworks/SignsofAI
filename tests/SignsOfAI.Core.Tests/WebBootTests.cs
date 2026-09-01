@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace SignsOfAI.Core.Tests;
@@ -11,18 +12,21 @@ namespace SignsOfAI.Core.Tests;
 /// the visitor gets the loading circle and nothing else. That is a healthy deployment reading as an
 /// outage, and it is how it was first reported to us.
 ///
-/// <c>boot.js</c> retries, and says so when the retry does not help. Three things in it fail
-/// silently if a later edit gets them wrong, which is why they are asserted here rather than left
-/// to a reviewer: the script has to run *after* Blazor is defined, it has to keep handing the
-/// manifest hash to <c>fetch</c>, and it has to leave the runtime's own ES modules alone.
+/// The retry itself is tested where it can actually be executed: <c>tests/boot/boot.test.mjs</c>
+/// runs <c>boot.js</c> against a fake network. What is left here is the wiring those tests cannot
+/// see — which file loads in which order, and whether the explanation can still be shown when the
+/// file holding it is the one that never arrived.
+///
+/// Everything is asserted against source with comments stripped. An earlier version of these tests
+/// searched the raw text, and a reviewer showed every one of them could be satisfied by a comment
+/// while the real markup said the opposite.
 /// </summary>
 public class WebBootTests
 {
     private static readonly string WebRoot = FindWebRoot();
+
     private static readonly string IndexHtml =
-        File.ReadAllText(Path.Combine(WebRoot, "index.html"));
-    private static readonly string BootJs =
-        File.ReadAllText(Path.Combine(WebRoot, "js", "boot.js"));
+        StripComments(File.ReadAllText(Path.Combine(WebRoot, "index.html")));
 
     [Fact]
     public void Blazor_does_not_autostart_so_boot_js_can_supply_the_retry()
@@ -44,38 +48,62 @@ public class WebBootTests
     }
 
     [Fact]
-    public void Boot_script_starts_blazor_through_a_boot_resource_loader()
+    public void The_failure_panel_stays_inline_so_it_survives_its_own_file_not_arriving()
     {
-        Assert.Contains("Blazor.start(", BootJs);
-        Assert.Contains("loadBootResource", BootJs);
+        // The point of the whole exercise. Move this into a .js file and the one failure it could
+        // never explain becomes its own: a 503 on that request leaves the eternal spinner back.
+        var panel = IndexHtml.IndexOf("window.signsofaiBoot", StringComparison.Ordinal);
+        var firstScriptFile = IndexHtml.IndexOf("js/boot.js", StringComparison.Ordinal);
+
+        Assert.True(panel >= 0, "The inline boot panel is gone from index.html.");
+        Assert.True(panel < firstScriptFile,
+            "The panel must be defined before any script it has to survive the loss of.");
     }
 
     [Fact]
-    public void Retry_still_hands_the_manifest_hash_to_fetch()
+    public void A_watchdog_covers_the_failures_the_retry_cannot_reach()
     {
-        // Returning a Response from loadBootResource takes the integrity check away from Blazor.
-        // Dropping `integrity` here would therefore not fail anything — it would quietly stop
-        // verifying every assembly the app loads, which is the opposite of what this file is for.
-        Assert.Contains("integrity: integrity", BootJs);
+        // The runtime's ES modules must be left to the default loader, so they get no retry; and a
+        // connection that hangs never errors. Only a watchdog catches those.
+        Assert.Contains("setInterval", IndexHtml);
+        Assert.Contains("lastProgress", IndexHtml);
     }
 
     [Fact]
-    public void Runtime_modules_are_left_to_the_default_loader()
+    public void The_panel_offers_the_desktop_app_by_absolute_url_not_an_in_app_route()
     {
-        // The dotnet.js family is imported as ES modules, which needs a URL. Answer those with a
-        // Response and the import fails — turning a fix for rare 503s into a permanent breakage.
-        Assert.Contains("dotnetjs", BootJs);
-        Assert.Contains("undefined", BootJs);
+        // Every route on this site is served by this same page, so a link to /download would try to
+        // start the app it just failed to start. The escape hatch has to leave the site.
+        var match = Regex.Match(IndexHtml, @"var DESKTOP = '([^']+)'");
+
+        Assert.True(match.Success, "The panel no longer names a desktop download URL.");
+        Assert.StartsWith("https://github.com/", match.Groups[1].Value);
+    }
+
+    [Fact]
+    public void The_panel_prefers_the_language_the_reader_actually_chose()
+    {
+        // The app persists the switch here. Reading only navigator.language would show an English
+        // panel to a teacher using the app in Spanish — issue #36 in the one place Loc cannot reach.
+        Assert.Contains("signsofai.ui.lang", IndexHtml);
     }
 
     [Theory]
-    // The app picks its language from the browser, and this panel renders before the app exists,
-    // so it carries its own copy. English-only here would be the #36 bug in a new place.
-    [InlineData("No se pudo terminar de cargar")]
-    [InlineData("Couldn't finish loading")]
-    public void Failure_panel_speaks_both_languages(string phrase)
+    [InlineData("No se pudo completar la carga")]
+    [InlineData("Couldn’t load")]
+    public void The_panel_speaks_both_languages(string phrase)
     {
-        Assert.Contains(phrase, BootJs);
+        Assert.Contains(phrase, IndexHtml);
+    }
+
+    /// <summary>
+    /// Removes HTML comments and JavaScript line comments, so an assertion cannot be satisfied by
+    /// prose describing what the markup ought to do. <c>//</c> inside a URL is left alone.
+    /// </summary>
+    private static string StripComments(string source)
+    {
+        var withoutHtml = Regex.Replace(source, "<!--.*?-->", string.Empty, RegexOptions.Singleline);
+        return Regex.Replace(withoutHtml, @"(?<!:)//[^\r\n]*", string.Empty);
     }
 
     private static string FindWebRoot()
