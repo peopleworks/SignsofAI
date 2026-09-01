@@ -12,7 +12,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>signsofai-mcp</ToolCommandName>
     <PackageId>SignsOfAI.Mcp</PackageId>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <Authors>Pedro Hernández (PeopleWorks)</Authors>
     <Company>PeopleWorks</Company>
     <Description>Model Context Protocol (MCP) server for Signs of AI Writing. Exposes the engine as tools — analyze text for AI tells, check originality between documents, search the sign catalog, extract distinctive phrases, and (optionally, via the hosted API) measure perplexity and find paraphrases — to Claude Desktop and any MCP client.</Description>

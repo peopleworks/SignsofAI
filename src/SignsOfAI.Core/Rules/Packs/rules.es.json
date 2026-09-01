@@ -970,7 +970,7 @@
     {
       "id": "chat.eager-opener",
       "category": "Rhetorical",
-      "regex": "(?m)(?:^|(?<=[.!?¡])\\s)¡?(Por supuesto|Claro|Excelente pregunta|Desde luego)[!,]",
+      "regex": "(?m)(?:^|(?<=[.!?¡])\\s)¡?(Por supuesto|Claro|Excelente pregunta|Desde luego)!",
       "weight": 3.5,
       "severity": "Medium",
       "message": "Apertura entusiasta de asistente («¡Por supuesto!», «¡Excelente pregunta!»).",

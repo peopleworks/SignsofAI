@@ -45,33 +45,46 @@ public class VerdictAgreementTests
     }
 
     [Fact]
-    public void No_language_is_silenced_merely_because_its_own_corpus_is_small()
+    public void A_language_too_small_for_its_own_threshold_still_gets_a_report_that_names_its_own_bound()
     {
-        // The per-language threshold needs roughly seventy-five texts. Spanish has twenty-five and
-        // will not reach seventy-five for a long time. A gate that waits for it does not protect a
-        // Spanish writer; it withholds the tool from them while serving everyone else — and on this
-        // corpus it withholds it from everyone, because English has sixty-five.
+        // The per-language threshold needs roughly seventy-five texts. English crossed that line in
+        // September 2026 with the learner essays; Spanish has twenty-five and will not reach it for a
+        // long time. A gate that waits for it does not protect a Spanish writer; it withholds the tool
+        // from them while serving everyone else. So a language without its own threshold borrows the
+        // pooled boundary and carries its own best bound beside it, and this checks the second half.
         var calibration = PublishedCalibration.Current;
         Assert.NotNull(calibration);
 
-        foreach (var language in calibration!.Languages)
-            Assert.True(language.RecommendedThreshold is null,
-                $"'{language.Language}' now supports its own threshold. That is good news and it " +
-                "makes this test's premise obsolete — keep the fallback, but re-read it.");
+        var borrowing = calibration!.Languages.Where(l => l.RecommendedThreshold is null).ToList();
+        Assert.True(borrowing.Count > 0,
+            "Every language now supports its own threshold. That is good news and it makes this " +
+            "test's premise obsolete — keep the fallback, but re-read it.");
 
-        var spanish = new AiWritingAnalyzer().Analyze(
-            "En el panorama actual, es importante destacar que la inteligencia artificial ha " +
-            "transformado fundamentalmente nuestro enfoque. Además, este marco integral facilita " +
-            "una comprensión robusta de los mecanismos subyacentes. Asimismo, cabe señalar que " +
-            "dichos sistemas no solo mejoran la productividad sino que también optimizan las " +
-            "operaciones.", "es");
+        foreach (var language in borrowing)
+        {
+            var report = EvidenceReport.ToMarkdown(new AiWritingAnalyzer().Analyze(
+                SampleIn(language.Language), language.Language));
 
-        var report = EvidenceReport.ToMarkdown(spanish);
-
-        // Whatever it says about Spanish, it must not be silence justified by a missing number that
-        // the aggregate already supplies.
-        Assert.Contains("13.3%", report);
+            // Whatever it says, it must not be silence justified by a missing number that the
+            // aggregate already supplies — and the bound it quotes must be this language's own.
+            Assert.Contains($"{language.BestBound * 100:0.0}%", report);
+        }
     }
+
+    private static string SampleIn(string language) => language switch
+    {
+        "es" => "En el panorama actual, es importante destacar que la inteligencia artificial ha " +
+                "transformado fundamentalmente nuestro enfoque. Además, este marco integral facilita " +
+                "una comprensión robusta de los mecanismos subyacentes. Asimismo, cabe señalar que " +
+                "dichos sistemas no solo mejoran la productividad sino que también optimizan las " +
+                "operaciones.",
+        "en" => "In today's landscape, it is important to note that artificial intelligence has " +
+                "fundamentally transformed our approach. Moreover, this comprehensive framework " +
+                "facilitates a robust understanding of the underlying mechanisms. Additionally, " +
+                "these systems not only improve productivity but also optimize operations.",
+        _ => throw new ArgumentOutOfRangeException(nameof(language), language,
+                "A language joined the calibration; give this test a sample in it."),
+    };
 
     [Fact]
     public void The_verdict_reaches_its_reader_in_their_own_language()

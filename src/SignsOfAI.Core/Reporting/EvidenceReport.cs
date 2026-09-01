@@ -486,11 +486,12 @@ public static class EvidenceReport
     ///
     /// This asked for the threshold measured for the language actually analysed, refusing to borrow
     /// the aggregate. That reading was too strict by a wide margin, and the cost was not theoretical:
-    /// no language in the corpus supports its own threshold — English has 65 texts and Spanish 25,
-    /// against the ~75 the interval needs — so the condition was false for every document in every
-    /// language, and the exported report never carried a verdict at all. A tool that renders nothing
-    /// has not been careful, it has been switched off, and Spanish would have stayed switched off
-    /// for years while the page still promised a reading.
+    /// at the time no language in the corpus supported its own threshold — English had 65 texts and
+    /// Spanish 25, against the ~75 the interval needs — so the condition was false for every document
+    /// in every language, and the exported report never carried a verdict at all. A tool that renders
+    /// nothing has not been careful, it has been switched off, and Spanish would have stayed switched
+    /// off for years while the page still promised a reading. English crossed the line in September
+    /// 2026 with the learner essays; Spanish still borrows.
     ///
     /// The distinction that resolves it: borrowing the aggregate *error rate* would misstate how
     /// often this build is wrong about Spanish (13.3% measured, against 5.6% for English and 4.1%

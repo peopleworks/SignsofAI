@@ -29,10 +29,11 @@ and cannot also be the thing doing the measuring.
 
 ## What the corpus does not cover, and what it costs
 
-Every text here is **662 words or longer** — that is the shortest one, and the Wikipedia fetcher skips
-anything under 700 by design. The threshold is therefore supported over that range and nowhere else,
-so since #59 the engine **withholds its verdict below 662 words** rather than extrapolating onto a
-population it never sampled.
+Every text here is **649 words or longer** as the engine counts them — that is the shortest one; the
+Wikipedia fetcher skips anything under 700 by design and the learner selection anything under 662 by
+a naive split. The threshold is therefore supported over that range and nowhere else, so since #59
+the engine **withholds its verdict below that length** rather than extrapolating onto a population it
+never sampled.
 
 That is not a small exclusion. It is most of how the tool is used: somebody pastes a paragraph. And
 the direction of the error is known — the same documents flag 0 of 32 whole and 6 of 32 as 400-word
@@ -65,6 +66,10 @@ dotnet run --project tools/SignsOfAI.Calibration -- fetch --source plos --count 
 dotnet run --project tools/SignsOfAI.Calibration -- fetch --source wikipedia --lang en --count 25
 dotnet run --project tools/SignsOfAI.Calibration -- fetch --source wikipedia --lang es --count 25
 
+# 206 essays by adult learners of English, 2006–2012, one per student — a fixed rule, no --count,
+# so anyone running it gets the same texts and the same hashes (about 180 MB downloaded once)
+dotnet run --project tools/SignsOfAI.Calibration -- fetch --source pelic
+
 # measure, and rewrite Docs/CALIBRATION.md
 dotnet run --project tools/SignsOfAI.Calibration -- run
 ```
@@ -78,7 +83,8 @@ having.
 | Group | What it is | What it is for |
 |---|---|---|
 | `en-anglophone-affiliation` | PLOS articles with at least one author affiliated in an anglophone country | The comparison baseline |
-| `en-other-affiliation` | PLOS articles with no anglophone affiliation | **Standing in for second-language English** — the population this whole category harms |
+| `en-other-affiliation` | PLOS articles with no anglophone affiliation | Was standing in for second-language English until the learner group arrived; kept, because it is the same question asked of professional writers |
+| `en-second-language-learner` | Classroom essays from PELIC — University of Pittsburgh's Intensive English Program, 2006–2012, first language recorded per writer | **The population this whole category harms**, measured directly rather than through a proxy |
 | `en-wikipedia` | Pre-2022 English Wikipedia revisions | Same register as the Spanish group, so a language effect can be told from a register effect |
 | `es-wikipedia` | Pre-2022 Spanish Wikipedia revisions | The half nobody else measures at all |
 
@@ -88,11 +94,28 @@ direction: a paper with *any* anglophone affiliation counts as anglophone, which
 second-language group and makes any gap found an understatement rather than an exaggeration. Every
 entry records the affiliation used, so each classification can be argued with individually.
 
-**None of this is a student essay.** Published articles are longer, more heavily edited and written by
-people who write for a living. A first-year essay is a different thing and the rate measured on one
-does not transfer to the other. The honest fix is for a school to calibrate on its own students'
-pre-2022 work — the same tool does it, and the result would be a false-positive rate for *its*
-population instead of somebody else's.
+**The learner group is the one that is not a proxy.** [PELIC](https://github.com/ELI-Data-Mining-Group/PELIC-dataset)
+records each writer's first language — Arabic, Korean, Chinese, Japanese, Spanish, Thai and Turkish
+make up most of it — and every essay was written years before generative models, in a classroom,
+under a prompt. The selection is a rule rather than a choice: first submitted version, writing
+classes only, at least 662 words so the group enters at the floor the corpus already had, one text
+per student so nobody prolific counts twice. Nothing is picked by score. The licence is
+CC BY-NC-ND 4.0, which permits measuring and publishing the numbers and forbids redistributing the
+texts — the same arrangement every other source here already has.
+
+What it found is on `Docs/CALIBRATION.md` and it is the reason the boundary moved from 25 to 30: at
+25, 9 of the 206 essays were flagged and none of the 90 published texts. The rules doing it are the
+connectors an academic-English course teaches (`rhet.in-conclusion` fires in 40% of learner essays
+and 14% of published ones) — see issue #75. It also caught a defect: `chat.eager-opener` had been
+admitted on zero hits in the published texts and fired on eleven learner essays, because its pattern
+accepted *"Of course, …"* with a comma, an ordinary concession, alongside *"Certainly!"*. Zero on one
+register is not zero.
+
+**Still no native-speaker student essay.** Published articles are written by people who write for a
+living; the learner essays are by adults in a university language programme. A first-year essay by a
+native speaker is a different population again, and the rate measured here does not transfer to it.
+The honest fix is for a school to calibrate on its own students' pre-2022 work — the same tool does
+it, and the result would be a false-positive rate for *its* population instead of somebody else's.
 
 ## Contributing texts
 
@@ -109,8 +132,9 @@ What is most wanted, in order:
 - **Spanish academic writing.** SciELO and Redalyc are the obvious sources and neither was reachable
   from where this was first assembled. Spanish is the half of this project nobody else measures, and
   it currently rests on encyclopedia prose alone.
-- **Anything closer to a student essay.** Coursework released under an open licence, pre-2022 writing
-  competition entries, open thesis repositories.
+- **Native-speaker student writing.** Coursework released under an open licence, pre-2022 writing
+  competition entries, open thesis repositories. The learner group covers second-language writers;
+  nothing yet covers a first-year student writing in their own language.
 - **More of everything.** With nothing flagged it still takes roughly seventy-five texts in a group
   before the interval alone can bound a 5% rate. Most groups here are half that.
 

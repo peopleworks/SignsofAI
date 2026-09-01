@@ -10,13 +10,14 @@ namespace SignsOfAI.Core.Tests;
 /// <summary>
 /// The length condition on the verdict — issue #59.
 ///
-/// The boundary this build ships was fitted on 90 texts whose shortest is 662 words, and it was being
-/// applied to a pasted paragraph with nothing on the page to say so. The same documents flag 0 of 32
+/// The boundary this build ships is fitted on texts whose shortest is a few hundred words (662 when
+/// #59 was filed, 649 since the learner essays joined), and it was being applied to a pasted
+/// paragraph with nothing on the page to say so. The same documents flag 0 of 32
 /// whole and 6 of 32 as 400-word excerpts of themselves, so the error does not merely get noisier as
 /// text gets shorter: it moves one way, toward the machine.
 ///
 /// What these guard is a **coverage** claim, not a reliability one. Nothing here asserts that the
-/// tool is wrong below 662 words. It asserts that the tool stops claiming, which is the only thing
+/// tool is wrong below that length. It asserts that the tool stops claiming, which is the only thing
 /// the corpus supports — and that it goes on showing the evidence, because the evidence was never
 /// what the boundary was about.
 /// </summary>

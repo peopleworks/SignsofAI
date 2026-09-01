@@ -8,20 +8,20 @@ It is **not an accuracy figure**. Accuracy needs machine-written text to measure
 
 ## What was measured
 
-- **Corpus** `signsofai-human-baseline`, fingerprint `123fa5b9ebca3f29`
-- **Texts** 90 (280,221 words)
-- **Lengths measured** 662 – 9,328 words (median 2,772)
-- **Engine** SignsOfAI.Core 0.5.0
-- **Run** 2026-08-24
+- **Corpus** `signsofai-human-baseline`, fingerprint `78bda061bde3dc99`
+- **Texts** 296 (452,184 words)
+- **Lengths measured** 649 – 9,328 words (median 832)
+- **Engine** SignsOfAI.Core 0.6.0
+- **Run** 2026-09-01
 - **Target false-positive rate** 5%
 
-Every text here was published before generative models could have written it. That is the whole basis for calling it human, and it is a stronger guarantee than any classifier offers about anything. The manifest names each source, its licence and its year, so the claim can be traced rather than trusted.
+Every text here was written before generative models could have written it — articles and encyclopedia revisions with a date, and classroom essays from a learner corpus collected years earlier. That is the whole basis for calling it human, and it is a stronger guarantee than any classifier offers about anything. The manifest names each source, its licence and its year, so the claim can be traced rather than trusted.
 
 ## The headline
 
-**At a threshold of 25/100, this tool flags at most 5% of writing known to be human** — 0 of 90 texts in this corpus, an observed 0% with a 95% interval of 0% – 4.1%.
+**At a threshold of 30/100, this tool flags at most 5% of writing known to be human** — 2 of 296 texts in this corpus, an observed 0.7% with a 95% interval of 0.2% – 2.4%.
 
-**It covers documents of 662 words and up, because that is what was measured.** Nothing shorter was: the corpus has no text below that length, so the boundary below is not supported there and the tool withholds its verdict rather than extrapolating. That is a statement about coverage, not about where the tool breaks — though the direction of the length effect *has* been measured, and it goes the wrong way: the same documents flagged 0 of 32 whole and 6 of 32 as 400-word excerpts of themselves (`Docs/PARAPHRASE.md`, section *Length*). Lowering this floor means measuring short writing people actually composed at that length, not slicing long documents into pieces.
+**It covers documents of 649 words and up, because that is what was measured.** Nothing shorter was: the corpus has no text below that length, so the boundary below is not supported there and the tool withholds its verdict rather than extrapolating. That is a statement about coverage, not about where the tool breaks — though the direction of the length effect *has* been measured, and it goes the wrong way: the same documents flagged 0 of 32 whole and 6 of 32 as 400-word excerpts of themselves (`Docs/PARAPHRASE.md`, section *Length*). Lowering this floor means measuring short writing people actually composed at that length, not slicing long documents into pieces.
 
 Read the interval, not the percentage. On a small corpus an observed rate is compatible with a much wider range, and the recommendation below is made from the **upper** end of that range rather than the flattering one — so it stays cautious while the corpus is thin and tightens on its own as it grows.
 
@@ -31,7 +31,7 @@ A rate that holds in English and fails in Spanish is not one number, and reporti
 
 | Group | Texts | Median | 90th pct | Highest | Threshold for 5% | Best bound it can support |
 |---|---|---|---|---|---|---|
-| **en** | 65 | 5.8 | 11.8 | 23.4 | — | 5.6% |
+| **en** | 271 | 8.8 | 18.3 | 33.8 | 30 | 1.4% |
 | **es** | 25 | 7.2 | 15.1 | 18.4 | — | 13.3% |
 
 A dash means this group has too few texts to bound that rate at all — with nothing flagged it still takes roughly seventy-five before the interval alone gets under 5%. That is a statement about the corpus, not the tool.
@@ -44,41 +44,42 @@ The reason the whole exercise exists. If this project cannot show a rate for sec
 |---|---|---|---|---|---|---|
 | **en-anglophone-affiliation** | 21 | 5.9 | 9.0 | 14.2 | — | 15.5% |
 | **en-other-affiliation** | 19 | 6.2 | 13.6 | 18.0 | — | 16.8% |
+| **en-second-language-learner** | 206 | 9.6 | 19.7 | 33.8 | 30 | 1.8% |
 | **en-wikipedia** | 25 | 4.9 | 10.4 | 23.4 | — | 13.3% |
 | **es-wikipedia** | 25 | 7.2 | 15.1 | 18.4 | — | 13.3% |
 
 A dash means this group has too few texts to bound that rate at all — with nothing flagged it still takes roughly seventy-five before the interval alone gets under 5%. That is a statement about the corpus, not the tool.
 
-Across these groups the median score runs from 7.2 (**es-wikipedia**) down to 4.9 (**en-wikipedia**), a spread of 2.3 points on a scale of a hundred. The longest tail belongs to **es-wikipedia** at 15.1 for the ninetieth percentile. A tool with the defect this project criticises would show one group sitting well above the rest; on this corpus none does. It is a first indication rather than a finding — these are tens of texts, not hundreds — and the numbers move as the corpus grows, in whichever direction they move.
+Across these groups the median score runs from 9.6 (**en-second-language-learner**) down to 4.9 (**en-wikipedia**), a spread of 4.7 points on a scale of a hundred. The longest tail belongs to **en-second-language-learner** at 19.7 for the ninetieth percentile. At the boundary this page recommends, 30/100, **en-second-language-learner** is flagged 2 of 206 (1%, interval 0.3% – 3.5%); every other group is flagged nothing at all. It also sits highest in median and ninetieth percentile. That is the shape of the defect this project criticises, and it is reported here rather than averaged away — smaller than the figures published for other tools, which is a comparison, not an excuse. The groups run from tens of texts to a couple of hundred, and the numbers move as the corpus grows, in whichever direction they move.
 
 ## Every threshold
 
 | Score at or above | Human texts flagged | Rate | 95% interval |
 |---|---|---|---|
-| 5 | 61 / 90 | 67.8% | 57.6% – 76.5% |
-| 10 | 16 / 90 | 17.8% | 11.2% – 26.9% |
-| 15 | 6 / 90 | 6.7% | 3.1% – 13.8% |
-| 20 | 1 / 90 | 1.1% | 0.2% – 6% |
-| 25 | 0 / 90 | 0% | 0% – 4.1% |
-| 30 | 0 / 90 | 0% | 0% – 4.1% |
-| 35 | 0 / 90 | 0% | 0% – 4.1% |
-| 40 | 0 / 90 | 0% | 0% – 4.1% |
-| 45 | 0 / 90 | 0% | 0% – 4.1% |
-| 50 | 0 / 90 | 0% | 0% – 4.1% |
-| 55 | 0 / 90 | 0% | 0% – 4.1% |
-| 60 | 0 / 90 | 0% | 0% – 4.1% |
-| 65 | 0 / 90 | 0% | 0% – 4.1% |
-| 70 | 0 / 90 | 0% | 0% – 4.1% |
-| 75 | 0 / 90 | 0% | 0% – 4.1% |
-| 80 | 0 / 90 | 0% | 0% – 4.1% |
-| 85 | 0 / 90 | 0% | 0% – 4.1% |
-| 90 | 0 / 90 | 0% | 0% – 4.1% |
-| 95 | 0 / 90 | 0% | 0% – 4.1% |
-| 100 | 0 / 90 | 0% | 0% – 4.1% |
+| 5 | 253 / 296 | 85.5% | 81% – 89% |
+| 10 | 113 / 296 | 38.2% | 32.8% – 43.8% |
+| 15 | 49 / 296 | 16.6% | 12.8% – 21.2% |
+| 20 | 21 / 296 | 7.1% | 4.7% – 10.6% |
+| 25 | 9 / 296 | 3% | 1.6% – 5.7% |
+| 30 | 2 / 296 | 0.7% | 0.2% – 2.4% |
+| 35 | 0 / 296 | 0% | 0% – 1.3% |
+| 40 | 0 / 296 | 0% | 0% – 1.3% |
+| 45 | 0 / 296 | 0% | 0% – 1.3% |
+| 50 | 0 / 296 | 0% | 0% – 1.3% |
+| 55 | 0 / 296 | 0% | 0% – 1.3% |
+| 60 | 0 / 296 | 0% | 0% – 1.3% |
+| 65 | 0 / 296 | 0% | 0% – 1.3% |
+| 70 | 0 / 296 | 0% | 0% – 1.3% |
+| 75 | 0 / 296 | 0% | 0% – 1.3% |
+| 80 | 0 / 296 | 0% | 0% – 1.3% |
+| 85 | 0 / 296 | 0% | 0% – 1.3% |
+| 90 | 0 / 296 | 0% | 0% – 1.3% |
+| 95 | 0 / 296 | 0% | 0% – 1.3% |
+| 100 | 0 / 296 | 0% | 0% – 1.3% |
 
 ## What the product does with this number
 
-The tool speaks at **25/100** and nowhere else, taking the boundary from the table above rather than from anybody's judgement. Below it a document gets its score and the reason it gets nothing more: a low score is not evidence that a person wrote something, since a detector that detects nothing also returns a low score, and this project has deliberately never measured how much machine writing it catches. The boundary moves when this page moves — including upward if a larger corpus turns out to be less flattering.
+The tool speaks at **30/100** and nowhere else, taking the boundary from the table above rather than from anybody's judgement. Below it a document gets its score and the reason it gets nothing more: a low score is not evidence that a person wrote something, since a detector that detects nothing also returns a low score, and this project has deliberately never measured how much machine writing it catches. The boundary moves when this page moves — including upward if a larger corpus turns out to be less flattering.
 
 Above it there is **one** verdict, not a scale of them. This corpus can place a boundary and can say nothing whatever about how much further past it a score has travelled: no text known to be human came close to the upper reaches, and grading "moderate" against "strong" would need machine-written text, which the opening of this page argues against collecting. Interfaces do shade a high score more urgently than a low one, and those shades are a display convention — they are not on this page because nothing measured them.
 
@@ -90,39 +91,39 @@ Every rule below fired on text no machine wrote, so each hit is a false positive
 
 | Rule | Texts it fired on | Share | Total hits |
 |---|---|---|---|
-| `stat.burstiness` | 25 | 27.8% | 25 |
-| `rhet.in-terms-of` | 9 | 10% | 22 |
-| `rhet.not-only-but` | 8 | 8.9% | 16 |
-| `rhet.in-order-to` | 7 | 7.8% | 33 |
-| `lex.furthermore` | 7 | 7.8% | 24 |
-| `lex.robust` | 7 | 7.8% | 19 |
-| `lex.just` | 7 | 7.8% | 16 |
-| `lex.simply` | 7 | 7.8% | 16 |
-| `lex.utilizar` | 7 | 7.8% | 15 |
-| `rhet.in-this-article` | 7 | 7.8% | 15 |
-| `lex.notably` | 7 | 7.8% | 14 |
-| `syn.superficial-ing` | 7 | 7.8% | 12 |
-| `rhet.with-regard-to` | 7 | 7.8% | 10 |
-| `lex.crucial` | 7 | 7.8% | 8 |
-| `syn.serves-as` | 7 | 7.8% | 8 |
-| `lex.moreover` | 6 | 6.7% | 35 |
-| `lex.comprehensive` | 6 | 6.7% | 27 |
-| `lex.utilize` | 6 | 6.7% | 22 |
-| `lex.facilitate` | 6 | 6.7% | 16 |
-| `rhet.rule-of-three` | 6 | 6.7% | 16 |
-| `lex.importantly` | 6 | 6.7% | 9 |
-| `rhet.weasel-attribution` | 6 | 6.7% | 9 |
-| `lex.actually` | 6 | 6.7% | 8 |
-| `rhet.in-conclusion` | 6 | 6.7% | 8 |
-| `rhet.important-note` | 6 | 6.7% | 7 |
+| `lex.just` | 103 | 34.8% | 189 |
+| `stat.burstiness` | 95 | 32.1% | 95 |
+| `rhet.in-conclusion` | 89 | 30.1% | 99 |
+| `rhet.rule-of-three` | 77 | 26% | 143 |
+| `lex.moreover` | 66 | 22.3% | 126 |
+| `rhet.not-only-but` | 63 | 21.3% | 90 |
+| `lex.furthermore` | 55 | 18.6% | 92 |
+| `lex.crucial` | 50 | 16.9% | 61 |
+| `lex.actually` | 49 | 16.6% | 69 |
+| `rhet.in-order-to` | 41 | 13.9% | 87 |
+| `rhet.in-terms-of` | 22 | 7.4% | 38 |
+| `rhet.weasel-attribution` | 19 | 6.4% | 32 |
+| `rhet.in-this-article` | 16 | 5.4% | 24 |
+| `lex.simply` | 14 | 4.7% | 23 |
+| `lex.facilitate` | 12 | 4.1% | 22 |
+| `lex.utilize` | 10 | 3.4% | 30 |
+| `lex.truly` | 10 | 3.4% | 15 |
+| `lex.comprehensive` | 9 | 3% | 30 |
+| `rhet.when-it-comes` | 9 | 3% | 10 |
+| `syn.serves-as` | 9 | 3% | 10 |
+| `lex.notably` | 8 | 2.7% | 15 |
+| `rhet.with-regard-to` | 8 | 2.7% | 11 |
+| `rhet.on-one-hand` | 8 | 2.7% | 9 |
+| `lex.profound` | 8 | 2.7% | 8 |
+| `lex.robust` | 7 | 2.4% | 19 |
 
 A rule near the top is not automatically wrong. Some tells genuinely appear in human academic prose and the catalog says so. But a rule firing on most human texts is measuring the genre rather than the machine, and should be reweighted or retired.
 
 ## What this does not tell you
 
 - **Nothing about how much AI writing it catches.** That is the other half of the picture and it is not measured here, deliberately. A tool that flags nothing has a perfect false-positive rate.
-- **Nothing about text unlike this corpus.** These are published articles. A first-year essay is shorter, looser and differently edited, and the rate on one does not transfer to the other. Calibrating on your own students' pre-2022 work is the fix, and the same tool does it.
-- **The grouping of writers is a proxy, not a fact.** Nobody's first language is recorded in a DOI. The manifest states the reasoning per text so it can be argued with; where it is wrong, the number moves.
+- **Nothing about text unlike this corpus.** These are published articles and the essays of adult learners in a university English programme. A first-year essay by a native speaker is a different population again, and the rate on one does not transfer to the other. Calibrating on your own students' pre-2022 work is the fix, and the same tool does it.
+- **The affiliation groups are a proxy, not a fact.** Nobody's first language is recorded in a DOI. The learner group is the exception — its corpus records each writer's first language — which is why it exists. Elsewhere the manifest states the reasoning per text so it can be argued with; where it is wrong, the number moves.
 - **Hashes prove what *this* run measured**, not that another person extracting the same articles would get identical text. They would not: PDF and HTML extraction differ. Reproducing this needs the extracted texts, not just the manifest.
 
 Re-run it yourself:

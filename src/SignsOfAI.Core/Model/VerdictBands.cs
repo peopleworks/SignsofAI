@@ -36,9 +36,10 @@ public static class VerdictBands
     ///
     /// This is a statement about **coverage, not about reliability**. It does not claim the tool
     /// breaks below this length; it says nothing was measured there, which is a different and much
-    /// weaker claim — and the only one the corpus can support. The 25/100 boundary was fitted on 90
-    /// texts whose shortest is 662 words and whose median is 2,772, and it was being applied to a
-    /// pasted paragraph with nothing on the page to say so. See issue #59.
+    /// weaker claim — and the only one the corpus can support. When this was written the 25/100
+    /// boundary was fitted on 90 texts whose shortest was 662 words and whose median was 2,772, and it
+    /// was being applied to a pasted paragraph with nothing on the page to say so. See issue #59. The
+    /// current figures are in the embedded calibration, not here.
     ///
     /// The number comes from the analyzer's own word count, not from a naive split on whitespace —
     /// the two disagree by about 7% on this corpus. Deriving the floor with one counter and comparing

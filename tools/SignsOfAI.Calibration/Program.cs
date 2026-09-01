@@ -96,8 +96,12 @@ if (argv[0] == "fetch")
             Console.WriteLine($"Fetching {count} pre-2022 {fetchLanguage}.wikipedia revisions…");
             fetched = await Fetch.WikipediaAsync(fetchLanguage, count, textsDir);
             break;
+        case "pelic":
+            Console.WriteLine("Selecting learner essays from PELIC (Pittsburgh, 2006–2012)…");
+            fetched = await Fetch.PelicAsync(textsDir);
+            break;
         default:
-            Console.Error.WriteLine("--source must be 'plos' or 'wikipedia'.");
+            Console.Error.WriteLine("--source must be 'plos', 'wikipedia' or 'pelic'.");
             return 2;
     }
 
@@ -611,6 +615,7 @@ static void Help() => Console.WriteLine(
 
       dotnet run --project tools/SignsOfAI.Calibration -- fetch --source plos --count 40
       dotnet run --project tools/SignsOfAI.Calibration -- fetch --source wikipedia --lang es --count 30
+      dotnet run --project tools/SignsOfAI.Calibration -- fetch --source pelic
 
       dotnet run --project tools/SignsOfAI.Calibration -- excerpt --per-stratum 8 --words 400
       dotnet run --project tools/SignsOfAI.Calibration -- paraphrase --paraphrased-by "<model>"
@@ -621,7 +626,8 @@ static void Help() => Console.WriteLine(
       --out <file>        Where to write the report (default: Docs/CALIBRATION.md)
       --record-hashes     Record each text's SHA-256 into the manifest. Use once, when
                           assembling or deliberately updating the corpus.
-      --source <name>     fetch only: 'plos' or 'wikipedia'
+      --source <name>     fetch only: 'plos', 'wikipedia' or 'pelic' (learner essays; --count is
+                          ignored — the selection is a fixed rule, so everyone gets the same texts)
       --lang <code>       fetch only: language for wikipedia (default: en)
       --count <n>         fetch only: how many texts (default: 40)
       --from-year/--to-year   fetch only: publication window for plos (default 2018-2020)

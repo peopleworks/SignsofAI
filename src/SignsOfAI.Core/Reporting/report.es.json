@@ -113,12 +113,12 @@
       "sourceHash": "08c2211aa03c38ed8dc1c7c9245ca4aadc38492032aa91deb3cfa4700f8e3f44"
     },
     "caveat.language-measured": {
-      "text": "> **Una puntuación no es una prueba.** En {0} textos de este idioma, publicados antes de que existieran los modelos generativos, la tasa de falsos positivos de esta compilación con un umbral de {1}/100 estuvo por debajo de {2}: el extremo superior de un intervalo del 95 %, no una garantía, y medido en artículos publicados, no en trabajos estudiantiles. Por debajo de ese umbral, considere que la puntuación no dice nada.",
-      "sourceHash": "afe3b6e337129413cdcd13c30d6bcf26279811bfdc7ab55fb67c61de6613081d"
+      "text": "> **Una puntuación no es una prueba.** En {0} textos de este idioma, publicados antes de que existieran los modelos generativos, la tasa de falsos positivos de esta compilación con un umbral de {1}/100 estuvo por debajo de {2}: el extremo superior de un intervalo del 95 %, no una garantía, y medido en artículos publicados y redacciones de adultos que aprendían inglés, no en el trabajo de esta persona. Por debajo de ese umbral, considere que la puntuación no dice nada.",
+      "sourceHash": "afb551416768426e2d0906f65b655a0916e056d77ca835a53a0aba8178651453"
     },
     "caveat.aggregate-measured": {
-      "text": "> **Una puntuación no es una prueba.** En {0} textos publicados antes de que existieran los modelos generativos, la tasa de falsos positivos de esta compilación con un umbral de {1}/100 estuvo por debajo de {2}: el extremo superior de un intervalo del 95 %, no una garantía, y medido en artículos publicados, no en trabajos estudiantiles. Por debajo de ese umbral, considere que la puntuación no dice nada.",
-      "sourceHash": "6a84dab32d61e99ac8c4c18ccbe2aca123c36441f862333ba3c6eba72c0c6282"
+      "text": "> **Una puntuación no es una prueba.** En {0} textos publicados antes de que existieran los modelos generativos, la tasa de falsos positivos de esta compilación con un umbral de {1}/100 estuvo por debajo de {2}: el extremo superior de un intervalo del 95 %, no una garantía, y medido en artículos publicados y redacciones de adultos que aprendían inglés, no en el trabajo de esta persona. Por debajo de ese umbral, considere que la puntuación no dice nada.",
+      "sourceHash": "81b5495705097ffffc281a216d4395ad9c7da60165e4494c3d9c1f9a9b8b52e6"
     },
     "how.uncalibrated": {
       "text": "Esta compilación no incluye calibración, de modo que se desconoce con qué frecuencia se equivoca. Eso es lo más importante de esta página.",

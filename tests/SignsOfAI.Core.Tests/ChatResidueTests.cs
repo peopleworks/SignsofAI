@@ -22,6 +22,11 @@ namespace SignsOfAI.Core.Tests;
 /// The mine they came from is amanmaqsood/prose-humanizer (MIT). Twelve of its other candidates
 /// were rejected here by the same screen: underpin, optimize, elucidate, paradigm, exemplify and
 /// illuminate are ordinary research English, and each appears in three to six of those ninety texts.
+///
+/// One of the six then failed the screen it had passed. When 206 learner essays joined the corpus,
+/// <c>chat.eager-opener</c> fired in eleven of them: its pattern accepted "Of course," with a comma —
+/// an ordinary concession — alongside "Certainly!". Zero on published articles had been zero on one
+/// register. The pattern now requires the exclamation mark, and the test for the comma is below.
 /// </summary>
 public class ChatResidueTests
 {
@@ -60,6 +65,8 @@ public class ChatResidueTests
     [Theory]
     [InlineData("Let me know when the survey is finished and I will read it.", "chat.signoff")]
     [InlineData("The wall was, of course, built long before the survey began.", "chat.eager-opener")]
+    [InlineData("Of course, the wall was built long before the survey began.", "chat.eager-opener")]
+    [InlineData("Absolutely, the council should publish it before the winter.", "chat.eager-opener")]
     [InlineData("I hope the council publishes the survey before the winter.", "chat.signoff")]
     [InlineData("Here is the revised timetable the committee agreed on Tuesday.", "chat.answer-preamble")]
     public void Leaves_a_person_writing_to_a_person_alone_en(string text, string ruleId) =>
@@ -68,6 +75,8 @@ public class ChatResidueTests
     [Theory]
     [InlineData("Avísame cuando termine el estudio y lo leo.", "chat.signoff")]
     [InlineData("El muro, por supuesto, se construyó mucho antes del estudio.", "chat.eager-opener")]
+    [InlineData("Por supuesto, el muro se construyó mucho antes del estudio.", "chat.eager-opener")]
+    [InlineData("Claro, el consejo debería publicarlo antes del invierno.", "chat.eager-opener")]
     [InlineData("Aquí tienes el calendario que acordó la comisión el martes.", "chat.answer-preamble")]
     public void Leaves_a_person_writing_to_a_person_alone_es(string text, string ruleId) =>
         Assert.False(Has(text, "es", ruleId), ruleId);

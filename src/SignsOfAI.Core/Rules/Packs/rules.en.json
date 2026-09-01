@@ -1123,7 +1123,7 @@
       "severity": "High",
       "message": "A sentence the assistant says about itself, not a sentence in a document.",
       "suggestion": "Delete it. If the text was drafted with a tool, say so in the acknowledgements instead.",
-      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+      "evidence": "0 occurrences in the 413,258-word en half of the human calibration corpus (pre-2022, 271 texts, 206 of them learner essays)"
     },
     {
       "id": "chat.training-cutoff",
@@ -1133,7 +1133,7 @@
       "severity": "High",
       "message": "A disclaimer about a model’s training data, left in the text.",
       "suggestion": "Delete it, and check the claim it was hedging.",
-      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+      "evidence": "0 occurrences in the 413,258-word en half of the human calibration corpus (pre-2022, 271 texts, 206 of them learner essays)"
     },
     {
       "id": "chat.signoff",
@@ -1143,7 +1143,7 @@
       "severity": "High",
       "message": "The closing line of an assistant’s reply, inside the document.",
       "suggestion": "Delete it. The document has no reader to offer further help to.",
-      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+      "evidence": "0 occurrences in the 413,258-word en half of the human calibration corpus (pre-2022, 271 texts, 206 of them learner essays)"
     },
     {
       "id": "chat.capability-disclaimer",
@@ -1153,7 +1153,7 @@
       "severity": "High",
       "message": "A statement about what the writing tool cannot do.",
       "suggestion": "Delete it, and supply the source it was standing in for.",
-      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+      "evidence": "0 occurrences in the 413,258-word en half of the human calibration corpus (pre-2022, 271 texts, 206 of them learner essays)"
     },
     {
       "id": "chat.answer-preamble",
@@ -1163,17 +1163,17 @@
       "severity": "High",
       "message": "The line a tool prints before handing back its answer.",
       "suggestion": "Delete it. The document should start with the document.",
-      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+      "evidence": "0 occurrences in the 413,258-word en half of the human calibration corpus (pre-2022, 271 texts, 206 of them learner essays)"
     },
     {
       "id": "chat.eager-opener",
       "category": "Rhetorical",
-      "regex": "(?m)(?:^|(?<=[.!?])\\s)(Certainly|Of course|Absolutely|Sure thing|Great question)[!,]",
+      "regex": "(?m)(?:^|(?<=[.!?])\\s)(Certainly|Of course|Absolutely|Sure thing|Great question)!",
       "weight": 3.5,
       "severity": "Medium",
       "message": "An assistant’s eager opener (“Certainly!”, “Great question!”).",
       "suggestion": "Delete it. Nobody asked the document a question.",
-      "evidence": "0 occurrences in the 249,455-word en half of the human calibration corpus (pre-2022, 65 texts)"
+      "evidence": "0 occurrences in the 413,258-word en half of the human calibration corpus (pre-2022, 271 texts, 206 of them learner essays)"
     }
   ],
   "functionWords": [

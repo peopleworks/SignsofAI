@@ -55,8 +55,8 @@ public sealed record PublishedCalibration
     /// the analyzer counts them.
     ///
     /// Recorded because a bound measured on one population must not be spent on another, and length
-    /// is such a population: the shipped boundary was fitted on texts of 662 words and up, and was
-    /// being applied to a pasted paragraph. <see cref="Model.VerdictBands.Measured(int)"/> reads
+    /// is such a population: the boundary shipped at the time was fitted on texts of 662 words and
+    /// up, and was being applied to a pasted paragraph. <see cref="Model.VerdictBands.Measured(int)"/> reads
     /// <see cref="ShortestWords"/> and withholds the verdict below it; nothing reads
     /// <see cref="LongestWords"/> yet, and it is here so the range on the page is a range rather
     /// than half of one. See issue #59.

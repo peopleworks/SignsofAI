@@ -8,7 +8,7 @@ namespace SignsOfAI.Core.Tests;
 /// Shared fixture plumbing, and one piece of it is a fact about the engine rather than a convenience.
 ///
 /// Since #59 a document shorter than the shortest text the boundary was measured on gets no verdict
-/// at all — 662 words on the corpus this build ships. Almost every fixture in this suite is a
+/// at all — 649 words on the corpus this build ships. Almost every fixture in this suite is a
 /// paragraph, so without <see cref="LongEnough"/> a test written to check *what the verdict says*
 /// silently becomes a test of the length gate, passes for the wrong reason or fails for a reason that
 /// has nothing to do with what it was guarding.
