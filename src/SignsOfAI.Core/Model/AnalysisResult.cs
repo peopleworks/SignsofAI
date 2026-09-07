@@ -50,7 +50,7 @@ public sealed record AnalysisResult
 
     /// <summary>
     /// What matched but is not evidence: rules this text uses at a rate measured on writing published
-    /// before generative models existed. Worth showing — "you use 'furthermore' about as often as
+    /// written before 2022. Worth showing — "you use 'furthermore' about as often as
     /// other people do" is a useful thing to be told — and worth nothing to the score.
     /// </summary>
     public IReadOnlyList<Finding> Observations => field ??= [.. Findings.Where(f => f.AtHumanRate)];

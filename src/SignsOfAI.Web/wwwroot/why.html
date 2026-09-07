@@ -14,18 +14,23 @@
   server — and the same defect we shipped in the report this month (an image tag that fetched a
   pixel when a teacher pasted it into a comment box) is exactly what this rule prevents here.
 
-  The numbers are drawn, not tabulated. "Zero of ninety, with a 95% interval reaching 4.1%" is a
-  sentence a statistician reads and everybody else skips. Ninety dots with none of them filled is a
-  picture anyone reads in a second, and the interval drawn around the zero is why we do not claim
-  zero.
+  The numbers are drawn, not tabulated. "Two of 296, with a 95% interval reaching 2.4%" is a
+  sentence a statistician reads and everybody else skips. Two hundred and ninety-six dots with two
+  of them filled is a picture anyone reads in a second, and the interval drawn around them is why
+  the rate is a range and not a promise.
 
   Both languages live in this file, switched with a radio input and :has() — no script at all. The
   Spanish is written in Spanish rather than translated into it, as everything else here is.
 
   Every figure comes from src/SignsOfAI.Core/Calibration/published-calibration.json, measured on
-  2026-08-05 with engine 0.4.0. If that file changes, this page is stale and must be regenerated
+  2026-09-07 with engine 0.7.0. If that file changes, this page is stale and must be regenerated
   by hand — there is no build step behind it, deliberately: it has to open from a downloads folder
   years from now on a machine that has never heard of this project.
+
+  Saying that in a comment was not enough. It sat here from 5 August while the corpus grew from
+  ninety texts to 296 and the published rate stopped being zero, and this page — the one the README
+  sends teachers to first — went on showing a green zero for six days. WhyPageTests now fails when
+  the calibration moves and these figures do not, so the next person is told instead of trusted.
 -->
 <html lang="es">
 <head>
@@ -180,60 +185,65 @@ body:has(#en:checked) .only-en{display:block}
   una persona delante.
 </p>
 <p>
-  Lo medimos así: noventa textos <strong>publicados antes de que existieran los modelos
-  generativos</strong>. No los juzgó nadie: sabemos que son humanos por su fecha. Después los
-  pasamos por la herramienta y contamos a cuántos habría acusado.
+  Lo medimos así: <strong>296 textos escritos antes de 2022</strong> — artículos publicados,
+  revisiones de Wikipedia y ensayos de clase. No los juzgó nadie: sabemos que son humanos por su
+  fecha. Después los pasamos por la herramienta y contamos a cuántos habría acusado.
 </p>
 
 <figure>
-  <svg viewBox="0 0 640 250" role="img" aria-label="Noventa círculos, ninguno marcado, y el intervalo dibujado alrededor del cero">
-    <text x="0" y="14" fill="currentColor" font-size="13" font-weight="700" opacity=".75">90 TEXTOS HUMANOS</text>
+  <svg viewBox="0 0 640 250" role="img" aria-label="Doscientos noventa y seis círculos, dos de ellos marcados, y el intervalo dibujado alrededor de la cifra medida">
+    <text x="0" y="14" fill="currentColor" font-size="13" font-weight="700" opacity=".75">296 TEXTOS HUMANOS</text>
     <g fill="none" stroke="currentColor" stroke-opacity=".38" stroke-width="1.5">
       <!-- 90 dots: 15 per row, 6 rows. None filled, because none was flagged. -->
-      <circle cx="12" cy="38" r="6"/><circle cx="36" cy="38" r="6"/><circle cx="60" cy="38" r="6"/><circle cx="84" cy="38" r="6"/><circle cx="108" cy="38" r="6"/><circle cx="132" cy="38" r="6"/><circle cx="156" cy="38" r="6"/><circle cx="180" cy="38" r="6"/><circle cx="204" cy="38" r="6"/><circle cx="228" cy="38" r="6"/><circle cx="252" cy="38" r="6"/><circle cx="276" cy="38" r="6"/><circle cx="300" cy="38" r="6"/><circle cx="324" cy="38" r="6"/><circle cx="348" cy="38" r="6"/>
-      <circle cx="12" cy="62" r="6"/><circle cx="36" cy="62" r="6"/><circle cx="60" cy="62" r="6"/><circle cx="84" cy="62" r="6"/><circle cx="108" cy="62" r="6"/><circle cx="132" cy="62" r="6"/><circle cx="156" cy="62" r="6"/><circle cx="180" cy="62" r="6"/><circle cx="204" cy="62" r="6"/><circle cx="228" cy="62" r="6"/><circle cx="252" cy="62" r="6"/><circle cx="276" cy="62" r="6"/><circle cx="300" cy="62" r="6"/><circle cx="324" cy="62" r="6"/><circle cx="348" cy="62" r="6"/>
-      <circle cx="12" cy="86" r="6"/><circle cx="36" cy="86" r="6"/><circle cx="60" cy="86" r="6"/><circle cx="84" cy="86" r="6"/><circle cx="108" cy="86" r="6"/><circle cx="132" cy="86" r="6"/><circle cx="156" cy="86" r="6"/><circle cx="180" cy="86" r="6"/><circle cx="204" cy="86" r="6"/><circle cx="228" cy="86" r="6"/><circle cx="252" cy="86" r="6"/><circle cx="276" cy="86" r="6"/><circle cx="300" cy="86" r="6"/><circle cx="324" cy="86" r="6"/><circle cx="348" cy="86" r="6"/>
-      <circle cx="12" cy="110" r="6"/><circle cx="36" cy="110" r="6"/><circle cx="60" cy="110" r="6"/><circle cx="84" cy="110" r="6"/><circle cx="108" cy="110" r="6"/><circle cx="132" cy="110" r="6"/><circle cx="156" cy="110" r="6"/><circle cx="180" cy="110" r="6"/><circle cx="204" cy="110" r="6"/><circle cx="228" cy="110" r="6"/><circle cx="252" cy="110" r="6"/><circle cx="276" cy="110" r="6"/><circle cx="300" cy="110" r="6"/><circle cx="324" cy="110" r="6"/><circle cx="348" cy="110" r="6"/>
-      <circle cx="12" cy="134" r="6"/><circle cx="36" cy="134" r="6"/><circle cx="60" cy="134" r="6"/><circle cx="84" cy="134" r="6"/><circle cx="108" cy="134" r="6"/><circle cx="132" cy="134" r="6"/><circle cx="156" cy="134" r="6"/><circle cx="180" cy="134" r="6"/><circle cx="204" cy="134" r="6"/><circle cx="228" cy="134" r="6"/><circle cx="252" cy="134" r="6"/><circle cx="276" cy="134" r="6"/><circle cx="300" cy="134" r="6"/><circle cx="324" cy="134" r="6"/><circle cx="348" cy="134" r="6"/>
-      <circle cx="12" cy="158" r="6"/><circle cx="36" cy="158" r="6"/><circle cx="60" cy="158" r="6"/><circle cx="84" cy="158" r="6"/><circle cx="108" cy="158" r="6"/><circle cx="132" cy="158" r="6"/><circle cx="156" cy="158" r="6"/><circle cx="180" cy="158" r="6"/><circle cx="204" cy="158" r="6"/><circle cx="228" cy="158" r="6"/><circle cx="252" cy="158" r="6"/><circle cx="276" cy="158" r="6"/><circle cx="300" cy="158" r="6"/><circle cx="324" cy="158" r="6"/><circle cx="348" cy="158" r="6"/>
+      <circle cx="12" cy="34" r="3.2"/><circle cx="23" cy="34" r="3.2"/><circle cx="34" cy="34" r="3.2"/><circle cx="45" cy="34" r="3.2"/><circle cx="56" cy="34" r="3.2"/><circle cx="67" cy="34" r="3.2"/><circle cx="78" cy="34" r="3.2"/><circle cx="89" cy="34" r="3.2"/><circle cx="100" cy="34" r="3.2"/><circle cx="111" cy="34" r="3.2"/><circle cx="122" cy="34" r="3.2"/><circle cx="133" cy="34" r="3.2"/><circle cx="144" cy="34" r="3.2"/><circle cx="155" cy="34" r="3.2"/><circle cx="166" cy="34" r="3.2"/><circle cx="177" cy="34" r="3.2"/><circle cx="188" cy="34" r="3.2"/><circle cx="199" cy="34" r="3.2"/><circle cx="210" cy="34" r="3.2"/><circle cx="221" cy="34" r="3.2"/><circle cx="232" cy="34" r="3.2"/><circle cx="243" cy="34" r="3.2"/><circle cx="254" cy="34" r="3.2"/><circle cx="265" cy="34" r="3.2"/><circle cx="276" cy="34" r="3.2"/><circle cx="287" cy="34" r="3.2"/><circle cx="298" cy="34" r="3.2"/><circle cx="309" cy="34" r="3.2"/><circle cx="320" cy="34" r="3.2"/><circle cx="331" cy="34" r="3.2"/><circle cx="342" cy="34" r="3.2"/><circle cx="353" cy="34" r="3.2"/><circle cx="364" cy="34" r="3.2"/><circle cx="375" cy="34" r="3.2"/><circle cx="386" cy="34" r="3.2"/><circle cx="397" cy="34" r="3.2"/><circle cx="408" cy="34" r="3.2"/>
+      <circle cx="12" cy="47" r="3.2"/><circle cx="23" cy="47" r="3.2"/><circle cx="34" cy="47" r="3.2"/><circle cx="45" cy="47" r="3.2"/><circle cx="56" cy="47" r="3.2"/><circle cx="67" cy="47" r="3.2"/><circle cx="78" cy="47" r="3.2"/><circle cx="89" cy="47" r="3.2"/><circle cx="100" cy="47" r="3.2"/><circle cx="111" cy="47" r="3.2"/><circle cx="122" cy="47" r="3.2"/><circle cx="133" cy="47" r="3.2"/><circle cx="144" cy="47" r="3.2"/><circle cx="155" cy="47" r="3.2"/><circle cx="166" cy="47" r="3.2"/><circle cx="177" cy="47" r="3.2"/><circle cx="188" cy="47" r="3.2"/><circle cx="199" cy="47" r="3.2"/><circle cx="210" cy="47" r="3.2"/><circle cx="221" cy="47" r="3.2"/><circle cx="232" cy="47" r="3.2"/><circle cx="243" cy="47" r="3.2"/><circle cx="254" cy="47" r="3.2"/><circle cx="265" cy="47" r="3.2"/><circle cx="276" cy="47" r="3.2"/><circle cx="287" cy="47" r="3.2"/><circle cx="298" cy="47" r="3.2"/><circle cx="309" cy="47" r="3.2"/><circle cx="320" cy="47" r="3.2"/><circle cx="331" cy="47" r="3.2"/><circle cx="342" cy="47" r="3.2"/><circle cx="353" cy="47" r="3.2"/><circle cx="364" cy="47" r="3.2"/><circle cx="375" cy="47" r="3.2" fill="#f59e0b" stroke="#f59e0b"/><circle cx="386" cy="47" r="3.2"/><circle cx="397" cy="47" r="3.2"/><circle cx="408" cy="47" r="3.2"/>
+      <circle cx="12" cy="60" r="3.2"/><circle cx="23" cy="60" r="3.2"/><circle cx="34" cy="60" r="3.2"/><circle cx="45" cy="60" r="3.2"/><circle cx="56" cy="60" r="3.2"/><circle cx="67" cy="60" r="3.2"/><circle cx="78" cy="60" r="3.2"/><circle cx="89" cy="60" r="3.2"/><circle cx="100" cy="60" r="3.2"/><circle cx="111" cy="60" r="3.2"/><circle cx="122" cy="60" r="3.2"/><circle cx="133" cy="60" r="3.2"/><circle cx="144" cy="60" r="3.2"/><circle cx="155" cy="60" r="3.2"/><circle cx="166" cy="60" r="3.2"/><circle cx="177" cy="60" r="3.2"/><circle cx="188" cy="60" r="3.2"/><circle cx="199" cy="60" r="3.2"/><circle cx="210" cy="60" r="3.2"/><circle cx="221" cy="60" r="3.2"/><circle cx="232" cy="60" r="3.2"/><circle cx="243" cy="60" r="3.2"/><circle cx="254" cy="60" r="3.2"/><circle cx="265" cy="60" r="3.2"/><circle cx="276" cy="60" r="3.2"/><circle cx="287" cy="60" r="3.2"/><circle cx="298" cy="60" r="3.2"/><circle cx="309" cy="60" r="3.2"/><circle cx="320" cy="60" r="3.2"/><circle cx="331" cy="60" r="3.2"/><circle cx="342" cy="60" r="3.2"/><circle cx="353" cy="60" r="3.2"/><circle cx="364" cy="60" r="3.2"/><circle cx="375" cy="60" r="3.2"/><circle cx="386" cy="60" r="3.2"/><circle cx="397" cy="60" r="3.2"/><circle cx="408" cy="60" r="3.2"/>
+      <circle cx="12" cy="73" r="3.2"/><circle cx="23" cy="73" r="3.2"/><circle cx="34" cy="73" r="3.2"/><circle cx="45" cy="73" r="3.2"/><circle cx="56" cy="73" r="3.2"/><circle cx="67" cy="73" r="3.2"/><circle cx="78" cy="73" r="3.2"/><circle cx="89" cy="73" r="3.2"/><circle cx="100" cy="73" r="3.2"/><circle cx="111" cy="73" r="3.2"/><circle cx="122" cy="73" r="3.2"/><circle cx="133" cy="73" r="3.2"/><circle cx="144" cy="73" r="3.2"/><circle cx="155" cy="73" r="3.2"/><circle cx="166" cy="73" r="3.2"/><circle cx="177" cy="73" r="3.2"/><circle cx="188" cy="73" r="3.2"/><circle cx="199" cy="73" r="3.2"/><circle cx="210" cy="73" r="3.2"/><circle cx="221" cy="73" r="3.2"/><circle cx="232" cy="73" r="3.2"/><circle cx="243" cy="73" r="3.2"/><circle cx="254" cy="73" r="3.2"/><circle cx="265" cy="73" r="3.2"/><circle cx="276" cy="73" r="3.2"/><circle cx="287" cy="73" r="3.2"/><circle cx="298" cy="73" r="3.2"/><circle cx="309" cy="73" r="3.2"/><circle cx="320" cy="73" r="3.2"/><circle cx="331" cy="73" r="3.2"/><circle cx="342" cy="73" r="3.2"/><circle cx="353" cy="73" r="3.2"/><circle cx="364" cy="73" r="3.2"/><circle cx="375" cy="73" r="3.2"/><circle cx="386" cy="73" r="3.2"/><circle cx="397" cy="73" r="3.2"/><circle cx="408" cy="73" r="3.2"/>
+      <circle cx="12" cy="86" r="3.2"/><circle cx="23" cy="86" r="3.2"/><circle cx="34" cy="86" r="3.2"/><circle cx="45" cy="86" r="3.2"/><circle cx="56" cy="86" r="3.2"/><circle cx="67" cy="86" r="3.2"/><circle cx="78" cy="86" r="3.2"/><circle cx="89" cy="86" r="3.2"/><circle cx="100" cy="86" r="3.2"/><circle cx="111" cy="86" r="3.2"/><circle cx="122" cy="86" r="3.2"/><circle cx="133" cy="86" r="3.2"/><circle cx="144" cy="86" r="3.2"/><circle cx="155" cy="86" r="3.2"/><circle cx="166" cy="86" r="3.2"/><circle cx="177" cy="86" r="3.2"/><circle cx="188" cy="86" r="3.2"/><circle cx="199" cy="86" r="3.2"/><circle cx="210" cy="86" r="3.2"/><circle cx="221" cy="86" r="3.2"/><circle cx="232" cy="86" r="3.2"/><circle cx="243" cy="86" r="3.2"/><circle cx="254" cy="86" r="3.2"/><circle cx="265" cy="86" r="3.2"/><circle cx="276" cy="86" r="3.2"/><circle cx="287" cy="86" r="3.2"/><circle cx="298" cy="86" r="3.2"/><circle cx="309" cy="86" r="3.2"/><circle cx="320" cy="86" r="3.2"/><circle cx="331" cy="86" r="3.2"/><circle cx="342" cy="86" r="3.2"/><circle cx="353" cy="86" r="3.2"/><circle cx="364" cy="86" r="3.2"/><circle cx="375" cy="86" r="3.2"/><circle cx="386" cy="86" r="3.2"/><circle cx="397" cy="86" r="3.2"/><circle cx="408" cy="86" r="3.2"/>
+      <circle cx="12" cy="99" r="3.2"/><circle cx="23" cy="99" r="3.2"/><circle cx="34" cy="99" r="3.2"/><circle cx="45" cy="99" r="3.2"/><circle cx="56" cy="99" r="3.2"/><circle cx="67" cy="99" r="3.2" fill="#f59e0b" stroke="#f59e0b"/><circle cx="78" cy="99" r="3.2"/><circle cx="89" cy="99" r="3.2"/><circle cx="100" cy="99" r="3.2"/><circle cx="111" cy="99" r="3.2"/><circle cx="122" cy="99" r="3.2"/><circle cx="133" cy="99" r="3.2"/><circle cx="144" cy="99" r="3.2"/><circle cx="155" cy="99" r="3.2"/><circle cx="166" cy="99" r="3.2"/><circle cx="177" cy="99" r="3.2"/><circle cx="188" cy="99" r="3.2"/><circle cx="199" cy="99" r="3.2"/><circle cx="210" cy="99" r="3.2"/><circle cx="221" cy="99" r="3.2"/><circle cx="232" cy="99" r="3.2"/><circle cx="243" cy="99" r="3.2"/><circle cx="254" cy="99" r="3.2"/><circle cx="265" cy="99" r="3.2"/><circle cx="276" cy="99" r="3.2"/><circle cx="287" cy="99" r="3.2"/><circle cx="298" cy="99" r="3.2"/><circle cx="309" cy="99" r="3.2"/><circle cx="320" cy="99" r="3.2"/><circle cx="331" cy="99" r="3.2"/><circle cx="342" cy="99" r="3.2"/><circle cx="353" cy="99" r="3.2"/><circle cx="364" cy="99" r="3.2"/><circle cx="375" cy="99" r="3.2"/><circle cx="386" cy="99" r="3.2"/><circle cx="397" cy="99" r="3.2"/><circle cx="408" cy="99" r="3.2"/>
+      <circle cx="12" cy="112" r="3.2"/><circle cx="23" cy="112" r="3.2"/><circle cx="34" cy="112" r="3.2"/><circle cx="45" cy="112" r="3.2"/><circle cx="56" cy="112" r="3.2"/><circle cx="67" cy="112" r="3.2"/><circle cx="78" cy="112" r="3.2"/><circle cx="89" cy="112" r="3.2"/><circle cx="100" cy="112" r="3.2"/><circle cx="111" cy="112" r="3.2"/><circle cx="122" cy="112" r="3.2"/><circle cx="133" cy="112" r="3.2"/><circle cx="144" cy="112" r="3.2"/><circle cx="155" cy="112" r="3.2"/><circle cx="166" cy="112" r="3.2"/><circle cx="177" cy="112" r="3.2"/><circle cx="188" cy="112" r="3.2"/><circle cx="199" cy="112" r="3.2"/><circle cx="210" cy="112" r="3.2"/><circle cx="221" cy="112" r="3.2"/><circle cx="232" cy="112" r="3.2"/><circle cx="243" cy="112" r="3.2"/><circle cx="254" cy="112" r="3.2"/><circle cx="265" cy="112" r="3.2"/><circle cx="276" cy="112" r="3.2"/><circle cx="287" cy="112" r="3.2"/><circle cx="298" cy="112" r="3.2"/><circle cx="309" cy="112" r="3.2"/><circle cx="320" cy="112" r="3.2"/><circle cx="331" cy="112" r="3.2"/><circle cx="342" cy="112" r="3.2"/><circle cx="353" cy="112" r="3.2"/><circle cx="364" cy="112" r="3.2"/><circle cx="375" cy="112" r="3.2"/><circle cx="386" cy="112" r="3.2"/><circle cx="397" cy="112" r="3.2"/><circle cx="408" cy="112" r="3.2"/>
+      <circle cx="12" cy="125" r="3.2"/><circle cx="23" cy="125" r="3.2"/><circle cx="34" cy="125" r="3.2"/><circle cx="45" cy="125" r="3.2"/><circle cx="56" cy="125" r="3.2"/><circle cx="67" cy="125" r="3.2"/><circle cx="78" cy="125" r="3.2"/><circle cx="89" cy="125" r="3.2"/><circle cx="100" cy="125" r="3.2"/><circle cx="111" cy="125" r="3.2"/><circle cx="122" cy="125" r="3.2"/><circle cx="133" cy="125" r="3.2"/><circle cx="144" cy="125" r="3.2"/><circle cx="155" cy="125" r="3.2"/><circle cx="166" cy="125" r="3.2"/><circle cx="177" cy="125" r="3.2"/><circle cx="188" cy="125" r="3.2"/><circle cx="199" cy="125" r="3.2"/><circle cx="210" cy="125" r="3.2"/><circle cx="221" cy="125" r="3.2"/><circle cx="232" cy="125" r="3.2"/><circle cx="243" cy="125" r="3.2"/><circle cx="254" cy="125" r="3.2"/><circle cx="265" cy="125" r="3.2"/><circle cx="276" cy="125" r="3.2"/><circle cx="287" cy="125" r="3.2"/><circle cx="298" cy="125" r="3.2"/><circle cx="309" cy="125" r="3.2"/><circle cx="320" cy="125" r="3.2"/><circle cx="331" cy="125" r="3.2"/><circle cx="342" cy="125" r="3.2"/><circle cx="353" cy="125" r="3.2"/><circle cx="364" cy="125" r="3.2"/><circle cx="375" cy="125" r="3.2"/><circle cx="386" cy="125" r="3.2"/><circle cx="397" cy="125" r="3.2"/><circle cx="408" cy="125" r="3.2"/>
     </g>
-    <text x="380" y="86" fill="#2fd27a" font-size="46" font-weight="800">0</text>
-    <text x="380" y="112" fill="currentColor" font-size="14" opacity=".8">marcados</text>
-    <text x="380" y="134" fill="currentColor" font-size="13" opacity=".55">ninguno relleno,</text>
-    <text x="380" y="151" fill="currentColor" font-size="13" opacity=".55">ninguno acusado</text>
+    <text x="442" y="72" fill="#f59e0b" font-size="46" font-weight="800">2</text>
+    <text x="442" y="98" fill="currentColor" font-size="14" opacity=".8">marcados</text>
+    <text x="442" y="120" fill="currentColor" font-size="13" opacity=".55">los dos rellenos,</text>
+    <text x="442" y="137" fill="currentColor" font-size="13" opacity=".55">de doscientos noventa y seis</text>
 
-    <!-- The interval, drawn, because zero of ninety is not a rate of zero. -->
-    <text x="0" y="196" fill="currentColor" font-size="12" font-weight="700" opacity=".75">LO QUE SE PUEDE AFIRMAR DE VERDAD</text>
+    <!-- The interval, drawn, because two of 296 is a range and not a promise. -->
+    <text x="0" y="172" fill="currentColor" font-size="12" font-weight="700" opacity=".75">LO QUE SE PUEDE AFIRMAR DE VERDAD</text>
     <line x1="12" y1="216" x2="620" y2="216" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/>
-    <rect x="12" y="209" width="249" height="14" rx="7" fill="#f59e0b" fill-opacity=".28"/>
-    <circle cx="12" cy="216" r="6" fill="#2fd27a"/>
+    <rect x="24" y="209" width="134" height="14" rx="7" fill="#f59e0b" fill-opacity=".28"/>
+    <circle cx="53" cy="216" r="6" fill="#2fd27a"/>
+    <text x="53" y="202" fill="#2fd27a" font-size="12" font-weight="700" text-anchor="middle">0,7 %</text>
     <text x="12" y="241" fill="currentColor" font-size="12" opacity=".75">0 %</text>
-    <text x="222" y="241" fill="#f59e0b" font-size="12" font-weight="700">4,1 %</text>
+    <text x="168" y="241" fill="#f59e0b" font-size="12" font-weight="700">2,4 %</text>
     <text x="620" y="241" fill="currentColor" font-size="12" opacity=".55" text-anchor="end">10 %</text>
   </svg>
   <figcaption>
-    Ninguno de los noventa fue marcado. Pero <strong>cero de noventa no significa que la tasa
-    sea cero</strong>: con esa muestra, lo máximo que se puede afirmar honestamente es que se
-    equivoca <strong>menos del 4,1 %</strong> de las veces. Esa franja ámbar es la diferencia
-    entre una medición y una promesa.
+    Dos de los 296 fueron marcados: el <strong>0,7 %</strong>. Pero dos de 296 tampoco es
+    exactamente la tasa: con esa muestra, lo máximo que se puede afirmar honestamente es que se
+    equivoca <strong>menos del 2,4 %</strong> de las veces. Esa franja ámbar es la diferencia
+    entre una medición y una promesa. <strong>No es cero, y ese es justamente el punto</strong>:
+    hasta septiembre esta página enseñaba un cero, porque el corpus todavía no contenía a las
+    personas con más probabilidades de ser acusadas en falso.
   </figcaption>
 </figure>
 
 <h3>Y no es el mismo número para todos</h3>
 <p>
   Repartir la cifra global a todo el mundo sería cómodo y sería falso. El corpus tiene
-  sesenta y cinco textos en inglés y veinticinco en español, así que lo que se puede
+  <strong>271 textos en inglés y veinticinco en español</strong>, así que lo que se puede
   afirmar sobre cada idioma es distinto — y en la herramienta cada lector ve el suyo,
   no el promedio.
 </p>
 
 <figure>
-  <svg viewBox="0 0 640 140" role="img" aria-label="Cota por idioma: inglés 5,6 por ciento, español 13,3 por ciento">
+  <svg viewBox="0 0 640 140" role="img" aria-label="Cota por idioma: inglés 2,7 por ciento, español 13,3 por ciento">
     <text x="0" y="22" fill="currentColor" font-size="14" font-weight="600">Inglés</text>
-    <text x="0" y="39" fill="currentColor" font-size="11.5" opacity=".55">65 textos</text>
+    <text x="0" y="39" fill="currentColor" font-size="11.5" opacity=".55">271 textos</text>
     <line x1="120" y1="26" x2="620" y2="26" stroke="currentColor" stroke-opacity=".2" stroke-width="2"/>
-    <rect x="120" y="19" width="187" height="14" rx="7" fill="#f59e0b" fill-opacity=".3"/>
-    <text x="317" y="31" fill="#f59e0b" font-size="13" font-weight="700">5,6 %</text>
+    <rect x="120" y="19" width="90" height="14" rx="7" fill="#f59e0b" fill-opacity=".3"/>
+    <text x="220" y="31" fill="#f59e0b" font-size="13" font-weight="700">2,7 %</text>
 
     <text x="0" y="80" fill="currentColor" font-size="14" font-weight="600">Español</text>
     <text x="0" y="97" fill="currentColor" font-size="11.5" opacity=".55">25 textos</text>
@@ -262,15 +272,24 @@ body:has(#en:checked) .only-en{display:block}
   que estaban de moda ese mes. Una herramienta que no marca nada tiene una tasa de error perfecta.
 </p>
 <p>
-  Los noventa textos son <strong>artículos publicados, no trabajos de estudiantes</strong>. Un
-  ensayo de primero de carrera no se parece a un artículo revisado por pares, y esa diferencia
-  no está medida aquí.
+  <strong>Sí incluye trabajos de estudiantes, y esa es la parte que más le importa a usted.</strong>
+  De los 296 textos, <strong>206 son ensayos de clase</strong> escritos por adultos que estaban
+  aprendiendo inglés. Es exactamente el grupo del que se acusa a los detectores de equivocarse más,
+  y aquí es el que peor sale: mide más alto que cualquier otro grupo en todas las columnas. A un
+  umbral de 25 sobre 100 se marcaban nueve de ellos. <strong>Por eso la frontera está en 30 y no
+  en 25</strong> — se movió cuando supimos a quién estaba haciendo daño.
+</p>
+<p>
+  Lo que sigue sin medirse es el <strong>ensayo de estudiante en español</strong>: los veinticinco
+  textos en español son revisiones de Wikipedia de una sola fuente. Ahí esta herramienta sabe
+  menos, y lo dice en vez de prestarle a un idioma una cifra que midió en otro.
 </p>
 <div class="quote">
-  Y una que conviene saber antes de mirar ninguna puntuación: la señal que más salta en escritura
-  humana es <b>el ritmo uniforme de las frases</b> — aparece en el <b>27,8 %</b> de los textos
-  humanos que medimos. Si la evidencia de un trabajo se apoya sobre todo en eso, vale menos.
-  La herramienta lo dice en cada informe, por su nombre.
+  Y una que conviene saber antes de mirar ninguna puntuación: las señales que más saltan en
+  escritura humana casi no dicen nada. <b>El ritmo uniforme de las frases</b> aparece en el
+  <b>32,1 %</b> de los textos humanos que medimos, y la palabra «just» en el <b>34,8 %</b>. Si la
+  evidencia de un trabajo se apoya sobre todo en eso, vale menos. La herramienta lo dice en cada
+  informe, por su nombre.
 </div>
 
 <h2>¿Por qué fiarse de este y no de otro?</h2>
@@ -375,57 +394,62 @@ body:has(#en:checked) .only-en{display:block}
   on the other side of it.
 </p>
 <p>
-  Here is how it was measured: ninety texts <strong>published before generative models
-  existed</strong>. Nobody judged them human — their dates did. Then they went through the tool and
-  we counted how many it would have accused.
+  Here is how it was measured: <strong>296 texts written before 2022</strong> — published
+  articles, Wikipedia revisions and classroom essays. Nobody judged them human; their dates did.
+  Then they went through the tool and we counted how many it would have accused.
 </p>
 
 <figure>
-  <svg viewBox="0 0 640 250" role="img" aria-label="Ninety circles, none of them filled, and the interval drawn around zero">
-    <text x="0" y="14" fill="currentColor" font-size="13" font-weight="700" opacity=".75">90 HUMAN TEXTS</text>
+  <svg viewBox="0 0 640 250" role="img" aria-label="Two hundred and ninety-six circles, two of them filled, and the interval drawn around the measured figure">
+    <text x="0" y="14" fill="currentColor" font-size="13" font-weight="700" opacity=".75">296 HUMAN TEXTS</text>
     <g fill="none" stroke="currentColor" stroke-opacity=".38" stroke-width="1.5">
-      <circle cx="12" cy="38" r="6"/><circle cx="36" cy="38" r="6"/><circle cx="60" cy="38" r="6"/><circle cx="84" cy="38" r="6"/><circle cx="108" cy="38" r="6"/><circle cx="132" cy="38" r="6"/><circle cx="156" cy="38" r="6"/><circle cx="180" cy="38" r="6"/><circle cx="204" cy="38" r="6"/><circle cx="228" cy="38" r="6"/><circle cx="252" cy="38" r="6"/><circle cx="276" cy="38" r="6"/><circle cx="300" cy="38" r="6"/><circle cx="324" cy="38" r="6"/><circle cx="348" cy="38" r="6"/>
-      <circle cx="12" cy="62" r="6"/><circle cx="36" cy="62" r="6"/><circle cx="60" cy="62" r="6"/><circle cx="84" cy="62" r="6"/><circle cx="108" cy="62" r="6"/><circle cx="132" cy="62" r="6"/><circle cx="156" cy="62" r="6"/><circle cx="180" cy="62" r="6"/><circle cx="204" cy="62" r="6"/><circle cx="228" cy="62" r="6"/><circle cx="252" cy="62" r="6"/><circle cx="276" cy="62" r="6"/><circle cx="300" cy="62" r="6"/><circle cx="324" cy="62" r="6"/><circle cx="348" cy="62" r="6"/>
-      <circle cx="12" cy="86" r="6"/><circle cx="36" cy="86" r="6"/><circle cx="60" cy="86" r="6"/><circle cx="84" cy="86" r="6"/><circle cx="108" cy="86" r="6"/><circle cx="132" cy="86" r="6"/><circle cx="156" cy="86" r="6"/><circle cx="180" cy="86" r="6"/><circle cx="204" cy="86" r="6"/><circle cx="228" cy="86" r="6"/><circle cx="252" cy="86" r="6"/><circle cx="276" cy="86" r="6"/><circle cx="300" cy="86" r="6"/><circle cx="324" cy="86" r="6"/><circle cx="348" cy="86" r="6"/>
-      <circle cx="12" cy="110" r="6"/><circle cx="36" cy="110" r="6"/><circle cx="60" cy="110" r="6"/><circle cx="84" cy="110" r="6"/><circle cx="108" cy="110" r="6"/><circle cx="132" cy="110" r="6"/><circle cx="156" cy="110" r="6"/><circle cx="180" cy="110" r="6"/><circle cx="204" cy="110" r="6"/><circle cx="228" cy="110" r="6"/><circle cx="252" cy="110" r="6"/><circle cx="276" cy="110" r="6"/><circle cx="300" cy="110" r="6"/><circle cx="324" cy="110" r="6"/><circle cx="348" cy="110" r="6"/>
-      <circle cx="12" cy="134" r="6"/><circle cx="36" cy="134" r="6"/><circle cx="60" cy="134" r="6"/><circle cx="84" cy="134" r="6"/><circle cx="108" cy="134" r="6"/><circle cx="132" cy="134" r="6"/><circle cx="156" cy="134" r="6"/><circle cx="180" cy="134" r="6"/><circle cx="204" cy="134" r="6"/><circle cx="228" cy="134" r="6"/><circle cx="252" cy="134" r="6"/><circle cx="276" cy="134" r="6"/><circle cx="300" cy="134" r="6"/><circle cx="324" cy="134" r="6"/><circle cx="348" cy="134" r="6"/>
-      <circle cx="12" cy="158" r="6"/><circle cx="36" cy="158" r="6"/><circle cx="60" cy="158" r="6"/><circle cx="84" cy="158" r="6"/><circle cx="108" cy="158" r="6"/><circle cx="132" cy="158" r="6"/><circle cx="156" cy="158" r="6"/><circle cx="180" cy="158" r="6"/><circle cx="204" cy="158" r="6"/><circle cx="228" cy="158" r="6"/><circle cx="252" cy="158" r="6"/><circle cx="276" cy="158" r="6"/><circle cx="300" cy="158" r="6"/><circle cx="324" cy="158" r="6"/><circle cx="348" cy="158" r="6"/>
+      <circle cx="12" cy="34" r="3.2"/><circle cx="23" cy="34" r="3.2"/><circle cx="34" cy="34" r="3.2"/><circle cx="45" cy="34" r="3.2"/><circle cx="56" cy="34" r="3.2"/><circle cx="67" cy="34" r="3.2"/><circle cx="78" cy="34" r="3.2"/><circle cx="89" cy="34" r="3.2"/><circle cx="100" cy="34" r="3.2"/><circle cx="111" cy="34" r="3.2"/><circle cx="122" cy="34" r="3.2"/><circle cx="133" cy="34" r="3.2"/><circle cx="144" cy="34" r="3.2"/><circle cx="155" cy="34" r="3.2"/><circle cx="166" cy="34" r="3.2"/><circle cx="177" cy="34" r="3.2"/><circle cx="188" cy="34" r="3.2"/><circle cx="199" cy="34" r="3.2"/><circle cx="210" cy="34" r="3.2"/><circle cx="221" cy="34" r="3.2"/><circle cx="232" cy="34" r="3.2"/><circle cx="243" cy="34" r="3.2"/><circle cx="254" cy="34" r="3.2"/><circle cx="265" cy="34" r="3.2"/><circle cx="276" cy="34" r="3.2"/><circle cx="287" cy="34" r="3.2"/><circle cx="298" cy="34" r="3.2"/><circle cx="309" cy="34" r="3.2"/><circle cx="320" cy="34" r="3.2"/><circle cx="331" cy="34" r="3.2"/><circle cx="342" cy="34" r="3.2"/><circle cx="353" cy="34" r="3.2"/><circle cx="364" cy="34" r="3.2"/><circle cx="375" cy="34" r="3.2"/><circle cx="386" cy="34" r="3.2"/><circle cx="397" cy="34" r="3.2"/><circle cx="408" cy="34" r="3.2"/>
+      <circle cx="12" cy="47" r="3.2"/><circle cx="23" cy="47" r="3.2"/><circle cx="34" cy="47" r="3.2"/><circle cx="45" cy="47" r="3.2"/><circle cx="56" cy="47" r="3.2"/><circle cx="67" cy="47" r="3.2"/><circle cx="78" cy="47" r="3.2"/><circle cx="89" cy="47" r="3.2"/><circle cx="100" cy="47" r="3.2"/><circle cx="111" cy="47" r="3.2"/><circle cx="122" cy="47" r="3.2"/><circle cx="133" cy="47" r="3.2"/><circle cx="144" cy="47" r="3.2"/><circle cx="155" cy="47" r="3.2"/><circle cx="166" cy="47" r="3.2"/><circle cx="177" cy="47" r="3.2"/><circle cx="188" cy="47" r="3.2"/><circle cx="199" cy="47" r="3.2"/><circle cx="210" cy="47" r="3.2"/><circle cx="221" cy="47" r="3.2"/><circle cx="232" cy="47" r="3.2"/><circle cx="243" cy="47" r="3.2"/><circle cx="254" cy="47" r="3.2"/><circle cx="265" cy="47" r="3.2"/><circle cx="276" cy="47" r="3.2"/><circle cx="287" cy="47" r="3.2"/><circle cx="298" cy="47" r="3.2"/><circle cx="309" cy="47" r="3.2"/><circle cx="320" cy="47" r="3.2"/><circle cx="331" cy="47" r="3.2"/><circle cx="342" cy="47" r="3.2"/><circle cx="353" cy="47" r="3.2"/><circle cx="364" cy="47" r="3.2"/><circle cx="375" cy="47" r="3.2" fill="#f59e0b" stroke="#f59e0b"/><circle cx="386" cy="47" r="3.2"/><circle cx="397" cy="47" r="3.2"/><circle cx="408" cy="47" r="3.2"/>
+      <circle cx="12" cy="60" r="3.2"/><circle cx="23" cy="60" r="3.2"/><circle cx="34" cy="60" r="3.2"/><circle cx="45" cy="60" r="3.2"/><circle cx="56" cy="60" r="3.2"/><circle cx="67" cy="60" r="3.2"/><circle cx="78" cy="60" r="3.2"/><circle cx="89" cy="60" r="3.2"/><circle cx="100" cy="60" r="3.2"/><circle cx="111" cy="60" r="3.2"/><circle cx="122" cy="60" r="3.2"/><circle cx="133" cy="60" r="3.2"/><circle cx="144" cy="60" r="3.2"/><circle cx="155" cy="60" r="3.2"/><circle cx="166" cy="60" r="3.2"/><circle cx="177" cy="60" r="3.2"/><circle cx="188" cy="60" r="3.2"/><circle cx="199" cy="60" r="3.2"/><circle cx="210" cy="60" r="3.2"/><circle cx="221" cy="60" r="3.2"/><circle cx="232" cy="60" r="3.2"/><circle cx="243" cy="60" r="3.2"/><circle cx="254" cy="60" r="3.2"/><circle cx="265" cy="60" r="3.2"/><circle cx="276" cy="60" r="3.2"/><circle cx="287" cy="60" r="3.2"/><circle cx="298" cy="60" r="3.2"/><circle cx="309" cy="60" r="3.2"/><circle cx="320" cy="60" r="3.2"/><circle cx="331" cy="60" r="3.2"/><circle cx="342" cy="60" r="3.2"/><circle cx="353" cy="60" r="3.2"/><circle cx="364" cy="60" r="3.2"/><circle cx="375" cy="60" r="3.2"/><circle cx="386" cy="60" r="3.2"/><circle cx="397" cy="60" r="3.2"/><circle cx="408" cy="60" r="3.2"/>
+      <circle cx="12" cy="73" r="3.2"/><circle cx="23" cy="73" r="3.2"/><circle cx="34" cy="73" r="3.2"/><circle cx="45" cy="73" r="3.2"/><circle cx="56" cy="73" r="3.2"/><circle cx="67" cy="73" r="3.2"/><circle cx="78" cy="73" r="3.2"/><circle cx="89" cy="73" r="3.2"/><circle cx="100" cy="73" r="3.2"/><circle cx="111" cy="73" r="3.2"/><circle cx="122" cy="73" r="3.2"/><circle cx="133" cy="73" r="3.2"/><circle cx="144" cy="73" r="3.2"/><circle cx="155" cy="73" r="3.2"/><circle cx="166" cy="73" r="3.2"/><circle cx="177" cy="73" r="3.2"/><circle cx="188" cy="73" r="3.2"/><circle cx="199" cy="73" r="3.2"/><circle cx="210" cy="73" r="3.2"/><circle cx="221" cy="73" r="3.2"/><circle cx="232" cy="73" r="3.2"/><circle cx="243" cy="73" r="3.2"/><circle cx="254" cy="73" r="3.2"/><circle cx="265" cy="73" r="3.2"/><circle cx="276" cy="73" r="3.2"/><circle cx="287" cy="73" r="3.2"/><circle cx="298" cy="73" r="3.2"/><circle cx="309" cy="73" r="3.2"/><circle cx="320" cy="73" r="3.2"/><circle cx="331" cy="73" r="3.2"/><circle cx="342" cy="73" r="3.2"/><circle cx="353" cy="73" r="3.2"/><circle cx="364" cy="73" r="3.2"/><circle cx="375" cy="73" r="3.2"/><circle cx="386" cy="73" r="3.2"/><circle cx="397" cy="73" r="3.2"/><circle cx="408" cy="73" r="3.2"/>
+      <circle cx="12" cy="86" r="3.2"/><circle cx="23" cy="86" r="3.2"/><circle cx="34" cy="86" r="3.2"/><circle cx="45" cy="86" r="3.2"/><circle cx="56" cy="86" r="3.2"/><circle cx="67" cy="86" r="3.2"/><circle cx="78" cy="86" r="3.2"/><circle cx="89" cy="86" r="3.2"/><circle cx="100" cy="86" r="3.2"/><circle cx="111" cy="86" r="3.2"/><circle cx="122" cy="86" r="3.2"/><circle cx="133" cy="86" r="3.2"/><circle cx="144" cy="86" r="3.2"/><circle cx="155" cy="86" r="3.2"/><circle cx="166" cy="86" r="3.2"/><circle cx="177" cy="86" r="3.2"/><circle cx="188" cy="86" r="3.2"/><circle cx="199" cy="86" r="3.2"/><circle cx="210" cy="86" r="3.2"/><circle cx="221" cy="86" r="3.2"/><circle cx="232" cy="86" r="3.2"/><circle cx="243" cy="86" r="3.2"/><circle cx="254" cy="86" r="3.2"/><circle cx="265" cy="86" r="3.2"/><circle cx="276" cy="86" r="3.2"/><circle cx="287" cy="86" r="3.2"/><circle cx="298" cy="86" r="3.2"/><circle cx="309" cy="86" r="3.2"/><circle cx="320" cy="86" r="3.2"/><circle cx="331" cy="86" r="3.2"/><circle cx="342" cy="86" r="3.2"/><circle cx="353" cy="86" r="3.2"/><circle cx="364" cy="86" r="3.2"/><circle cx="375" cy="86" r="3.2"/><circle cx="386" cy="86" r="3.2"/><circle cx="397" cy="86" r="3.2"/><circle cx="408" cy="86" r="3.2"/>
+      <circle cx="12" cy="99" r="3.2"/><circle cx="23" cy="99" r="3.2"/><circle cx="34" cy="99" r="3.2"/><circle cx="45" cy="99" r="3.2"/><circle cx="56" cy="99" r="3.2"/><circle cx="67" cy="99" r="3.2" fill="#f59e0b" stroke="#f59e0b"/><circle cx="78" cy="99" r="3.2"/><circle cx="89" cy="99" r="3.2"/><circle cx="100" cy="99" r="3.2"/><circle cx="111" cy="99" r="3.2"/><circle cx="122" cy="99" r="3.2"/><circle cx="133" cy="99" r="3.2"/><circle cx="144" cy="99" r="3.2"/><circle cx="155" cy="99" r="3.2"/><circle cx="166" cy="99" r="3.2"/><circle cx="177" cy="99" r="3.2"/><circle cx="188" cy="99" r="3.2"/><circle cx="199" cy="99" r="3.2"/><circle cx="210" cy="99" r="3.2"/><circle cx="221" cy="99" r="3.2"/><circle cx="232" cy="99" r="3.2"/><circle cx="243" cy="99" r="3.2"/><circle cx="254" cy="99" r="3.2"/><circle cx="265" cy="99" r="3.2"/><circle cx="276" cy="99" r="3.2"/><circle cx="287" cy="99" r="3.2"/><circle cx="298" cy="99" r="3.2"/><circle cx="309" cy="99" r="3.2"/><circle cx="320" cy="99" r="3.2"/><circle cx="331" cy="99" r="3.2"/><circle cx="342" cy="99" r="3.2"/><circle cx="353" cy="99" r="3.2"/><circle cx="364" cy="99" r="3.2"/><circle cx="375" cy="99" r="3.2"/><circle cx="386" cy="99" r="3.2"/><circle cx="397" cy="99" r="3.2"/><circle cx="408" cy="99" r="3.2"/>
+      <circle cx="12" cy="112" r="3.2"/><circle cx="23" cy="112" r="3.2"/><circle cx="34" cy="112" r="3.2"/><circle cx="45" cy="112" r="3.2"/><circle cx="56" cy="112" r="3.2"/><circle cx="67" cy="112" r="3.2"/><circle cx="78" cy="112" r="3.2"/><circle cx="89" cy="112" r="3.2"/><circle cx="100" cy="112" r="3.2"/><circle cx="111" cy="112" r="3.2"/><circle cx="122" cy="112" r="3.2"/><circle cx="133" cy="112" r="3.2"/><circle cx="144" cy="112" r="3.2"/><circle cx="155" cy="112" r="3.2"/><circle cx="166" cy="112" r="3.2"/><circle cx="177" cy="112" r="3.2"/><circle cx="188" cy="112" r="3.2"/><circle cx="199" cy="112" r="3.2"/><circle cx="210" cy="112" r="3.2"/><circle cx="221" cy="112" r="3.2"/><circle cx="232" cy="112" r="3.2"/><circle cx="243" cy="112" r="3.2"/><circle cx="254" cy="112" r="3.2"/><circle cx="265" cy="112" r="3.2"/><circle cx="276" cy="112" r="3.2"/><circle cx="287" cy="112" r="3.2"/><circle cx="298" cy="112" r="3.2"/><circle cx="309" cy="112" r="3.2"/><circle cx="320" cy="112" r="3.2"/><circle cx="331" cy="112" r="3.2"/><circle cx="342" cy="112" r="3.2"/><circle cx="353" cy="112" r="3.2"/><circle cx="364" cy="112" r="3.2"/><circle cx="375" cy="112" r="3.2"/><circle cx="386" cy="112" r="3.2"/><circle cx="397" cy="112" r="3.2"/><circle cx="408" cy="112" r="3.2"/>
+      <circle cx="12" cy="125" r="3.2"/><circle cx="23" cy="125" r="3.2"/><circle cx="34" cy="125" r="3.2"/><circle cx="45" cy="125" r="3.2"/><circle cx="56" cy="125" r="3.2"/><circle cx="67" cy="125" r="3.2"/><circle cx="78" cy="125" r="3.2"/><circle cx="89" cy="125" r="3.2"/><circle cx="100" cy="125" r="3.2"/><circle cx="111" cy="125" r="3.2"/><circle cx="122" cy="125" r="3.2"/><circle cx="133" cy="125" r="3.2"/><circle cx="144" cy="125" r="3.2"/><circle cx="155" cy="125" r="3.2"/><circle cx="166" cy="125" r="3.2"/><circle cx="177" cy="125" r="3.2"/><circle cx="188" cy="125" r="3.2"/><circle cx="199" cy="125" r="3.2"/><circle cx="210" cy="125" r="3.2"/><circle cx="221" cy="125" r="3.2"/><circle cx="232" cy="125" r="3.2"/><circle cx="243" cy="125" r="3.2"/><circle cx="254" cy="125" r="3.2"/><circle cx="265" cy="125" r="3.2"/><circle cx="276" cy="125" r="3.2"/><circle cx="287" cy="125" r="3.2"/><circle cx="298" cy="125" r="3.2"/><circle cx="309" cy="125" r="3.2"/><circle cx="320" cy="125" r="3.2"/><circle cx="331" cy="125" r="3.2"/><circle cx="342" cy="125" r="3.2"/><circle cx="353" cy="125" r="3.2"/><circle cx="364" cy="125" r="3.2"/><circle cx="375" cy="125" r="3.2"/><circle cx="386" cy="125" r="3.2"/><circle cx="397" cy="125" r="3.2"/><circle cx="408" cy="125" r="3.2"/>
     </g>
-    <text x="380" y="86" fill="#2fd27a" font-size="46" font-weight="800">0</text>
-    <text x="380" y="112" fill="currentColor" font-size="14" opacity=".8">flagged</text>
-    <text x="380" y="134" fill="currentColor" font-size="13" opacity=".55">none filled in,</text>
-    <text x="380" y="151" fill="currentColor" font-size="13" opacity=".55">none accused</text>
+    <text x="442" y="72" fill="#f59e0b" font-size="46" font-weight="800">2</text>
+    <text x="442" y="98" fill="currentColor" font-size="14" opacity=".8">flagged</text>
+    <text x="442" y="120" fill="currentColor" font-size="13" opacity=".55">the two filled in,</text>
+    <text x="442" y="137" fill="currentColor" font-size="13" opacity=".55">out of two hundred and ninety-six</text>
 
-    <text x="0" y="196" fill="currentColor" font-size="12" font-weight="700" opacity=".75">WHAT CAN HONESTLY BE CLAIMED</text>
+    <text x="0" y="172" fill="currentColor" font-size="12" font-weight="700" opacity=".75">WHAT CAN HONESTLY BE CLAIMED</text>
     <line x1="12" y1="216" x2="620" y2="216" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/>
-    <rect x="12" y="209" width="249" height="14" rx="7" fill="#f59e0b" fill-opacity=".28"/>
-    <circle cx="12" cy="216" r="6" fill="#2fd27a"/>
+    <rect x="24" y="209" width="134" height="14" rx="7" fill="#f59e0b" fill-opacity=".28"/>
+    <circle cx="53" cy="216" r="6" fill="#2fd27a"/>
+    <text x="53" y="202" fill="#2fd27a" font-size="12" font-weight="700" text-anchor="middle">0.7%</text>
     <text x="12" y="241" fill="currentColor" font-size="12" opacity=".75">0%</text>
-    <text x="222" y="241" fill="#f59e0b" font-size="12" font-weight="700">4.1%</text>
+    <text x="168" y="241" fill="#f59e0b" font-size="12" font-weight="700">2.4%</text>
     <text x="620" y="241" fill="currentColor" font-size="12" opacity=".55" text-anchor="end">10%</text>
   </svg>
   <figcaption>
-    None of the ninety was flagged. But <strong>zero out of ninety is not a rate of zero</strong>:
-    with a sample that size, the most anyone can honestly claim is that it is wrong
-    <strong>less than 4.1%</strong> of the time. That amber band is the difference between a
-    measurement and a promise.
+    Two of the 296 were flagged: <strong>0.7%</strong>. But two out of 296 is not exactly the
+    rate either: with a sample that size, the most anyone can honestly claim is that it is wrong
+    <strong>less than 2.4%</strong> of the time. That amber band is the difference between a
+    measurement and a promise. <strong>It is not zero, and that is the point</strong>: until
+    September this page showed a zero, because the corpus did not yet hold the people most likely
+    to be accused falsely.
   </figcaption>
 </figure>
 
 <h3>And it is not the same number for everybody</h3>
 <p>
-  Handing the pooled figure to everyone would be convenient and false. The corpus holds sixty-five
-  English texts and twenty-five Spanish ones, so what can be claimed about each language differs —
-  and in the tool, each reader is shown their own, never the average.
+  Handing the pooled figure to everyone would be convenient and false. The corpus holds
+  <strong>271 English texts and twenty-five Spanish ones</strong>, so what can be claimed about
+  each language differs — and in the tool, each reader is shown their own, never the average.
 </p>
 
 <figure>
-  <svg viewBox="0 0 640 140" role="img" aria-label="Bound by language: English 5.6 percent, Spanish 13.3 percent">
+  <svg viewBox="0 0 640 140" role="img" aria-label="Bound by language: English 2.7 percent, Spanish 13.3 percent">
     <text x="0" y="22" fill="currentColor" font-size="14" font-weight="600">English</text>
-    <text x="0" y="39" fill="currentColor" font-size="11.5" opacity=".55">65 texts</text>
+    <text x="0" y="39" fill="currentColor" font-size="11.5" opacity=".55">271 texts</text>
     <line x1="120" y1="26" x2="620" y2="26" stroke="currentColor" stroke-opacity=".2" stroke-width="2"/>
-    <rect x="120" y="19" width="187" height="14" rx="7" fill="#f59e0b" fill-opacity=".3"/>
-    <text x="317" y="31" fill="#f59e0b" font-size="13" font-weight="700">5.6%</text>
+    <rect x="120" y="19" width="90" height="14" rx="7" fill="#f59e0b" fill-opacity=".3"/>
+    <text x="220" y="31" fill="#f59e0b" font-size="13" font-weight="700">2.7%</text>
 
     <text x="0" y="80" fill="currentColor" font-size="14" font-weight="600">Spanish</text>
     <text x="0" y="97" fill="currentColor" font-size="11.5" opacity=".55">25 texts</text>
@@ -454,14 +478,23 @@ body:has(#en:checked) .only-en{display:block}
   fashionable that month. A tool that flags nothing has a perfect error rate.
 </p>
 <p>
-  The ninety texts are <strong>published articles, not student work</strong>. A first-year essay
-  does not read like a peer-reviewed paper, and that difference is not measured here.
+  <strong>It does include student work, and that is the part that matters most to you.</strong>
+  Of the 296 texts, <strong>206 are classroom essays</strong> written by adults learning English.
+  That is precisely the group detectors are accused of getting wrong most often, and here it is the
+  group that fares worst: it sits highest of any group in every column. At a threshold of 25 out of
+  100, nine of them were flagged. <strong>That is why the boundary is 30 and not 25</strong> — it
+  moved once we knew who it was hurting.
+</p>
+<p>
+  What is still unmeasured is the <strong>student essay in Spanish</strong>: the twenty-five Spanish
+  texts are Wikipedia revisions from a single source. There this tool knows less, and it says so
+  rather than lending one language a figure it measured in another.
 </p>
 <div class="quote">
-  And one worth knowing before you look at any score: the signal that fires most often on human
-  writing is <b>uniform sentence rhythm</b> — it appears in <b>27.8%</b> of the human texts we
-  measured. If the evidence against a piece of work leans mostly on that, it is worth less. The
-  tool says so on every report, by name.
+  And one worth knowing before you look at any score: the signals that fire most often on human
+  writing say almost nothing. <b>Uniform sentence rhythm</b> appears in <b>32.1%</b> of the human
+  texts we measured, and the word "just" in <b>34.8%</b>. If the evidence against a piece of work
+  leans mostly on those, it is worth less. The tool says so on every report, by name.
 </div>
 
 <h2>Why trust this one and not another?</h2>
@@ -516,13 +549,13 @@ body:has(#en:checked) .only-en{display:block}
 <footer>
   <p class="only-es">
     Signs of AI Writing · PeopleWorks — Pedro Hernández · Código abierto (MIT).
-    Cifras medidas el 5 de agosto de 2026 sobre el motor 0.4.0, con noventa textos publicados
-    antes de que existieran los modelos generativos.
+    Cifras medidas el 7 de septiembre de 2026 sobre el motor 0.7.0, con 296 textos escritos
+    antes de 2022.
   </p>
   <p class="only-en">
     Signs of AI Writing · PeopleWorks — Pedro Hernández · Open source (MIT).
-    Figures measured on 5 August 2026 against engine 0.4.0, over ninety texts published before
-    generative models existed.
+    Figures measured on 7 September 2026 against engine 0.7.0, over 296 texts written before
+    2022.
   </p>
 </footer>
 

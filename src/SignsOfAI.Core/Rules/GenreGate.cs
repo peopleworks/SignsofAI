@@ -5,7 +5,7 @@ namespace SignsOfAI.Core.Rules;
 /// <summary>
 /// Marks the findings of rules that are describing the genre rather than the machine.
 ///
-/// Measuring the analyzer against ninety texts published before generative models existed produced a
+/// Measuring the analyzer against the calibration corpus, all of it written before 2022, produced a
 /// number worth staring at: a median of <b>seven</b> flagged tells per human academic paper, 888
 /// across the corpus, with only two of the ninety coming back clean. The score survived that — the
 /// median was 6.8 out of 100 and nothing reached the recommended threshold — because the rules

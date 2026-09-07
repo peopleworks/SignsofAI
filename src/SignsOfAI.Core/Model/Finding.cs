@@ -45,7 +45,7 @@ public sealed record Finding
 
     /// <summary>
     /// True when this rule is being used in this text at a rate people write at, measured against
-    /// writing published before generative models existed. The finding still describes something real
+    /// writing published before 2022. The finding still describes something real
     /// and is still shown, but it is not evidence of a machine and contributes nothing to the score.
     ///
     /// It is marked rather than removed on purpose. Ninety human academic papers produced a median of

@@ -10,7 +10,7 @@ namespace SignsOfAI.Calibration;
 /// Assembles a corpus of writing that is known to be human.
 ///
 /// "Known" is doing real work here, and it rests on one fact rather than on a classifier: every text
-/// collected was published before generative models could have written it. A paper with a 2019 DOI
+/// collected was published before 2022, so no generative model could have written it. A 2019 DOI
 /// and a Wikipedia revision stamped 2021 were not produced by something that did not exist. No
 /// detector can offer a guarantee that strong about anything, which is precisely why the corpus has
 /// to come from dates and not from judgement.
@@ -87,7 +87,7 @@ public static partial class Fetch
     ];
 
     /// <summary>
-    /// Open-access research articles published well before generative models, from PLOS.
+    /// Open-access research articles published well before 2022, from PLOS.
     ///
     /// Academic prose is not a student essay and the report says so. It is, however, the closest
     /// freely licensed writing to what a teacher actually reads, and it comes with author
@@ -194,7 +194,7 @@ public static partial class Fetch
     // ---- Wikipedia -------------------------------------------------------------------------------
 
     /// <summary>
-    /// Article prose as it stood before generative models, taken from the revision history.
+    /// Article prose as it stood before 2022, taken from the revision history.
     ///
     /// This is the only route found that yields substantial Spanish prose that is provably pre-model,
     /// openly licensed and machine-fetchable — and Spanish is the half of this project that nobody
@@ -261,7 +261,7 @@ public static partial class Fetch
                         Url = $"https://{language}.wikipedia.org/w/index.php?oldid={revid}",
                         File = file,
                         Sha256 = CorpusManifest.HashText(text),
-                        Note = $"Revision of \"{title}\" as of {stamp}, before generative models.",
+                        Note = $"Revision of \"{title}\" as of {stamp}, before 2022.",
                     });
 
                     Console.WriteLine($"  {entries.Count,3}. {id}  {stamp[..10]}  {CountWords(text),6:N0} words  {Shorten(title)}");

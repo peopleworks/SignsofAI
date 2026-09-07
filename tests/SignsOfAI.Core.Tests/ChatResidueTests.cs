@@ -15,7 +15,7 @@ namespace SignsOfAI.Core.Tests;
 ///
 /// That is also why this batch was admissible when most of the pattern set it came from was not.
 /// The rules were screened against the calibration corpus first — 249,455 words of English and
-/// 39,712 of Spanish, all published before generative models existed — and every one of them scored
+/// 39,712 of Spanish, all published before 2022 — and every one of them scored
 /// zero. Re-running the calibration afterwards left the published false-positive rate untouched,
 /// which is the point: they cost nothing to carry.
 ///

@@ -140,7 +140,7 @@ public static class ParaphraseReport
         sb.AppendLine($"- **Run** {generatedOn}");
         sb.AppendLine();
         sb.AppendLine(
-            "Every human half was published before generative models existed, which is the whole basis " +
+            "Every human half was published before 2022, which is the whole basis " +
             "for calling it human and the same basis the calibration page rests on. Both halves are the " +
             "same passage at roughly the same length, so the comparison is within a text rather than " +
             "between two populations: no collection of machine-written prose was assembled, and none " +
