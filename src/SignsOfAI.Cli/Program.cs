@@ -10,7 +10,9 @@ using SignsOfAI.Core.Reporting;
 using SignsOfAI.Core.Rules;
 
 // ── signsofai: lint prose for the signs of AI writing ────────────────────────
-const string Version = "0.1.0";
+// Read from the assembly, never restated here: a constant went seven releases saying 0.1.0 while
+// the package said 0.6.0, so anyone checking whether they had a fix was told they did not.
+string Version = SignsOfAI.Cli.BuildInfo.Version;
 
 // Emit UTF-8 so accents, · separators and glyphs render on Windows consoles too.
 try { Console.OutputEncoding = System.Text.Encoding.UTF8; } catch { /* redirected / unsupported */ }
