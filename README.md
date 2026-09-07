@@ -262,6 +262,74 @@ See `skill/README.md`.
 
 ---
 
+## 6. Use it where the writing happens — the Word add-in
+
+A task pane inside Word. Press **Read the signs** on the Home tab and it reads the open document and
+answers in the sidebar — no copying into a browser, no uploading a file, no leaving the page you are
+writing on.
+
+**It is the same engine, not a smaller one.** Every rule, the character scan, the citation
+cross-check and the verdict rules arrive through `SignsOfAI.UI`, the class library the web app and
+the desktop app also render. Word is simply a third host.
+
+### Why a task pane is the right place for this particular tool
+
+A task pane is a browser. The WebAssembly engine is downloaded once and runs there, on the machine,
+which means **the document is never uploaded** — the same guarantee the web app makes, in the
+application where the document actually lives.
+
+That is not a nicety. Every other add-in in this category posts your text to an API, because their
+analysis is a server. Ours is not, so there is nothing to post it to. And the manifest asks for
+**`ReadDocument`**, not `ReadWriteDocument`: Word itself enforces that this add-in can only read
+your document, rather than asking you to trust a sentence on a website.
+
+### What it looks like on a real document
+
+A 357-word document, which is below the length this build measured:
+
+```
+Document 1.docx
+
+  0/100
+  No verdict at this length
+
+  This text is 357 words. The boundary was measured only on texts of 649 words and
+  longer, so no verdict is given — the score is neither evidence that a machine wrote
+  this nor evidence that a person did. Everything below is unaffected.
+
+  357 words · 21 sentences · 0 signals
+
+  Character artifacts          Present, not spread
+  6 unusual characters, not spread through the document.
+  U+00A0   NO-BREAK SPACE   ×6
+```
+
+Two things worth reading twice. **It refused to give a verdict**, and said why, because the corpus
+this build is calibrated on contains no text shorter than 649 words — see
+[the calibration](Docs/CALIBRATION.md). And it still reported six no-break spaces, because the
+character scan is a fact about the file and carries no threshold: it holds at any length, and it
+says nothing about who wrote anything.
+
+### Installing it
+
+**Word on the web** — Home → Add-ins → More Add-ins → My Add-ins → **Upload My Add-in**, and choose
+[`src/SignsOfAI.Word/manifest.xml`](src/SignsOfAI.Word/manifest.xml).
+
+**Word for Windows** has no upload button and reads a shared-folder catalogue instead; the steps are
+in [`src/SignsOfAI.Word/README.md`](src/SignsOfAI.Word/README.md).
+
+First load is about 3.4 MB — the .NET runtime, cached afterwards. It is not in the Office Store yet.
+
+### PowerPoint is a different product, on purpose
+
+A deck rarely reaches 649 words, so the same add-in in PowerPoint would mostly do what it did above:
+withhold the verdict. Correct, and not much use. What *does* work at slide length is the part with no
+threshold — the character scan and the named tells — so the honest question there is **"does this
+deck carry a humanizer's fingerprints"**, not "is this AI". That is a different product and it is not
+built yet.
+
+---
+
 ## Architecture
 
 ```
