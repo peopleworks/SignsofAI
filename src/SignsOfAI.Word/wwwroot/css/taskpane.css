@@ -1,0 +1,143 @@
+/*
+  A task pane is roughly 320px wide and the user cannot widen it much. Everything here is about
+  that column: no hero, no side-by-side, nothing that needs horizontal room.
+
+  It loads *after* the shared stylesheet and only overrides layout — colours, the score classes
+  (good / notice / warn / danger / unmeasured) and the fact panels come from SignsOfAI.UI, so a
+  boundary change or a palette change reaches this host without being restated.
+*/
+
+body.taskpane {
+  margin: 0;
+  font: 13px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+  /* The shared stylesheet is written for a page with room. In a pane there is none, and anything
+     that assumes a minimum width pushes content off the right edge where nobody can scroll to it. */
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+body.taskpane * { max-width: 100%; }
+
+/* Rule ids, file names and long suggestions are the things that will not wrap on their own. */
+.pane, .pane * { overflow-wrap: anywhere; }
+
+.pane-booting {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+.pane {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  padding: .75rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border, #e2e6ea);
+}
+
+.pane-title { font-weight: 650; font-size: .95rem; }
+
+.pane-note,
+.pane-file,
+.pane-unmeasured,
+.pane-stats {
+  margin: 0;
+  font-size: .8rem;
+  color: var(--muted, #5b6470);
+}
+
+.pane-file { font-style: italic; word-break: break-all; }
+
+.pane-error {
+  margin: 0;
+  padding: .5rem;
+  border-radius: .35rem;
+  font-size: .8rem;
+  background: rgba(240, 85, 111, .12);
+}
+
+.pane-paste {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  padding: .5rem;
+  border: 1px solid var(--border, #e2e6ea);
+  border-radius: .35rem;
+  resize: vertical;
+}
+
+.pane-run {
+  width: 100%;
+  padding: .55rem .75rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--brand, #2563eb);
+  border: 0;
+  border-radius: .35rem;
+  cursor: pointer;
+}
+
+.pane-run:disabled { opacity: .5; cursor: default; }
+
+.pane-result { display: flex; flex-direction: column; gap: .6rem; }
+
+/* The number, big enough to read at a glance and no bigger — the pane has one column to spend. */
+.pane-score { font-size: 2.1rem; font-weight: 800; line-height: 1; }
+.pane-score-of { font-size: .9rem; font-weight: 500; opacity: .6; }
+.pane-verdict { margin: 0; font-weight: 650; font-size: .95rem; }
+
+/* Below the measured length there is no verdict, and the reason has to be visible rather than
+   inferred from a missing line. */
+.pane-unmeasured {
+  padding: .5rem;
+  border-left: 3px solid var(--muted, #9aa4b0);
+  background: rgba(128, 128, 128, .08);
+}
+
+.pane-findings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+}
+
+.pane-findings li {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  padding: .45rem .5rem;
+  border-left: 3px solid var(--border, #e2e6ea);
+  background: rgba(128, 128, 128, .06);
+}
+
+.pane-rule {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: .7rem;
+  opacity: .65;
+}
+
+.pane-msg { font-size: .8rem; }
+.pane-fix { font-size: .78rem; color: var(--muted, #5b6470); }
+
+.pane-foot {
+  margin-top: auto;
+  padding-top: .5rem;
+  border-top: 1px solid var(--border, #e2e6ea);
+  font-size: .7rem;
+  color: var(--muted, #5b6470);
+}

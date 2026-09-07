@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Word task pane for Signs of AI Writing.
+
+  Two things in here are the product, not boilerplate:
+
+  Permissions is ReadDocument, not ReadWriteDocument. This add-in reads the body and never touches
+  it, and Word enforces that rather than asking anyone to believe a sentence on a website. An
+  add-in that could rewrite your document would be a different promise.
+
+  There is no AppDomain for an analysis endpoint, because there is no analysis endpoint. The engine
+  is WebAssembly served with the pane and it runs in the pane; the document never leaves the
+  machine. The only host reached is Microsoft's own CDN, for office.js, before anything is read.
+-->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+           xsi:type="TaskPaneApp">
+
+  <Id>7f3c1d94-6a2e-4b58-9c11-0d5e8a4b2f60</Id>
+  <Version>0.1.0.0</Version>
+  <ProviderName>PeopleWorks Services</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+
+  <DisplayName DefaultValue="Signs of AI Writing"/>
+  <Description DefaultValue="Read the signs of AI writing in this document, with the evidence named — and the error rate this build actually measured. Runs on your machine; the document is never uploaded."/>
+
+  <IconUrl DefaultValue="https://peopleworks.github.io/SignsofAI/icon-192.png"/>
+  <HighResolutionIconUrl DefaultValue="https://peopleworks.github.io/SignsofAI/icon-192.png"/>
+  <SupportUrl DefaultValue="https://github.com/peopleworks/SignsofAI"/>
+
+  <AppDomains>
+    <!-- Nothing but the pane's own origin. Listed explicitly so the absence of an API host is
+         visible in the manifest a reviewer reads. -->
+    <AppDomain>https://peopleworks.github.io</AppDomain>
+  </AppDomains>
+
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://peopleworks.github.io/SignsofAI/word/index.html"/>
+  </DefaultSettings>
+
+  <Permissions>ReadDocument</Permissions>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="SignsOfAI.Group">
+                <Label resid="Group.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16"/>
+                  <bt:Image size="32" resid="Icon.32"/>
+                  <bt:Image size="80" resid="Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="SignsOfAI.OpenPane">
+                  <Label resid="Button.Label"/>
+                  <Supertip>
+                    <Title resid="Button.Label"/>
+                    <Description resid="Button.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>SignsOfAI.Taskpane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16" DefaultValue="https://peopleworks.github.io/SignsofAI/favicon.png"/>
+        <bt:Image id="Icon.32" DefaultValue="https://peopleworks.github.io/SignsofAI/favicon.png"/>
+        <bt:Image id="Icon.80" DefaultValue="https://peopleworks.github.io/SignsofAI/icon-192.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://peopleworks.github.io/SignsofAI/why.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://peopleworks.github.io/SignsofAI/word/index.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="Signs of AI Writing is ready"/>
+        <bt:String id="Group.Label" DefaultValue="Signs of AI"/>
+        <bt:String id="Button.Label" DefaultValue="Read the signs"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="On the Home tab, choose Read the signs to open the pane."/>
+        <bt:String id="Button.Tooltip" DefaultValue="Analyse this document on your own machine. It is never uploaded."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

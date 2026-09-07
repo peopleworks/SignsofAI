@@ -15,6 +15,7 @@
     <Project Path="src/SignsOfAI.Perplexity.Api/SignsOfAI.Perplexity.Api.csproj" />
     <Project Path="src/SignsOfAI.UI/SignsOfAI.UI.csproj" />
     <Project Path="src/SignsOfAI.Web/SignsOfAI.Web.csproj" />
+    <Project Path="src/SignsOfAI.Word/SignsOfAI.Word.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/SignsOfAI.Calibration/SignsOfAI.Calibration.csproj" />
