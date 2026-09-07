@@ -31,7 +31,7 @@ public static class ReportTools
         disagree with its own bibliography. Checkable facts are named at the top and kept apart from the score,
         which is an opinion about prose.
         Every report prints how often this build is wrong, measured for the language actually analysed against
-        texts published before generative models existed, and names the rules known to fire on human writing so
+        texts written before 2022, and names the rules known to fire on human writing so
         the reader can weigh evidence that leans on one. Below the threshold that measurement supports, no
         verdict is given at all.
         Runs FULLY OFFLINE. The result contains material from the document, so treat it as you would the

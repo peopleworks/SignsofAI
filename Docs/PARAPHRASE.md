@@ -16,7 +16,7 @@ This page measures what such a rewrite does to a passage, using passages whose a
 - **Pair fingerprint** `9fb9e9798f5b2a78`
 - **Run** 2026-08-19
 
-Every human half was published before generative models existed, which is the whole basis for calling it human and the same basis the calibration page rests on. Both halves are the same passage at roughly the same length, so the comparison is within a text rather than between two populations: no collection of machine-written prose was assembled, and none was needed. The pairs are cut from the **opening** of each document, which matters and is measured under Length.
+Every human half was published before 2022, which is the whole basis for calling it human and the same basis the calibration page rests on. Both halves are the same passage at roughly the same length, so the comparison is within a text rather than between two populations: no collection of machine-written prose was assembled, and none was needed. The pairs are cut from the **opening** of each document, which matters and is measured under Length.
 
 **This half of the study ages, and the human half does not.** A 2019 paper will still have been written in 2019 a decade from now; the rewrite is the work of one model on one day. That is why the model and the date are printed above rather than buried, and why the right response to "but a newer model rewrites differently" is to re-run this with that model rather than to argue about it.
 

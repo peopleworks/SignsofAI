@@ -22,7 +22,7 @@ public sealed record PublishedCalibration
     /// <summary>The corpus this was measured against, e.g. "signsofai-human-baseline".</summary>
     public required string CorpusId { get; init; }
 
-    /// <summary>How many texts, all published before generative models could have written them.</summary>
+    /// <summary>How many texts, all written before 2022, so no generative model could have written them.</summary>
     public required int Texts { get; init; }
 
     /// <summary>Date of the measuring run, yyyy-MM-dd.</summary>
