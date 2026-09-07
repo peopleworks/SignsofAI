@@ -30,14 +30,35 @@ jobs:
       - name: Publish
         run: dotnet publish src/SignsOfAI.Web -c Release -o publish
 
+      # The Word task pane is its own WebAssembly app and ships under /word/. Office loads a task
+      # pane by URL, so an add-in whose SourceLocation 404s does not fail quietly: Word says "this
+      # add-in may not load properly" and the pane shows whatever the fallback served. That is
+      # exactly what happened the first time the manifest was sideloaded, because this step did not
+      # exist yet and Pages answered the pane's URL with the web app's SPA fallback.
+      - name: Publish the Word task pane
+        run: dotnet publish src/SignsOfAI.Word -c Release -o publish-word
+
       # Project sites live at /<repo>/, so rewrite the base href from "/" to "/<repo>/".
       - name: Rewrite base href
         run: |
           sed -i 's|<base href="/" />|<base href="/${{ github.event.repository.name }}/" />|g' publish/wwwroot/index.html
+          sed -i 's|<base href="/" />|<base href="/${{ github.event.repository.name }}/word/" />|g' publish-word/wwwroot/index.html
 
       # SPA deep links (e.g. /catalog) 404 on Pages without a fallback — serve index.html as 404.
       - name: SPA fallback
         run: cp publish/wwwroot/index.html publish/wwwroot/404.html
+
+      - name: Place the task pane under /word/
+        run: cp -r publish-word/wwwroot publish/wwwroot/word
+
+      # The pane is loaded by URL from inside Word, where a 404 shows as an add-in error rather than
+      # a missing page. Fail the deploy here instead of finding out in Word.
+      - name: The task pane's own entry point exists
+        run: |
+          test -f publish/wwwroot/word/index.html
+          grep -q 'base href="/${{ github.event.repository.name }}/word/"' publish/wwwroot/word/index.html
+          grep -q '_framework/blazor.webassembly\.' publish/wwwroot/word/index.html
+          echo "word/index.html is in the artifact, with its own base href and a real bootstrap name."
 
       - uses: actions/upload-pages-artifact@v5
         with:
