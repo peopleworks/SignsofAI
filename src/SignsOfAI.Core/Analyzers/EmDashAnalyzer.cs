@@ -8,6 +8,9 @@ namespace SignsOfAI.Core.Analyzers;
 /// the tell is density. Emits one document-level finding (like burstiness) when em-dashes appear
 /// far more often than human prose, which averages well under one per 100 words.
 /// Counts real em-dashes (—), horizontal bars (―) and the "--" ASCII stand-in.
+/// Counts them in prose only: a hyphen run inside a fenced block or a code span is a command-line
+/// flag, and a run of three or more is a rule, a table separator or a frontmatter delimiter. None of
+/// those is punctuation, and counting them charged technical documents for their own markup.
 /// Categorised as Rhetorical so the signal counts toward the score, not just the report.
 /// </summary>
 public sealed class EmDashAnalyzer : IAnalyzer
@@ -50,22 +53,66 @@ public sealed class EmDashAnalyzer : IAnalyzer
         };
     }
 
+    /// <summary>
+    /// Counts dashes used as punctuation. Skips fenced code blocks and inline code spans, where a
+    /// "--" is a command-line flag; and skips hyphen runs of three or more, which are separators
+    /// (---, |---|---|, a line of hyphens above a bibliography), never a dash between two clauses.
+    /// The ASCII stand-in for an em-dash is exactly two hyphens.
+    /// </summary>
     private static int CountEmDashes(string text)
     {
         int count = 0;
-        for (int i = 0; i < text.Length; i++)
+        bool insideFence = false;
+
+        foreach (var line in text.Split('\n'))
         {
-            char c = text[i];
-            if (c is '—' or '―') // em dash, horizontal bar
+            var trimmed = line.AsSpan().Trim();
+            if (trimmed.StartsWith("```") || trimmed.StartsWith("~~~"))
+            {
+                insideFence = !insideFence;
+                continue;
+            }
+
+            if (!insideFence)
+                count += CountInProseLine(line);
+        }
+
+        return count;
+    }
+
+    private static int CountInProseLine(string line)
+    {
+        int count = 0;
+        for (int i = 0; i < line.Length; i++)
+        {
+            char c = line[i];
+
+            if (c == '`')
+            {
+                // An inline code span holds flags and identifiers, not punctuation. An unmatched
+                // backtick is just a character, so only skip when a closing one exists.
+                int close = line.IndexOf('`', i + 1);
+                if (close < 0)
+                    continue;
+                i = close;
+            }
+            else if (c is '—' or '―') // em dash, horizontal bar
             {
                 count++;
             }
-            else if (c == '-' && i + 1 < text.Length && text[i + 1] == '-')
+            else if (c == '-')
             {
-                count++;
-                i++; // consume the pair, so "---" counts once
+                int run = 1;
+                while (i + run < line.Length && line[i + run] == '-')
+                    run++;
+
+                if (run == 2)
+                    count++; // the ASCII stand-in; a single hyphen joins words, three or more separate blocks
+
+                i += run - 1;
             }
         }
+
         return count;
     }
 }
