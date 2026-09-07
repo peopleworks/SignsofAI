@@ -12,7 +12,7 @@ It is **not an accuracy figure**. Accuracy needs machine-written text to measure
 - **Texts** 296 (452,184 words)
 - **Lengths measured** 649 – 9,328 words (median 832)
 - **Engine** SignsOfAI.Core 0.6.0
-- **Run** 2026-09-01
+- **Run** 2026-09-07
 - **Target false-positive rate** 5%
 
 Every text here was written before 2022 — articles and encyclopedia revisions with a date, and classroom essays from a learner corpus collected years earlier. That is the whole basis for calling it human, and it is a stronger guarantee than any classifier offers about anything. The manifest names each source, its licence and its year, so the claim can be traced rather than trusted.
@@ -41,7 +41,7 @@ A rate that holds in English and fails in Spanish is not one number, and reporti
 
 | Group | Texts | Median | 90th pct | Highest | Threshold for 5% | Best bound it can support |
 |---|---|---|---|---|---|---|
-| **en** | 271 | 8.8 | 18.3 | 33.8 | 30 | 1.4% |
+| **en** | 271 | 8.7 | 18.3 | 33.8 | 30 | 1.4% |
 | **es** | 25 | 7.2 | 15.1 | 18.4 | — | 13.3% |
 
 A dash means this group has too few texts to bound that rate at all — with nothing flagged it still takes roughly seventy-five before the interval alone gets under 5%. That is a statement about the corpus, not the tool.
@@ -54,20 +54,20 @@ The reason the whole exercise exists. If this project cannot show a rate for sec
 |---|---|---|---|---|---|---|
 | **en-anglophone-affiliation** | 21 | 5.9 | 9.0 | 14.2 | — | 15.5% |
 | **en-other-affiliation** | 19 | 6.2 | 13.6 | 18.0 | — | 16.8% |
-| **en-second-language-learner** | 206 | 9.6 | 19.7 | 33.8 | 30 | 1.8% |
+| **en-second-language-learner** | 206 | 9.5 | 19.7 | 33.8 | 30 | 1.8% |
 | **en-wikipedia** | 25 | 4.9 | 10.4 | 23.4 | — | 13.3% |
 | **es-wikipedia** | 25 | 7.2 | 15.1 | 18.4 | — | 13.3% |
 
 A dash means this group has too few texts to bound that rate at all — with nothing flagged it still takes roughly seventy-five before the interval alone gets under 5%. That is a statement about the corpus, not the tool.
 
-Across these groups the median score runs from 9.6 (**en-second-language-learner**) down to 4.9 (**en-wikipedia**), a spread of 4.7 points on a scale of a hundred. The longest tail belongs to **en-second-language-learner** at 19.7 for the ninetieth percentile. At the boundary this page recommends, 30/100, **en-second-language-learner** is flagged 2 of 206 (1%, interval 0.3% – 3.5%); the other 4 groups measured there are flagged nothing at all. It also sits highest in median and ninetieth percentile. One step down, at 25/100, **en-second-language-learner** would be flagged 9 of 206 (4.4%, interval 2.3% – 8.1%) — the only flags anywhere in the corpus at that boundary. That step is why the boundary does not sit at 25. That is the shape of the defect this project criticises, and it is reported here rather than averaged away — smaller than the figures published for other tools, which is a comparison, not an excuse. The groups run from tens of texts to a couple of hundred, and the numbers move as the corpus grows, in whichever direction they move.
+Across these groups the median score runs from 9.5 (**en-second-language-learner**) down to 4.9 (**en-wikipedia**), a spread of 4.6 points on a scale of a hundred. The longest tail belongs to **en-second-language-learner** at 19.7 for the ninetieth percentile. At the boundary this page recommends, 30/100, **en-second-language-learner** is flagged 2 of 206 (1%, interval 0.3% – 3.5%); the other 4 groups measured there are flagged nothing at all. It also sits highest in median and ninetieth percentile. One step down, at 25/100, **en-second-language-learner** would be flagged 9 of 206 (4.4%, interval 2.3% – 8.1%) — the only flags anywhere in the corpus at that boundary. That step is why the boundary does not sit at 25. That is the shape of the defect this project criticises, and it is reported here rather than averaged away — smaller than the figures published for other tools, which is a comparison, not an excuse. The groups run from tens of texts to a couple of hundred, and the numbers move as the corpus grows, in whichever direction they move.
 
 ## Every threshold
 
 | Score at or above | Human texts flagged | Rate | 95% interval |
 |---|---|---|---|
 | 5 | 253 / 296 | 85.5% | 81% – 89% |
-| 10 | 113 / 296 | 38.2% | 32.8% – 43.8% |
+| 10 | 112 / 296 | 37.8% | 32.5% – 43.5% |
 | 15 | 49 / 296 | 16.6% | 12.8% – 21.2% |
 | 20 | 21 / 296 | 7.1% | 4.7% – 10.6% |
 | 25 | 9 / 296 | 3% | 1.6% – 5.7% |
