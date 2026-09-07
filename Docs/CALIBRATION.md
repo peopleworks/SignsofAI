@@ -11,7 +11,7 @@ It is **not an accuracy figure**. Accuracy needs machine-written text to measure
 - **Corpus** `signsofai-human-baseline`, fingerprint `78bda061bde3dc99`
 - **Texts** 296 (452,184 words)
 - **Lengths measured** 649 – 9,328 words (median 832)
-- **Engine** SignsOfAI.Core 0.7.0
+- **Engine** SignsOfAI.Core 0.7.1
 - **Run** 2026-09-07
 - **Target false-positive rate** 5%
 
