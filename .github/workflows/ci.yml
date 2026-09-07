@@ -45,6 +45,21 @@ jobs:
       - name: Test boot script
         run: node --test tests/boot/boot.test.mjs
 
+      # `signsofai --version` reported 0.1.0 for seven releases, because the number was restated in
+      # Program.cs instead of read from the build. Anyone checking whether they had a fix was told
+      # they were on the first release ever published. This runs the tool that was just built and
+      # compares what it says against the version the csproj packs, so the two cannot drift again.
+      - name: The CLI reports the version it was built as
+        run: |
+          want=$(grep -oPm1 '(?<=<Version>)[^<]+' src/SignsOfAI.Cli/SignsOfAI.Cli.csproj)
+          got=$(dotnet run --project src/SignsOfAI.Cli -c Release --no-build -- --version)
+          echo "csproj packs $want; the tool reports $got"
+          if [ "$want" != "$got" ]; then
+            echo "::error::signsofai --version says $got but this build is $want."
+            echo "Program.cs must read the version from the assembly, never restate it."
+            exit 1
+          fi
+
   # The desktop app is WPF, so it needs a Windows runner and it is not in SignsOfAI.slnx — see the
   # comment at the top of that file. Its own job keeps the build above on Linux, where it stays fast
   # for the translation PRs that are the reason this workflow exists.
