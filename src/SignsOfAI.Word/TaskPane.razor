@@ -1,0 +1,183 @@
+@using SignsOfAI.Core
+@using SignsOfAI.Core.Model
+@using SignsOfAI.Core.Rules
+@using SignsOfAI.UI.Components
+@using SignsOfAI.UI.Services
+@inherits LocalizedComponent
+@inject AiWritingAnalyzer Analyzer
+@inject HostCapabilities Host
+@inject IJSRuntime JS
+
+@*
+    The task pane. Deliberately not the Home page in a narrow column: a pane is about 320px wide and
+    the web app's hero, tabs and side-by-side rewriter do not survive that. What it shares with the
+    other hosts is everything that matters — the same engine, the same rule packs, the same verdict
+    rules, the same components for the facts.
+
+    It reads the document. It never writes to it, and the manifest asks only for ReadDocument.
+*@
+
+<div class="pane">
+
+    <header class="pane-head">
+        <span class="pane-title">Signs of AI Writing</span>
+        <LanguageSwitch />
+    </header>
+
+    @if (_state == State.Starting)
+    {
+        <p class="pane-note">@L["word.starting"]</p>
+    }
+    else if (_state == State.OutsideWord)
+    {
+        @* A plain browser tab. Not an error — it is how this gets developed, and saying so beats a
+           panel that looks broken. *@
+        <p class="pane-note">@L["word.outside"]</p>
+        <textarea class="pane-paste" rows="10" @bind="_text" @bind:event="oninput"
+                  placeholder="@L["word.paste.placeholder"]"></textarea>
+        <button class="pane-run" disabled="@(string.IsNullOrWhiteSpace(_text))" @onclick="AnalyzeCurrentText">
+            @L["word.analyze"]
+        </button>
+    }
+    else
+    {
+        <button class="pane-run" @onclick="ReadAndAnalyze" disabled="@(_state == State.Reading)">
+            @(_state == State.Reading ? L["word.reading"] : L["word.analyze.document"])
+        </button>
+        @if (_documentName is not null)
+        {
+            <p class="pane-file">@_documentName</p>
+        }
+    }
+
+    @if (_error is not null)
+    {
+        <p class="pane-error">@_error</p>
+    }
+
+    @if (_result is { } r)
+    {
+        <section class="pane-result">
+
+            @* The verdict, under the same rule every other surface obeys: below the shortest text
+               the boundary was measured on, there is no verdict — the findings still stand. *@
+            <div class="pane-score @ScoreClass(r)">
+                <span class="pane-score-num">@Math.Round(r.OverallScore)</span><span class="pane-score-of">/100</span>
+            </div>
+            <p class="pane-verdict @ScoreClass(r)">@L.Verdict(r)</p>
+
+            @if (!VerdictBands.Measured(r.Statistics.WordCount))
+            {
+                <p class="pane-unmeasured">
+                    @L.F("home.unmeasured.length", r.Statistics.WordCount, VerdictBands.MinimumWords ?? 0)
+                </p>
+            }
+
+            <p class="pane-stats">
+                @L.F("word.stats", r.Statistics.WordCount, r.Statistics.SentenceCount, r.Findings.Count)
+            </p>
+
+            @* The facts, which carry no threshold and hold at any length. *@
+            <ArtifactPanel Report="r.Artifacts" />
+            <CitationPanel Report="r.Citations" />
+
+            <ul class="pane-findings">
+                @foreach (var f in r.Findings.OrderByDescending(f => f.Weight).Take(12))
+                {
+                    <li>
+                        <span class="pane-rule">@f.RuleId</span>
+                        <span class="pane-msg">@f.Message</span>
+                        @if (!string.IsNullOrWhiteSpace(f.Suggestion))
+                        {
+                            <span class="pane-fix">@f.Suggestion</span>
+                        }
+                    </li>
+                }
+            </ul>
+            @if (r.Findings.Count > 12)
+            {
+                <p class="pane-note">@L.F("word.more", r.Findings.Count - 12)</p>
+            }
+        </section>
+    }
+
+    <footer class="pane-foot">@L[Host.RuntimeKey]</footer>
+</div>
+
+@code {
+    private enum State { Starting, InsideWord, OutsideWord, Reading }
+
+    private State _state = State.Starting;
+    private AnalysisResult? _result;
+    private string? _error;
+    private string? _documentName;
+    private string _text = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        bool insideWord;
+        try
+        {
+            insideWord = await JS.InvokeAsync<bool>("signsOfAiWord.isInsideWord");
+        }
+        catch (Exception)
+        {
+            // The bridge did not load at all. Treat it as "not in Word" rather than a dead pane.
+            insideWord = false;
+        }
+
+        _state = insideWord ? State.InsideWord : State.OutsideWord;
+
+        if (insideWord)
+        {
+            _documentName = await JS.InvokeAsync<string?>("signsOfAiWord.documentName");
+        }
+    }
+
+    private async Task ReadAndAnalyze()
+    {
+        _error = null;
+        _state = State.Reading;
+
+        try
+        {
+            _text = await JS.InvokeAsync<string>("signsOfAiWord.readDocument");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+            _state = State.InsideWord;
+            return;
+        }
+
+        _state = State.InsideWord;
+        AnalyzeCurrentText();
+    }
+
+    private void AnalyzeCurrentText()
+    {
+        if (string.IsNullOrWhiteSpace(_text))
+        {
+            _result = null;
+            return;
+        }
+
+        // "auto" so the analysed language is the document's, independent of the pane's own — the
+        // distinction the web app makes too, and the one a report has to keep straight.
+        _result = Analyzer.Analyze(_text, "auto");
+    }
+
+    // The same mapping the web app uses, not a second scale invented for a narrow column. The
+    // classes are the shared stylesheet's, so a boundary change reaches this host for free.
+    private static string ScoreClass(AnalysisResult r) =>
+        VerdictBands.Emphasis(r.OverallScore, r.Language, r.Statistics.WordCount) switch
+        {
+            VerdictEmphasis.High => "danger",
+            VerdictEmphasis.Elevated => "warn",
+            VerdictEmphasis.Present => "notice",
+            VerdictEmphasis.Unmeasured => "unmeasured",
+            _ => "good",
+        };
+}

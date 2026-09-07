@@ -51,4 +51,18 @@ public sealed class HostCapabilities
         RuntimeKey = "footer.runtime.desktop",
         Version = version,
     };
+
+    /// <summary>
+    /// A Word task pane. The third host, and the one this class's opening comment was written for.
+    ///
+    /// It is a browser in every way that matters here — an embedded WebView, sandboxed, unable to
+    /// reach a plain-HTTP port on the machine — so the capabilities match the tab. What differs is
+    /// only what it may say about itself: "runs 100% in your browser" is false inside Word, the
+    /// same way it was false inside a WPF window before the desktop host got its own key.
+    /// </summary>
+    public static HostCapabilities WordTaskPane { get; } = new()
+    {
+        ReachesLocalServices = false,
+        RuntimeKey = "footer.runtime.word",
+    };
 }

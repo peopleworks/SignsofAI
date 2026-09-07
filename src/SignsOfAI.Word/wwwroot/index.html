@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signs of AI Writing</title>
+    <base href="/" />
+    <link rel="preload" id="webassembly" />
+    <!-- The interface lives in SignsOfAI.UI, shared with the web app and the desktop window; a
+         Razor class library serves its wwwroot under _content/{assembly}/. Relative paths, so a
+         deploy that rewrites <base href> still resolves them. -->
+    <link rel="stylesheet" href="_content/SignsOfAI.UI/css/app.css" />
+    <link rel="stylesheet" href="css/taskpane.css" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <script type="importmap"></script>
+
+    <!--
+      Office.js must come from Microsoft's CDN: the host validates that an add-in loads the runtime
+      it published, and a copy served from anywhere else is refused. It is the one external request
+      this pane makes, it happens before any document is read, and it carries nothing.
+
+      Loaded before Blazor on purpose. Office.onReady fires once; if the module were still starting
+      when it did, the signal would be gone by the time anything was listening. The bridge parks it
+      in a promise instead, and .NET awaits that whenever it is ready.
+    -->
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <script src="js/office-bridge.js"></script>
+    <script>
+        // Outside Word — a plain tab, which is how this gets developed and tested — Office.js is
+        // simply not there. That is a state, not a failure: the pane says so and offers the paste
+        // box instead of showing a broken panel.
+        if (typeof Office !== "undefined" && Office.onReady) {
+            Office.onReady(function (info) {
+                window.signsOfAiWord.markReady(info && info.host === Office.HostType.Word);
+            });
+        } else {
+            window.signsOfAiWord.markReady(false);
+        }
+    </script>
+</head>
+
+<body class="taskpane">
+    <div id="app">
+        <div class="pane-booting">
+            <svg class="loading-progress">
+                <circle r="40%" cx="50%" cy="50%" />
+                <circle r="40%" cx="50%" cy="50%" />
+            </svg>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="." class="reload">Reload</a>
+        <span class="dismiss">🗙</span>
+    </div>
+
+    <script src="_content/SignsOfAI.UI/js/lang.js"></script>
+    <!-- The fingerprint placeholder, rewritten at publish. Without it the published page asks for
+         a file name that only exists during development, and the pane never starts — which is what
+         this spike found on its first run.
+
+         Not yet wrapped in the web app's boot.js retry, and that gap is deliberate for a spike: the
+         resilience work from #73/#74 lives in SignsOfAI.Web/wwwroot and would have to move into the
+         shared library to be used here. A pane that hangs inside Word is worse than a tab that
+         hangs, so it should move before this ships. -->
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+</body>
+
+</html>
