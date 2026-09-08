@@ -303,13 +303,13 @@ A tool that answers everything is easy to build. This is the other kind.
 
 ### Installing it
 
-**Word on the web** — Home → Add-ins → More Add-ins → My Add-ins → **Upload My Add-in**, and choose
-[`src/SignsOfAI.Word/manifest.xml`](src/SignsOfAI.Word/manifest.xml).
+**[The add-in's page &rarr;](https://peopleworks.github.io/SignsofAI/word)** — what it does, both
+install routes, and what it refuses to do, in English and Spanish.
 
-**Word for Windows** has no upload button and reads a shared-folder catalogue instead; the steps are
-in [`src/SignsOfAI.Word/README.md`](src/SignsOfAI.Word/README.md).
-
-First load is about 3.4 MB — the .NET runtime, cached afterwards. It is not in the Office Store yet.
+The short version: on the web it is Home → Add-ins → More Add-ins → My Add-ins → **Upload My Add-in**
+with [`src/SignsOfAI.Word/manifest.xml`](src/SignsOfAI.Word/manifest.xml). Word for Windows has no
+upload button and reads a shared-folder catalogue instead, which
+[`src/SignsOfAI.Word/README.md`](src/SignsOfAI.Word/README.md) walks through.
 
 ### PowerPoint is a different product, on purpose
 

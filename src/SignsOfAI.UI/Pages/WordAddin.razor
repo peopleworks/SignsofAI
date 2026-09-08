@@ -1,0 +1,108 @@
+@page "/word"
+@using SignsOfAI.Core.Calibration
+@inherits LocalizedComponent
+
+@*
+    The Word add-in's own page, the way the desktop app has one.
+
+    It leads with what the add-in refuses to do, because that is what makes it different from every
+    other add-in in this category — not as modesty, but because a reader deciding whether to let a
+    tool near coursework is deciding about exactly those refusals.
+
+    The floor and the published rate are read from the calibration the build ships rather than typed
+    here. That page went stale for six days in August by being typed; this one cannot.
+*@
+
+<PageTitle>@L["wa.pagetitle"]</PageTitle>
+
+<header class="hero">
+    <h1>@L["wa.h1"]</h1>
+    <p class="tagline">@L["wa.tagline"]</p>
+</header>
+
+@* Installing first: somebody who arrived from the README or a video wants the manifest, not an
+   argument they have already been convinced by. *@
+<section class="card">
+    <h2 class="dl-h2"><Icon Name="download" /> @L["wa.install.title"]</h2>
+    <p class="hint">@L["wa.install.lede"]</p>
+
+    <h3 class="wa-h3">@L["wa.install.web.title"]</h3>
+    <ol class="dl-steps">
+        <li>@L.M("wa.install.web.1")</li>
+        <li>@L.M("wa.install.web.2")</li>
+        <li>@L.M("wa.install.web.3")</li>
+    </ol>
+
+    <h3 class="wa-h3">@L["wa.install.win.title"]</h3>
+    <p>@L.M("wa.install.win.body")</p>
+
+    <div class="cta">
+        <a class="primary" href="@ManifestUrl" target="_blank" rel="noopener">@L["wa.install.manifest"]</a>
+        <a href="@StepsUrl" target="_blank" rel="noopener">@L["wa.install.steps"]</a>
+    </div>
+    <p class="hint sub">@L["wa.install.size"]</p>
+</section>
+
+@* The differentiator, stated as a mechanism rather than a promise: there is no endpoint, so there
+   is nothing to send the document to. A claim a reader can check in the manifest beats one they
+   have to believe. *@
+<section class="card">
+    <h2 class="dl-h2"><Icon Name="lock" /> @L["wa.privacy.title"]</h2>
+    <p>@L.M("wa.privacy.body")</p>
+    <p>@L.M("wa.privacy.permission")</p>
+</section>
+
+<section class="card">
+    <h2 class="dl-h2">@L["wa.does.title"]</h2>
+    <ul class="dl-grid">
+        @foreach (var item in Does)
+        {
+            <li class="dl-item">
+                <h3>@L[$"wa.does.{item}.name"]</h3>
+                <p>@L[$"wa.does.{item}.what"]</p>
+            </li>
+        }
+    </ul>
+</section>
+
+@* The refusal, with the numbers read from the shipped calibration. This is the part a teacher is
+   deciding about, so it gets its own section rather than a caveat at the bottom. *@
+<section class="card">
+    <h2 class="dl-h2">@L["wa.short.title"]</h2>
+    <p>@L.F("wa.short.body", Floor)</p>
+    <blockquote class="wa-quote">@L.F("wa.short.quote", Floor)</blockquote>
+    <p>@L.F("wa.short.rate", Texts, Flagged, RateHigh)</p>
+    <p class="hint">@L["wa.short.facts"]</p>
+</section>
+
+<section class="card">
+    <h2 class="dl-h2">@L["wa.not.title"]</h2>
+    <ul class="dl-steps">
+        <li>@L.F("wa.not.powerpoint", Floor)</li>
+        <li>@L["wa.not.parts"]</li>
+        <li>@L["wa.not.store"]</li>
+    </ul>
+</section>
+
+<div class="cta">
+    <a href="./">@L["wa.cta.try"]</a>
+    <a href="https://github.com/peopleworks/SignsofAI" target="_blank" rel="noopener">@L["wa.cta.code"]</a>
+</div>
+
+@code {
+    private const string Repo = "https://github.com/peopleworks/SignsofAI/blob/main/src/SignsOfAI.Word";
+    private const string ManifestUrl = $"{Repo}/manifest.xml";
+    private const string StepsUrl = $"{Repo}/README.md";
+
+    // Same shape as Download.razor's list, and listed by hand in LocaleFileTests for the same
+    // reason: a text search cannot see a key built from this array.
+    private static readonly string[] Does = ["reads", "evidence", "characters", "languages"];
+
+    // Read, never restated. why.html was typed by hand and spent six days quoting a corpus of
+    // ninety after the corpus became 296.
+    private static int Floor => PublishedCalibration.Current?.ShortestWords ?? 0;
+    private static int Texts => PublishedCalibration.Current?.Texts ?? 0;
+    private static int Flagged => PublishedCalibration.Current?.FlaggedAtThreshold ?? 0;
+    private static string RateHigh =>
+        ((PublishedCalibration.Current?.RateHigh ?? 0) * 100).ToString("0.0");
+}
