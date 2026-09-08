@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metí mi detector de IA dentro de Word, y lo primero que hizo fue negarse a contestar · SignsOfAI</title>
+<meta name="description" content="Un panel de tareas es un navegador, así que el motor corre en la máquina y el documento no se sube a ningún sitio — que es justo lo contrario de como funciona cualquier otro add-in de esta categoría. Después leyó un documento real, se negó a dar veredicto porque tenía 357 palabras, y aun así encontró seis caracteres invisibles.">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111a2e; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.10);
+  --ink:#eaf1fb; --muted:#96a8c6; --brand:#6d7cff; --brand2:#db2777;
+  --lex:#db2777; --rhet:#f59e0b; --syn:#22b8cf; --stat:#f0556f; --ok:#2fd27a;
+  --code-bg:#0a1223;
+}
+:root[data-theme="light"]{
+  --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+  --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+  --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+  --code-bg:#0d1526;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f7f9ff; --bg2:#eef2fb; --card:rgba(10,20,40,.03); --line:rgba(10,20,40,.10);
+    --ink:#141c2e; --muted:#54617a; --brand:#4553d6; --brand2:#be2168;
+    --lex:#be2168; --rhet:#b7790a; --syn:#0e7490; --stat:#d63a53; --ok:#188a53;
+    --code-bg:#0d1526;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(219,39,119,.14), transparent 60%),
+    radial-gradient(820px 480px at 8% -6%, rgba(109,124,255,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68; font-size:18px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+.top{display:flex;align-items:center;gap:12px;padding:26px 0 8px}
+.brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand .mark{width:26px;height:26px;border-radius:7px;
+  background:conic-gradient(from 210deg,var(--lex),var(--rhet),var(--syn),var(--stat),var(--lex));
+  display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.tag{margin-left:auto;font-size:12.5px;color:var(--muted);border:1px solid var(--line);
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.kicker{margin-top:28px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;color:var(--brand);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.14;margin:.35em 0 .3em;letter-spacing:-.4px}
+.lead{font-size:20px;color:var(--ink);opacity:.95}
+.byline{color:var(--muted);font-size:15px;margin:.4em 0 1.4em}
+h2{font-size:26px;margin:2em 0 .5em;line-height:1.22;letter-spacing:-.2px}
+p{margin:.85em 0}
+a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-bottom-color:currentColor}
+strong{color:var(--ink)}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em;background:var(--code-bg);
+  color:#dbe7ff;padding:.12em .42em;border-radius:6px;border:1px solid var(--line)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  overflow:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:14.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0}
+blockquote{margin:1.3em 0;padding:.7em 1.1em;border-left:3px solid var(--brand);
+  background:linear-gradient(90deg,rgba(109,124,255,.10),transparent);border-radius:0 10px 10px 0;color:var(--ink)}
+figure{margin:1.8em 0}
+figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px}
+figcaption{margin-top:.6em;font-size:14.5px;color:var(--muted,#6b7280);text-align:center;font-style:italic}
+ul{padding-left:1.2em}
+li{margin:.35em 0}
+.cta{display:block;margin:1.4em 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--ink)}
+.cta b{color:var(--brand)}
+.chip{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);margin-right:4px}
+.chip.lex{color:var(--lex)} .chip.rhet{color:var(--rhet)} .chip.syn{color:var(--syn)} .chip.stat{color:var(--stat)}
+hr{border:0;border-top:1px solid var(--line);margin:1.6em 0}
+footer{margin-top:2.4em;padding-top:1.2em;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+
+/* Tables. The maker story had none, so the shared sheet had no rule for them until an article
+   arrived carrying a comparison. Kept quiet: a thin rule under the header, numbers right-aligned. */
+table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.95em}
+th,td{padding:.5em .7em;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85em;letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}
+@media (max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand"><span class="mark"></span> SignsOfAI</span>
+    <span class="tag">PeopleWorks · <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a></span>
+  </div>
+
+  <div class="kicker">Historia de taller · Ingeniería</div>
+  <h1>Metí mi detector de IA dentro de Word, y lo primero que hizo fue negarse a contestar</h1>
+  <p class="lead">Un panel de tareas es un navegador, así que el motor corre en la máquina y el documento no se sube a ningún sitio — que es justo lo contrario de como funciona cualquier otro add-in de esta categoría. Después leyó un documento real, se negó a dar veredicto porque tenía 357 palabras, y aun así encontró seis caracteres invisibles.</p>
+  <p class="byline">Pedro Hernández (PeopleWorks)</p>
+
+  <a class="cta" href="https://github.com/peopleworks/SignsofAI"><b>▶ Descárgalo o pruébalo</b> — gratis, MIT, web y Windows.</a>
+
+  <hr>
+
+  <p>La petición más repetida de este proyecto lleva meses siendo la misma frase: <em>mételo en Word</em>. Y es razonable. Nadie escribe en una pestaña del navegador; se escribe en un procesador de textos, y pedirle a alguien que copie dos mil palabras del documento que está escribiendo, las pegue en una web, y así averigüe algo sobre el documento que está escribiendo, es un flujo de trabajo que solo puede querer quien lo diseñó.</p>
+  <p>Así que el add-in ya existe. Lo interesante no es que funcione. Es lo que hizo la primera vez que se lo puse delante a un documento real.</p>
+  <h2>Leyó el documento y se negó a dar un veredicto</h2>
+  <p>357 palabras, una nota técnica sobre una API, abierta en Word dentro del navegador. El panel la leyó, devolvió una puntuación de 0 sobre 100 y, debajo, en lugar de una conclusión, esto:</p>
+  <blockquote><strong>Sin veredicto a esta longitud.</strong> Este texto tiene 357 palabras. La frontera se midió solo sobre textos de 649 palabras o más, así que aquí no se da veredicto: la puntuación no es prueba de que lo escribiera una máquina ni prueba de que lo escribiera una persona. Todo lo de abajo no se ve afectado.</blockquote>
+  <p>Ese párrafo es el proyecto entero, impreso dentro de Word.</p>
+  <p>El número con el que esta herramienta juzga, 30 sobre 100, no se eligió. Se midió, sobre 296 documentos escritos antes de 2022, humanos por su fecha y no por la opinión de nadie. En esa frontera se marcan 2 de los 296: una tasa de falsos positivos del 0,7 %, con un intervalo del 95 % que llega al 2,4 %. Esa cifra está publicada, se mueve cuando se mueve el corpus, y dejó de ser cero el día en que entraron 206 redacciones de adultos aprendiendo inglés.</p>
+  <p>El más corto de esos 296 documentos tiene 649 palabras. Por debajo de ahí no hay nada sobre lo que la frontera se haya ajustado. La puntuación se puede calcular igual —la aritmética no deja de funcionar— pero no hay ninguna evidencia sobre qué significa, porque nunca se midió un texto tan corto. Así que la herramienta lo dice y se calla.</p>
+  <h2>La tentación aquí es enorme, y conviene nombrarla</h2>
+  <p>Un detector que contesta a todo sienta mejor. Se demuestra más fácil, se vende más fácil, y nadie escribe para quejarse de que le diste una respuesta.</p>
+  <p>Pero esa respuesta sería inventada. La versión honesta de «esto no lo he medido» no es un número más pequeño ni un adjetivo más suave. Es el silencio, con el motivo al lado. En el add-in eso cuesta algo real: casi todo lo que la gente pega en un detector es un párrafo, y casi ningún párrafo llega a 649 palabras. La herramienta va a callarse muchísimo.</p>
+  <p>Prefiero que se calle a que adivine en una barra lateral, al lado del nombre de un alumno.</p>
+  <h2>Lo que sí encontró</h2>
+  <p>El mismo panel, sobre esas mismas 357 palabras, informó de seis espacios de no separación (<code>U+00A0</code>) con el punto de código, la cuenta y un botón para enseñar todas sus posiciones en el documento.</p>
+  <p>Eso no es un juicio sobre la prosa y no lleva umbral, así que vale a cualquier longitud. Es un hecho sobre el archivo: esos caracteres están ahí, y tecleando no salen. Copiando de una página web o de un PDF sí, y también los dejan algunas herramientas que reescriben texto para esquivar detectores.</p>
+  <p>El panel dice el resto en voz alta, porque un hecho que insinúa algo sin decirlo es peor que una opinión:</p>
+  <blockquote>Esto no dice nada sobre quién escribió el texto, y no es prueba de deshonestidad. Es una pregunta sobre por dónde ha pasado el archivo: pídale a quien lo escribió que abra el documento y le cuente cómo lo produjo.</blockquote>
+  <p>Un porcentaje se discute media hora en una reunión. «Aquí hay seis caracteres invisibles, y estas son sus posiciones» se resuelve con una pregunta.</p>
+  <h2>La parte que más importa es de arquitectura</h2>
+  <p>Cualquier otro add-in de esta categoría manda tu documento a un servidor. No le queda otra: el análisis <em>es</em> el servidor, así que el texto tiene que viajar hasta donde vive el análisis.</p>
+  <p>Éste no puede, y el motivo es aburrido en el mejor sentido. <strong>Un panel de tareas es un navegador</strong>: un WebView incrustado, con las mismas reglas que una pestaña. El motor es WebAssembly, se descarga una vez con el panel y corre ahí. En este add-in no hay ningún endpoint, así que no hay adónde mandar el documento. La garantía que ya daba la aplicación web se aplica ahora en el programa donde el documento ya vive.</p>
+  <p>Y el manifest le pide a Word permiso de <code>ReadDocument</code>, no de <code>ReadWriteDocument</code>. Es una diferencia de dos palabras con dientes de verdad: <strong>lo impone Word</strong>. El add-in no puede cambiar tu documento, diga lo que diga una web sobre sus intenciones. Si eres profesor y estás decidiendo si dejas que una herramienta se acerque a los trabajos de tus alumnos, esa línea del manifest vale más que cualquier párrafo de una página de aterrizaje. Éste incluido.</p>
+  <h2>Es un tercer anfitrión, no un segundo producto</h2>
+  <p>El panel no es un motor reducido. Todas las reglas, el escáner de caracteres, el contraste de la bibliografía y las normas sobre lo que se puede afirmar llegan de la misma biblioteca compartida que renderizan la web y la aplicación de Windows. Word es un tercer sitio donde ejecutarlo.</p>
+  <p>La clase que guarda lo que puede hacer cada anfitrión llevaba este comentario dentro mucho antes de que hubiera un tercero:</p>
+  <blockquote>La interfaz debe ramificar por lo que es posible, no por quién pregunta: el día que aparezca un tercer anfitrión, o el día que un navegador deje de bloquear algo, los componentes no hay que revisarlos.</blockquote>
+  <p>Resultó ser verdad, con una excepción que merece contarse porque es de las cosas que se pudren en silencio. El pie compartido dice <em>«funciona 100 % en tu navegador»</em>. Dentro de Word eso es falso, igual que era falso dentro de la aplicación de Windows, que estuvo semanas enseñando esa frase dentro de una ventana WPF sin que nadie lo notara. Así que el anfitrión nuevo tiene su propia frase. Una herramienta que le exige evidencia a los demás no puede ser descuidada con lo que afirma sobre sí misma.</p>
+  <h2>No funcionó a la primera, y el motivo enseña algo</h2>
+  <p>El primer intento metió el panel en Word, enseñó el botón en la cinta, abrió la barra lateral… y mostró la página equivocada, con Word avisando de que el complemento podría no cargar bien.</p>
+  <p>Parecía un entorno inestable. Era un 404. El manifest apunta a una URL que el despliegue nunca había publicado, así que el servidor respondió con el fallback de la aplicación de una sola página; la aplicación que salió de ahí no tiene ninguna ruta para la dirección del panel y dijo, correctamente, que esa página no existe. El aviso de Word era el 404, a tres pasos de su causa.</p>
+  <p>Ahora el despliegue publica el panel y se niega a terminar si su punto de entrada no está. Un panel se carga por URL desde dentro de un procesador de textos, donde un archivo que falta aparece como «este complemento podría no cargar bien»: un mensaje de error que no señala a nada. Mejor romper el despliegue que depurar eso dos veces.</p>
+  <h2>PowerPoint es otro producto, y no lo estoy publicando</h2>
+  <p>El mismo manifest puede declarar más anfitriones, y sería una línea. También sería deshonesto.</p>
+  <p>Una presentación casi nunca llega a 649 palabras. Apuntado a una, este add-in haría lo mismo que arriba —retener el veredicto— con casi cualquier presentación, correctamente y sin servirle a nadie. Lo que sí funciona a la longitud de una diapositiva es la parte sin umbral: el escáner de caracteres y las señales con nombre, enseñadas sin puntuación.</p>
+  <p>Así que la pregunta honesta en PowerPoint no es «¿escribió esto una IA?». Es «¿lleva esta presentación las huellas de una herramienta que reescribe texto para esquivar detectores?», que es otro producto con otra promesa. Puede que valga la pena construirlo. No es éste con una línea de más en un archivo.</p>
+  <h2>Lo que esto no arregla</h2>
+  <p>El add-in no vuelve medibles los documentos cortos. Saca el límite a la superficie donde la gente se lo va a encontrar más a menudo, que ya es algo, pero el hueco sigue ahí: el corpus no contiene ni una redacción de estudiante por debajo de 649 palabras, y mientras no la contenga, todo lo que baje de esa longitud recibe una puntuación y una negativa.</p>
+  <p>No lee comentarios, ni notas al pie, ni control de cambios. Solo el cuerpo.</p>
+  <p>Y no está en la tienda de Office, así que instalarlo sigue siendo un manifest y un menú en vez de un botón. Eso es lo siguiente.</p>
+  <h2>La versión general, para quien no le interese la detección de IA</h2>
+  <p>Lo que la gente pedía era «mételo en Word». Lo que salió es sobre todo un conjunto de negativas: no da un veredicto que no puede sostener, no sube tu documento porque no tiene adónde subirlo, y pidió permiso para leer y deliberadamente no para escribir.</p>
+  <p>Nada de eso se parece a una petición de función. Todo eso es lo que la función vale de verdad.</p>
+
+  <footer>
+    Built by Pedro Hernández — PeopleWorks, <a href="https://mvp.microsoft.com/en-US/mvp/profile/24060a02-dbc6-44ec-bca5-c213ff9835c5" target="_blank" rel="noopener">Microsoft MVP for .NET</a>. MIT licensed.<br>
+    <em>Por y para la comunidad educativa.</em> · <a href="https://github.com/peopleworks/SignsofAI">github.com/peopleworks/SignsofAI</a>
+  </footer>
+
+</div>
+</body>
+</html>
