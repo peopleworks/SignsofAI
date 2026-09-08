@@ -40,6 +40,9 @@ public class LocaleFileTests
         // Download.razor builds these from its own list, the same way.
         .. new[] { "documents", "folder", "perplexity", "ollama" }
             .SelectMany(a => new[] { $"dl.add.{a}.name", $"dl.add.{a}.what", $"dl.add.{a}.browser" }),
+        // WordAddin.razor builds these from its own list, the same way Download.razor does.
+        .. new[] { "reads", "evidence", "characters", "languages" }
+            .SelectMany(d => new[] { $"wa.does.{d}.name", $"wa.does.{d}.what" }),
         // Chosen by the host at startup — HostCapabilities.RuntimeKey — so the footer and the
         // .NET badge's tooltip describe the runtime the reader is actually looking at.
         "footer.runtime.browser", "footer.runtime.desktop",

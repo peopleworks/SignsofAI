@@ -106,28 +106,15 @@ else
     <p class="hint">@L.M("dl.zip.body")</p>
 </section>
 
-@* Not the desktop app, and placed after it rather than beside it: this is the other way to run the
-   engine on your own machine, in the application where the document already is. The privacy claim is
-   the same one and it is the reason this host is worth having at all, so it is stated rather than
-   implied. *@
+@* The Word add-in has its own page. This is a pointer, deliberately short: the argument lived here
+   in full for a few hours and that is two copies of the same paragraphs, which is how one of them
+   ends up saying something the other stopped saying. *@
 <section class="card">
     <h2 class="dl-h2"><Icon Name="file-text" /> @L["dl.word.title"]</h2>
     <p class="hint">@L["dl.word.lede"]</p>
-    <p>@L.M("dl.word.why")</p>
-
-    <ul class="dl-steps">
-        <li>@L.M("dl.word.install.web")</li>
-        <li>@L.M("dl.word.install.desktop")</li>
-    </ul>
-
-    <p class="hint sub">
-        <a href="https://github.com/peopleworks/SignsofAI/blob/main/src/SignsOfAI.Word/manifest.xml"
-           target="_blank" rel="noopener">@L["dl.word.manifest"]</a>
-        ·
-        <a href="https://github.com/peopleworks/SignsofAI/blob/main/src/SignsOfAI.Word/README.md"
-           target="_blank" rel="noopener">@L["dl.word.steps"]</a>
-    </p>
-    <p class="hint">@L["dl.word.size"]</p>
+    <div class="cta">
+        <a class="primary" href="word">@L["dl.word.page"]</a>
+    </div>
 </section>
 
 @code {

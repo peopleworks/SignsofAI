@@ -1101,6 +1101,39 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
    Deliberately shares the visual language of the front-door task cards: somebody who learned to
    read those four cards reads these four the same way. */
 .dl-h2 { font-size: 1.02rem; margin: 0 0 .35rem; }
+
+/* The Word add-in page. It reuses the download page's cards, and adds only what it needs:
+   a sub-heading inside a card, and a pulled quote for the sentence the pane actually prints. */
+.wa-h3 { font-size: .94rem; font-weight: 650; margin: 1.1rem 0 .4rem; }
+
+/* A row of links where one of them is the action. why.html has a .cta of its own — it is a
+   standalone page with its own stylesheet — and copying the markup here without the style is
+   exactly how this shipped as two bare links sitting against each other. */
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: 1rem 0 .4rem; }
+.cta a {
+  padding: .55rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .92rem;
+  transition: filter .15s, transform .15s, border-color .15s;
+}
+.cta a:hover, .cta a:focus-visible { transform: translateY(-1px); border-color: var(--brand); }
+.cta a.primary {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: transparent;
+}
+.cta a.primary:hover, .cta a.primary:focus-visible { filter: brightness(1.08); }
+.wa-quote {
+  margin: .6rem 0;
+  padding: .7rem .9rem;
+  border-left: 3px solid var(--muted, #9aa4b0);
+  background: rgba(128, 128, 128, .07);
+  font-size: .92rem;
+  line-height: 1.5;
+}
 .dl-h2 svg { vertical-align: -2px; }
 
 /* The call to action. A link, not a button, because it is a download and the browser should be
