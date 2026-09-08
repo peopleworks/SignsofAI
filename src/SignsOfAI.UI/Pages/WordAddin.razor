@@ -1,4 +1,7 @@
-@page "/word"
+@* /word-addin, not /word: the deploy publishes the task pane itself at /word/, and a directory
+   on the host wins over a route in the router. The pane's address is in a manifest people have
+   already installed, so the pane keeps it and the page moves. *@
+@page "/word-addin"
 @using SignsOfAI.Core.Calibration
 @inherits LocalizedComponent
 
