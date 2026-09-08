@@ -22,6 +22,7 @@ Paleta SignsOfAI: `--bg:#0b1020` · léxico `#db2777` · retórico `#f59e0b` · 
 | 11 | El veredicto que nunca se dio | ✅ | ✅ | ✅ 35,5 s · 32,4 s |
 | 12 | La señal más fiable no es una palabra | ✅ | ⬜ | ⬜ |
 | 13 | 94/100 y sin veredicto | ✅ | ⬜ | ⬜ |
+| 14 | Dentro de Word, y se calla | ✅ | ⬜ | ⬜ |
 
 Los renders están en `out/<id>.mp4` + `.srt`.
 
@@ -33,13 +34,13 @@ es lo que hay que recortar, no la animación.
 (`cue-times.mjs`) y **después** escribir el HTML alrededor de la duración medida, porque los
 retardos de animación son absolutos. `build-short.mjs` reutiliza el mp3 salvo `--revoice`.
 
-**Los shorts 12 y 13 rompen ese orden a propósito, y se puede copiar.** Sus tiempos no van en
+**Los shorts 12, 13 y 14 rompen ese orden a propósito, y se puede copiar.** Sus tiempos no van en
 segundos sino en **fracciones de `--dur`**, una variable CSS al principio del archivo. Funciona
 porque `cue-times.mjs` reparte la duración medida entre las palabras del guion: la posición
 *relativa* de cada frase se conoce sin oír el audio, y lo único que falta es el total. Así que se
 escribió el HTML antes de narrar, y al narrar solo hay que poner `--dur` a la duración real:
 
-    node narrate-all.mjs short12-residencia-es short12-residencia-en short13-longitud-es short13-longitud-en
+    node narrate-all.mjs short12-residencia-es short12-residencia-en short13-longitud-es short13-longitud-en short14-word-es short14-word-en
     # anota la duración que imprime cada uno, y ponla en --dur del HTML correspondiente
     node build-short.mjs scenes/short13-longitud-es.json
 

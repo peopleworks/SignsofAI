@@ -1634,6 +1634,144 @@ leyendo mis propios números con otra pregunta en la cabeza.
 https://github.com/peopleworks/SignsofAI
 ```
 
+### X / Twitter — décimo artículo (EN)
+```
+I put my AI detector inside Word. The first thing it did was refuse to answer.
+
+357 words, a real document. Score: 0/100. Underneath, instead of a conclusion:
+
+  No verdict at this length. This text is 357 words. The boundary was measured
+  only on texts of 649 words and longer, so no verdict is given.
+
+It found six invisible characters anyway, because that is a fact about the file and
+carries no threshold.
+
+And it cannot upload your document, because a task pane is a browser: the engine runs
+there. Every other add-in in this category posts your text to an API. There is no API
+here to post it to.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### X / Twitter — décimo artículo (ES)
+```
+Metí mi detector de IA dentro de Word. Lo primero que hizo fue negarse a contestar.
+
+357 palabras, un documento real. Puntuación: 0/100. Debajo, en vez de una conclusión:
+
+  Sin veredicto a esta longitud. Este texto tiene 357 palabras. La frontera se midió
+  solo sobre textos de 649 palabras o más, así que aquí no se da veredicto.
+
+Aun así encontró seis caracteres invisibles, porque eso es un hecho sobre el archivo y
+no lleva umbral.
+
+Y no puede subir tu documento, porque un panel de tareas es un navegador: el motor corre
+ahí. Cualquier otro add-in de esta categoría manda tu texto a una API. Aquí no hay API
+a la que mandarlo.
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — décimo artículo (EN)
+```
+The most requested feature for this project has been the same sentence for months: put it in Word.
+It is there now. The first thing it did on a real document was decline to answer.
+
+WHAT HAPPENED
+
+357 words, open in Word. The pane read the document and returned 0 out of 100, and under the score,
+instead of a conclusion:
+
+"No verdict at this length. This text is 357 words. The boundary was measured only on texts of 649
+words and longer, so no verdict is given — the score is neither evidence that a machine wrote this
+nor evidence that a person did."
+
+The boundary this tool judges by, 30 out of 100, was measured on 296 documents written before 2022:
+human by their dates, not by anyone's opinion. At that boundary it flags 2 of the 296, a false
+positive rate of 0.7% with a 95% interval reaching 2.4%. The shortest of those documents is 649
+words. Below that length there is nothing the boundary was fitted on, so there is nothing to say.
+
+WHAT IT FOUND ANYWAY
+
+Six no-break spaces, with the codepoint, the count and every position. That is not a judgement about
+prose and it carries no threshold, so it holds at any length. It is a fact about the file: those
+characters are in it and typing does not produce them.
+
+The panel says the rest out loud, because a fact left to imply something is worse than an opinion:
+this says nothing about who wrote the text, and it is not evidence of dishonesty.
+
+THE PART THAT MATTERS MOST
+
+Every other add-in in this category sends your document to a server, because their analysis is the
+server. This one cannot. A task pane is a browser, the engine is WebAssembly, and it runs there —
+so there is no endpoint for the document to be sent to.
+
+And the manifest asks Word for ReadDocument, not ReadWriteDocument. Word enforces it. If you are
+deciding whether to let a tool near coursework, that line is worth more than any paragraph on a
+landing page, including this one.
+
+WHAT DID NOT SHIP
+
+PowerPoint. A deck rarely reaches 649 words, so the same add-in there would withhold the verdict for
+almost every deck — correctly, and to nobody's benefit. That is a different product with a different
+promise, not this one with an extra line in a file.
+
+Free and open source. The full write-up, including the 404 that made the first install look broken:
+
+https://github.com/peopleworks/SignsofAI
+```
+
+### LinkedIn — décimo artículo (ES)
+```
+La petición más repetida de este proyecto lleva meses siendo la misma frase: mételo en Word. Ya está.
+Y lo primero que hizo con un documento real fue negarse a contestar.
+
+QUÉ PASÓ
+
+357 palabras, abiertas en Word. El panel leyó el documento, devolvió 0 sobre 100 y, debajo de la
+puntuación, en lugar de una conclusión:
+
+«Sin veredicto a esta longitud. Este texto tiene 357 palabras. La frontera se midió solo sobre textos
+de 649 palabras o más, así que aquí no se da veredicto: la puntuación no es prueba de que lo
+escribiera una máquina ni prueba de que lo escribiera una persona.»
+
+La frontera con la que juzga, 30 sobre 100, se midió sobre 296 documentos escritos antes de 2022:
+humanos por su fecha, no por la opinión de nadie. En esa frontera marca 2 de los 296, una tasa de
+falsos positivos del 0,7 % con un intervalo del 95 % que llega al 2,4 %. El más corto de esos
+documentos tiene 649 palabras. Por debajo no hay nada sobre lo que la frontera se haya ajustado, así
+que no hay nada que decir.
+
+LO QUE SÍ ENCONTRÓ
+
+Seis espacios de no separación, con el punto de código, la cuenta y todas sus posiciones. Eso no es
+un juicio sobre la prosa y no lleva umbral, así que vale a cualquier longitud. Es un hecho sobre el
+archivo: esos caracteres están ahí y tecleando no salen.
+
+El panel dice el resto en voz alta, porque un hecho que insinúa sin decir es peor que una opinión:
+esto no dice nada sobre quién escribió el texto, y no es prueba de deshonestidad.
+
+LA PARTE QUE MÁS IMPORTA
+
+Cualquier otro add-in de esta categoría manda tu documento a un servidor, porque su análisis es el
+servidor. Éste no puede. Un panel de tareas es un navegador, el motor es WebAssembly y corre ahí, así
+que no hay ningún endpoint al que mandar el documento.
+
+Y el manifest le pide a Word permiso de ReadDocument, no de ReadWriteDocument. Lo impone Word. Si
+estás decidiendo si dejas que una herramienta se acerque a los trabajos de tus alumnos, esa línea
+vale más que cualquier párrafo de una página de aterrizaje. Éste incluido.
+
+LO QUE NO SALIÓ
+
+PowerPoint. Una presentación casi nunca llega a 649 palabras, así que el mismo add-in ahí retendría
+el veredicto con casi cualquiera — correctamente, y sin servirle a nadie. Es otro producto con otra
+promesa, no éste con una línea de más en un archivo.
+
+Gratis y de código abierto. El artículo completo, incluido el 404 que hizo parecer que la primera
+instalación estaba rota:
+
+https://github.com/peopleworks/SignsofAI
+```
+
 ## 8. Notas de publicación
 - Sube el `.srt` de cada video como subtítulos (clave para reproducción sin sonido en Shorts/Reels/TikTok).
 - Cruza los enlaces: el video enlaza al artículo del blog y viceversa; ambos enlazan al demo.

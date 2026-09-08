@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>
+/* Short 14 — "Ya está dentro de Word, y lo primero que hizo fue callarse".
+
+   Tiempos en FRACCIONES de --dur, como los shorts 12 y 13: se escribió antes de narrarlo.
+   Tras narrar, poner --dur a la duración real y todo cae donde debe.
+
+   Fracciones por posición de palabra en el guion ES (63 palabras):
+   0.095 "Lo primero que hizo fue negarse"   0.222 "Trescientas cincuenta y siete"
+   0.302 "La frontera se midió"              0.603 "Pero encontró seis caracteres"
+   0.825 "Y tu documento no sale"
+
+   Todas las cifras son reales: 357 palabras, 0/100, suelo 649, seis U+00A0. Primera ejecución
+   dentro de Word, 7 de septiembre. */
+html,body{margin:0;padding:0}
+body{--dur:26s;
+ width:1080px;height:1920px;overflow:hidden;position:relative;
+ background:radial-gradient(700px 700px at 78% 8%,rgba(109,124,255,.17),transparent 60%),
+   radial-gradient(760px 760px at 14% 70%,rgba(34,184,207,.12),transparent 60%),
+   linear-gradient(165deg,#0b1020,#0d1428 55%,#111a2e);
+ color:#eaf1fb;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;text-align:center}
+@keyframes rv{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+/* El sello va centrado con translateX(-50%), así que necesita su propio keyframe: cualquier otro
+   que escriba `transform` lo reemplaza entero y la pieza se va a un lado. */
+@keyframes stampin{0%{opacity:0;transform:translateX(-50%) scale(.5) rotate(-9deg)}60%{transform:translateX(-50%) scale(1.1) rotate(-2deg)}100%{opacity:1;transform:translateX(-50%) scale(1) rotate(-4deg)}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes drop{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}
+@keyframes fade{to{opacity:1}}
+/* La flecha que NO sale: se dibuja y se tacha. */
+@keyframes strike{from{transform:rotate(19deg) scaleX(0)}to{transform:rotate(19deg) scaleX(1)}}
+
+.brand{position:absolute;top:74px;width:100%;display:flex;align-items:center;justify-content:center;gap:20px;font-weight:800;font-size:44px}
+.bmark{width:60px;height:60px;border-radius:16px;background:conic-gradient(from 210deg,#db2777,#f59e0b,#22b8cf,#f0556f,#db2777);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+
+/* El panel, tal como respondió. */
+.pane{position:absolute;top:196px;left:96px;right:96px;padding:44px 48px 52px;border-radius:28px;
+ background:rgba(21,27,44,.92);border:2px solid rgba(90,104,140,.5);text-align:left;
+ opacity:0;animation:rv .7s calc(var(--dur)*.02) forwards}
+.pane-h{display:flex;align-items:center;justify-content:space-between;font-size:38px;font-weight:700;color:#c3ccdb}
+.pane-h span{font-size:30px;font-family:Consolas,monospace;color:#7c8aa6}
+.file{margin-top:10px;font-size:32px;font-style:italic;color:#7c8aa6}
+
+/* El número, en gris. Existe y no acusa: ese gris es medio argumento. */
+.score{margin-top:26px;font-size:190px;font-weight:900;line-height:1;color:#9aa8bd;
+ font-variant-numeric:tabular-nums;opacity:0;animation:rv .6s calc(var(--dur)*.04) forwards}
+.score span{font-size:64px;font-weight:700;opacity:.55}
+.stamp{position:absolute;top:560px;left:50%;transform:translateX(-50%) rotate(-4deg);
+ padding:16px 44px;border:5px solid #7c8aa6;border-radius:20px;color:#c3ccdb;
+ font-size:52px;font-weight:900;opacity:0;animation:stampin .5s calc(var(--dur)*.095) forwards;z-index:3}
+
+/* La regla: 357 cae a la izquierda de donde hay evidencia. */
+.ruler{position:absolute;top:730px;left:96px;right:96px;height:330px;opacity:0;animation:rv .7s calc(var(--dur)*.302) forwards}
+.track{position:absolute;top:172px;left:0;right:0;height:12px;border-radius:4px;background:rgba(255,255,255,.12)}
+.void{position:absolute;top:92px;left:0;width:44%;height:172px;border-radius:16px;
+ background:linear-gradient(90deg,rgba(124,138,166,.22),rgba(124,138,166,.05));border:2px dashed rgba(124,138,166,.4)}
+.wall{position:absolute;top:70px;left:44%;width:6px;height:216px;background:#f59e0b;
+ transform:scaleY(0);transform-origin:bottom;animation:grow .5s calc(var(--dur)*.34) forwards}
+.wall-lab{position:absolute;top:6px;left:44%;transform:translateX(-50%);white-space:nowrap;
+ font-family:Consolas,monospace;font-size:44px;font-weight:800;color:#f59e0b;opacity:0;animation:fade .4s calc(var(--dur)*.34) forwards}
+.void-lab{position:absolute;top:288px;left:0;width:44%;font-size:30px;color:#8a93a6;line-height:1.3;
+ opacity:0;animation:fade .4s calc(var(--dur)*.36) forwards}
+.here{position:absolute;top:152px;left:24%;width:52px;height:52px;border-radius:50%;
+ background:#f0556f;box-shadow:0 0 0 10px rgba(240,85,111,.2);opacity:0;animation:pop .5s calc(var(--dur)*.222) forwards}
+.here-lab{position:absolute;top:88px;left:24%;transform:translateX(-50%);white-space:nowrap;
+ font-family:Consolas,monospace;font-size:40px;font-weight:800;color:#f0556f;opacity:0;animation:fade .4s calc(var(--dur)*.222) forwards}
+
+/* El hecho que sí sobrevive a cualquier longitud. */
+.fact{position:absolute;top:1116px;left:96px;right:96px;padding:30px 40px;border-radius:22px;
+ background:rgba(34,184,207,.09);border:2px solid rgba(34,184,207,.34);text-align:left;
+ opacity:0;animation:rv .6s calc(var(--dur)*.603) forwards}
+.fact-h{font-size:38px;font-weight:800;color:#67e8f9}
+.fact-row{margin-top:16px;display:flex;align-items:baseline;justify-content:space-between;font-size:40px}
+.fact-row code{font-family:Consolas,monospace;color:#67e8f9;font-weight:800}
+.fact-row b{font-family:Consolas,monospace;color:#67e8f9;font-size:46px}
+.fact-sub{margin-top:14px;font-size:30px;color:#8a93a6;line-height:1.32}
+
+/* Lo que no ocurre: el documento no sale. */
+.priv{position:absolute;top:1416px;left:96px;right:96px;opacity:0;animation:rv .7s calc(var(--dur)*.825) forwards}
+.priv-row{display:flex;align-items:center;justify-content:center;gap:26px}
+.doc{width:86px;height:110px;border-radius:10px;border:3px solid #7c8aa6;background:rgba(124,138,166,.12)}
+.arrow{position:relative;width:230px;height:6px;background:rgba(124,138,166,.45);border-radius:3px}
+.arrow::after{content:'';position:absolute;right:-2px;top:-13px;border:16px solid transparent;border-left-color:rgba(124,138,166,.45)}
+.cross{position:absolute;top:0;left:-4%;width:108%;height:6px;background:#f0556f;border-radius:3px;
+ transform:rotate(19deg) scaleX(0);transform-origin:center;animation:strike .45s calc(var(--dur)*.865) forwards}
+.cloud{width:118px;height:74px;border-radius:38px;border:3px dashed rgba(124,138,166,.5)}
+.priv-lab{margin-top:26px;font-size:46px;font-weight:900;line-height:1.24}
+.priv-lab b{background:linear-gradient(90deg,#6d7cff,#22b8cf);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.foot{position:absolute;bottom:88px;width:100%;opacity:0;animation:rv .8s calc(var(--dur)*.93) forwards}
+.foot .big{font-size:42px;font-weight:900;line-height:1.26;color:#c3ccdb}
+.foot .sub{margin-top:14px;font-size:32px;color:#7c8aa6;font-family:Consolas,monospace}
+</style></head><body>
+<div class="brand"><span class="bmark"></span> SignsOfAI</div>
+
+<div class="pane">
+  <div class="pane-h">Signs of AI Writing <span>Word</span></div>
+  <div class="file">Documento 1.docx</div>
+  <div class="score">0<span>/100</span></div>
+</div>
+<div class="stamp">SIN VEREDICTO</div>
+
+<div class="ruler">
+  <div class="track"></div>
+  <div class="void"></div>
+  <div class="wall"></div>
+  <div class="wall-lab">649 palabras</div>
+  <div class="void-lab">nunca se midió<br>nada tan corto</div>
+  <div class="here"></div>
+  <div class="here-lab">357</div>
+</div>
+
+<div class="fact">
+  <div class="fact-h">Caracteres, no prosa</div>
+  <div class="fact-row"><code>U+00A0</code> <span style="color:#8a93a6;font-size:32px">NO-BREAK SPACE</span> <b>×6</b></div>
+  <div class="fact-sub">Un hecho sobre el archivo. No lleva umbral,<br>así que a esta longitud sigue valiendo.</div>
+</div>
+
+<div class="priv">
+  <div class="priv-row">
+    <div class="doc"></div>
+    <div class="arrow"><div class="cross"></div></div>
+    <div class="cloud"></div>
+  </div>
+  <div class="priv-lab">Tu documento <b>no sale de tu máquina</b>.<br>No hay adónde mandarlo.</div>
+</div>
+
+<div class="foot">
+  <div class="big">Un panel de Word es un navegador.<br>El motor corre ahí, no en un servidor.</div>
+  <div class="sub">signsofai · gratis y de código abierto</div>
+</div>
+</body></html>
