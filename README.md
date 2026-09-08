@@ -303,7 +303,7 @@ A tool that answers everything is easy to build. This is the other kind.
 
 ### Installing it
 
-**[The add-in's page &rarr;](https://peopleworks.github.io/SignsofAI/word)** — what it does, both
+**[The add-in's page &rarr;](https://peopleworks.github.io/SignsofAI/word-addin)** — what it does, both
 install routes, and what it refuses to do, in English and Spanish.
 
 The short version: on the web it is Home → Add-ins → More Add-ins → My Add-ins → **Upload My Add-in**
