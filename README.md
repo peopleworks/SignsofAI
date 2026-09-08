@@ -265,7 +265,7 @@ See `skill/README.md`.
 ## 6. Use it where the writing happens — the Word add-in
 
 A task pane inside Word. Press **Read the signs** on the Home tab and it reads the open document and
-answers in the sidebar — no copying into a browser, no uploading a file, no leaving the page you are
+answers in the sidebar: no copying into a browser, no uploading a file, no leaving the page you are
 writing on.
 
 **It is the same engine, not a smaller one.** Every rule, the character scan, the citation
@@ -275,7 +275,7 @@ the desktop app also render. Word is simply a third host.
 ### Why a task pane is the right place for this particular tool
 
 A task pane is a browser. The WebAssembly engine is downloaded once and runs there, on the machine,
-which means **the document is never uploaded** — the same guarantee the web app makes, in the
+which means **the document is never uploaded**. It is the guarantee the web app already makes, in the
 application where the document actually lives.
 
 That is not a nicety. Every other add-in in this category posts your text to an API, because their
@@ -285,30 +285,21 @@ your document, rather than asking you to trust a sentence on a website.
 
 ### What it looks like on a real document
 
-A 357-word document, which is below the length this build measured:
+![The Signs of AI Writing task pane open beside a document in Word on the web: a score of 0/100, the verdict withheld because the document is 357 words, and six no-break spaces reported underneath](Docs/screenshots/word-taskpane.png)
 
-```
-Document 1.docx
+That is Word on the web (the address bar is in the picture) with a 357-word document open, and the
+pane is worth reading twice.
 
-  0/100
-  No verdict at this length
+**It refused to give a verdict**, and printed why: the corpus this build is calibrated on contains no
+text shorter than 649 words, so below that there is nothing to compare against and the score is
+*"neither evidence that a machine wrote this nor evidence that a person did."* See
+[the calibration](Docs/CALIBRATION.md).
 
-  This text is 357 words. The boundary was measured only on texts of 649 words and
-  longer, so no verdict is given — the score is neither evidence that a machine wrote
-  this nor evidence that a person did. Everything below is unaffected.
+**And it still found six no-break spaces**, because the character scan is a fact about the file
+rather than a judgement of its prose. It carries no threshold, so it holds at any length, and it
+says nothing about who wrote anything, which the panel states in as many words.
 
-  357 words · 21 sentences · 0 signals
-
-  Character artifacts          Present, not spread
-  6 unusual characters, not spread through the document.
-  U+00A0   NO-BREAK SPACE   ×6
-```
-
-Two things worth reading twice. **It refused to give a verdict**, and said why, because the corpus
-this build is calibrated on contains no text shorter than 649 words — see
-[the calibration](Docs/CALIBRATION.md). And it still reported six no-break spaces, because the
-character scan is a fact about the file and carries no threshold: it holds at any length, and it
-says nothing about who wrote anything.
+A tool that answers everything is easy to build. This is the other kind.
 
 ### Installing it
 
