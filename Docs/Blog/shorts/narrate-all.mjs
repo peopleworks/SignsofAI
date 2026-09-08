@@ -36,6 +36,14 @@ const SCRIPTS = {
     voice: RACHEL,
     text: "My detector scored this paragraph ninety-four out of a hundred. And it refuses to say anything. The boundary it judges by was measured on ninety texts, and the shortest is six hundred and sixty-two words. This one is sixty-six. We never measured anything that short. All twenty-three signals are still there. What's withheld is the accusation.",
   },
+  'short14-word-es': {
+    voice: 'Marcela',
+    text: "Ya está dentro de Word. Lo primero que hizo fue negarse a contestar. Trescientas cincuenta y siete palabras. La frontera se midió sobre textos de seiscientas cuarenta y nueve o más, así que aquí no hay veredicto. Pero encontró seis caracteres invisibles, porque eso es un hecho y no tiene umbral. Y tu documento no sale de tu máquina: no hay adónde mandarlo.",
+  },
+  'short14-word-en': {
+    voice: RACHEL,
+    text: "It's inside Word now. The first thing it did was refuse to answer. Three hundred and fifty-seven words. The boundary was measured on texts of six hundred and forty-nine words and up, so there's no verdict here. But it found six invisible characters, because that's a fact and it carries no threshold. And your document never leaves your machine: there's nowhere to send it.",
+  },
   'short4-traduccion-es': {
     voice: 'Marcela',
     text: 'SignsOfAI habla inglés y español. ¿Y el tuyo? Las traducciones no están compiladas: son un archivo JSON. Copias el inglés, traduces las frases y mandas un pull request. Sin C sharp, sin compilar, sin saber programar. Si falta una clave, cae al inglés: una traducción a medias ya sirve. Tu idioma, en un archivo.',
