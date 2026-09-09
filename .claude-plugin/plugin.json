@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "signs-of-ai",
   "description": "Measure a text for the signs of AI writing and read back the evidence — offline, EN/ES, with the tool's own false-positive rate attached.",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "author": {
     "name": "Pedro Hernández — PeopleWorks",
     "url": "https://github.com/peopleworks"
