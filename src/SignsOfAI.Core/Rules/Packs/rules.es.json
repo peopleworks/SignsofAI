@@ -35,8 +35,8 @@
     "style.summary.within": "Distancia {0}. Los propios trabajos de esta persona se separan hasta {1} de su centro, así que este queda dentro del rango que ya cubren.",
     "style.summary.edge": "Distancia {0}, un poco por encima del {1} que los propios trabajos de esta persona cubren entre sí.",
     "style.summary.beyond": "Distancia {0}, frente a {1} de separación máxima entre los propios trabajos de esta persona. Este queda fuera del rango que cubren.",
-    "style.note.broad": "Esas muestras además discrepan bastante entre sí, lo que debilita cualquier comparación — compruebe que todas son de la misma persona y del mismo tipo.",
-    "style.advice": "El estilo cambia con la tarea, con el género, con el plazo y con que una persona simplemente mejore. Un texto fuera del rango es una razón para preguntar qué cambió, nunca una conclusión sobre quién lo escribió — y un texto dentro del rango es el resultado más útil, porque es el que zanja una sospecha.",
+    "style.note.broad": "Esas muestras además discrepan bastante entre sí, lo que debilita cualquier comparación: compruebe que todas son de la misma persona y del mismo tipo.",
+    "style.advice": "El estilo cambia con la tarea, con el género, con el plazo y con que una persona simplemente mejore. Un texto fuera del rango es una razón para preguntar qué cambió, nunca una conclusión sobre quién lo escribió. Y un texto dentro del rango es el resultado más útil, porque es el que zanja una sospecha.",
     "style.need.baseline": "No hay suficiente trabajo previo de esta persona para comparar: {0} palabras, y hacen falta al menos {1}.",
     "style.need.questioned": "El texto a revisar es demasiado corto: {0} palabras, y hacen falta al menos {1}.",
     "style.need.samples": "No hay suficientes piezas separadas para medir la variación de la propia persona: {0} utilizables, y hacen falta al menos {1}.",
@@ -159,7 +159,7 @@
       ],
       "weight": 4.0,
       "severity": "Medium",
-      "suggestion": "complejo — o nombra las facetas reales",
+      "suggestion": "complejo, o nombra las facetas reales",
       "replacements": [
         "complejo"
       ],
@@ -174,7 +174,7 @@
       ],
       "weight": 3.5,
       "severity": "Medium",
-      "suggestion": "sutil, detallado — o precisa la distinción",
+      "suggestion": "sutil, detallado, o precisa la distinción",
       "replacements": [
         "sutil",
         "detallado"
@@ -341,7 +341,7 @@
       ],
       "weight": 3.0,
       "severity": "Low",
-      "suggestion": "animado, lleno de vida — o un detalle concreto",
+      "suggestion": "animado, lleno de vida, o un detalle concreto",
       "replacements": [
         "animado",
         "lleno de vida"
@@ -373,7 +373,7 @@
       ],
       "weight": 3.5,
       "severity": "Medium",
-      "suggestion": "muchos, montones — o da la cifra",
+      "suggestion": "muchos, montones, o da la cifra",
       "replacements": [
         "muchos",
         "montones"
@@ -388,7 +388,7 @@
       ],
       "weight": 3.5,
       "severity": "Medium",
-      "suggestion": "de gran impacto — o muestra el cambio",
+      "suggestion": "de gran impacto, o muestra el cambio",
       "replacements": [
         "de gran impacto"
       ]
@@ -464,7 +464,7 @@
       ],
       "weight": 2.5,
       "severity": "Low",
-      "suggestion": "nuevo — o di qué lo hace nuevo",
+      "suggestion": "nuevo, o di qué lo hace nuevo",
       "replacements": [
         "nuevo"
       ]
@@ -551,7 +551,7 @@
       ],
       "weight": 1.0,
       "severity": "Info",
-      "suggestion": "muletilla — suele sobrar",
+      "suggestion": "muletilla: suele sobrar",
       "delete": true
     },
     {
@@ -561,7 +561,7 @@
       ],
       "weight": 1.0,
       "severity": "Info",
-      "suggestion": "muletilla — suele sobrar",
+      "suggestion": "muletilla: suele sobrar",
       "delete": true
     },
     {
@@ -572,7 +572,7 @@
       ],
       "weight": 1.5,
       "severity": "Info",
-      "suggestion": "muletilla — suele sobrar",
+      "suggestion": "muletilla: suele sobrar",
       "delete": true
     },
     {
@@ -582,7 +582,7 @@
       ],
       "weight": 1.5,
       "severity": "Info",
-      "suggestion": "muletilla — suele sobrar",
+      "suggestion": "muletilla: suele sobrar",
       "delete": true
     },
     {
@@ -593,7 +593,7 @@
       ],
       "weight": 1.5,
       "severity": "Info",
-      "suggestion": "muletilla — córtala",
+      "suggestion": "muletilla: córtala",
       "delete": true
     },
     {
@@ -603,7 +603,7 @@
       ],
       "weight": 1.5,
       "severity": "Info",
-      "suggestion": "muletilla — córtala salvo sentido literal",
+      "suggestion": "muletilla: córtala salvo sentido literal",
       "delete": true
     },
     {
@@ -613,7 +613,7 @@
       ],
       "weight": 2.0,
       "severity": "Low",
-      "suggestion": "muletilla — córtala",
+      "suggestion": "muletilla: córtala",
       "delete": true
     },
     {
@@ -623,7 +623,7 @@
       ],
       "weight": 2.0,
       "severity": "Low",
-      "suggestion": "muletilla — córtala",
+      "suggestion": "muletilla: córtala",
       "delete": true
     }
   ],
@@ -751,7 +751,7 @@
       "regex": "\\bpor un lado\\b",
       "weight": 3.0,
       "severity": "Medium",
-      "message": "Marco simétrico (“por un lado… por otro”) — falso equilibrio.",
+      "message": "Marco simétrico (“por un lado… por otro”): falso equilibrio.",
       "suggestion": "Si la evidencia favorece un lado, dilo."
     },
     {
@@ -761,7 +761,7 @@
       "regex": "\\b(\\w+), (\\w+) y (\\w+)[.,;]",
       "weight": 1.2,
       "severity": "Info",
-      "message": "Posible “regla de tres” — la IA abusa de los tríos.",
+      "message": "Posible “regla de tres”: la IA abusa de los tríos.",
       "suggestion": "Bien de vez en cuando; si todas las listas son de tres, varía."
     },
     {
@@ -905,7 +905,7 @@
       "regex": "(?m)^\\s{0,3}#{1,6}\\s+[^\\n]*[\\u2190-\\u21FF\\u2300-\\u27BF\\u2600-\\u26FF\\u2B00-\\u2BFF\\uD83C-\\uDBFF]",
       "weight": 3.0,
       "severity": "Low",
-      "message": "Emoji en un encabezado — ruido de formato.",
+      "message": "Emoji en un encabezado: ruido de formato.",
       "suggestion": "Los encabezados no necesitan emoji."
     },
     {
@@ -914,7 +914,7 @@
       "regex": "(?m)(?<=[a-z,;áéíóúñ])\\s\\*\\*[^\\n*]{1,60}\\*\\*",
       "weight": 2.0,
       "severity": "Info",
-      "message": "Negrita a media frase — ruido de formato.",
+      "message": "Negrita a media frase: ruido de formato.",
       "suggestion": "El énfasis rara vez ayuda a la prosa; quita la negrita."
     },
     {
