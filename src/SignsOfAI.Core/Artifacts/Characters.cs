@@ -106,6 +106,23 @@ internal static class Characters
     /// What is deliberately absent: every accented Latin letter. "á", "ñ" and "ü" are ordinary
     /// Spanish, and a table that treated them as impostors would turn this check into exactly the
     /// kind of instrument that punishes people for the language they write in.
+    ///
+    /// That principle was written for the two languages this project ships and applied only to them,
+    /// which is how U+0131 DOTLESS I — ordinary Turkish, Azerbaijani, Crimean Tatar and Kazakh — sat
+    /// here until #62. It flagged the proper names Fazıl, Kıbrıs, Rıza and Komandoları in a Spanish
+    /// article about a Turkish organisation: the tool penalising a document for being multilingual,
+    /// which is the harm the calibration page exists to measure.
+    ///
+    /// So the line is not "Latin or not" but **is this a letter of some living alphabet**. The three
+    /// entries below survive it because they are phonetic symbols from the IPA extensions, which no
+    /// national orthography writes prose in — a "ɡ" in running text is anomalous in a way a "ı" is
+    /// not. Nothing outside that reasoning may be added: a table that treats a nation's alphabet as
+    /// a disguise is the instrument this project argues against.
+    ///
+    /// The cost is real and is the right way to be wrong: a substitution that swaps ı for i is no
+    /// longer caught. It has never been observed — U+0131 occurs in one of the 371 texts we hold, and
+    /// that one is Turkish names — and this check errs toward a missed artifact over a false
+    /// accusation, the direction <see cref="IsEmojiLike"/> already states.
     /// </summary>
     private static readonly Dictionary<int, char> Table = new()
     {
@@ -129,8 +146,7 @@ internal static class Characters
         [0x03A1] = 'P', [0x03A4] = 'T', [0x03A5] = 'Y', [0x03A7] = 'X',
         // Armenian
         [0x0570] = 'h', [0x0578] = 'n', [0x057D] = 'u', [0x0585] = 'o',
-        // Latin letters that are not the ASCII one they look like
-        [0x0131] = 'i', // DOTLESS I
+        // IPA extensions: phonetic symbols, not letters of anyone's alphabet
         [0x0251] = 'a', // LATIN SMALL LETTER ALPHA
         [0x0261] = 'g', // LATIN SMALL LETTER SCRIPT G
         [0x0269] = 'i', // LATIN SMALL LETTER IOTA

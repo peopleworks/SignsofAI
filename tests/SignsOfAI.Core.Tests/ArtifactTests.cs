@@ -22,6 +22,8 @@ internal static class Chars
     public static readonly string NoBreakSpace = U(0x00A0);
     public static readonly string CyrillicA = U(0x0430);      // indistinguishable from "a"
     public static readonly string CyrillicE = U(0x0435);      // indistinguishable from "e"
+    public static readonly string DotlessI = U(0x0131);        // ordinary Turkish, not a disguise
+    public static readonly string ScriptG = U(0x0261);         // IPA, ordinary nowhere
     public static readonly string GreekAlpha = U(0x03B1);
     public static readonly string GreekBeta = U(0x03B2);
     public static readonly string MathBoldA = U(0x1D41A);     // MATHEMATICAL BOLD SMALL A
@@ -127,6 +129,38 @@ public class ArtifactScannerTests
                    "¿Qué más da? Añadió: «la investigación continúa». Él también lo dijo.";
 
         Assert.False(ArtifactScanner.Scan(text).Any);
+    }
+
+    [Fact]
+    public void Turkish_names_are_never_flagged_for_being_Turkish()
+    {
+        // #62: a Spanish article about a Turkish organisation. The dotless i is how these names are
+        // spelled, in every one of them, and nobody substituted anything. Flagging it made the one
+        // check that states a fact state a false one.
+        var spanish = $"El líder turcochipriota Mustafa Ak{Chars.DotlessI}nc{Chars.DotlessI} " +
+                      $"y el poeta Faz{Chars.DotlessI}l Say hablaron sobre K{Chars.DotlessI}br" +
+                      $"{Chars.DotlessI}s y sobre R{Chars.DotlessI}za.";
+
+        Assert.False(ArtifactScanner.Scan(spanish).Any);
+
+        // The same names inside English prose: the reader's language cannot be what decides whether
+        // somebody's name is an artifact.
+        var english = $"The Cypriot leader Mustafa Ak{Chars.DotlessI}nc{Chars.DotlessI} met the " +
+                      $"pianist Faz{Chars.DotlessI}l Say to discuss K{Chars.DotlessI}br{Chars.DotlessI}s.";
+
+        Assert.False(ArtifactScanner.Scan(english).Any);
+    }
+
+    [Fact]
+    public void A_phonetic_symbol_inside_a_word_is_still_an_artifact()
+    {
+        // The line #62 drew is "a letter of some living alphabet", not "Latin". A script g is an IPA
+        // symbol; no orthography writes prose with it, so one sitting mid-word is still a fingerprint.
+        var found = Assert.Single(ArtifactScanner.Scan($"a lon{Chars.ScriptG}er analysis").Occurrences);
+
+        Assert.Equal(ArtifactKind.LookalikeLetter, found.Kind);
+        Assert.Equal("U+0261", found.CodePoint);
+        Assert.Equal("g", found.LooksLike);
     }
 
     [Fact]
