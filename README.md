@@ -16,6 +16,10 @@
 
 **[Try the live demo &rarr;](https://peopleworks.github.io/SignsofAI/)** — English & Spanish, runs in your browser. No signup, and the analysis uploads nothing.
 
+**[Use it in your editor &rarr;](https://peopleworks.github.io/SignsofAI/skill)** — an agent skill for
+Claude Code, Codex, Gemini CLI and Cursor, in one line: `npx skills add peopleworks/SignsofAI -g`.
+It edits by the same rules this engine scores by, and it never invents a number.
+
 **[Download the Windows app &rarr;](https://github.com/peopleworks/SignsofAI/releases?q=desktop&expanded=true)** — the same tool in a window. Nothing to install alongside it: the .NET runtime is bundled.
 
 ![Signs of AI Writing analyzing text live: the score climbs as AI tells accumulate, then every tell is highlighted with a fix](Docs/screenshots/analyze-live.gif)
@@ -231,6 +235,9 @@ Or install it as a global tool once — `dotnet tool install --global SignsOfAI.
 already generated — copy it into `.vscode/mcp.json` and you're done.
 
 ## 5. Use it as an agent skill — `/signs-of-ai`
+
+**[The skill has its own page &rarr;](https://peopleworks.github.io/SignsofAI/skill)**, with the two
+modes side by side and what it refuses to do.
 
 Prefer to work inside your editor? [`SKILL.md`](SKILL.md) is a drop-in **agent skill** that de-slops a
 draft — or reports the tells a text carries — in **English and Spanish**. It is a human-readable

@@ -1,0 +1,85 @@
+@page "/skill"
+@using SignsOfAI.Core.Rules
+@inherits LocalizedComponent
+
+@*
+    The agent skill's own page, the way the desktop app and the Word add-in have one.
+
+    It had none, and the repository mentioned it at section 5, past two hundred lines of badges for
+    other people's registries. That is backwards: of every channel this project ships to, the skill
+    is the only one a person installs by choice rather than a machine indexes, and it was the only
+    one with nowhere to land.
+
+    The rule counts are read from the packs the build ships, never typed. Everything this project
+    has typed about itself has gone stale at least once.
+*@
+
+<PageTitle>@L["skill.pagetitle"]</PageTitle>
+
+<header class="hero">
+    <h1>@L["skill.h1"]</h1>
+    <p class="tagline">@L["skill.tagline"]</p>
+</header>
+
+@* Installing first: one line, because that is the whole argument against scrolling. *@
+<section class="card">
+    <h2 class="dl-h2"><Icon Name="download" /> @L["skill.install.title"]</h2>
+    <p class="hint">@L["skill.install.lede"]</p>
+
+    <h3 class="wa-h3">@L["skill.install.any.title"]</h3>
+    <pre class="skill-cmd"><code>npx skills add peopleworks/SignsofAI -g</code></pre>
+    <p>@L.M("skill.install.any.body")</p>
+
+    <h3 class="wa-h3">@L["skill.install.plugin.title"]</h3>
+    <pre class="skill-cmd"><code>/plugin marketplace add peopleworks/SignsofAI
+/plugin install signs-of-ai</code></pre>
+    <p>@L.M("skill.install.plugin.body")</p>
+</section>
+
+<section class="card">
+    <h2 class="dl-h2"><Icon Name="wand" /> @L["skill.use.title"]</h2>
+    <pre class="skill-cmd"><code>/signs-of-ai @L["skill.use.edit.arg"]
+/signs-of-ai @L["skill.use.examine.arg"]</code></pre>
+    <ul class="dl-grid">
+        <li class="dl-item">
+            <h3>@L["skill.use.edit.name"]</h3>
+            <p>@L["skill.use.edit.what"]</p>
+        </li>
+        <li class="dl-item">
+            <h3>@L["skill.use.examine.name"]</h3>
+            <p>@L["skill.use.examine.what"]</p>
+        </li>
+    </ul>
+</section>
+
+@* The differentiator, and the reason this is not just another de-slop prompt: the two things it is
+   built to refuse. A reader deciding whether to let a tool near coursework is deciding about these. *@
+<section class="card">
+    <h2 class="dl-h2"><Icon Name="lock" /> @L["skill.refuses.title"]</h2>
+    <p>@L.M("skill.refuses.score")</p>
+    <p>@L.M("skill.refuses.author")</p>
+</section>
+
+<section class="card">
+    <h2 class="dl-h2"><Icon Name="layers" /> @L["skill.rules.title"]</h2>
+    <p>@L.M("skill.rules.body", EnglishRules, SpanishRules)</p>
+    <div class="cta">
+        <a class="primary" href="@SkillUrl" target="_blank" rel="noopener">@L["skill.cta.read"]</a>
+        <a href="catalog">@L["skill.cta.catalog"]</a>
+    </div>
+</section>
+
+@code {
+    private const string SkillUrl = "https://github.com/peopleworks/SignsofAI/blob/main/SKILL.md";
+
+    // Counted from the packs this build carries. The number in a sentence about how many rules there
+    // are is exactly the kind that outlives its truth.
+    private static int Count(string language)
+    {
+        var pack = RulePackLoader.Load(language);
+        return pack.Lexical.Length + pack.Patterns.Length;
+    }
+
+    private static int EnglishRules => Count("en");
+    private static int SpanishRules => Count("es");
+}

@@ -25,6 +25,10 @@
             @* No host condition, unlike the two below: somebody using the desktop app writes in
                Word too, and the add-in is useful to them for the same reasons. *@
             <NavLink class="nav-link" href="word-addin">@L["nav.word"]</NavLink>
+            @* Same reasoning as the Word link: every host can use it, because it runs in the
+               reader's editor rather than in this one. It had no link at all until #98, which is
+               how the one channel people install by choice stayed the hardest one to find. *@
+            <NavLink class="nav-link" href="skill">@L["nav.skill"]</NavLink>
             @* Only where there is something to gain by downloading it. The same signal as the
                folder link above, and for the same reason: this host cannot open a folder, so a
                better host exists for this machine and hiding that would be the lowest-common-
