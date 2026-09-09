@@ -10,14 +10,14 @@
     "emdash.suggestion": "Replace most with a period, comma, or parentheses; keep em-dashes rare and deliberate.",
     "emdash.evidence": "Human prose averages well under one em-dash per 100 words.",
     "catalog.lexical": "Overused AI vocabulary.",
-    "artifact.invisible": "{1} ({0}) — a character that occupies no space when the text is displayed.",
-    "artifact.bidi": "{1} ({0}) — a control character that can make the displayed text differ from the stored text.",
+    "artifact.invisible": "{1} ({0}): a character that occupies no space when the text is displayed.",
+    "artifact.bidi": "{1} ({0}): a control character that can make the displayed text differ from the stored text.",
     "artifact.lookalike": "“{3}” contains {1} ({0}) where the Latin letter “{2}” belongs. The two are indistinguishable on screen.",
     "artifact.space": "{1} ({0}) in place of an ordinary space.",
-    "artifact.soft-hyphen": "{1} ({0}) — an invisible hyphenation point, routine in text copied out of a PDF.",
-    "artifact.variation-selector": "{1} ({0}) — a rendering modifier attached to something that is not an emoji.",
-    "artifact.private-use": "{1} ({0}) — a codepoint with no meaning outside the font that defined it.",
-    "artifact.tag": "{1} ({0}) — an invisible character of the kind used to carry hidden text alongside visible text.",
+    "artifact.soft-hyphen": "{1} ({0}): an invisible hyphenation point, routine in text copied out of a PDF.",
+    "artifact.variation-selector": "{1} ({0}): a rendering modifier attached to something that is not an emoji.",
+    "artifact.private-use": "{1} ({0}): a codepoint with no meaning outside the font that defined it.",
+    "artifact.tag": "{1} ({0}): an invisible character of the kind used to carry hidden text alongside visible text.",
     "artifact.summary.incidental": "{0} unusual characters, not spread through the document. Copying from a web page or a PDF produces these.",
     "artifact.summary.systematic": "{0} characters that typing does not produce, spread across {1} of {2} sections of the document. That distribution is what a tool leaves behind when it processes a whole text.",
     "artifact.advice": "This says nothing about who wrote the text, and it is not evidence of dishonesty. It is a question about where the file has been: ask the writer to open the document and describe how it was produced.",
@@ -35,8 +35,8 @@
     "style.summary.within": "Distance {0}. This writer’s own pieces sit up to {1} from their centre, so this one is inside the range they already cover.",
     "style.summary.edge": "Distance {0}, a little past the {1} that this writer’s own pieces cover between themselves.",
     "style.summary.beyond": "Distance {0}, against {1} for the widest gap between this writer’s own pieces. This one sits outside the range they cover.",
-    "style.note.broad": "Those samples also disagree with each other a lot, which makes any comparison weak — check that they are all by the same person and of a similar kind.",
-    "style.advice": "Style moves with the assignment, the genre, the deadline, and with a person simply getting better. A text outside the range is a reason to ask what changed, never a conclusion about who wrote it — and a text inside the range is the more useful result, because it is the one that settles a suspicion.",
+    "style.note.broad": "Those samples also disagree with each other a lot, which makes any comparison weak: check that they are all by the same person and of a similar kind.",
+    "style.advice": "Style moves with the assignment, the genre, the deadline, and with a person simply getting better. A text outside the range is a reason to ask what changed, never a conclusion about who wrote it. And a text inside the range is the more useful result, because it is the one that settles a suspicion.",
     "style.need.baseline": "Not enough of this writer’s own work to measure against: {0} words, and this needs at least {1}.",
     "style.need.questioned": "The text being checked is too short: {0} words, and this needs at least {1}.",
     "style.need.samples": "Not enough separate pieces to measure the writer’s own variation: {0} usable, and this needs at least {1}.",
@@ -71,7 +71,7 @@
       ],
       "weight": 5.5,
       "severity": "High",
-      "suggestion": "mix, blend, range — or just name the thing",
+      "suggestion": "mix, blend, range, or just name the thing",
       "replacements": [
         "mix",
         "blend",
@@ -100,7 +100,7 @@
       ],
       "weight": 4.0,
       "severity": "Medium",
-      "suggestion": "subtle, detailed — or state the specific distinction",
+      "suggestion": "subtle, detailed, or state the specific distinction",
       "replacements": [
         "subtle",
         "detailed"
@@ -197,7 +197,7 @@
       ],
       "weight": 4.5,
       "severity": "High",
-      "suggestion": "proof, evidence, sign — or drop the flourish",
+      "suggestion": "proof, evidence, sign, or drop the flourish",
       "replacements": [
         "proof",
         "evidence",
@@ -280,7 +280,7 @@
       ],
       "weight": 3.5,
       "severity": "Medium",
-      "suggestion": "smooth, smoothly — or show it, don't claim it",
+      "suggestion": "smooth, smoothly, or show it, don't claim it",
       "replacements": [
         "smooth",
         "smoothly"
@@ -308,7 +308,7 @@
       ],
       "weight": 3.5,
       "severity": "Medium",
-      "suggestion": "many, countless — or give the number",
+      "suggestion": "many, countless, or give the number",
       "replacements": [
         "many",
         "countless"
@@ -335,7 +335,7 @@
       ],
       "weight": 3.5,
       "severity": "Medium",
-      "suggestion": "major, far-reaching — or show the change",
+      "suggestion": "major, far-reaching, or show the change",
       "replacements": [
         "major",
         "far-reaching"
@@ -348,7 +348,7 @@
       ],
       "weight": 3.0,
       "severity": "Low",
-      "suggestion": "lively, colorful — or a concrete detail",
+      "suggestion": "lively, colorful, or a concrete detail",
       "replacements": [
         "lively",
         "colorful"
@@ -361,7 +361,7 @@
       ],
       "weight": 3.5,
       "severity": "Medium",
-      "suggestion": "busy, crowded — or describe the scene",
+      "suggestion": "busy, crowded, or describe the scene",
       "replacements": [
         "busy",
         "crowded"
@@ -497,7 +497,7 @@
       ],
       "weight": 3.5,
       "severity": "Medium",
-      "suggestion": "changing — or say how it changes",
+      "suggestion": "changing, or say how it changes",
       "replacements": [
         "changing"
       ]
@@ -523,7 +523,7 @@
       ],
       "weight": 3.0,
       "severity": "Low",
-      "suggestion": "major shift — or state the actual impact",
+      "suggestion": "major shift, or state the actual impact",
       "replacements": [
         "major shift"
       ]
@@ -645,7 +645,7 @@
       ],
       "weight": 3.5,
       "severity": "Medium",
-      "suggestion": "example, model — or drop the metaphor",
+      "suggestion": "example, model, or drop the metaphor",
       "replacements": [
         "example",
         "model"
@@ -675,7 +675,7 @@
       ],
       "weight": 1.0,
       "severity": "Info",
-      "suggestion": "empty intensifier — usually deletable",
+      "suggestion": "empty intensifier: usually deletable",
       "delete": true
     },
     {
@@ -686,7 +686,7 @@
       ],
       "weight": 1.0,
       "severity": "Info",
-      "suggestion": "empty intensifier — usually deletable",
+      "suggestion": "empty intensifier: usually deletable",
       "delete": true
     },
     {
@@ -697,7 +697,7 @@
       ],
       "weight": 1.0,
       "severity": "Info",
-      "suggestion": "empty intensifier — usually deletable",
+      "suggestion": "empty intensifier: usually deletable",
       "delete": true
     },
     {
@@ -707,7 +707,7 @@
       ],
       "weight": 1.5,
       "severity": "Info",
-      "suggestion": "empty intensifier — cut unless it's meant literally",
+      "suggestion": "empty intensifier: cut unless it's meant literally",
       "delete": true
     },
     {
@@ -717,7 +717,7 @@
       ],
       "weight": 1.5,
       "severity": "Info",
-      "suggestion": "empty intensifier — cut it",
+      "suggestion": "empty intensifier: cut it",
       "delete": true
     },
     {
@@ -727,7 +727,7 @@
       ],
       "weight": 1.5,
       "severity": "Info",
-      "suggestion": "empty intensifier — cut it",
+      "suggestion": "empty intensifier: cut it",
       "delete": true
     },
     {
@@ -748,7 +748,7 @@
       ],
       "weight": 2.0,
       "severity": "Low",
-      "suggestion": "empty intensifier — cut it",
+      "suggestion": "empty intensifier: cut it",
       "delete": true
     },
     {
@@ -758,7 +758,7 @@
       ],
       "weight": 2.0,
       "severity": "Low",
-      "suggestion": "empty intensifier — cut it",
+      "suggestion": "empty intensifier: cut it",
       "delete": true
     },
     {
@@ -768,7 +768,7 @@
       ],
       "weight": 2.0,
       "severity": "Low",
-      "suggestion": "empty intensifier — cut it",
+      "suggestion": "empty intensifier: cut it",
       "delete": true
     },
     {
@@ -778,7 +778,7 @@
       ],
       "weight": 2.0,
       "severity": "Low",
-      "suggestion": "empty intensifier — cut it",
+      "suggestion": "empty intensifier: cut it",
       "delete": true
     }
   ],
@@ -789,7 +789,7 @@
       "regex": "\\bit'?s not (just|only|merely|about)\\b[^.?!\\n]{1,60}?,\\s*it'?s\\b",
       "weight": 6.0,
       "severity": "High",
-      "message": "Negative parallelism (“it's not just X, it's Y”) — feigns depth.",
+      "message": "Negative parallelism (“it's not just X, it's Y”): feigns depth.",
       "suggestion": "State the claim directly. Cut the “not just… it's…” frame."
     },
     {
@@ -862,7 +862,7 @@
       "regex": "\\bon (the )?one hand\\b",
       "weight": 3.0,
       "severity": "Medium",
-      "message": "Symmetrical framing (“on one hand… on the other”) — false balance.",
+      "message": "Symmetrical framing (“on one hand… on the other”): false balance.",
       "suggestion": "If the evidence favors one side, say so. Don't force a two-sided frame."
     },
     {
@@ -891,7 +891,7 @@
       "regex": "\\b(\\w+), (\\w+),? and (\\w+)[.,;]",
       "weight": 1.2,
       "severity": "Info",
-      "message": "Possible “rule of three” — AI defaults to tricolons.",
+      "message": "Possible “rule of three”: AI defaults to tricolons.",
       "suggestion": "Fine occasionally; if every list is three items, vary the count."
     },
     {
@@ -1103,7 +1103,7 @@
       "regex": "(?m)^\\s{0,3}#{1,6}\\s+[^\\n]*[\\u2190-\\u21FF\\u2300-\\u27BF\\u2600-\\u26FF\\u2B00-\\u2BFF\\uD83C-\\uDBFF]",
       "weight": 3.0,
       "severity": "Low",
-      "message": "Emoji in a heading — formatting slop.",
+      "message": "Emoji in a heading: formatting slop.",
       "suggestion": "Headings don't need emoji."
     },
     {
@@ -1112,7 +1112,7 @@
       "regex": "(?m)(?<=[a-z,;])\\s\\*\\*[^\\n*]{1,60}\\*\\*",
       "weight": 2.0,
       "severity": "Info",
-      "message": "Mid-sentence bold — formatting slop.",
+      "message": "Mid-sentence bold: formatting slop.",
       "suggestion": "Emphasis rarely helps prose; cut the bold."
     },
     {

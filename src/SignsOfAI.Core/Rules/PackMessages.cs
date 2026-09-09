@@ -132,15 +132,15 @@ public static class PackMessages
         [EmDashSuggestion] = "Replace most with a period, comma, or parentheses; keep em-dashes rare and deliberate.",
         [EmDashEvidence] = "Human prose averages well under one em-dash per 100 words.",
         [CatalogLexical] = "Overused AI vocabulary.",
-        [ArtifactInvisible] = "{1} ({0}) — a character that occupies no space when the text is displayed.",
-        [ArtifactBidi] = "{1} ({0}) — a control character that can make the displayed text differ from the stored text.",
+        [ArtifactInvisible] = "{1} ({0}): a character that occupies no space when the text is displayed.",
+        [ArtifactBidi] = "{1} ({0}): a control character that can make the displayed text differ from the stored text.",
         [ArtifactLookalike] = "“{3}” contains {1} ({0}) where the Latin letter “{2}” belongs. " +
                               "The two are indistinguishable on screen.",
         [ArtifactSpace] = "{1} ({0}) in place of an ordinary space.",
-        [ArtifactSoftHyphen] = "{1} ({0}) — an invisible hyphenation point, routine in text copied out of a PDF.",
-        [ArtifactVariationSelector] = "{1} ({0}) — a rendering modifier attached to something that is not an emoji.",
-        [ArtifactPrivateUse] = "{1} ({0}) — a codepoint with no meaning outside the font that defined it.",
-        [ArtifactTag] = "{1} ({0}) — an invisible character of the kind used to carry hidden text alongside visible text.",
+        [ArtifactSoftHyphen] = "{1} ({0}): an invisible hyphenation point, routine in text copied out of a PDF.",
+        [ArtifactVariationSelector] = "{1} ({0}): a rendering modifier attached to something that is not an emoji.",
+        [ArtifactPrivateUse] = "{1} ({0}): a codepoint with no meaning outside the font that defined it.",
+        [ArtifactTag] = "{1} ({0}): an invisible character of the kind used to carry hidden text alongside visible text.",
         [ArtifactSummaryIncidental] = "{0} unusual characters, not spread through the document. " +
                                       "Copying from a web page or a PDF produces these.",
         [ArtifactSummarySystematic] = "{0} characters that typing does not produce, spread across {1} of {2} " +
@@ -177,7 +177,7 @@ public static class PackMessages
                            "weak — check that they are all by the same person and of a similar kind.",
         [StyleAdvice] = "Style moves with the assignment, the genre, the deadline, and with a person simply " +
                         "getting better. A text outside the range is a reason to ask what changed, never a " +
-                        "conclusion about who wrote it — and a text inside the range is the more useful " +
+                        "conclusion about who wrote it. And a text inside the range is the more useful " +
                         "result, because it is the one that settles a suspicion.",
         [StyleNeedBaseline] = "Not enough of this writer’s own work to measure against: {0} words, and this " +
                               "needs at least {1}.",

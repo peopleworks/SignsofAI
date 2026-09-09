@@ -40,7 +40,7 @@ noise is large at four hundred words. "Moved with the rewrite" is what this desi
 because of the rewrite" is a stronger claim and an earlier version of the report made it.
 
 The human halves are drawn from the calibration corpus, so every one of them was published before
-generative models existed. That remains the only basis for calling writing human, and it is a
+2022. That remains the only basis for calling writing human, and it is a
 stronger one than any classifier offers about anything.
 
 ## The controls, which were not planned

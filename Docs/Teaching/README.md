@@ -92,13 +92,14 @@ estas herramientas. Pídale que hable de su trabajo.
 ## Por qué este proyecto puede permitirse decir todo esto
 
 Porque publica con qué frecuencia se equivoca, cosa que casi nadie hace en esta categoría:
-[`Docs/CALIBRATION.md`](../CALIBRATION.md). Noventa textos publicados antes de que existieran los
-modelos generativos, ninguno marcado en el umbral recomendado, y la lectura honesta es el intervalo y
-no el cero: por debajo del 4,1%.
+[`Docs/CALIBRATION.md`](../CALIBRATION.md). 296 textos publicados antes de 2022, dos de ellos
+marcados en el umbral recomendado, y la lectura honesta es el intervalo y no el 0,7 % observado: por
+debajo del 2,4 %.
 
-Siga leyendo esa página y dice algo menos halagador, que es justo lo que importa aquí: **ni el
-español ni el inglés respaldan por sí solos un umbral propio.** El corpus es demasiado delgado por
-idioma. Una cifra medida mayoritariamente en un idioma, citada frente a un estudiante que escribe en
-otro, es exactamente el error que estos documentos le piden a un comité que no cometa.
+Siga leyendo esa página y dice algo menos halagador, que es justo lo que importa aquí: **el corpus
+español son 25 textos y no respalda un umbral propio**, y su mejor cota es del 13,3 %. El inglés sí
+lo respalda, con 271 textos, y aun así su cota en ese umbral es del 2,7 %. Una cifra medida
+mayoritariamente en un idioma, citada frente a un estudiante que escribe en otro, es exactamente el
+error que estos documentos le piden a un comité que no cometa.
 
 Todo funciona sin conexión. Ningún documento, ni fragmento de él, sale del equipo donde está.
