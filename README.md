@@ -376,7 +376,14 @@ signsofai check article.docx --lang en    # Word documents too
 signsofai check post.md --json            # machine-readable
 signsofai check post.md --max-score 40    # exit 1 if it reads too much like AI → fails CI
 signsofai check post.md --rules my-style.json   # your custom catalog
+signsofai check ensayo.txt --lang es --reader-lang en --report out.md
 ```
+
+`--lang` is the language of the **text**; `--reader-lang` is the language of whoever reads the
+output — the evidence report, the character scan and the citation cross-check, all of which address
+that person rather than describe the prose. It defaults to the text's language, so you only pass it
+when the two differ. Findings stay in the text's language on purpose: a Spanish tell is explained in
+Spanish.
 
 The analysis engine is also a library — `dotnet add package SignsOfAI.Core`:
 

@@ -129,6 +129,7 @@ var ruleFiles = new List<string>();
 string language = "auto";
 bool json = false, noColor = false, failOnArtifacts = false;
 string? reportPath = null;
+string? readerLang = null;
 double? maxScore = null;
 int top = 10;
 
@@ -140,6 +141,10 @@ for (int i = 1; i < argList.Count; i++)
         case "--lang": language = Next(); break;
         case "--json": json = true; break;
         case "--report": reportPath = Next(); break;
+        // The language of whoever reads the output, which is not always the document's: the
+        // report, the character scan and the citation cross-check all address that person.
+        // Defaults to the text's language, so nothing changes unless it is asked for.
+        case "--reader-lang": readerLang = Next(); break;
         case "--no-color": noColor = true; break;
         case "--rules": ruleFiles.Add(Next()); break;
         case "--max-score": maxScore = double.Parse(Next(), System.Globalization.CultureInfo.InvariantCulture); break;
@@ -154,7 +159,7 @@ for (int i = 1; i < argList.Count; i++)
 
 if (positionals.Count == 0)
 {
-    Console.Error.WriteLine("Usage: signsofai check <path> [--lang auto|en|es] [--json] [--report FILE] [--max-score N] [--fail-on-artifacts] [--top N]");
+    Console.Error.WriteLine("Usage: signsofai check <path> [--lang auto|en|es] [--reader-lang en|es] [--json] [--report FILE] [--max-score N] [--fail-on-artifacts] [--top N]");
     return 2;
 }
 
@@ -173,7 +178,7 @@ foreach (var rf in ruleFiles)
     catch (Exception ex) { Console.Error.WriteLine($"Invalid rule-pack '{rf}': {ex.Message}"); return 2; }
 }
 
-var result = new AiWritingAnalyzer().Analyze(text, language, extraPacks);
+var result = new AiWritingAnalyzer().Analyze(text, language, extraPacks, readerLang);
 
 if (json)
 {
@@ -244,7 +249,15 @@ else
 // --max-score gate still leaves the document behind for whoever has to look at it.
 if (reportPath is not null)
 {
-    var options = new ReportOptions { DocumentName = Path.GetFileName(path) };
+    // Without this the report was English whatever was asked for, because the CLI never set it
+    // (#77) — report.es.json was unreachable from a command line. An unsupported language falls
+    // back to English inside ReportMessages and the report says so on its face, so passing the
+    // detected language through is safe.
+    var options = new ReportOptions
+    {
+        DocumentName = Path.GetFileName(path),
+        InterfaceLanguage = readerLang ?? result.Language,
+    };
     var markdown = Path.GetExtension(reportPath).Equals(".md", StringComparison.OrdinalIgnoreCase);
     var document = markdown
         ? EvidenceReport.ToMarkdown(result, options)

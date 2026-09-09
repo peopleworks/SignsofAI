@@ -296,17 +296,25 @@ public class EvidenceReportTests
         Assert.Contains("# Informe del análisis de escritura", markdown);
         Assert.Contains("## Qué dice el análisis", markdown);
         Assert.Contains("## Con qué frecuencia se equivoca", markdown);
-        Assert.Contains("Este informe contiene", markdown);
-        Assert.Contains("Este bloque aún no está traducido", markdown);
         Assert.Contains("<html lang=\"es\">", html);
 
-        var stated = int.Parse(Regex.Match(markdown,
-            @"Este informe contiene (\d+) bloque").Groups[1].Value);
-        var marked = Regex.Matches(markdown,
-            "Este bloque aún no está traducido").Count;
-        Assert.Equal(marked, stated);
-        Assert.True(markdown.IndexOf("Este informe contiene", StringComparison.Ordinal)
-                    < markdown.IndexOf("Este bloque aún no está traducido", StringComparison.Ordinal));
+        // This used to assert the opposite. report.es.json carried 39 of the 76 blocks, so a Spanish
+        // report was half English behind fallback markers, and the test pinned that as expected —
+        // the symptom recorded as the specification. #77 translated the other 37; a Spanish report
+        // is now Spanish throughout, and Spanish_says_every_block_the_report_can_print keeps it so.
+        Assert.DoesNotContain("Este bloque aún no está traducido", markdown);
+        Assert.DoesNotContain("Este informe contiene", markdown);
+
+        // The announcement invariant still has to hold whenever a block does fall back: the count in
+        // the summary matches the markers, and the summary comes first. Vacuous while the
+        // translation is complete, and the only thing standing when a new English string lands
+        // before its translation does.
+        var stated = Regex.Match(markdown, @"Este informe contiene (\d+) bloque");
+        var marked = Regex.Matches(markdown, "Este bloque aún no está traducido").Count;
+        Assert.Equal(marked, stated.Success ? int.Parse(stated.Groups[1].Value) : 0);
+        if (marked > 0)
+            Assert.True(markdown.IndexOf("Este informe contiene", StringComparison.Ordinal)
+                        < markdown.IndexOf("Este bloque aún no está traducido", StringComparison.Ordinal));
     }
 
     [Fact]
