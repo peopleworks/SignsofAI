@@ -196,8 +196,12 @@ dotnet tool install --global SignsOfAI.Cli
 signsofai check draft.md --json               # the analysis, structured
 signsofai check essay.docx --report out.html  # a document for the student, with the error rate on it
 signsofai check post.md --max-score 40        # gate prose in CI
+signsofai check ensayo.docx --reader-lang es --report out.html   # the report in the reader's language
 signsofai baseline essay4.docx --against essay1.docx --against essay2.docx --against essay3.docx
 ```
+
+`--reader-lang` is who reads the output, not what language the text is in — a teacher reading Spanish
+essays in English wants `--reader-lang en`. It defaults to the text's language.
 
 Or the web app, which runs in the browser with nothing installed and uploads nothing:
 https://peopleworks.github.io/SignsofAI/
