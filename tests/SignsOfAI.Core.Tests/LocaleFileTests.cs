@@ -154,6 +154,38 @@ public class LocaleFileTests
             "verdict.none. Found:\n  " + string.Join("\n  ", problems));
     }
 
+    /// <summary>
+    /// Being current is not the same as being complete, and only the first was guarded.
+    ///
+    /// This project claims the interface is bilingual, not that Spanish is a courtesy translation
+    /// kept roughly up to date. A missing key renders in English inside an otherwise Spanish page,
+    /// which is the same defect #77 found in the evidence report: three tests watched report.es.json
+    /// and none of them noticed it carried 39 of 76 blocks.
+    ///
+    /// The line is the manifest's own credit. A locale this project puts its own name to has to be
+    /// complete; a locale contributed by somebody else may be partial, because demanding all 500
+    /// keys from a first pull request would turn a partial translation into no translation.
+    /// </summary>
+    [Fact]
+    public void A_locale_this_project_credits_itself_for_is_complete()
+    {
+        var manifest = ReadManifest();
+        var fallback = ReadLocale(manifest.Fallback);
+
+        foreach (var locale in manifest.Locales.Where(l =>
+                     l.Code != manifest.Fallback &&
+                     string.Equals(l.Credit, "PeopleWorks", StringComparison.OrdinalIgnoreCase)))
+        {
+            var strings = ReadLocale(locale.Code);
+            var missing = fallback.Keys.Where(k => !strings.ContainsKey(k)).OrderBy(k => k).ToList();
+
+            Assert.True(missing.Count == 0,
+                $"{locale.Code}.json is missing {missing.Count} of {fallback.Count} keys, so those "
+                + $"strings appear in {manifest.Fallback} inside a {locale.Code} page: "
+                + string.Join(", ", missing.Take(20)));
+        }
+    }
+
     [Fact]
     public void Translations_use_only_known_keys()
     {

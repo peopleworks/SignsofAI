@@ -1106,6 +1106,17 @@ button.ghost.sm { padding: .35rem .7rem; font-size: .82rem; }
    a sub-heading inside a card, and a pulled quote for the sentence the pane actually prints. */
 .wa-h3 { font-size: .94rem; font-weight: 650; margin: 1.1rem 0 .4rem; }
 
+/* The one command that installs the skill. It is the whole argument of that page, so it is set as a
+   block a reader can select in one gesture rather than as inline code inside a sentence. Wraps
+   rather than scrolls: a command you cannot see the end of is a command you retype wrong. */
+.skill-cmd {
+    margin: .5rem 0 .8rem; padding: .7rem .85rem;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px;
+    font-size: .86rem; line-height: 1.55;
+    white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.skill-cmd code { background: none; padding: 0; font: inherit; }
+
 /* A row of links where one of them is the action. why.html has a .cta of its own — it is a
    standalone page with its own stylesheet — and copying the markup here without the style is
    exactly how this shipped as two bare links sitting against each other. */
