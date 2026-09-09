@@ -36,7 +36,17 @@ public sealed class AiWritingAnalyzer
     /// A pack applies when its <c>Language</c> matches (or is "*"/"all"/empty); rules override
     /// built-ins by id.
     /// </param>
-    public AnalysisResult Analyze(string text, string? language = null, IReadOnlyList<RulePack>? extraPacks = null)
+    /// <param name="readerLanguage">
+    /// The language of whoever is reading the result, when it differs from the text's. It governs
+    /// only what is addressed to that reader rather than said about the prose — see the character
+    /// scan and the citation cross-check below. Null follows the text, which is what a caller with
+    /// no interface of its own wants.
+    /// </param>
+    public AnalysisResult Analyze(
+        string text,
+        string? language = null,
+        IReadOnlyList<RulePack>? extraPacks = null,
+        string? readerLanguage = null)
     {
         text ??= string.Empty;
 
@@ -56,13 +66,23 @@ public sealed class AiWritingAnalyzer
 
         var rulePack = ResolvePack(lang, extraPacks);
 
+        // Both of the checks below state facts about the file rather than judgements of its prose,
+        // and everything they say is addressed to whoever is reading: U+00A0 is U+00A0 in every
+        // language, and "ask the writer how this document was produced" is an instruction, not
+        // commentary. So they take the reader's pack, which #36 settled for the evidence report and
+        // #88 found these two had never been given.
+        //
+        // Findings are different and deliberately untouched: a finding quotes the text and argues
+        // about it, and a Spanish tell explained in Spanish is the useful form.
+        var readerPack = ResolveReaderPack(readerLanguage, lang, rulePack, extraPacks);
+
         // Re-scanned only when there is something to report, this time with the pack that supplies
         // the wording — the first pass runs before the language is known.
-        var artifacts = probe.Any ? ArtifactScanner.Scan(text, rulePack) : ArtifactReport.Empty;
+        var artifacts = probe.Any ? ArtifactScanner.Scan(text, readerPack) : ArtifactReport.Empty;
 
         // Sources are read from the cleaned copy too, so a substituted letter cannot hide a citation
         // from its own bibliography any more than it can hide a word from the catalog.
-        var citations = ToSource(CitationChecker.Check(normalized.Text, rulePack), normalized);
+        var citations = ToSource(CitationChecker.Check(normalized.Text, readerPack), normalized);
 
         var context = new AnalysisContext
         {
@@ -141,6 +161,21 @@ public sealed class AiWritingAnalyzer
     /// replacements — has to consult the very same merged pack. Re-deriving it at the call site is how
     /// the two drift apart.
     /// </summary>
+    /// <summary>
+    /// The pack that supplies wording addressed to the reader. Falls back to the analysed text's
+    /// pack whenever no reader language is given or it is the same one — so a caller that never
+    /// heard of this keeps exactly the behaviour it had.
+    /// </summary>
+    private static RulePack ResolveReaderPack(
+        string? readerLanguage, string textLanguage, RulePack textPack, IReadOnlyList<RulePack>? extraPacks)
+    {
+        if (readerLanguage is null or "" or "auto")
+            return textPack;
+
+        var reader = readerLanguage.ToLowerInvariant();
+        return reader == textLanguage ? textPack : ResolvePack(reader, extraPacks);
+    }
+
     public static RulePack ResolvePack(string language, IReadOnlyList<RulePack>? extraPacks = null)
     {
         var builtIn = RulePackLoader.Load(language);

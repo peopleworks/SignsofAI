@@ -507,7 +507,9 @@ else
             return;
         }
         _analyzedText = _text;
-        _result = Analyzer.Analyze(_text, _language, Catalogs.EnabledPacks());
+        // L.Current, not _language: the character scan and the citation cross-check speak to
+        // whoever is reading the page, and the page already knows their language (#88).
+        _result = Analyzer.Analyze(_text, _language, Catalogs.EnabledPacks(), L.Current);
         ResetHumanize();
         _showCard = false;
     }
@@ -648,7 +650,7 @@ else
         if (result.Success)
         {
             _humanized = result.Text;
-            _humanizedResult = Analyzer.Analyze(_humanized, _language, Catalogs.EnabledPacks());
+            _humanizedResult = Analyzer.Analyze(_humanized, _language, Catalogs.EnabledPacks(), L.Current);
             _diff = WordDiff.Compute(_analyzedText, _humanized);
         }
         else _humanizeError = L.F("home.humanize.failed", result.Error ?? "");

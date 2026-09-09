@@ -166,7 +166,7 @@
 
         // "auto" so the analysed language is the document's, independent of the pane's own — the
         // distinction the web app makes too, and the one a report has to keep straight.
-        _result = Analyzer.Analyze(_text, "auto");
+        _result = Analyzer.Analyze(_text, "auto", readerLanguage: L.Current);
     }
 
     // The same mapping the web app uses, not a second scale invented for a narrow column. The
