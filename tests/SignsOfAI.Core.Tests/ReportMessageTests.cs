@@ -51,6 +51,25 @@ public class ReportMessageTests
     }
 
     [Fact]
+    public void Spanish_says_every_block_the_report_can_print()
+    {
+        // The core being current is not the same as the translation being complete. It carried 39 of
+        // 76 blocks, so `--report` on a Spanish document produced a report that opened in Spanish and
+        // then said "Este bloque aún no está traducido" six times (#77). A half-translated report is
+        // not a Spanish report, and nothing failed while it was one.
+        var resource = Load("es");
+
+        var missing = ReportMessages.Defaults.Keys
+            .Where(key => !resource.Messages.ContainsKey(key))
+            .Order()
+            .ToList();
+
+        Assert.True(missing.Count == 0,
+            $"report.es.json is missing {missing.Count} of {ReportMessages.Defaults.Count} blocks, so a "
+            + $"Spanish report prints them in English behind a fallback marker: {string.Join(", ", missing)}");
+    }
+
+    [Fact]
     public void Every_default_declares_its_template_arity()
     {
         Assert.Equal(ReportMessages.Defaults.Keys.Order(), ReportMessages.Arity.Keys.Order());
