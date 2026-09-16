@@ -20,11 +20,20 @@ namespace SignsOfAI.UI.Services;
 public static class DesktopRelease
 {
     /// <summary>The published version, without the <c>desktop-v</c> prefix its tag carries.</summary>
-    public const string Version = "0.8.0";
+    public const string Version = "0.8.1";
 
     /// <summary>
-    /// The .zip itself, so the button downloads rather than starting a scavenger hunt through a
-    /// release page. Interpolated from <see cref="Version"/> so the two cannot disagree.
+    /// The installer, which is what the page offers first. It installs for the current user only, so
+    /// a teacher on a managed laptop needs no administrator — and it cannot split the folder the app
+    /// needs kept together, which the zip left to the person extracting it. Still unsigned, so it
+    /// warns exactly as the executable does. Interpolated from <see cref="Version"/>, like the zip.
+    /// </summary>
+    public const string SetupUrl =
+        $"https://github.com/peopleworks/SignsofAI/releases/download/desktop-v{Version}/SignsOfAI-Desktop-{Version}-win-x64-Setup.exe";
+
+    /// <summary>
+    /// The .zip itself, for anyone who would rather not run an installer: extract anywhere, delete the
+    /// folder to remove it. Interpolated from <see cref="Version"/> so the two cannot disagree.
     /// </summary>
     public const string ZipUrl =
         $"https://github.com/peopleworks/SignsofAI/releases/download/desktop-v{Version}/SignsOfAI-Desktop-{Version}-win-x64.zip";
