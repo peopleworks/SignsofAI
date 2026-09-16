@@ -20,7 +20,7 @@
 Claude Code, Codex, Gemini CLI and Cursor, in one line: `npx skills add peopleworks/SignsofAI -g`.
 It edits by the same rules this engine scores by, and it never invents a number.
 
-**[Download the Windows app &rarr;](https://github.com/peopleworks/SignsofAI/releases?q=desktop&expanded=true)** — the same tool in a window. Nothing to install alongside it: the .NET runtime is bundled.
+**[Download the Windows app &rarr;](https://peopleworks.github.io/SignsofAI/download)** — the same tool in a window. An installer that needs no administrator rights, with the .NET runtime bundled; a .zip too, if you would rather not.
 
 ![Signs of AI Writing analyzing text live: the score climbs as AI tells accumulate, then every tell is highlighted with a fix](Docs/screenshots/analyze-live.gif)
 

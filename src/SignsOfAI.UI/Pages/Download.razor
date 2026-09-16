@@ -55,12 +55,16 @@
 else
 {
     <section class="card dl-get">
-        <a class="dl-cta" href="@DesktopRelease.ZipUrl">
+        @* The installer first. The zip stays one click away for anyone who would rather not run an
+           installer, but it is no longer what a teacher is handed by default. *@
+        <a class="dl-cta" href="@DesktopRelease.SetupUrl">
             <Icon Name="download" />
             <span class="dl-cta-main">@L.F("dl.get", DesktopRelease.Version)</span>
             <span class="dl-cta-sub">@L["dl.for"]</span>
         </a>
         <p class="hint sub">
+            <a href="@DesktopRelease.ZipUrl">@L["dl.zip.link"]</a>
+            ·
             <a href="@DesktopRelease.ReleaseUrl" target="_blank" rel="noopener">@L["dl.notes"]</a>
             ·
             <a href="@DesktopRelease.AllReleasesUrl" target="_blank" rel="noopener">@L["dl.all"]</a>
@@ -100,9 +104,12 @@ else
     <p>@L.M("dl.warn.body")</p>
     <ol class="dl-steps">
         <li>@L["dl.warn.step1"]</li>
-        <li>@L["dl.warn.step2"]</li>
-        <li>@L.M("dl.warn.step3")</li>
+        <li>@L.M("dl.warn.step2")</li>
+        <li>@L["dl.warn.step3"]</li>
     </ol>
+    @* Checking the file is still worth doing and still explained — it just no longer stands between a
+       teacher and the app. Before the installer it was step two of three. *@
+    <p class="hint">@L.M("dl.verify")</p>
     <p class="hint">@L.M("dl.zip.body")</p>
 </section>
 
