@@ -128,6 +128,7 @@ respecto a, de cara al futuro, en este artículo
   signpost. · "en conclusión", "en resumen".
 - **Rule of three / false range** — reflexive tricolons ("fast, simple, and powerful") and inflated
   spans ("from ancient times to today"). Vary the count; keep a range only if the middle matters.
+  A list of data is not a tricolon: leave "2324, 2425 and 2526" or "CD31, CD45 and CD56" as written.
 - **False balance** — "on one hand… on the other" when the evidence favors one side. Say which.
   · "por un lado… por otro".
 

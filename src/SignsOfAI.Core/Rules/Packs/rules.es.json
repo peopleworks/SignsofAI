@@ -758,7 +758,7 @@
       "id": "rhet.regla-de-tres",
       "humanRatePer1000": 1.29,
       "category": "Rhetorical",
-      "regex": "\\b(\\w+), (\\w+) y (\\w+)[.,;]",
+      "regex": "\\b(?!(?-i:[\\p{Lu}\\d]+), (?-i:[\\p{Lu}\\d]+) y (?-i:[\\p{Lu}\\d]+)[.,;])(\\w+), (\\w+) y (\\w+)[.,;]",
       "weight": 1.2,
       "severity": "Info",
       "message": "Posible “regla de tres”: la IA abusa de los tríos.",

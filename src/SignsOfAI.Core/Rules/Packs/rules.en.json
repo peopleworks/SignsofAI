@@ -888,7 +888,7 @@
       "id": "rhet.rule-of-three",
       "humanRatePer1000": 1.09,
       "category": "Rhetorical",
-      "regex": "\\b(\\w+), (\\w+),? and (\\w+)[.,;]",
+      "regex": "\\b(?!(?-i:[\\p{Lu}\\d]+), (?-i:[\\p{Lu}\\d]+),? and (?-i:[\\p{Lu}\\d]+)[.,;])(\\w+), (\\w+),? and (\\w+)[.,;]",
       "weight": 1.2,
       "severity": "Info",
       "message": "Possible “rule of three”: AI defaults to tricolons.",
