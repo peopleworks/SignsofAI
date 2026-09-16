@@ -91,27 +91,45 @@ jobs:
             -o "staging/${{ steps.version.outputs.name }}" `
             --nologo
 
-      - name: Zip and checksum
+      # The installer is built from the same staging folder the zip is, so the two can never carry
+      # different files. Inno Setup is not guaranteed on the runner image, so it is installed when it
+      # is missing rather than assumed. The version is passed in, never written into the script.
+      - name: Build the installer
+        shell: pwsh
+        run: |
+          $iscc = Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'
+          if (-not (Test-Path $iscc)) {
+            choco install innosetup --no-progress -y
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          $staging = (Resolve-Path "staging/${{ steps.version.outputs.name }}").Path
+          & $iscc "/DAppVersion=${{ steps.version.outputs.version }}" "/DStaging=$staging" "/O$PWD" `
+                  src/SignsOfAI.Desktop/installer/SignsOfAI.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Package and checksum
         id: package
         shell: pwsh
         run: |
           $name = "${{ steps.version.outputs.name }}"
           Compress-Archive -Path "staging/$name" -DestinationPath "$name.zip" -CompressionLevel Optimal
-          $hash = (Get-FileHash "$name.zip" -Algorithm SHA256).Hash.ToLower()
-          # The sidecar travels with the release; the summary is for pasting into the notes, which
-          # have carried the checksum inline since desktop-v0.1.0.
-          "sha256  $hash" | Set-Content "$name.zip.sha256" -NoNewline
-          "sha256=$hash" >> $env:GITHUB_OUTPUT
 
-          $mb = [math]::Round((Get-Item "$name.zip").Length / 1MB)
-          @(
-            "### $name.zip"
-            ""
-            "- **$mb MB**"
-            "- ``sha256  $hash``"
-            ""
-            "Paste the checksum line into the release notes."
-          ) | Add-Content $env:GITHUB_STEP_SUMMARY
+          # The sidecars travel with the release; the summary is for pasting into the notes, which
+          # have carried the checksum inline since desktop-v0.1.0. Both artifacts get one: the
+          # installer is the one most people will run, so it is the one most worth checking.
+          foreach ($file in @("$name-Setup.exe", "$name.zip")) {
+            $hash = (Get-FileHash $file -Algorithm SHA256).Hash.ToLower()
+            "sha256  $hash" | Set-Content "$file.sha256" -NoNewline
+            $mb = [math]::Round((Get-Item $file).Length / 1MB)
+            @(
+              "### $file"
+              ""
+              "- **$mb MB**"
+              "- ``sha256  $hash``"
+              ""
+            ) | Add-Content $env:GITHUB_STEP_SUMMARY
+          }
+          "Paste both checksum lines into the release notes." | Add-Content $env:GITHUB_STEP_SUMMARY
 
       - name: Attach to the release
         if: github.event_name == 'release'
@@ -120,7 +138,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $name = "${{ steps.version.outputs.name }}"
-          gh release upload $env:GITHUB_REF_NAME "$name.zip" "$name.zip.sha256" --clobber
+          gh release upload $env:GITHUB_REF_NAME `
+            "$name-Setup.exe" "$name-Setup.exe.sha256" "$name.zip" "$name.zip.sha256" --clobber
 
       # Dispatch runs produce something to download and check by hand before tagging for real.
       - name: Keep the build as a run artifact
@@ -128,5 +147,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.version.outputs.name }}
-          path: ${{ steps.version.outputs.name }}.zip
+          path: |
+            ${{ steps.version.outputs.name }}-Setup.exe
+            ${{ steps.version.outputs.name }}.zip
           retention-days: 7
