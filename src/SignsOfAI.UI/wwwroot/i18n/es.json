@@ -36,7 +36,7 @@
   "dl.h1": "Señales de escritura IA para Windows",
   "dl.tagline": "La misma herramienta de esta página, en una ventana: abre los formatos que una pestaña no puede, lee una carpeta entera de una vez y mide en tu propia máquina.",
   "dl.get": "Descargar la versión {0}",
-  "dl.for": "Windows 10 (1809) o posterior · 64 bits · unos 60 MB · sin permisos de administrador",
+  "dl.for": "Windows 10 (1809) o posterior · 64 bits · menos de 100 MB · sin permisos de administrador",
   "dl.notes": "Notas de la versión y checksum",
   "dl.all": "Todas las versiones de escritorio",
   "dl.running": "Estás usando la app de escritorio, versión {0}.",

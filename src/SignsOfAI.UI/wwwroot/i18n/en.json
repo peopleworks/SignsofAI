@@ -36,7 +36,7 @@
   "dl.h1": "Signs of AI Writing for Windows",
   "dl.tagline": "The same tool as this page, in a window: it opens the file formats a browser tab cannot, reads a whole folder at once, and measures on your own machine.",
   "dl.get": "Download version {0}",
-  "dl.for": "Windows 10 (1809) or newer · 64-bit · about 60 MB · no administrator rights needed",
+  "dl.for": "Windows 10 (1809) or newer · 64-bit · under 100 MB · no administrator rights needed",
   "dl.notes": "Release notes and checksum",
   "dl.all": "All desktop releases",
   "dl.running": "You are running the desktop app, version {0}.",
