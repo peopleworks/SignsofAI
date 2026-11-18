@@ -26,21 +26,25 @@ def main() -> None:
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
-    detectors = []
+    detectors, read, skipped = [], [], []
     for f in sorted(Path(args.dir).glob("*.json")):
         d = json.loads(f.read_text(encoding="utf-8"))
+        read.append(f.name)
         scores = d.get("scores") or []
         row = {a: pick(scores, a) for a in ATTACKS}
         if row["none"] is None:
+            skipped.append({"file": f.name, "reason": "no score for the all-domains, no-attack split"})
             continue
         detectors.append({
             "name": d["detector_name"],
-            "submittedBy": "RAID authors" if "RAID Authors" in str(d.get("contact_info")) else "vendor",
+            "submittedBy": "RAID authors" if "RAID Authors" in str(d.get("contact_info")) else "others",
             "tpr05": row,
         })
     detectors.sort(key=lambda r: -r["tpr05"]["none"])
     out = {"source": "github.com/liamdugan/raid leaderboard/submissions/*/results.json",
-           "commit": args.commit, "split": "RAID-test", "detectors": detectors}
+           "commit": args.commit, "split": "RAID-test",
+           "selection": "chosen by hand: the open detectors RAID's authors ran, and the highest entries on 2026-11-17",
+           "filesRead": read, "skipped": skipped, "detectors": detectors}
     Path(args.out).write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
     for r in detectors:
         print(f"{r['name']:<20} {r['submittedBy']:<13} " + " ".join(f"{(v or 0) * 100:6.1f}" for v in r["tpr05"].values()))

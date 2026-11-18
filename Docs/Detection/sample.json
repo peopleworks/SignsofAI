@@ -30,6 +30,19 @@
     "mpt": 1600,
     "mpt-chat": 1600
   },
+  "datasetMachineByModel": {
+    "chatgpt": 26742,
+    "cohere": 26742,
+    "cohere-chat": 26742,
+    "gpt2": 53484,
+    "gpt3": 26742,
+    "gpt4": 26742,
+    "llama-chat": 53484,
+    "mistral": 53484,
+    "mistral-chat": 53484,
+    "mpt": 53484,
+    "mpt-chat": 53484
+  },
   "idFingerprintSha256": "136c179ba9288e53bab98e5086cde93923965863350c0544df1f4f028903db5b",
   "pandas": "2.2.3"
 }

@@ -33,6 +33,19 @@
       "mpt": 1600,
       "mpt-chat": 1600
     },
+    "datasetMachineByModel": {
+      "chatgpt": 26742,
+      "cohere": 26742,
+      "cohere-chat": 26742,
+      "gpt2": 53484,
+      "gpt3": 26742,
+      "gpt4": 26742,
+      "llama-chat": 53484,
+      "mistral": 53484,
+      "mistral-chat": 53484,
+      "mpt": 53484,
+      "mpt-chat": 53484
+    },
     "idFingerprintSha256": "136c179ba9288e53bab98e5086cde93923965863350c0544df1f4f028903db5b",
     "pandas": "2.2.3"
   },
@@ -446,28 +459,36 @@
       "machine": 7800,
       "human": 4990,
       "tpr05": 0.2296153846153846,
-      "fpr05": 0.05791583166332665
+      "fpr05": 0.05791583166332665,
+      "humanAtBoundary": 0.14509018036072144,
+      "machineAtBoundary": 0.2969230769230769
     },
     {
       "bucket": "200-399",
       "machine": 8875,
       "human": 6463,
       "tpr05": 0.2917183098591549,
-      "fpr05": 0.05585641343029553
+      "fpr05": 0.05585641343029553,
+      "humanAtBoundary": 0.10676156583629894,
+      "machineAtBoundary": 0.35538028169014085
     },
     {
       "bucket": "400-648",
       "machine": 925,
       "human": 1210,
       "tpr05": 0.31675675675675674,
-      "fpr05": 0.009917355371900827
+      "fpr05": 0.009917355371900827,
+      "humanAtBoundary": 0.06694214876033058,
+      "machineAtBoundary": 0.40216216216216216
     },
     {
       "bucket": "649 or more",
       "machine": 0,
       "human": 708,
       "tpr05": null,
-      "fpr05": 0.0014124293785310734
+      "fpr05": 0.0014124293785310734,
+      "humanAtBoundary": 0.01977401129943503,
+      "machineAtBoundary": null
     }
   ],
   "matchedRepetitionPenalty": {
@@ -535,6 +556,11 @@
       "machine": 219.0
     }
   },
+  "calibration": {
+    "engine": "0.7.1",
+    "measuredOn": "2026-09-07",
+    "burstinessShare": 0.32094594594594594
+  },
   "predictions": [
     {
       "id": "P1",
@@ -567,6 +593,39 @@
       "held": true
     }
   ],
+  "predictionsSingleThreshold": [
+    {
+      "id": "P1",
+      "claim": "chat-tuned rate at least twice the base-model rate",
+      "measured": "chat 0.343, base 0.102, ratio 3.37",
+      "held": true
+    },
+    {
+      "id": "P2",
+      "claim": "base-model rate under 20%",
+      "measured": "0.102",
+      "held": true
+    },
+    {
+      "id": "P3",
+      "claim": "text-davinci-003 between the two groups",
+      "measured": "0.109 (range 0.102-0.343)",
+      "held": true
+    },
+    {
+      "id": "P4",
+      "claim": "poetry and recipes not among the three best domains",
+      "measured": "best three: abstracts 0.376, poetry 0.348, news 0.307",
+      "held": false
+    },
+    {
+      "id": "overall",
+      "claim": "between 15% and 40% overall, without attacks",
+      "measured": "0.234",
+      "held": true
+    }
+  ],
+  "raidMixTpr05": 0.25338235294117645,
   "longHumanCheck": {
     "rows": 708,
     "texts": 705,
@@ -583,7 +642,8 @@
         "interval": [
           0.0031735030165784012,
           0.027029709659563105
-        ]
+        ],
+        "burstiness": 0.42857142857142855
       },
       "news": {
         "texts": 108,
@@ -591,7 +651,8 @@
         "interval": [
           0.044460404358563896,
           0.15082906253293688
-        ]
+        ],
+        "burstiness": 0.7407407407407407
       },
       "poetry": {
         "texts": 108,
@@ -599,7 +660,8 @@
         "interval": [
           0.005093224298949841,
           0.06501904855345103
-        ]
+        ],
+        "burstiness": 0.12962962962962962
       },
       "recipes": {
         "texts": 16,
@@ -607,7 +669,8 @@
         "interval": [
           0.0,
           0.1936076829974049
-        ]
+        ],
+        "burstiness": 0.0
       },
       "reviews": {
         "texts": 151,
@@ -615,7 +678,8 @@
         "interval": [
           0.0,
           0.024808981451414282
-        ]
+        ],
+        "burstiness": 0.033112582781456956
       }
     },
     "rulesInFlagged": {
@@ -637,6 +701,11 @@
       "lex.profound": 1,
       "rhet.not-only-but": 1,
       "syn.serves-as": 1
+    },
+    "burstinessAll": 0.33617021276595743,
+    "withoutNews": {
+      "texts": 597,
+      "flagged": 5
     },
     "published": {
       "texts": 296,

@@ -157,5 +157,32 @@
     "any": 0.004431818181818182,
     "strong": 0.0021022727272727274,
     "systematic": 0.00011363636363636364
+  },
+  "predictions": {
+    "P5": {
+      "homoglyphStrong": 0.997,
+      "zeroWidthStrong": 1.0,
+      "humanAlarms": 112,
+      "humanTexts": 13371,
+      "humanAlarmInterval": [
+        0.006966539636313223,
+        0.0100685377200619
+      ],
+      "held": true
+    },
+    "P6": {
+      "scoreDrop": 0.5300000000000011,
+      "held": true
+    }
+  },
+  "scannerMisses": {
+    "homoglyph": [
+      "1be69639-7772-42e3-a9a4-b7ba487f043a::homoglyph",
+      "253f18bf-bad3-45b0-bab7-05f178d47b1b::homoglyph",
+      "28726675-3f10-4220-a2f7-09061175a1c3::homoglyph",
+      "7974922a-02e8-4db9-8483-862dbe870103::homoglyph",
+      "ef0a1b4f-66a0-4d6a-872b-7e415d9cc788::homoglyph"
+    ],
+    "zero_width_space": []
   }
 }

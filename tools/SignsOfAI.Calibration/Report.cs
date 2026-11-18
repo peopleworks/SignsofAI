@@ -138,7 +138,7 @@ public static class Report
                 "and can say nothing whatever about how much further past it a score has travelled: no " +
                 "text known to be human came close to the upper reaches, and grading \"moderate\" against " +
                 "\"strong\" would need machine-written text, which the opening of this page argues against " +
-                "collecting. Interfaces do shade a high score more urgently than a low one, and those " +
+                "collecting; the benchmark in DETECTION.md was not used to set any band. Interfaces do shade a high score more urgently than a low one, and those " +
                 "shades are a display convention — they are not on this page because nothing measured " +
                 "them.");
             sb.AppendLine();
@@ -192,7 +192,9 @@ public static class Report
                       "the essays of adult learners in a university English programme. A first-year " +
                       "essay by a native speaker is a different population again, and the rate on one " +
                       "does not transfer to the other. Calibrating on your own students' pre-2022 work is " +
-                      "the fix, and the same tool does it.");
+                      "the fix, and the same tool does it. The first outside check, on long human writing " +
+                      "from a public benchmark, is in [DETECTION.md](DETECTION.md): there the boundary did " +
+                      "not hold for news articles.");
         sb.AppendLine("- **The affiliation groups are a proxy, not a fact.** Nobody's first language is " +
                       "recorded in a DOI. The learner group is the exception — its corpus records each " +
                       "writer's first language — which is why it exists. Elsewhere the manifest states " +

@@ -301,7 +301,7 @@ public static class ReportMessages
         [HowReadInterval] = "Read the interval, not the observed rate. {0} out of {1} is not a false-positive rate you can round down.",
         [HowNoisyIntro] = "The rules seen most often on that human writing, worst first — if the evidence above leans on one of these, weigh it accordingly:",
         [HowNoisyRule] = "- `{0}` — {1} of human texts",
-        [HowLimitation] = "What this does **not** tell you: how much machine-written text it catches. The corpus behind this report is human writing only. That half was measured separately, on a public benchmark of 2023 models (Docs/DETECTION.md in the project's repository), and most machine-written text scored low there too, so a low score is not evidence that a person wrote this. A tool that flags nothing has a perfect false-positive rate.",
+        [HowLimitation] = "What this does **not** tell you: how much machine-written text it catches. The corpus behind this report is human writing only. That half was measured separately, on a public benchmark of 2023 models (https://github.com/peopleworks/SignsofAI/blob/main/Docs/DETECTION.md), and most machine-written text scored below the cutoffs there too, so a low score is not evidence that a person wrote this. A tool that flags nothing has a perfect false-positive rate.",
     };
 
     /// <summary>

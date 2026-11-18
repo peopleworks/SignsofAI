@@ -230,7 +230,7 @@
       "text": "- `{0}` — {1} of human texts"
     },
     "how.limitation": {
-      "text": "What this does **not** tell you: how much machine-written text it catches. The corpus behind this report is human writing only. That half was measured separately, on a public benchmark of 2023 models (Docs/DETECTION.md in the project's repository), and most machine-written text scored low there too, so a low score is not evidence that a person wrote this. A tool that flags nothing has a perfect false-positive rate."
+      "text": "What this does **not** tell you: how much machine-written text it catches. The corpus behind this report is human writing only. That half was measured separately, on a public benchmark of 2023 models (https://github.com/peopleworks/SignsofAI/blob/main/Docs/DETECTION.md), and most machine-written text scored below the cutoffs there too, so a low score is not evidence that a person wrote this. A tool that flags nothing has a perfect false-positive rate."
     }
   }
 }

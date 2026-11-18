@@ -19,9 +19,10 @@ the harm this category actually causes: detectors flag 61% of essays by non-nati
 and not one of them publishes that figure about itself.
 
 The other half, how much machine-written text the score catches, is measured in `Docs/DETECTION.md`
-on RAID, a public benchmark nobody here assembled. That does not contradict the argument above. It
-uses someone else's collection, it states the year its models come from, and it reports a detection
-rate beside this false-positive rate instead of an accuracy figure that blends the two.
+on RAID, a public benchmark nobody here assembled. It answers one of the two objections above: nobody
+here assembled it. It does not answer the other: its models are from 2023, and the number ages. It
+reports a detection rate beside this false-positive rate rather than an accuracy figure that blends
+the two.
 
 ## What makes a text admissible
 

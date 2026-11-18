@@ -139,6 +139,33 @@ def evaluate(args) -> None:
             "scanMachine": scan(machine),
             "scanHuman": scan(human),
         }
+    def wilson(k, n, z=1.959964):
+        p = k / n
+        d = 1 + z * z / n
+        c = (p + z * z / (2 * n)) / d
+        m = z * ((p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5) / d
+        return [max(0.0, c - m), min(1.0, c + m)]
+
+    humans = original[original["model"] == "human"]
+    alarms = int((humans["artifacts"] > 0).sum())
+    hg, zw = report["attacks"]["homoglyph"], report["attacks"]["zero_width_space"]
+    report["predictions"] = {
+        "P5": {
+            "homoglyphStrong": hg["scanMachine"]["strong"],
+            "zeroWidthStrong": zw["scanMachine"]["strong"],
+            "humanAlarms": alarms, "humanTexts": int(len(humans)),
+            "humanAlarmInterval": wilson(alarms, int(len(humans))),
+            "held": hg["scanMachine"]["strong"] >= 0.99 and zw["scanMachine"]["strong"] >= 0.99
+                    and alarms / len(humans) <= 0.01,
+        },
+        "P6": {"scoreDrop": hg["meanScoreBefore"] - hg["meanScoreAfter"],
+               "held": hg["meanScoreAfter"] < hg["meanScoreBefore"]},
+    }
+    # Which attacked texts the scanner did not report, so the explanation can be checked.
+    report["scannerMisses"] = {
+        name: sorted(sub.loc[sub["strongArtifacts"] == 0, "id"].tolist())
+        for name, sub in df.groupby("attack") if name in ("homoglyph", "zero_width_space")
+    }
     Path(args.out).write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
 
     print(f"{'attack':<22} {'TPR before':>10} {'after':>7} {'score':>13} {'scan any/strong/sys (machine)':>32}")

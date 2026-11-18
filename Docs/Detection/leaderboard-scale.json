@@ -2,10 +2,30 @@
   "source": "github.com/liamdugan/raid leaderboard/submissions/*/results.json",
   "commit": "84c2ea413752a39def012394a0ce905c8a692b05",
   "split": "RAID-test",
+  "selection": "chosen by hand: the open detectors RAID's authors ran, and the highest entries on 2026-11-17",
+  "filesRead": [
+    "binoculars.json",
+    "chatgpt-roberta.json",
+    "desklib.json",
+    "fastdetectgpt.json",
+    "gltr.json",
+    "gptzero.json",
+    "grammarly.json",
+    "llmdet.json",
+    "QuillBot.json",
+    "radar.json",
+    "Slop-Or-Not.json"
+  ],
+  "skipped": [
+    {
+      "file": "fastdetectgpt.json",
+      "reason": "no score for the all-domains, no-attack split"
+    }
+  ],
   "detectors": [
     {
       "name": "Grammarly",
-      "submittedBy": "vendor",
+      "submittedBy": "others",
       "tpr05": {
         "none": 0.9991360294117647,
         "homoglyph": 0.9920588235294118,
@@ -15,7 +35,7 @@
     },
     {
       "name": "QuillBot",
-      "submittedBy": "vendor",
+      "submittedBy": "others",
       "tpr05": {
         "none": 0.9972058823529412,
         "homoglyph": 0.9960845588235294,
@@ -25,7 +45,7 @@
     },
     {
       "name": "Slop Or Not",
-      "submittedBy": "vendor",
+      "submittedBy": "others",
       "tpr05": {
         "none": 0.9964338235294118,
         "homoglyph": 0.9950367647058823,
@@ -35,7 +55,7 @@
     },
     {
       "name": "GPTZero",
-      "submittedBy": "vendor",
+      "submittedBy": "others",
       "tpr05": {
         "none": 0.9836764705882353,
         "homoglyph": 0.9836397058823529,
@@ -45,7 +65,7 @@
     },
     {
       "name": "Desklib",
-      "submittedBy": "vendor",
+      "submittedBy": "others",
       "tpr05": {
         "none": 0.9238235294117647,
         "homoglyph": 0.6915441176470588,

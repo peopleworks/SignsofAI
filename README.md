@@ -100,9 +100,11 @@ non-native English speakers, and none of them publish that about themselves.
 
 The other half, how much machine-written text the score catches, is measured separately in
 [`Docs/DETECTION.md`](Docs/DETECTION.md), on RAID, a public benchmark of 2023 models that nobody here
-assembled, with the predictions committed before the run. Most machine-written text scores low there,
-and the tells catch chat-tuned models far more often than the rest: they are fingerprints of
-chat-tuning, not a way to tell who wrote a text.
+assembled, with the predictions committed before the run. Most machine-written text scores below the
+cutoffs there, and the tells show up far more often in 2023 chat-tuned models than in base models,
+which makes them fingerprints of chat-tuning rather than a way to tell who wrote a text. The same page
+found that the boundary does not hold for long news articles, a kind of writing the calibration
+corpus does not contain.
 
 The report also names **which rules misfire**, ranked. That list is uncomfortable and it is the most
 useful thing the exercise produces.

@@ -270,7 +270,7 @@ body:has(#en:checked) .only-en{display:block}
   <strong>Cuánta escritura de máquina se le escapa.</strong> La calibración no lo mide: para eso
   hace falta una colección de textos generados, y cualquiera envejece con los modelos de su momento.
   Se midió aparte, en un banco de pruebas público con modelos de 2023 que nadie de aquí reunió, y
-  <strong>la mayor parte del texto de máquina también puntúa bajo</strong>
+  <strong>la mayor parte del texto de máquina también queda por debajo de los umbrales</strong>
   (<a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/DETECTION.md">DETECTION.md</a>).
   Por eso una puntuación baja no demuestra que lo escribiera una persona. Una herramienta que no
   marca nada tiene una tasa de error perfecta.
@@ -287,6 +287,14 @@ body:has(#en:checked) .only-en{display:block}
   Lo que sigue sin medirse es el <strong>ensayo de estudiante en español</strong>: los veinticinco
   textos en español son revisiones de Wikipedia de una sola fuente. Ahí esta herramienta sabe
   menos, y lo dice en vez de prestarle a un idioma una cifra que midió en otro.
+</p>
+<p>
+  Tampoco está medido ningún tipo de escritura que el corpus no contenga. La primera comprobación,
+  con escritura humana larga del mismo banco de pruebas público, encontró que la frontera
+  <strong>no se sostiene en artículos de prensa</strong>: la prosa periodística dispara la señal del
+  ritmo de las frases mucho más a menudo. Hasta que un tipo de escritura esté medido, lea una
+  puntuación alta en él como si no dijera nada
+  (<a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/DETECTION.md">DETECTION.md</a>).
 </p>
 <div class="quote">
   Y una que conviene saber antes de mirar ninguna puntuación: las señales que más saltan en
@@ -480,7 +488,7 @@ body:has(#en:checked) .only-en{display:block}
   <strong>How much machine writing it misses.</strong> The calibration does not measure it: that
   needs a collection of generated text, and any such collection ages with the models of its month.
   It was measured separately, on a public benchmark of 2023 models that nobody here assembled, and
-  <strong>most machine-written text scores low there too</strong>
+  <strong>most machine-written text scores below the cutoffs there too</strong>
   (<a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/DETECTION.md">DETECTION.md</a>).
   That is why a low score is not evidence that a person wrote something. A tool that flags nothing
   has a perfect error rate.
@@ -497,6 +505,13 @@ body:has(#en:checked) .only-en{display:block}
   What is still unmeasured is the <strong>student essay in Spanish</strong>: the twenty-five Spanish
   texts are Wikipedia revisions from a single source. There this tool knows less, and it says so
   rather than lending one language a figure it measured in another.
+</p>
+<p>
+  Nor is any kind of writing the corpus does not contain. The first check of that, on long human
+  writing from the same public benchmark, found that the boundary <strong>does not hold for news
+  articles</strong>: newspaper prose trips the sentence-rhythm signal far more often. Until a kind of
+  writing has been measured, read a high score on it as saying nothing
+  (<a href="https://github.com/peopleworks/SignsofAI/blob/main/Docs/DETECTION.md">DETECTION.md</a>).
 </p>
 <div class="quote">
   And one worth knowing before you look at any score: the signals that fire most often on human

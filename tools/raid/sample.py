@@ -78,6 +78,9 @@ def main() -> None:
         "total": int(len(sample)),
         "humanByDomain": {k: int(v) for k, v in human["domain"].value_counts().sort_index().items()},
         "machineByModel": {k: int(v) for k, v in drawn["model"].value_counts().sort_index().items()},
+        # RAID's own mix, which this sample does not follow: it weights generators run with and without
+        # a repetition penalty twice. Kept so a rate can be re-weighted to RAID's proportions.
+        "datasetMachineByModel": {k: int(v) for k, v in machine["model"].value_counts().sort_index().items()},
         "idFingerprintSha256": fingerprint,
         "pandas": pd.__version__,
     }

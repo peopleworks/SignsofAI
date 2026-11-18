@@ -132,11 +132,13 @@ def summarise(result: dict, df: pd.DataFrame) -> dict:
     return out
 
 
-def by_length(df: pd.DataFrame, thresholds05) -> list:
-    """RAID does not split by length. Same per-domain thresholds, applied by hand."""
+def by_length(df: pd.DataFrame, thresholds05, boundary: float) -> list:
+    """RAID does not split by length. Same per-domain thresholds, applied by hand, and the product's
+    own boundary beside them."""
     rows = []
     t = df["domain"].map(thresholds05) if isinstance(thresholds05, dict) else thresholds05
     flagged = (df["score"] / 100.0) >= t
+    at_boundary = df["score"] >= boundary
     for lo, hi, label in LENGTH_BUCKETS:
         in_bucket = df["words"].between(lo, hi)
         human = in_bucket & (df["model"] == "human")
@@ -147,6 +149,8 @@ def by_length(df: pd.DataFrame, thresholds05) -> list:
             "human": int(human.sum()),
             "tpr05": float(flagged[machine].mean()) if machine.any() else None,
             "fpr05": float(flagged[human].mean()) if human.any() else None,
+            "humanAtBoundary": float(at_boundary[human].mean()) if human.any() else None,
+            "machineAtBoundary": float(at_boundary[machine].mean()) if machine.any() else None,
         })
     return rows
 
@@ -220,6 +224,10 @@ def long_human_check(df: pd.DataFrame, boundary: float, floor: int, published: d
         dk, dn = int((g["score"] >= boundary).sum()), int(len(g))
         by_domain[d] = {"texts": dn, "flagged": dk, "interval": list(wilson(dk, dn))}
     flagged_rules = long_human.loc[over, "rules"].explode().dropna().value_counts()
+    has_burst = long_human["rules"].apply(lambda rs: "stat.burstiness" in rs)
+    for d, g in long_human.groupby("domain"):
+        by_domain[d]["burstiness"] = float(has_burst[g.index].mean())
+    not_news = long_human["domain"] != "news"
     return {
         "rows": int(len(rows)),
         "texts": n,
@@ -228,6 +236,8 @@ def long_human_check(df: pd.DataFrame, boundary: float, floor: int, published: d
         "interval": [lo, hi],
         "byDomain": by_domain,
         "rulesInFlagged": {r: int(c) for r, c in flagged_rules.items()},
+        "burstinessAll": float(has_burst.mean()),
+        "withoutNews": {"texts": int(not_news.sum()), "flagged": int((over & not_news).sum())},
         "published": {"texts": published["texts"], "flagged": published["flaggedAtThreshold"],
                       "interval": [published["rateLow"], published["rateHigh"]]},
     }
@@ -272,6 +282,13 @@ def domain_rules(df: pd.DataFrame, domain: str, top: int = 8) -> list:
         rows.append({"rule": rule, "human": float(hit[human].mean()), "machine": float(hit[~human].mean())})
     rows.sort(key=lambda r: -(r["machine"] - r["human"]))
     return rows[:top]
+
+
+def raid_mix(per_domain: dict, dataset_by_model: dict) -> float:
+    """The overall rate re-weighted to RAID's proportions instead of this sample's equal ones."""
+    by_model = per_domain["byModel"]
+    total = sum(dataset_by_model[m] for m in by_model)
+    return sum(by_model[m]["tpr05"] * dataset_by_model[m] for m in by_model) / total
 
 
 def predictions(per_domain: dict) -> list:
@@ -324,13 +341,21 @@ def main() -> None:
         },
         "perDomainThreshold": per_domain,
         "singleThreshold": single,
-        "byLength": by_length(df, per_domain["thresholds"]["0.05"]),
+        "byLength": by_length(df, per_domain["thresholds"]["0.05"], calibration["recommendedThreshold"]),
         "matchedRepetitionPenalty": matched(df, per_domain["thresholds"]["0.05"], "repetition_penalty"),
         "matchedDecoding": matched(df, per_domain["thresholds"]["0.05"], "decoding"),
         "humanTexts": {"rows": int((df["model"] == "human").sum()),
                        "distinct": int(df.loc[df["model"] == "human", "textHash"].nunique())},
         "product": product_view(df, calibration["recommendedThreshold"], calibration["shortestWords"]),
+        "calibration": {
+            "engine": calibration["engine"],
+            "measuredOn": calibration["measuredOn"],
+            "burstinessShare": next((r["textShare"] for r in calibration["noisiestRules"]
+                                     if r["ruleId"] == "stat.burstiness"), None),
+        },
         "predictions": predictions(per_domain),
+        "predictionsSingleThreshold": predictions(single),
+        "raidMixTpr05": raid_mix(per_domain, json.loads(Path(args.manifest).read_text(encoding="utf-8"))["datasetMachineByModel"]),
         "longHumanCheck": long_human_check(df, calibration["recommendedThreshold"], calibration["shortestWords"], calibration),
         "rules": rule_lift(df),
         "domainRules": {d: domain_rules(df, d) for d in ("poetry", "reviews", "recipes", "reddit")},
