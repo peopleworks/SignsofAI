@@ -40,7 +40,7 @@ Written and committed before any RAID text was scored ([prediction.md](Detection
 
 **P4 failed** because machine verse settles into lines of even length: `stat.burstiness` fires on 52% of machine poems and 25% of human ones. Recipes were as weak as predicted (12.1%), because they are formulaic whoever writes them.
 
-**P6 held by its letter and failed in substance.** The score did drop, by less than half a point. The note added to the prediction before measuring was closer: the analyzer restores disguised letters before any rule reads the text. What the attack still moves is explained under *Attacks* below.
+**P6 held by its letter and failed in substance.** The score did drop, by 0.53 points on average across the machine texts. The note added to the prediction before measuring was closer: the analyzer restores disguised letters before any rule reads the text. What the attack still moves is explained under *Attacks* below.
 
 ## By generator
 
@@ -151,7 +151,7 @@ Eight of RAID's eleven attacks need no language model. They were run, at the str
 
 The scanner reports 99.7% of the homoglyph texts and 100.0% of the zero-width ones, counting only characters that typing does not produce. On unattacked human texts it reports something in 0.84% (any artifact, mostly non-breaking spaces from pasted text), a strong artifact in 0.03%, and a systematic pattern in 0.00%. The few homoglyph texts it did not report were written in Greek, where those letters are the alphabet, or were degenerate outputs with no Latin word to disguise.
 
-**What the homoglyph attack still moves.** The scanner counts a disguised word only when Latin letters are at least half of it, so that a Greek or Cyrillic word quoted in English is not called a disguise. RAID's attack replaces every letter it can, and in vowel-heavy words such as *crucial* or *moreover* the substitutes become the majority. Those words are neither reported nor restored, so the vocabulary rules miss them, while the document as a whole is still reported. Treating a word as disguised when every non-Latin letter in it is a known lookalike would close this with little risk, since real Greek and Russian words almost always contain letters that imitate nothing. That is a change of behaviour and was not made here.
+**What the homoglyph attack still moves.** The scanner counts a disguised word only when Latin letters are at least half of it, so that a Greek or Cyrillic word quoted in English is not called a disguise. RAID's attack replaces every letter it can. In words such as *crucial*, *intricate* or a capitalised *Moreover* the substitutes become the majority, and a one-letter word such as *a* has no Latin letter left at all. Those words are neither reported nor restored, so the rules that need them miss, while the document as a whole is still reported. Closing this is a change of behaviour, so it was not made here: it needs its own measurement against human text, because a lone Greek or Cyrillic letter is sometimes exactly what the writer meant.
 
 ### For scale: RAID's leaderboard
 
