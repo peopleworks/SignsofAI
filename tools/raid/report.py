@@ -380,10 +380,10 @@ def build(r: dict, a: dict, lb: dict, commit: str, run_date: str) -> str:
     w("**What the homoglyph attack still moves.** The scanner counts a disguised word only when Latin letters are at "
       "least half of it, so that a Greek or Cyrillic word quoted in English is not called a disguise. RAID's attack "
       "replaces every letter it can. In words such as *crucial*, *intricate* or a capitalised *Moreover* the "
-      "substitutes become the majority, and a one-letter word such as *a* has no Latin letter left at all. Those "
-      "words are neither reported nor restored, so the rules that need them miss, while the document as a whole is "
-      "still reported. Closing this is a change of behaviour, so it was not made here: it needs its own measurement "
-      "against human text, because a lone Greek or Cyrillic letter is sometimes exactly what the writer meant.")
+      "substitutes become the majority. Those words are neither reported nor restored, so the rules that need them "
+      "miss, while the document as a whole is still reported. Closing this is a change of behaviour, so it was not "
+      "made here: it needs its own measurement against human text, because a Greek or Cyrillic word is sometimes "
+      "exactly what the writer meant.")
     w("")
     w("### For scale: RAID's leaderboard")
     w("")
