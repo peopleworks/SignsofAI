@@ -1,0 +1,161 @@
+{
+  "setup": {
+    "seed": 20261117,
+    "perClass": 1000,
+    "attacks": {
+      "homoglyph": 1.0,
+      "zero_width_space": 1.0,
+      "whitespace": 0.2,
+      "upper_lower": 0.05,
+      "number": 0.5,
+      "article_deletion": 0.5,
+      "insert_paragraphs": 0.5,
+      "alternative_spelling": 1.0
+    },
+    "leftOut": [
+      "paraphrase",
+      "synonym",
+      "perplexity_misspelling"
+    ]
+  },
+  "attacks": {
+    "alternative_spelling": {
+      "tprBefore": 0.246,
+      "tprAfter": 0.241,
+      "meanScoreBefore": 20.6116,
+      "meanScoreAfter": 20.398300000000003,
+      "scanMachine": {
+        "any": 0.006,
+        "strong": 0.002,
+        "systematic": 0.0
+      },
+      "scanHuman": {
+        "any": 0.003,
+        "strong": 0.0,
+        "systematic": 0.0
+      }
+    },
+    "article_deletion": {
+      "tprBefore": 0.246,
+      "tprAfter": 0.247,
+      "meanScoreBefore": 20.6116,
+      "meanScoreAfter": 20.583,
+      "scanMachine": {
+        "any": 0.006,
+        "strong": 0.002,
+        "systematic": 0.0
+      },
+      "scanHuman": {
+        "any": 0.003,
+        "strong": 0.0,
+        "systematic": 0.0
+      }
+    },
+    "homoglyph": {
+      "tprBefore": 0.246,
+      "tprAfter": 0.237,
+      "meanScoreBefore": 20.6116,
+      "meanScoreAfter": 20.081599999999998,
+      "scanMachine": {
+        "any": 0.997,
+        "strong": 0.997,
+        "systematic": 0.996
+      },
+      "scanHuman": {
+        "any": 0.998,
+        "strong": 0.998,
+        "systematic": 0.997
+      }
+    },
+    "insert_paragraphs": {
+      "tprBefore": 0.246,
+      "tprAfter": 0.246,
+      "meanScoreBefore": 20.6116,
+      "meanScoreAfter": 20.578800000000005,
+      "scanMachine": {
+        "any": 0.005,
+        "strong": 0.002,
+        "systematic": 0.0
+      },
+      "scanHuman": {
+        "any": 0.003,
+        "strong": 0.0,
+        "systematic": 0.0
+      }
+    },
+    "number": {
+      "tprBefore": 0.246,
+      "tprAfter": 0.246,
+      "meanScoreBefore": 20.6116,
+      "meanScoreAfter": 20.6116,
+      "scanMachine": {
+        "any": 0.006,
+        "strong": 0.002,
+        "systematic": 0.0
+      },
+      "scanHuman": {
+        "any": 0.003,
+        "strong": 0.0,
+        "systematic": 0.0
+      }
+    },
+    "upper_lower": {
+      "tprBefore": 0.246,
+      "tprAfter": 0.246,
+      "meanScoreBefore": 20.6116,
+      "meanScoreAfter": 20.6116,
+      "scanMachine": {
+        "any": 0.006,
+        "strong": 0.002,
+        "systematic": 0.0
+      },
+      "scanHuman": {
+        "any": 0.003,
+        "strong": 0.0,
+        "systematic": 0.0
+      }
+    },
+    "whitespace": {
+      "tprBefore": 0.246,
+      "tprAfter": 0.238,
+      "meanScoreBefore": 20.6116,
+      "meanScoreAfter": 20.140099999999997,
+      "scanMachine": {
+        "any": 0.006,
+        "strong": 0.002,
+        "systematic": 0.0
+      },
+      "scanHuman": {
+        "any": 0.003,
+        "strong": 0.0,
+        "systematic": 0.0
+      }
+    },
+    "zero_width_space": {
+      "tprBefore": 0.246,
+      "tprAfter": 0.246,
+      "meanScoreBefore": 20.6116,
+      "meanScoreAfter": 20.6116,
+      "scanMachine": {
+        "any": 1.0,
+        "strong": 1.0,
+        "systematic": 1.0
+      },
+      "scanHuman": {
+        "any": 1.0,
+        "strong": 1.0,
+        "systematic": 1.0
+      }
+    }
+  },
+  "unattackedHumanScan": {
+    "any": 0.00837633684840326,
+    "strong": 0.0002991548874429736,
+    "systematic": 0.0
+  },
+  "unattackedMachineScan": {
+    "any": 0.004431818181818182,
+    "strong": 0.0021022727272727274,
+    "systematic": 0.00011363636363636364
+  }
+}

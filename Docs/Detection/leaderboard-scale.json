@@ -1,0 +1,107 @@
+{
+  "source": "github.com/liamdugan/raid leaderboard/submissions/*/results.json",
+  "commit": "84c2ea413752a39def012394a0ce905c8a692b05",
+  "split": "RAID-test",
+  "detectors": [
+    {
+      "name": "Grammarly",
+      "submittedBy": "vendor",
+      "tpr05": {
+        "none": 0.9991360294117647,
+        "homoglyph": 0.9920588235294118,
+        "zero_width_space": 0.9668382352941176,
+        "whitespace": 0.9989889705882353
+      }
+    },
+    {
+      "name": "QuillBot",
+      "submittedBy": "vendor",
+      "tpr05": {
+        "none": 0.9972058823529412,
+        "homoglyph": 0.9960845588235294,
+        "zero_width_space": 0.9925551470588235,
+        "whitespace": 0.9982904411764706
+      }
+    },
+    {
+      "name": "Slop Or Not",
+      "submittedBy": "vendor",
+      "tpr05": {
+        "none": 0.9964338235294118,
+        "homoglyph": 0.9950367647058823,
+        "zero_width_space": 0.9929227941176471,
+        "whitespace": 0.9983455882352941
+      }
+    },
+    {
+      "name": "GPTZero",
+      "submittedBy": "vendor",
+      "tpr05": {
+        "none": 0.9836764705882353,
+        "homoglyph": 0.9836397058823529,
+        "zero_width_space": 0.9836580882352941,
+        "whitespace": 0.9836397058823529
+      }
+    },
+    {
+      "name": "Desklib",
+      "submittedBy": "vendor",
+      "tpr05": {
+        "none": 0.9238235294117647,
+        "homoglyph": 0.6915441176470588,
+        "zero_width_space": 0.4871507352941176,
+        "whitespace": 0.9238235294117647
+      }
+    },
+    {
+      "name": "Binoculars",
+      "submittedBy": "RAID authors",
+      "tpr05": {
+        "none": 0.7898161764705882,
+        "homoglyph": 0.36099264705882356,
+        "zero_width_space": 0.9840808823529412,
+        "whitespace": 0.6868566176470589
+      }
+    },
+    {
+      "name": "RADAR",
+      "submittedBy": "RAID authors",
+      "tpr05": {
+        "none": 0.6561397058823529,
+        "homoglyph": 0.44830882352941176,
+        "zero_width_space": 0.7840073529411765,
+        "whitespace": 0.6113786764705882
+      }
+    },
+    {
+      "name": "GLTR",
+      "submittedBy": "RAID authors",
+      "tpr05": {
+        "none": 0.5969485294117647,
+        "homoglyph": 0.2031985294117647,
+        "zero_width_space": 0.97875,
+        "whitespace": 0.4305514705882353
+      }
+    },
+    {
+      "name": "RoBERTa (ChatGPT)",
+      "submittedBy": "RAID authors",
+      "tpr05": {
+        "none": 0.42518382352941175,
+        "homoglyph": 0.00014705882352941175,
+        "zero_width_space": 0.00016544117647058823,
+        "whitespace": 0.0015625
+      }
+    },
+    {
+      "name": "LLMDet",
+      "submittedBy": "RAID authors",
+      "tpr05": {
+        "none": 0.3339889705882353,
+        "homoglyph": 0.39088235294117646,
+        "zero_width_space": 0.22240808823529412,
+        "whitespace": 0.04029411764705882
+      }
+    }
+  ]
+}
