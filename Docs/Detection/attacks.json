@@ -177,11 +177,31 @@
   },
   "scannerMisses": {
     "homoglyph": [
-      "1be69639-7772-42e3-a9a4-b7ba487f043a::homoglyph",
-      "253f18bf-bad3-45b0-bab7-05f178d47b1b::homoglyph",
-      "28726675-3f10-4220-a2f7-09061175a1c3::homoglyph",
-      "7974922a-02e8-4db9-8483-862dbe870103::homoglyph",
-      "ef0a1b4f-66a0-4d6a-872b-7e415d9cc788::homoglyph"
+      {
+        "id": "1be69639-7772-42e3-a9a4-b7ba487f043a::homoglyph",
+        "class": "machine",
+        "reason": "written in another script"
+      },
+      {
+        "id": "253f18bf-bad3-45b0-bab7-05f178d47b1b::homoglyph",
+        "class": "human",
+        "reason": "no Latin letter left"
+      },
+      {
+        "id": "28726675-3f10-4220-a2f7-09061175a1c3::homoglyph",
+        "class": "machine",
+        "reason": "no Latin letter left"
+      },
+      {
+        "id": "7974922a-02e8-4db9-8483-862dbe870103::homoglyph",
+        "class": "human",
+        "reason": "written in another script"
+      },
+      {
+        "id": "ef0a1b4f-66a0-4d6a-872b-7e415d9cc788::homoglyph",
+        "class": "machine",
+        "reason": "written in another script"
+      }
     ],
     "zero_width_space": []
   }

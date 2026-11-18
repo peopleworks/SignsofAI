@@ -193,8 +193,8 @@ public static class Report
                       "essay by a native speaker is a different population again, and the rate on one " +
                       "does not transfer to the other. Calibrating on your own students' pre-2022 work is " +
                       "the fix, and the same tool does it. The first outside check, on long human writing " +
-                      "from a public benchmark, is in [DETECTION.md](DETECTION.md): there the boundary did " +
-                      "not hold for news articles.");
+                      "from a public benchmark, is in [DETECTION.md](DETECTION.md): in that one sample the " +
+                      "boundary did not hold for the news articles, and why was not measured.");
         sb.AppendLine("- **The affiliation groups are a proxy, not a fact.** Nobody's first language is " +
                       "recorded in a DOI. The learner group is the exception — its corpus records each " +
                       "writer's first language — which is why it exists. Elsewhere the manifest states " +

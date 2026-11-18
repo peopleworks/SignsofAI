@@ -559,7 +559,16 @@
   "calibration": {
     "engine": "0.7.1",
     "measuredOn": "2026-09-07",
-    "burstinessShare": 0.32094594594594594
+    "burstinessShare": 0.32094594594594594,
+    "rerun": {
+      "engine": "0.8.1",
+      "measuredOn": "2026-11-18",
+      "fieldsChanged": [
+        "engine",
+        "measuredOn"
+      ],
+      "file": "Docs/Detection/calibration-rerun.json"
+    }
   },
   "predictions": [
     {

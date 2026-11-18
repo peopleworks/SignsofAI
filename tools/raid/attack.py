@@ -161,9 +161,29 @@ def evaluate(args) -> None:
         "P6": {"scoreDrop": hg["meanScoreBefore"] - hg["meanScoreAfter"],
                "held": hg["meanScoreAfter"] < hg["meanScoreBefore"]},
     }
-    # Which attacked texts the scanner did not report, so the explanation can be checked.
+    # Which attacked texts the scanner did not report, by class, with a reason computed from the text:
+    # a letter that imitates nothing means the text is written in another script; no Latin letter at
+    # all means there was no Latin word left to disguise.
+    sys.path.insert(0, str(Path(args.adversarial)))
+    lookalikes = set()
+    for targets in importlib.import_module("attackers.homoglyph").HomoglyphAttack().mapping.values():
+        lookalikes.update(targets)
+    texts = {}
+    with open(args.attacked_jsonl, encoding="utf-8") as f:
+        for line in f:
+            row = json.loads(line)
+            texts[row["id"]] = row["text"]
+
+    def reason(text):
+        foreign = any(c.isalpha() and not c.isascii() and c not in lookalikes for c in text)
+        latin = sum(c.isascii() and c.isalpha() for c in text)
+        if foreign:
+            return "written in another script"
+        return "no Latin letter left" if latin == 0 else "unexplained"
+
     report["scannerMisses"] = {
-        name: sorted(sub.loc[sub["strongArtifacts"] == 0, "id"].tolist())
+        name: [{"id": r.id, "class": "human" if r.model == "human" else "machine", "reason": reason(texts[r.id])}
+               for r in sub.loc[sub["strongArtifacts"] == 0].sort_values("id").itertuples(index=False)]
         for name, sub in df.groupby("attack") if name in ("homoglyph", "zero_width_space")
     }
     Path(args.out).write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
@@ -195,6 +215,8 @@ def main() -> None:
     e.add_argument("--scores", required=True)
     e.add_argument("--results", required=True)
     e.add_argument("--setup", required=True, help="attacked.json written by make")
+    e.add_argument("--attacked-jsonl", required=True, help="attacked.jsonl, read to explain scanner misses")
+    e.add_argument("--adversarial", required=True, help="RAID's generation/adversarial directory")
     e.add_argument("--out", required=True)
     args = ap.parse_args()
     make(args) if args.cmd == "make" else evaluate(args)
