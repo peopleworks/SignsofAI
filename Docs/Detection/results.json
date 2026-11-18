@@ -69,6 +69,16 @@
         "poetry": 0.5876313170525127
       }
     },
+    "lowestCounted": {
+      "news": 40.6,
+      "reddit": 31.0,
+      "reviews": 23.8,
+      "books": 34.7,
+      "recipes": 8.9,
+      "wiki": 34.5,
+      "abstracts": 44.7,
+      "poetry": 34.6
+    },
     "trueFpr": {
       "0.05": {
         "news": 0.047752808988763995,
@@ -263,6 +273,7 @@
       "0.05": 0.3695574225469299,
       "0.01": 0.4769792975469299
     },
+    "lowestCounted": 37.0,
     "trueFpr": {
       "0.05": 0.049884077481115896,
       "0.01": 0.009946900007478887
@@ -459,6 +470,51 @@
       "fpr05": 0.0014124293785310734
     }
   ],
+  "matchedRepetitionPenalty": {
+    "models": [
+      "gpt2",
+      "llama-chat",
+      "mistral",
+      "mistral-chat",
+      "mpt",
+      "mpt-chat"
+    ],
+    "no": {
+      "tpr05": 0.28362324989393295,
+      "n": 4714
+    },
+    "yes": {
+      "tpr05": 0.18051575931232092,
+      "n": 4886
+    }
+  },
+  "matchedDecoding": {
+    "models": [
+      "chatgpt",
+      "cohere",
+      "cohere-chat",
+      "gpt2",
+      "gpt3",
+      "gpt4",
+      "llama-chat",
+      "mistral",
+      "mistral-chat",
+      "mpt",
+      "mpt-chat"
+    ],
+    "greedy": {
+      "tpr05": 0.30430316173952743,
+      "n": 8761
+    },
+    "sampling": {
+      "tpr05": 0.2270618848286005,
+      "n": 8839
+    }
+  },
+  "humanTexts": {
+    "rows": 13371,
+    "distinct": 13272
+  },
   "product": {
     "boundary": 30,
     "lengthFloorWords": 649,
@@ -512,12 +568,13 @@
     }
   ],
   "longHumanCheck": {
-    "texts": 708,
+    "rows": 708,
+    "texts": 705,
     "flagged": 14,
-    "rate": 0.01977401129943503,
+    "rate": 0.019858156028368795,
     "interval": [
-      0.011814885377382815,
-      0.03291622501809327
+      0.011865314049517352,
+      0.03305510994987548
     ],
     "byDomain": {
       "books": {
@@ -529,19 +586,19 @@
         ]
       },
       "news": {
-        "texts": 110,
+        "texts": 108,
         "flagged": 9,
         "interval": [
-          0.04364064606620328,
-          0.1482179184315548
+          0.044460404358563896,
+          0.15082906253293688
         ]
       },
       "poetry": {
-        "texts": 109,
+        "texts": 108,
         "flagged": 2,
         "interval": [
-          0.005046362321946482,
-          0.064444576195118
+          0.005093224298949841,
+          0.06501904855345103
         ]
       },
       "recipes": {

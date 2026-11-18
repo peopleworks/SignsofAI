@@ -98,8 +98,19 @@ def evaluate(args) -> None:
 
     meta = pd.read_csv(args.attacked_csv)
     scores = pd.read_json(args.attacked_scores, lines=True)
+    if len(scores) != len(meta) or set(scores["id"]) != set(meta["id"]):
+        raise SystemExit("The attacked scores do not cover exactly the attacked ids.")
     df = meta.merge(scores, on="id", how="left", validate="one_to_one")
-    original = pd.read_csv(args.sample_csv).merge(pd.read_json(args.scores, lines=True), on="id", validate="one_to_one")
+    sample = pd.read_csv(args.sample_csv)
+    original_scores = pd.read_json(args.scores, lines=True)
+    if len(original_scores) != len(sample) or set(original_scores["id"]) != set(sample["id"]):
+        raise SystemExit("The original scores do not cover exactly the sampled ids.")
+    original = sample.merge(original_scores, on="id", how="left", validate="one_to_one")
+    for frame, name in ((df, "attacked"), (original, "original")):
+        if frame["score"].isnull().any():
+            raise SystemExit(f"{frame['score'].isnull().sum()} {name} rows have no score.")
+    if not set(df["source"]).issubset(set(original["id"])):
+        raise SystemExit("Some attacked texts have no original to compare with.")
     by_id = original.set_index("id")
 
     def flagged(frame):

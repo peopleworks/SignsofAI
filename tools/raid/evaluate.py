@@ -9,7 +9,9 @@ mean and moves in steps of 0.5), and dividing by a constant changes no ranking a
 """
 
 import argparse
+import hashlib
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -24,13 +26,36 @@ GROUPS = {"chat": CHAT, "base": BASE, "between": BETWEEN}
 LENGTH_BUCKETS = [(0, 199, "under 200"), (200, 399, "200-399"), (400, 648, "400-648"), (649, 10**9, "649 or more")]
 
 
-def load(sample_csv: Path, scores_jsonl: Path) -> pd.DataFrame:
+def load(sample_csv: Path, scores_jsonl: Path, texts_jsonl: Path) -> pd.DataFrame:
     meta = pd.read_csv(sample_csv)
     scores = pd.read_json(scores_jsonl, lines=True)
+    if len(scores) != len(meta) or set(scores["id"]) != set(meta["id"]):
+        raise SystemExit("The scores do not cover exactly the sampled ids.")
     df = meta.merge(scores, on="id", how="left", validate="one_to_one")
     if df["score"].isnull().any():
         raise SystemExit(f"{df['score'].isnull().sum()} rows have no score.")
+    # RAID's human set repeats some texts verbatim. RAID counts rows and so does the headline; the
+    # checks this project adds on top count each distinct text once.
+    hashes = {}
+    with open(texts_jsonl, encoding="utf-8") as f:
+        for line in f:
+            row = json.loads(line)
+            hashes[row["id"]] = hashlib.sha256(row["text"].encode("utf-8")).hexdigest()
+    df["textHash"] = df["id"].map(hashes)
+    if df["textHash"].isnull().any():
+        raise SystemExit("Some sampled ids have no text.")
     return df
+
+
+def lowest_counted(threshold: float) -> float:
+    """The lowest one-decimal engine score that RAID's cutoff counts, using RAID's own comparison
+    (score / 100 >= threshold). Printing the cutoff rounded can move a whole tie across it."""
+    v = math.floor(threshold * 1000) / 10
+    while (v / 100.0) < threshold:
+        v = round(v + 0.1, 1)
+    while v >= 0.1 and (round(v - 0.1, 1) / 100.0) >= threshold:
+        v = round(v - 0.1, 1)
+    return v
 
 
 def pick(scores, **want):
@@ -70,6 +95,9 @@ def summarise(result: dict, df: pd.DataFrame) -> dict:
             "auroc": pick(scores)["auroc"],
         },
         "thresholds": result["thresholds"],
+        "lowestCounted": ({d: lowest_counted(t) for d, t in result["thresholds"]["0.05"].items()}
+                          if isinstance(result["thresholds"]["0.05"], dict)
+                          else lowest_counted(result["thresholds"]["0.05"])),
         "trueFpr": result["fpr"],
         "byModel": {},
         "byDomain": {},
@@ -151,6 +179,21 @@ def product_view(df: pd.DataFrame, boundary: float, floor: int) -> dict:
     }
 
 
+def matched(df: pd.DataFrame, thresholds05: dict, column: str) -> dict:
+    """A setting compared only across the generators that were run with both of its values, so a
+    difference is not just a difference in which generators are in each pool. Same cutoffs."""
+    machine = df[df["model"] != "human"]
+    values = sorted(machine[column].dropna().unique())
+    models = sorted(m for m, g in machine.groupby("model") if set(g[column].dropna().unique()) == set(values))
+    sub = machine[machine["model"].isin(models)]
+    flagged = (sub["score"] / 100.0) >= sub["domain"].map(thresholds05)
+    out = {"models": models}
+    for v in values:
+        mask = sub[column] == v
+        out[v] = {"tpr05": float(flagged[mask].mean()), "n": int(mask.sum())}
+    return out
+
+
 def wilson(k: int, n: int, z: float = 1.959964) -> tuple:
     """The interval docs/CALIBRATION.md publishes (2 of 296 -> 0.19%-2.43%), so the two compare."""
     if n == 0:
@@ -166,7 +209,8 @@ def long_human_check(df: pd.DataFrame, boundary: float, floor: int, published: d
     """RAID's human texts at or above the floor: long human writing from registers the calibration
     corpus does not contain (newswire, book summaries, film reviews, verse). Same boundary, same
     interval, nothing tuned. An outside sample of a different population, not a replication."""
-    long_human = df[(df["model"] == "human") & (df["words"] >= floor)]
+    rows = df[(df["model"] == "human") & (df["words"] >= floor)]
+    long_human = rows.drop_duplicates("textHash")
     over = long_human["score"] >= boundary
     k = int(over.sum())
     n = int(len(long_human))
@@ -177,6 +221,7 @@ def long_human_check(df: pd.DataFrame, boundary: float, floor: int, published: d
         by_domain[d] = {"texts": dn, "flagged": dk, "interval": list(wilson(dk, dn))}
     flagged_rules = long_human.loc[over, "rules"].explode().dropna().value_counts()
     return {
+        "rows": int(len(rows)),
         "texts": n,
         "flagged": k,
         "rate": k / n if n else None,
@@ -255,13 +300,14 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sample", required=True, help="sample.csv")
     ap.add_argument("--scores", required=True, help="scores.jsonl from `signsofai-calibrate raid`")
+    ap.add_argument("--texts", required=True, help="sample.jsonl, read only to recognise repeated texts")
     ap.add_argument("--manifest", required=True, help="sample.json")
     ap.add_argument("--calibration", required=True, help="published-calibration.json")
     ap.add_argument("--engine", required=True, help="engine version that produced the scores")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
-    df = load(Path(args.sample), Path(args.scores))
+    df = load(Path(args.sample), Path(args.scores), Path(args.texts))
     calibration = json.loads(Path(args.calibration).read_text(encoding="utf-8"))
 
     per_domain = summarise(evaluate(df, per_domain=True), df)
@@ -279,6 +325,10 @@ def main() -> None:
         "perDomainThreshold": per_domain,
         "singleThreshold": single,
         "byLength": by_length(df, per_domain["thresholds"]["0.05"]),
+        "matchedRepetitionPenalty": matched(df, per_domain["thresholds"]["0.05"], "repetition_penalty"),
+        "matchedDecoding": matched(df, per_domain["thresholds"]["0.05"], "decoding"),
+        "humanTexts": {"rows": int((df["model"] == "human").sum()),
+                       "distinct": int(df.loc[df["model"] == "human", "textHash"].nunique())},
         "product": product_view(df, calibration["recommendedThreshold"], calibration["shortestWords"]),
         "predictions": predictions(per_domain),
         "longHumanCheck": long_human_check(df, calibration["recommendedThreshold"], calibration["shortestWords"], calibration),

@@ -49,7 +49,7 @@ dotnet run --project tools/SignsOfAI.Calibration -c Release -- \
 
 # 4. RAID's evaluation, plus the breakdowns
 $PY -I tools/raid/evaluate.py --sample temp/raid/out/sample.csv --scores temp/raid/out/scores.jsonl \
-    --manifest temp/raid/out/sample.json \
+    --texts temp/raid/out/sample.jsonl --manifest temp/raid/out/sample.json \
     --calibration src/SignsOfAI.Core/Calibration/published-calibration.json \
     --engine 0.8.1 --out Docs/Detection/results.json
 

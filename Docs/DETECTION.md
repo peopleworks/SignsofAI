@@ -62,20 +62,22 @@ An AUROC below 0.5 (MPT-30B) means that generator's text scores, on average, as 
 
 ## By domain
 
-| Domain | Caught at 5% | AUROC | Cutoff RAID found |
+| Domain | Caught at 5% | AUROC | Lowest score counted |
 |---|---|---|---|
-| film reviews | 50.9% | 0.78 | 23.8/100 |
-| poetry | 36.7% | 0.67 | 34.5/100 |
-| book summaries | 33.7% | 0.71 | 34.7/100 |
-| news articles | 22.2% | 0.61 | 40.5/100 |
-| arXiv abstracts | 22.0% | 0.64 | 44.7/100 |
-| Wikipedia | 19.9% | 0.67 | 34.4/100 |
-| Reddit posts | 14.8% | 0.55 | 30.9/100 |
-| recipes | 12.1% | 0.53 | 8.8/100 |
+| film reviews | 50.9% | 0.78 | 23.8 |
+| poetry | 36.7% | 0.67 | 34.6 |
+| book summaries | 33.7% | 0.71 | 34.7 |
+| news articles | 22.2% | 0.61 | 40.6 |
+| arXiv abstracts | 22.0% | 0.64 | 44.7 |
+| Wikipedia | 19.9% | 0.67 | 34.5 |
+| Reddit posts | 14.8% | 0.55 | 31.0 |
+| recipes | 12.1% | 0.53 | 8.9 |
 
-Greedy decoding is caught more often than sampling (30.4% against 22.7%). A repetition penalty lowers it from 29.8% to 18.1%: penalising repeated tokens also suppresses stock phrases, and with them the tells.
+The engine scores to one decimal and RAID's cutoffs fall between those steps, so the last column gives the lowest score each cutoff counts rather than the cutoff rounded: rounding can carry a whole tie across it. The exact cutoffs are in `Docs/Detection/results.json`.
 
-With one cutoff for every domain, closer to how the product works, the rate is 23.4% (cutoff 37.0/100).
+Greedy decoding is caught more often than sampling (30.4% against 22.7%, across all 11 generators). Only 6 generators were run both with and without a repetition penalty; across those, texts generated with it are caught 18.1% of the time and texts without it 28.4%. These are observed differences between settings, not controlled experiments, and what causes them was not measured.
+
+With one cutoff for every domain, closer to how the product works, the rate is 23.4% (lowest score counted 37.0).
 
 ## Found along the way
 
@@ -96,18 +98,18 @@ Only 5.3% of the human texts and none of the machine texts reach 649 words.
 
 ### Long human writing the calibration does not contain
 
-708 of RAID's human texts reach the floor. They are an outside sample of long human writing, but of a different population from the calibration corpus, which holds research articles, encyclopedia revisions and learner essays. These are news articles, book summaries, film reviews and verse. At the product's boundary of 30/100:
+705 distinct human texts in the sample reach the floor (708 rows: RAID repeats a few texts verbatim, and here each is counted once). They are an outside sample of long human writing, but of a different population from the calibration corpus, which holds research articles, encyclopedia revisions and learner essays. These are news articles, book summaries, film reviews and verse. At the product's boundary of 30/100:
 
 | Domain | Texts | Crossing the boundary | 95% interval |
 |---|---|---|---|
-| news articles | 110 | 9 | 4.4–14.8% |
+| news articles | 108 | 9 | 4.4–15.1% |
 | book summaries | 322 | 3 | 0.3–2.7% |
-| poetry | 109 | 2 | 0.5–6.4% |
+| poetry | 108 | 2 | 0.5–6.5% |
 | recipes | 16 | 0 | 0.0–19.4% |
 | film reviews | 151 | 0 | 0.0–2.5% |
-| **all** | **708** | **14** | **1.2–3.3%** |
+| **all** | **705** | **14** | **1.2–3.3%** |
 
-Overall that is 2.0%, against the published 2 of 296 (0.2–2.4%). The two intervals overlap. The difference sits almost entirely in one register: **9 of 110 news articles cross the boundary** (4.4–14.8%), a register the calibration corpus never contained, and the point estimate is above the 5% this project promises. 14 of the 14 flagged texts carry `stat.burstiness`: news prose tends to keep its sentences to an even length, and sentence-length variation is the signal this tool trusts most.
+Overall that is 2.0%, against the published 2 of 296 (0.2–2.4%). The two intervals overlap. The difference sits almost entirely in one register: **9 of 108 news articles cross the boundary** (4.4–15.1%), a register the calibration corpus never contained, and the point estimate is above the 5% this project promises. 14 of the 14 flagged texts carry `stat.burstiness`: news prose tends to keep its sentences to an even length, and sentence-length variation is the signal this tool trusts most.
 
 This does not move the published number, which describes the corpus it was measured on, and the calibration page already says a rate does not transfer from one population to another. It is the first measurement of how far it fails to transfer, and where. A teacher of a register like this one, journalism for instance, should calibrate on their own students' earlier work before trusting the boundary. Any change to the published rate goes through the calibration corpus and the review committee, not through RAID.
 
@@ -175,6 +177,7 @@ Under the zero-width attack some detectors rise to about 98%. That is credit for
 - **Language fixed to English**, as the calibration does. The web app detects the language instead and would have misread 0.3% of the human texts and 0.1% of the machine ones.
 - **Scores divided by 100** for RAID's threshold search, which assumes a 0–1 range.
 - **Both cutoffs reported**: RAID's per-domain cutoff first, then one cutoff for all domains.
+- **Repeated texts.** RAID-train's human set holds 13,272 distinct texts in 13,371 rows. The headline counts rows, as RAID does; the long-text check above counts each distinct text once.
 
 ## What this does not tell you
 

@@ -147,19 +147,25 @@ def build(r: dict, a: dict, lb: dict, commit: str, run_date: str) -> str:
         w("")
     w("## By domain")
     w("")
-    w("| Domain | Caught at 5% | AUROC | Cutoff RAID found |")
+    w("| Domain | Caught at 5% | AUROC | Lowest score counted |")
     w("|---|---|---|---|")
-    th = pd_["thresholds"]["0.05"]
+    low = pd_["lowestCounted"]
     for d, v in sorted(pd_["byDomain"].items(), key=lambda x: -x[1]["tpr05"]):
-        w(f"| {DOMAINS[d]} | {pct(v['tpr05'])} | {v['auroc']:.2f} | {th[d] * 100:.1f}/100 |")
+        w(f"| {DOMAINS[d]} | {pct(v['tpr05'])} | {v['auroc']:.2f} | {low[d]:.1f} |")
     w("")
-    dec, rep = pd_["byDecoding"], pd_["byRepetitionPenalty"]
-    w(f"Greedy decoding is caught more often than sampling ({pct(dec['greedy']['tpr05'])} against "
-      f"{pct(dec['sampling']['tpr05'])}). A repetition penalty lowers it from {pct(rep['no']['tpr05'])} to "
-      f"{pct(rep['yes']['tpr05'])}: penalising repeated tokens also suppresses stock phrases, and with them the tells.")
+    w("The engine scores to one decimal and RAID's cutoffs fall between those steps, so the last column gives the "
+      "lowest score each cutoff counts rather than the cutoff rounded: rounding can carry a whole tie across it. "
+      "The exact cutoffs are in `Docs/Detection/results.json`.")
+    w("")
+    md, mr = r["matchedDecoding"], r["matchedRepetitionPenalty"]
+    w(f"Greedy decoding is caught more often than sampling ({pct(md['greedy']['tpr05'])} against "
+      f"{pct(md['sampling']['tpr05'])}, across all {len(md['models'])} generators). Only {len(mr['models'])} "
+      f"generators were run both with and without a repetition penalty; across those, texts generated with it are "
+      f"caught {pct(mr['yes']['tpr05'])} of the time and texts without it {pct(mr['no']['tpr05'])}. These are "
+      "observed differences between settings, not controlled experiments, and what causes them was not measured.")
     w("")
     w(f"With one cutoff for every domain, closer to how the product works, the rate is "
-      f"{pct(single['overall']['tpr05'])} (cutoff {single['thresholds']['0.05'] * 100:.1f}/100).")
+      f"{pct(single['overall']['tpr05'])} (lowest score counted {single['lowestCounted']:.1f}).")
     w("")
     w("## Found along the way")
     w("")
@@ -184,7 +190,8 @@ def build(r: dict, a: dict, lb: dict, commit: str, run_date: str) -> str:
     w("")
     w("### Long human writing the calibration does not contain")
     w("")
-    w(f"{lh['texts']} of RAID's human texts reach the floor. They are an outside sample of long human writing, but "
+    w(f"{lh['texts']} distinct human texts in the sample reach the floor ({lh['rows']} rows: RAID repeats a few "
+      "texts verbatim, and here each is counted once). They are an outside sample of long human writing, but "
       "of a different population from the calibration corpus, which holds research articles, encyclopedia "
       "revisions and learner essays. These are news articles, book summaries, film reviews and verse. At the "
       f"product's boundary of {prod['boundary']}/100:")
@@ -302,6 +309,9 @@ def build(r: dict, a: dict, lb: dict, commit: str, run_date: str) -> str:
       f"have misread {pct(dn['human'])} of the human texts and {pct(dn['machine'])} of the machine ones.")
     w("- **Scores divided by 100** for RAID's threshold search, which assumes a 0–1 range.")
     w("- **Both cutoffs reported**: RAID's per-domain cutoff first, then one cutoff for all domains.")
+    ht = r["humanTexts"]
+    w(f"- **Repeated texts.** RAID-train's human set holds {ht['distinct']:,} distinct texts in {ht['rows']:,} rows. "
+      "The headline counts rows, as RAID does; the long-text check above counts each distinct text once.")
     w("")
     w("## What this does not tell you")
     w("")
