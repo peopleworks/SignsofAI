@@ -360,9 +360,10 @@ public static class ParaphraseReport
         sb.AppendLine("- **Nothing about detecting a watermark.** The key is Anthropic's and no third " +
                       "party holds it. This measures what happens to *prose*, which is a different " +
                       "question that happens to be answerable without anybody's permission.");
-        sb.AppendLine("- **Nothing about how much machine writing this tool catches.** That would need " +
-                      "a corpus of machine writing, which `Docs/Calibration/README.md` argues at length " +
-                      "against assembling, and the argument has not changed.");
+        sb.AppendLine("- **Nothing about how much machine writing this tool catches.** This study needs " +
+                      "no collection of machine writing, because each passage is its own baseline. That " +
+                      "half is measured separately, on a public benchmark nobody here assembled, in " +
+                      "`Docs/DETECTION.md`.");
         sb.AppendLine("- **Nothing about whether rewriting helps or hurts a student.** The study " +
                       "failed to establish a direction. Anyone quoting it in either direction is " +
                       "quoting something that is not here.");

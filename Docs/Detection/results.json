@@ -1,0 +1,1370 @@
+{
+  "engine": "0.8.1",
+  "raidBench": "0.2.0",
+  "sample": {
+    "dataset": "RAID-train without attacks (train_none.csv)",
+    "datasetUrl": "https://dataset.raid-bench.xyz/train_none.csv",
+    "datasetSha256": "c5467bca6fc7f5c728c676450c7f84ce401df6c6ccc6d82c47e3b5f3c6d6fce4",
+    "seed": 20261117,
+    "machinePerGeneratorAndDomain": 200,
+    "human": 13371,
+    "machine": 17600,
+    "total": 30971,
+    "humanByDomain": {
+      "abstracts": 1766,
+      "books": 1781,
+      "news": 1780,
+      "poetry": 1771,
+      "recipes": 1772,
+      "reddit": 1779,
+      "reviews": 943,
+      "wiki": 1779
+    },
+    "machineByModel": {
+      "chatgpt": 1600,
+      "cohere": 1600,
+      "cohere-chat": 1600,
+      "gpt2": 1600,
+      "gpt3": 1600,
+      "gpt4": 1600,
+      "llama-chat": 1600,
+      "mistral": 1600,
+      "mistral-chat": 1600,
+      "mpt": 1600,
+      "mpt-chat": 1600
+    },
+    "datasetMachineByModel": {
+      "chatgpt": 26742,
+      "cohere": 26742,
+      "cohere-chat": 26742,
+      "gpt2": 53484,
+      "gpt3": 26742,
+      "gpt4": 26742,
+      "llama-chat": 53484,
+      "mistral": 53484,
+      "mistral-chat": 53484,
+      "mpt": 53484,
+      "mpt-chat": 53484
+    },
+    "idFingerprintSha256": "136c179ba9288e53bab98e5086cde93923965863350c0544df1f4f028903db5b",
+    "pandas": "2.2.3"
+  },
+  "language": "en",
+  "detectedNotEnglish": {
+    "human": 0.003141126318151223,
+    "machine": 0.0011931818181818183
+  },
+  "perDomainThreshold": {
+    "overall": {
+      "tpr05": 0.26551136363636363,
+      "tpr01": 0.12886363636363637,
+      "auroc": 0.6290205694481271
+    },
+    "thresholds": {
+      "0.05": {
+        "news": 0.40500000014628257,
+        "reddit": 0.3090000000002513,
+        "reviews": 0.23750112672322377,
+        "books": 0.34672011422655813,
+        "recipes": 0.08807745485327312,
+        "wiki": 0.3442784394322653,
+        "abstracts": 0.44698202151755373,
+        "poetry": 0.3454438170525127
+      },
+      "0.01": {
+        "news": 0.48229480337078656,
+        "reddit": 0.4050079749859472,
+        "reviews": 0.33320425172322377,
+        "books": 0.44144667672655813,
+        "recipes": 0.13885870485327312,
+        "wiki": 0.4380284394322653,
+        "abstracts": 0.5368257715175537,
+        "poetry": 0.5876313170525127
+      }
+    },
+    "lowestCounted": {
+      "news": 40.6,
+      "reddit": 31.0,
+      "reviews": 23.8,
+      "books": 34.7,
+      "recipes": 8.9,
+      "wiki": 34.5,
+      "abstracts": 44.7,
+      "poetry": 34.6
+    },
+    "trueFpr": {
+      "0.05": {
+        "news": 0.047752808988763995,
+        "reddit": 0.04946599213041036,
+        "reviews": 0.049840933191940606,
+        "books": 0.049971925884334634,
+        "recipes": 0.04966139954853277,
+        "wiki": 0.050028105677346835,
+        "abstracts": 0.050396375990939934,
+        "poetry": 0.0496894409937888
+      },
+      "0.01": {
+        "news": 0.009550561797752821,
+        "reddit": 0.009555930297920234,
+        "reviews": 0.009544008483563071,
+        "books": 0.010106681639528325,
+        "recipes": 0.010158013544018019,
+        "wiki": 0.009555930297920234,
+        "abstracts": 0.00962627406568517,
+        "poetry": 0.009599096555618303
+      }
+    },
+    "byModel": {
+      "chatgpt": {
+        "tpr05": 0.595625,
+        "tpr01": 0.37375,
+        "auroc": 0.8241476656570188,
+        "n": 1600
+      },
+      "cohere": {
+        "tpr05": 0.121875,
+        "tpr01": 0.036875,
+        "auroc": 0.5583628748784683,
+        "n": 1600
+      },
+      "cohere-chat": {
+        "tpr05": 0.215,
+        "tpr01": 0.076875,
+        "auroc": 0.6281445852965374,
+        "n": 1600
+      },
+      "gpt2": {
+        "tpr05": 0.1575,
+        "tpr01": 0.089375,
+        "auroc": 0.501044214157505,
+        "n": 1600
+      },
+      "gpt3": {
+        "tpr05": 0.16625,
+        "tpr01": 0.0475,
+        "auroc": 0.5676876495774438,
+        "n": 1600
+      },
+      "gpt4": {
+        "tpr05": 0.435,
+        "tpr01": 0.24375,
+        "auroc": 0.779918410178745,
+        "n": 1600
+      },
+      "llama-chat": {
+        "tpr05": 0.361875,
+        "tpr01": 0.166875,
+        "auroc": 0.7287554221823348,
+        "n": 1600
+      },
+      "mistral": {
+        "tpr05": 0.124375,
+        "tpr01": 0.05625,
+        "auroc": 0.5021589400568394,
+        "n": 1600
+      },
+      "mistral-chat": {
+        "tpr05": 0.35625,
+        "tpr01": 0.14875,
+        "auroc": 0.7305786543639219,
+        "n": 1600
+      },
+      "mpt": {
+        "tpr05": 0.100625,
+        "tpr01": 0.056875,
+        "auroc": 0.4384858088400269,
+        "n": 1600
+      },
+      "mpt-chat": {
+        "tpr05": 0.28625,
+        "tpr01": 0.120625,
+        "auroc": 0.6599420387405579,
+        "n": 1600
+      }
+    },
+    "byDomain": {
+      "abstracts": {
+        "tpr05": 0.22,
+        "tpr01": 0.06409090909090909,
+        "auroc": 0.6359171985998147
+      },
+      "books": {
+        "tpr05": 0.3372727272727273,
+        "tpr01": 0.18045454545454545,
+        "auroc": 0.710377979684549
+      },
+      "news": {
+        "tpr05": 0.22181818181818183,
+        "tpr01": 0.09227272727272727,
+        "auroc": 0.6079744637385086
+      },
+      "poetry": {
+        "tpr05": 0.36727272727272725,
+        "tpr01": 0.15818181818181817,
+        "auroc": 0.6745738155125506
+      },
+      "recipes": {
+        "tpr05": 0.12136363636363637,
+        "tpr01": 0.046363636363636364,
+        "auroc": 0.5292014672686229
+      },
+      "reddit": {
+        "tpr05": 0.1481818181818182,
+        "tpr01": 0.06954545454545455,
+        "auroc": 0.5505960958659104
+      },
+      "reviews": {
+        "tpr05": 0.509090909090909,
+        "tpr01": 0.33545454545454545,
+        "auroc": 0.7830432372505545
+      },
+      "wiki": {
+        "tpr05": 0.1990909090909091,
+        "tpr01": 0.08454545454545455,
+        "auroc": 0.6683374214318565
+      }
+    },
+    "byDecoding": {
+      "greedy": {
+        "tpr05": 0.30430316173952743,
+        "auroc": 0.6565801727116672
+      },
+      "sampling": {
+        "tpr05": 0.2270618848286005,
+        "auroc": 0.6017041666659263
+      }
+    },
+    "byRepetitionPenalty": {
+      "no": {
+        "tpr05": 0.2981752398930313,
+        "auroc": 0.6553431929974791
+      },
+      "yes": {
+        "tpr05": 0.18051575931232092,
+        "auroc": 0.5605257197128714
+      }
+    },
+    "byGroup": {
+      "chat": {
+        "tpr05": 0.375,
+        "models": [
+          "chatgpt",
+          "gpt4",
+          "llama-chat",
+          "cohere-chat",
+          "mpt-chat",
+          "mistral-chat"
+        ],
+        "n": 9600
+      },
+      "base": {
+        "tpr05": 0.12609375,
+        "models": [
+          "gpt2",
+          "mpt",
+          "mistral",
+          "cohere"
+        ],
+        "n": 6400
+      },
+      "between": {
+        "tpr05": 0.16625,
+        "models": [
+          "gpt3"
+        ],
+        "n": 1600
+      }
+    }
+  },
+  "singleThreshold": {
+    "overall": {
+      "tpr05": 0.23375,
+      "tpr01": 0.10744318181818181,
+      "auroc": 0.6290205694481271
+    },
+    "thresholds": {
+      "0.05": 0.3695574225469299,
+      "0.01": 0.4769792975469299
+    },
+    "lowestCounted": 37.0,
+    "trueFpr": {
+      "0.05": 0.049884077481115896,
+      "0.01": 0.009946900007478887
+    },
+    "byModel": {
+      "chatgpt": {
+        "tpr05": 0.55375,
+        "tpr01": 0.3125,
+        "auroc": 0.8241476656570188,
+        "n": 1600
+      },
+      "cohere": {
+        "tpr05": 0.094375,
+        "tpr01": 0.026875,
+        "auroc": 0.5583628748784683,
+        "n": 1600
+      },
+      "cohere-chat": {
+        "tpr05": 0.17375,
+        "tpr01": 0.06125,
+        "auroc": 0.6281445852965374,
+        "n": 1600
+      },
+      "gpt2": {
+        "tpr05": 0.123125,
+        "tpr01": 0.07625,
+        "auroc": 0.501044214157505,
+        "n": 1600
+      },
+      "gpt3": {
+        "tpr05": 0.10875,
+        "tpr01": 0.02,
+        "auroc": 0.5676876495774438,
+        "n": 1600
+      },
+      "gpt4": {
+        "tpr05": 0.4225,
+        "tpr01": 0.218125,
+        "auroc": 0.779918410178745,
+        "n": 1600
+      },
+      "llama-chat": {
+        "tpr05": 0.335625,
+        "tpr01": 0.16125,
+        "auroc": 0.7287554221823348,
+        "n": 1600
+      },
+      "mistral": {
+        "tpr05": 0.105625,
+        "tpr01": 0.0425,
+        "auroc": 0.5021589400568394,
+        "n": 1600
+      },
+      "mistral-chat": {
+        "tpr05": 0.325625,
+        "tpr01": 0.128125,
+        "auroc": 0.7305786543639219,
+        "n": 1600
+      },
+      "mpt": {
+        "tpr05": 0.08375,
+        "tpr01": 0.04875,
+        "auroc": 0.4384858088400269,
+        "n": 1600
+      },
+      "mpt-chat": {
+        "tpr05": 0.244375,
+        "tpr01": 0.08625,
+        "auroc": 0.6599420387405579,
+        "n": 1600
+      }
+    },
+    "byDomain": {
+      "abstracts": {
+        "tpr05": 0.37636363636363634,
+        "tpr01": 0.16863636363636364,
+        "auroc": 0.6359171985998147
+      },
+      "books": {
+        "tpr05": 0.30636363636363634,
+        "tpr01": 0.12545454545454546,
+        "auroc": 0.710377979684549
+      },
+      "news": {
+        "tpr05": 0.30727272727272725,
+        "tpr01": 0.09863636363636363,
+        "auroc": 0.6079744637385086
+      },
+      "poetry": {
+        "tpr05": 0.3481818181818182,
+        "tpr01": 0.25681818181818183,
+        "auroc": 0.6745738155125506
+      },
+      "recipes": {
+        "tpr05": 0.004545454545454545,
+        "tpr01": 0.0027272727272727275,
+        "auroc": 0.5292014672686229
+      },
+      "reddit": {
+        "tpr05": 0.09454545454545454,
+        "tpr01": 0.03954545454545454,
+        "auroc": 0.5505960958659104
+      },
+      "reviews": {
+        "tpr05": 0.27136363636363636,
+        "tpr01": 0.12090909090909091,
+        "auroc": 0.7830432372505545
+      },
+      "wiki": {
+        "tpr05": 0.16136363636363638,
+        "tpr01": 0.04681818181818182,
+        "auroc": 0.6683374214318565
+      }
+    },
+    "byDecoding": {
+      "greedy": {
+        "tpr05": 0.2690332153863714,
+        "auroc": 0.6565801727116672
+      },
+      "sampling": {
+        "tpr05": 0.1987781423237923,
+        "auroc": 0.6017041666659263
+      }
+    },
+    "byRepetitionPenalty": {
+      "no": {
+        "tpr05": 0.26521944313355356,
+        "auroc": 0.6553431929974791
+      },
+      "yes": {
+        "tpr05": 0.1518624641833811,
+        "auroc": 0.5605257197128714
+      }
+    },
+    "byGroup": {
+      "chat": {
+        "tpr05": 0.34260416666666665,
+        "models": [
+          "chatgpt",
+          "gpt4",
+          "llama-chat",
+          "cohere-chat",
+          "mpt-chat",
+          "mistral-chat"
+        ],
+        "n": 9600
+      },
+      "base": {
+        "tpr05": 0.10171875,
+        "models": [
+          "gpt2",
+          "mpt",
+          "mistral",
+          "cohere"
+        ],
+        "n": 6400
+      },
+      "between": {
+        "tpr05": 0.10875,
+        "models": [
+          "gpt3"
+        ],
+        "n": 1600
+      }
+    }
+  },
+  "byLength": [
+    {
+      "bucket": "under 200",
+      "machine": 7800,
+      "human": 4990,
+      "tpr05": 0.2296153846153846,
+      "fpr05": 0.05791583166332665,
+      "humanAtBoundary": 0.14509018036072144,
+      "machineAtBoundary": 0.2969230769230769
+    },
+    {
+      "bucket": "200-399",
+      "machine": 8875,
+      "human": 6463,
+      "tpr05": 0.2917183098591549,
+      "fpr05": 0.05585641343029553,
+      "humanAtBoundary": 0.10676156583629894,
+      "machineAtBoundary": 0.35538028169014085
+    },
+    {
+      "bucket": "400-648",
+      "machine": 925,
+      "human": 1210,
+      "tpr05": 0.31675675675675674,
+      "fpr05": 0.009917355371900827,
+      "humanAtBoundary": 0.06694214876033058,
+      "machineAtBoundary": 0.40216216216216216
+    },
+    {
+      "bucket": "649 or more",
+      "machine": 0,
+      "human": 708,
+      "tpr05": null,
+      "fpr05": 0.0014124293785310734,
+      "humanAtBoundary": 0.01977401129943503,
+      "machineAtBoundary": null
+    }
+  ],
+  "matchedRepetitionPenalty": {
+    "models": [
+      "gpt2",
+      "llama-chat",
+      "mistral",
+      "mistral-chat",
+      "mpt",
+      "mpt-chat"
+    ],
+    "no": {
+      "tpr05": 0.28362324989393295,
+      "n": 4714
+    },
+    "yes": {
+      "tpr05": 0.18051575931232092,
+      "n": 4886
+    }
+  },
+  "matchedDecoding": {
+    "models": [
+      "chatgpt",
+      "cohere",
+      "cohere-chat",
+      "gpt2",
+      "gpt3",
+      "gpt4",
+      "llama-chat",
+      "mistral",
+      "mistral-chat",
+      "mpt",
+      "mpt-chat"
+    ],
+    "greedy": {
+      "tpr05": 0.30430316173952743,
+      "n": 8761
+    },
+    "sampling": {
+      "tpr05": 0.2270618848286005,
+      "n": 8839
+    }
+  },
+  "humanTexts": {
+    "rows": 13371,
+    "distinct": 13272
+  },
+  "product": {
+    "boundary": 30,
+    "lengthFloorWords": 649,
+    "ignoringFloor": {
+      "fpr": 0.11285618128786179,
+      "tpr": 0.33193181818181816
+    },
+    "shareAtOrAboveFloor": {
+      "human": 0.052950415077406325,
+      "machine": 0.0
+    },
+    "withFloor": {
+      "humanFlagged": 0.0010470421060504076,
+      "machineFlagged": 0.0
+    },
+    "medianWords": {
+      "human": 222.0,
+      "machine": 219.0
+    }
+  },
+  "calibration": {
+    "engine": "0.7.1",
+    "measuredOn": "2026-09-07",
+    "burstinessShare": 0.32094594594594594,
+    "rerun": {
+      "engine": "0.8.1",
+      "measuredOn": "2026-11-18",
+      "fieldsChanged": [
+        "engine",
+        "measuredOn"
+      ],
+      "file": "Docs/Detection/calibration-rerun.json"
+    }
+  },
+  "predictions": [
+    {
+      "id": "P1",
+      "claim": "chat-tuned rate at least twice the base-model rate",
+      "measured": "chat 0.375, base 0.126, ratio 2.97",
+      "held": true
+    },
+    {
+      "id": "P2",
+      "claim": "base-model rate under 20%",
+      "measured": "0.126",
+      "held": true
+    },
+    {
+      "id": "P3",
+      "claim": "text-davinci-003 between the two groups",
+      "measured": "0.166 (range 0.126-0.375)",
+      "held": true
+    },
+    {
+      "id": "P4",
+      "claim": "poetry and recipes not among the three best domains",
+      "measured": "best three: reviews 0.509, poetry 0.367, books 0.337",
+      "held": false
+    },
+    {
+      "id": "overall",
+      "claim": "between 15% and 40% overall, without attacks",
+      "measured": "0.266",
+      "held": true
+    }
+  ],
+  "predictionsSingleThreshold": [
+    {
+      "id": "P1",
+      "claim": "chat-tuned rate at least twice the base-model rate",
+      "measured": "chat 0.343, base 0.102, ratio 3.37",
+      "held": true
+    },
+    {
+      "id": "P2",
+      "claim": "base-model rate under 20%",
+      "measured": "0.102",
+      "held": true
+    },
+    {
+      "id": "P3",
+      "claim": "text-davinci-003 between the two groups",
+      "measured": "0.109 (range 0.102-0.343)",
+      "held": true
+    },
+    {
+      "id": "P4",
+      "claim": "poetry and recipes not among the three best domains",
+      "measured": "best three: abstracts 0.376, poetry 0.348, news 0.307",
+      "held": false
+    },
+    {
+      "id": "overall",
+      "claim": "between 15% and 40% overall, without attacks",
+      "measured": "0.234",
+      "held": true
+    }
+  ],
+  "raidMixTpr05": 0.25338235294117645,
+  "longHumanCheck": {
+    "rows": 708,
+    "texts": 705,
+    "flagged": 14,
+    "rate": 0.019858156028368795,
+    "interval": [
+      0.011865314049517352,
+      0.03305510994987548
+    ],
+    "byDomain": {
+      "books": {
+        "texts": 322,
+        "flagged": 3,
+        "interval": [
+          0.0031735030165784012,
+          0.027029709659563105
+        ],
+        "burstiness": 0.42857142857142855
+      },
+      "news": {
+        "texts": 108,
+        "flagged": 9,
+        "interval": [
+          0.044460404358563896,
+          0.15082906253293688
+        ],
+        "burstiness": 0.7407407407407407
+      },
+      "poetry": {
+        "texts": 108,
+        "flagged": 2,
+        "interval": [
+          0.005093224298949841,
+          0.06501904855345103
+        ],
+        "burstiness": 0.12962962962962962
+      },
+      "recipes": {
+        "texts": 16,
+        "flagged": 0,
+        "interval": [
+          0.0,
+          0.1936076829974049
+        ],
+        "burstiness": 0.0
+      },
+      "reviews": {
+        "texts": 151,
+        "flagged": 0,
+        "interval": [
+          0.0,
+          0.024808981451414282
+        ],
+        "burstiness": 0.033112582781456956
+      }
+    },
+    "rulesInFlagged": {
+      "stat.burstiness": 14,
+      "lex.just": 7,
+      "lex.actually": 4,
+      "lex.truly": 2,
+      "lex.simply": 2,
+      "rhet.weasel-attribution": 2,
+      "rhet.with-regard-to": 1,
+      "rhet.rule-of-three": 1,
+      "rhet.in-order-to": 1,
+      "lex.notably": 1,
+      "lex.embark": 1,
+      "lex.literally": 1,
+      "lex.testament": 1,
+      "lex.crucial": 1,
+      "rhet.in-conclusion": 1,
+      "lex.profound": 1,
+      "rhet.not-only-but": 1,
+      "syn.serves-as": 1
+    },
+    "burstinessAll": 0.33617021276595743,
+    "withoutNews": {
+      "texts": 597,
+      "flagged": 5
+    },
+    "published": {
+      "texts": 296,
+      "flagged": 2,
+      "interval": [
+        0.0018549062642001807,
+        0.024297110573472523
+      ]
+    }
+  },
+  "rules": [
+    {
+      "rule": "syn.testament-to",
+      "texts": 340,
+      "human": 0.0005235210530252038,
+      "chat": 0.033541666666666664,
+      "base": 0.00109375,
+      "chatLift": 64.069375
+    },
+    {
+      "rule": "lex.delve",
+      "texts": 500,
+      "human": 0.0012714082716326377,
+      "chat": 0.04958333333333333,
+      "base": 0.0009375,
+      "chatLift": 38.99875
+    },
+    {
+      "rule": "lex.tapestry",
+      "texts": 134,
+      "human": 0.0004487323311644604,
+      "chat": 0.013125,
+      "base": 0.0003125,
+      "chatLift": 29.249062499999997
+    },
+    {
+      "rule": "lex.transformative",
+      "texts": 67,
+      "human": 0.0002243661655822302,
+      "chat": 0.006354166666666667,
+      "base": 0.00046875,
+      "chatLift": 28.320520833333333
+    },
+    {
+      "rule": "lex.underscore",
+      "texts": 60,
+      "human": 0.0002243661655822302,
+      "chat": 0.005729166666666666,
+      "base": 0.0003125,
+      "chatLift": 25.53489583333333
+    },
+    {
+      "rule": "lex.beacon",
+      "texts": 169,
+      "human": 0.000747887218607434,
+      "chat": 0.015729166666666666,
+      "base": 0.00109375,
+      "chatLift": 21.03146875
+    },
+    {
+      "rule": "lex.testament",
+      "texts": 422,
+      "human": 0.0019445067683793284,
+      "chat": 0.0396875,
+      "base": 0.00171875,
+      "chatLift": 20.410060096153845
+    },
+    {
+      "rule": "rhet.in-conclusion",
+      "texts": 306,
+      "human": 0.0014209857153541245,
+      "chat": 0.028229166666666666,
+      "base": 0.00234375,
+      "chatLift": 19.865904605263157
+    },
+    {
+      "rule": "lex.nuanced",
+      "texts": 132,
+      "human": 0.000747887218607434,
+      "chat": 0.011979166666666667,
+      "base": 0.00109375,
+      "chatLift": 16.01734375
+    },
+    {
+      "rule": "lex.vibrant",
+      "texts": 310,
+      "human": 0.001869718046518585,
+      "chat": 0.0284375,
+      "base": 0.00140625,
+      "chatLift": 15.2095125
+    },
+    {
+      "rule": "lex.bustling",
+      "texts": 80,
+      "human": 0.0005235210530252038,
+      "chat": 0.007395833333333333,
+      "base": 0.00015625,
+      "chatLift": 14.127098214285715
+    },
+    {
+      "rule": "syn.superficial-ing",
+      "texts": 488,
+      "human": 0.003215915040011966,
+      "chat": 0.045208333333333336,
+      "base": 0.00140625,
+      "chatLift": 14.057688953488373
+    },
+    {
+      "rule": "lex.showcase",
+      "texts": 446,
+      "human": 0.0032907037618727097,
+      "chat": 0.0396875,
+      "base": 0.003125,
+      "chatLift": 12.060490056818182
+    },
+    {
+      "rule": "lex.intricate",
+      "texts": 275,
+      "human": 0.0024680278214045323,
+      "chat": 0.023854166666666666,
+      "base": 0.00171875,
+      "chatLift": 9.66527462121212
+    },
+    {
+      "rule": "rhet.in-realm",
+      "texts": 178,
+      "human": 0.0017949293246578416,
+      "chat": 0.0140625,
+      "base": 0.0021875,
+      "chatLift": 7.8345703125
+    },
+    {
+      "rule": "lex.meticulous",
+      "texts": 141,
+      "human": 0.0016453518809363549,
+      "chat": 0.012291666666666666,
+      "base": 0.00015625,
+      "chatLift": 7.470539772727272
+    },
+    {
+      "rule": "lex.embark",
+      "texts": 432,
+      "human": 0.005309999252112781,
+      "chat": 0.035416666666666666,
+      "base": 0.00265625,
+      "chatLift": 6.669806338028169
+    },
+    {
+      "rule": "lex.seamless",
+      "texts": 176,
+      "human": 0.002243661655822302,
+      "chat": 0.014479166666666666,
+      "base": 0.00109375,
+      "chatLift": 6.453364583333333
+    },
+    {
+      "rule": "lex.comprehensive",
+      "texts": 307,
+      "human": 0.00418816842420163,
+      "chat": 0.0225,
+      "base": 0.00453125,
+      "chatLift": 5.372276785714286
+    },
+    {
+      "rule": "lex.profound",
+      "texts": 299,
+      "human": 0.0043377458679231175,
+      "chat": 0.023020833333333334,
+      "base": 0.00265625,
+      "chatLift": 5.307095905172414
+    },
+    {
+      "rule": "lex.unlock",
+      "texts": 88,
+      "human": 0.0013461969934933811,
+      "chat": 0.006354166666666667,
+      "base": 0.00109375,
+      "chatLift": 4.720086805555556
+    },
+    {
+      "rule": "rhet.not-only-but",
+      "texts": 425,
+      "human": 0.006357041358163189,
+      "chat": 0.0275,
+      "base": 0.010625,
+      "chatLift": 4.325911764705882
+    },
+    {
+      "rule": "lex.harness",
+      "texts": 84,
+      "human": 0.001495774437214868,
+      "chat": 0.00625,
+      "base": 0.000625,
+      "chatLift": 4.1784375
+    },
+    {
+      "rule": "lex.realm",
+      "texts": 229,
+      "human": 0.003889013536758657,
+      "chat": 0.01625,
+      "base": 0.00296875,
+      "chatLift": 4.1784375
+    },
+    {
+      "rule": "syn.plays-role",
+      "texts": 51,
+      "human": 0.0009722533841896642,
+      "chat": 0.0036458333333333334,
+      "base": 0.00046875,
+      "chatLift": 3.7498798076923077
+    },
+    {
+      "rule": "lex.leverage",
+      "texts": 401,
+      "human": 0.007329294742352853,
+      "chat": 0.0271875,
+      "base": 0.00578125,
+      "chatLift": 3.7094292091836736
+    },
+    {
+      "rule": "lex.empower",
+      "texts": 100,
+      "human": 0.001869718046518585,
+      "chat": 0.006875,
+      "base": 0.00125,
+      "chatLift": 3.677025
+    },
+    {
+      "rule": "syn.serves-as",
+      "texts": 291,
+      "human": 0.005758731583277242,
+      "chat": 0.02020833333333333,
+      "base": 0.00296875,
+      "chatLift": 3.5091639610389604
+    },
+    {
+      "rule": "lex.crucial",
+      "texts": 511,
+      "human": 0.010395632338643332,
+      "chat": 0.035,
+      "base": 0.0053125,
+      "chatLift": 3.3667985611510796
+    },
+    {
+      "rule": "lex.utilize",
+      "texts": 467,
+      "human": 0.009647745120035899,
+      "chat": 0.029166666666666667,
+      "base": 0.0084375,
+      "chatLift": 3.023158914728682
+    },
+    {
+      "rule": "lex.pivotal",
+      "texts": 84,
+      "human": 0.002094084212100815,
+      "chat": 0.005520833333333333,
+      "base": 0.00046875,
+      "chatLift": 2.636395089285714
+    },
+    {
+      "rule": "lex.truly",
+      "texts": 1024,
+      "human": 0.02355844738613417,
+      "chat": 0.060520833333333336,
+      "base": 0.0175,
+      "chatLift": 2.568965277777778
+    },
+    {
+      "rule": "rhet.in-terms-of",
+      "texts": 627,
+      "human": 0.013237603769351581,
+      "chat": 0.033541666666666664,
+      "base": 0.01703125,
+      "chatLift": 2.53381709039548
+    },
+    {
+      "rule": "lex.foster",
+      "texts": 198,
+      "human": 0.004636900755366091,
+      "chat": 0.011458333333333333,
+      "base": 0.0034375,
+      "chatLift": 2.471118951612903
+    },
+    {
+      "rule": "rhet.weasel-attribution",
+      "texts": 395,
+      "human": 0.010246054894921846,
+      "chat": 0.020729166666666667,
+      "base": 0.00828125,
+      "chatLift": 2.023136405109489
+    },
+    {
+      "rule": "lex.robust",
+      "texts": 351,
+      "human": 0.008750280457706977,
+      "chat": 0.017291666666666667,
+      "base": 0.00859375,
+      "chatLift": 1.976127136752137
+    },
+    {
+      "rule": "lex.furthermore",
+      "texts": 397,
+      "human": 0.010395632338643332,
+      "chat": 0.019479166666666665,
+      "base": 0.01046875,
+      "chatLift": 1.8737837230215826
+    },
+    {
+      "rule": "rhet.rule-of-three",
+      "texts": 3909,
+      "human": 0.107546182035749,
+      "chat": 0.17927083333333332,
+      "base": 0.08703125,
+      "chatLift": 1.6669195497218359
+    },
+    {
+      "rule": "rhet.on-one-hand",
+      "texts": 53,
+      "human": 0.0015705631590756115,
+      "chat": 0.0026041666666666665,
+      "base": 0.0009375,
+      "chatLift": 1.6581101190476188
+    },
+    {
+      "rule": "rhet.when-it-comes",
+      "texts": 155,
+      "human": 0.0043377458679231175,
+      "chat": 0.0069791666666666665,
+      "base": 0.00453125,
+      "chatLift": 1.6089385775862066
+    },
+    {
+      "rule": "stat.burstiness",
+      "texts": 16923,
+      "human": 0.46555979358312766,
+      "chat": 0.7296875,
+      "base": 0.42671875,
+      "chatLift": 1.5673335843373495
+    },
+    {
+      "rule": "lex.facilitate",
+      "texts": 118,
+      "human": 0.0042629571460623735,
+      "chat": 0.005104166666666667,
+      "base": 0.001875,
+      "chatLift": 1.1973300438596493
+    },
+    {
+      "rule": "lex.notably",
+      "texts": 125,
+      "human": 0.004711689477226834,
+      "chat": 0.004375,
+      "base": 0.0025,
+      "chatLift": 0.9285416666666667
+    },
+    {
+      "rule": "lex.importantly",
+      "texts": 120,
+      "human": 0.004038590980480144,
+      "chat": 0.0035416666666666665,
+      "base": 0.00484375,
+      "chatLift": 0.8769560185185183
+    },
+    {
+      "rule": "rhet.the-reality-is",
+      "texts": 67,
+      "human": 0.002617605265126019,
+      "chat": 0.0021875,
+      "base": 0.0015625,
+      "chatLift": 0.8356875
+    },
+    {
+      "rule": "rhet.rhetorical-setup",
+      "texts": 52,
+      "human": 0.0017949293246578416,
+      "chat": 0.0014583333333333334,
+      "base": 0.00203125,
+      "chatLift": 0.8124739583333334
+    },
+    {
+      "rule": "rhet.throat-clearing",
+      "texts": 109,
+      "human": 0.00418816842420163,
+      "chat": 0.0033333333333333335,
+      "base": 0.0028125,
+      "chatLift": 0.7958928571428572
+    },
+    {
+      "rule": "lex.moreover",
+      "texts": 286,
+      "human": 0.011966195497718945,
+      "chat": 0.009270833333333334,
+      "base": 0.00578125,
+      "chatLift": 0.774751953125
+    },
+    {
+      "rule": "lex.just",
+      "texts": 7251,
+      "human": 0.26191010395632336,
+      "chat": 0.17708333333333334,
+      "base": 0.291875,
+      "chatLift": 0.6761225728155341
+    },
+    {
+      "rule": "lex.simply",
+      "texts": 878,
+      "human": 0.0317104180689552,
+      "chat": 0.02,
+      "base": 0.03875,
+      "chatLift": 0.6307075471698114
+    },
+    {
+      "rule": "rhet.in-order-to",
+      "texts": 841,
+      "human": 0.03230872784384115,
+      "chat": 0.018958333333333334,
+      "base": 0.03125,
+      "chatLift": 0.5867867476851851
+    },
+    {
+      "rule": "rhet.in-this-article",
+      "texts": 56,
+      "human": 0.0015705631590756115,
+      "chat": 0.0008333333333333334,
+      "base": 0.00421875,
+      "chatLift": 0.5305952380952381
+    },
+    {
+      "rule": "lex.honestly",
+      "texts": 173,
+      "human": 0.00747887218607434,
+      "chat": 0.0035416666666666665,
+      "base": 0.00578125,
+      "chatLift": 0.47355624999999996
+    },
+    {
+      "rule": "lex.actually",
+      "texts": 1144,
+      "human": 0.04719168349412908,
+      "chat": 0.014479166666666666,
+      "base": 0.056875,
+      "chatLift": 0.30681606576862125
+    },
+    {
+      "rule": "lex.literally",
+      "texts": 230,
+      "human": 0.01278887143818712,
+      "chat": 0.0016666666666666668,
+      "base": 0.0065625,
+      "chatLift": 0.1303216374269006
+    },
+    {
+      "rule": "lex.inevitably",
+      "texts": 57,
+      "human": 0.0032907037618727097,
+      "chat": 0.0004166666666666667,
+      "base": 0.00140625,
+      "chatLift": 0.12661931818181818
+    },
+    {
+      "rule": "rhet.em-dash",
+      "texts": 298,
+      "human": 0.015780420312616856,
+      "chat": 0.0010416666666666667,
+      "base": 0.01171875,
+      "chatLift": 0.0660100710900474
+    }
+  ],
+  "domainRules": {
+    "poetry": [
+      {
+        "rule": "stat.burstiness",
+        "human": 0.2518351214003388,
+        "machine": 0.5186363636363637
+      },
+      {
+        "rule": "lex.beacon",
+        "human": 0.002258610954263128,
+        "machine": 0.06363636363636363
+      },
+      {
+        "rule": "lex.testament",
+        "human": 0.0016939582156973462,
+        "machine": 0.05090909090909091
+      },
+      {
+        "rule": "rhet.rule-of-three",
+        "human": 0.12309429700734048,
+        "machine": 0.16545454545454547
+      },
+      {
+        "rule": "lex.tapestry",
+        "human": 0.000564652738565782,
+        "machine": 0.04090909090909091
+      },
+      {
+        "rule": "lex.vibrant",
+        "human": 0.00564652738565782,
+        "machine": 0.04318181818181818
+      },
+      {
+        "rule": "lex.realm",
+        "human": 0.00564652738565782,
+        "machine": 0.04
+      },
+      {
+        "rule": "lex.truly",
+        "human": 0.033314511575381144,
+        "machine": 0.06727272727272728
+      }
+    ],
+    "reviews": [
+      {
+        "rule": "stat.burstiness",
+        "human": 0.18451749734888653,
+        "machine": 0.7304545454545455
+      },
+      {
+        "rule": "lex.showcase",
+        "human": 0.009544008483563097,
+        "machine": 0.08545454545454545
+      },
+      {
+        "rule": "lex.testament",
+        "human": 0.006362672322375398,
+        "machine": 0.06272727272727273
+      },
+      {
+        "rule": "syn.superficial-ing",
+        "human": 0.0021208907741251328,
+        "machine": 0.057727272727272724
+      },
+      {
+        "rule": "rhet.in-conclusion",
+        "human": 0.006362672322375398,
+        "machine": 0.06136363636363636
+      },
+      {
+        "rule": "syn.testament-to",
+        "human": 0.0042417815482502655,
+        "machine": 0.05818181818181818
+      },
+      {
+        "rule": "lex.delve",
+        "human": 0.006362672322375398,
+        "machine": 0.05818181818181818
+      },
+      {
+        "rule": "lex.nuanced",
+        "human": 0.006362672322375398,
+        "machine": 0.045
+      }
+    ],
+    "recipes": [
+      {
+        "rule": "stat.burstiness",
+        "human": 0.035553047404063204,
+        "machine": 0.07818181818181819
+      },
+      {
+        "rule": "rhet.rule-of-three",
+        "human": 0.22742663656884876,
+        "machine": 0.25363636363636366
+      },
+      {
+        "rule": "lex.simply",
+        "human": 0.01072234762979684,
+        "machine": 0.019545454545454546
+      },
+      {
+        "rule": "rhet.em-dash",
+        "human": 0.000564334085778781,
+        "machine": 0.004545454545454545
+      },
+      {
+        "rule": "lex.showcase",
+        "human": 0.0,
+        "machine": 0.0027272727272727275
+      },
+      {
+        "rule": "fmt.midsentence-bold",
+        "human": 0.0,
+        "machine": 0.0013636363636363637
+      },
+      {
+        "rule": "chat.signoff",
+        "human": 0.000564334085778781,
+        "machine": 0.0018181818181818182
+      },
+      {
+        "rule": "lex.holistic",
+        "human": 0.0,
+        "machine": 0.0009090909090909091
+      }
+    ],
+    "reddit": [
+      {
+        "rule": "stat.burstiness",
+        "human": 0.3468240584598089,
+        "machine": 0.4781818181818182
+      },
+      {
+        "rule": "rhet.rule-of-three",
+        "human": 0.022484541877459248,
+        "machine": 0.04318181818181818
+      },
+      {
+        "rule": "lex.simply",
+        "human": 0.01854974704890388,
+        "machine": 0.038181818181818185
+      },
+      {
+        "rule": "lex.truly",
+        "human": 0.023608768971332208,
+        "machine": 0.03772727272727273
+      },
+      {
+        "rule": "rhet.not-only-but",
+        "human": 0.0011242270938729624,
+        "machine": 0.012272727272727272
+      },
+      {
+        "rule": "lex.crucial",
+        "human": 0.0011242270938729624,
+        "machine": 0.011818181818181818
+      },
+      {
+        "rule": "rhet.in-conclusion",
+        "human": 0.0011242270938729624,
+        "machine": 0.01090909090909091
+      },
+      {
+        "rule": "rhet.when-it-comes",
+        "human": 0.010680157391793142,
+        "machine": 0.019545454545454546
+      }
+    ]
+  },
+  "scoreQuantiles": {
+    "human": {
+      "0.5": 8.6,
+      "0.9": 31.1,
+      "0.95": 36.9,
+      "0.99": 47.52999999999993
+    },
+    "machine": {
+      "0.5": 17.8,
+      "0.9": 48.5,
+      "0.95": 55.0,
+      "0.99": 66.7
+    }
+  }
+}

@@ -18,6 +18,12 @@ A **false-positive rate** needs only writing known to be human. It does not go s
 the harm this category actually causes: detectors flag 61% of essays by non-native English speakers,
 and not one of them publishes that figure about itself.
 
+The other half, how much machine-written text the score catches, is measured in `Docs/DETECTION.md`
+on RAID, a public benchmark nobody here assembled. It answers one of the two objections above: nobody
+here assembled it. It does not answer the other: its models are from 2023, and the number ages. It
+reports a detection rate beside this false-positive rate rather than an accuracy figure that blends
+the two.
+
 ## What makes a text admissible
 
 **It was written before 2022.** That is the whole test. A paper with a 2019 DOI predates the models

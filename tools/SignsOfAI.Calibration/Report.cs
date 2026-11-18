@@ -129,7 +129,7 @@ public static class Report
                 "boundary from the table above rather than from anybody's judgement. Below it a document " +
                 "gets its score and the reason it gets nothing more: a low score is not evidence that a " +
                 "person wrote something, since a detector that detects nothing also returns a low score, " +
-                "and this project has deliberately never measured how much machine writing it catches. " +
+                "and on the public benchmark in DETECTION.md most machine-written text scores low as well. " +
                 "The boundary moves when this page moves — including upward if a larger corpus turns out " +
                 "to be less flattering.");
             sb.AppendLine();
@@ -138,7 +138,7 @@ public static class Report
                 "and can say nothing whatever about how much further past it a score has travelled: no " +
                 "text known to be human came close to the upper reaches, and grading \"moderate\" against " +
                 "\"strong\" would need machine-written text, which the opening of this page argues against " +
-                "collecting. Interfaces do shade a high score more urgently than a low one, and those " +
+                "collecting; the benchmark in DETECTION.md was not used to set any band. Interfaces do shade a high score more urgently than a low one, and those " +
                 "shades are a display convention — they are not on this page because nothing measured " +
                 "them.");
             sb.AppendLine();
@@ -186,12 +186,15 @@ public static class Report
         sb.AppendLine();
         sb.AppendLine("- **Nothing about how much AI writing it catches.** That is the other half of the " +
                       "picture and it is not measured here, deliberately. A tool that flags nothing has a " +
-                      "perfect false-positive rate.");
+                      "perfect false-positive rate. That half is measured separately, on a public benchmark " +
+                      "nobody here assembled, in [DETECTION.md](DETECTION.md).");
         sb.AppendLine("- **Nothing about text unlike this corpus.** These are published articles and " +
                       "the essays of adult learners in a university English programme. A first-year " +
                       "essay by a native speaker is a different population again, and the rate on one " +
                       "does not transfer to the other. Calibrating on your own students' pre-2022 work is " +
-                      "the fix, and the same tool does it.");
+                      "the fix, and the same tool does it. The first outside check, on long human writing " +
+                      "from a public benchmark, is in [DETECTION.md](DETECTION.md): in that one sample the " +
+                      "boundary did not hold for the news articles, and why was not measured.");
         sb.AppendLine("- **The affiliation groups are a proxy, not a fact.** Nobody's first language is " +
                       "recorded in a DOI. The learner group is the exception — its corpus records each " +
                       "writer's first language — which is why it exists. Elsewhere the manifest states " +

@@ -98,6 +98,15 @@ which is a sample of whichever models were around that month; a false-positive r
 writing, and it measures the harm this category actually causes — studies report that detectors flag 61% of essays by
 non-native English speakers, and none of them publish that about themselves.
 
+The other half, how much machine-written text the score catches, is measured separately in
+[`Docs/DETECTION.md`](Docs/DETECTION.md), on RAID, a public benchmark of 2023 models that nobody here
+assembled, with the predictions committed before the run. Most machine-written text there scores too
+low to stand out from human writing, and the score crosses the cutoffs far more often for 2023
+chat-tuned models than for base models: on that benchmark the tells are mostly fingerprints of
+chat-tuning, not a way to tell who wrote a text. The same page found that, in that one sample, the
+boundary did not hold for long news articles, a kind of writing the calibration corpus does not
+contain.
+
 The report also names **which rules misfire**, ranked. That list is uncomfortable and it is the most
 useful thing the exercise produces.
 

@@ -193,8 +193,8 @@
       "sourceHash": "0fd44e4f3d48c7f8a7e2ee3f588ce6dda6e8dd83dd99db3ea2c47531fc1a77a8"
     },
     "how.limitation": {
-      "text": "Lo que esto **no** indica es cuánto texto escrito por máquinas detecta. Esa es la otra mitad del problema y aquí no se mide deliberadamente, porque cualquier colección de textos escritos por máquinas sólo representa los modelos que resultaron convenientes ese mes. Una herramienta que no marca nada tiene una tasa de falsos positivos perfecta.",
-      "sourceHash": "28e614ad0734da232d17fbf1e7a826e040184990935189aacd8aadfde88951a2"
+      "text": "Lo que esto **no** indica es cuánto texto escrito por máquinas detecta. El corpus en que se basa este informe es solo de escritura humana. Esa mitad se midió aparte, en un banco de pruebas público con modelos de 2023 (https://github.com/peopleworks/SignsofAI/blob/main/Docs/DETECTION.md), y allí la mayor parte del texto escrito por máquinas también puntuó demasiado bajo para distinguirse de la escritura humana, así que una puntuación baja no demuestra que esto lo escribiera una persona. Una herramienta que no marca nada tiene una tasa de falsos positivos perfecta.",
+      "sourceHash": "d9343cbd74be7eab7cf931609e9ebbab3e9abb1ae393e7e316faa0ed10c52cff"
     },
     "how.noisy-intro": {
       "text": "Las reglas que aparecieron con mayor frecuencia en esos textos humanos, de peor a mejor; si la evidencia anterior depende de alguna, sopésela en consecuencia:",

@@ -141,8 +141,8 @@ public class VerdictAgreementTests
     {
         // "Reads mostly human" in the report, "Minimal signs of AI writing" in the interface: the
         // same state, two claims, and the first was never ours to make. A detector that detects
-        // nothing also returns zero, and this project has deliberately never measured how much
-        // machine writing it catches.
+        // nothing also returns zero, and on the public benchmark in Docs/DETECTION.md most
+        // machine-written text scores low too.
         var human = new AiWritingAnalyzer().Analyze(
             "We measured height, weight and age in three hundred participants recruited at two " +
             "hospitals during the winter of 2011. At one site the effect vanished entirely.", "en");
