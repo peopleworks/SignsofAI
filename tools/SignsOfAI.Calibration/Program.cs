@@ -38,6 +38,8 @@ string pairsPath = "Docs/Paraphrase/pairs.json";
 string humanDir = "", rewrittenDir = "";
 int perStratum = 8, targetWords = 400;
 string paraphrasedBy = "", instructionPath = "";
+string inPath = "";
+int threads = -1;
 
 for (int i = 1; i < argv.Count; i++)
 {
@@ -61,6 +63,8 @@ for (int i = 1; i < argv.Count; i++)
         case "--words": targetWords = int.Parse(Next()); break;
         case "--paraphrased-by": paraphrasedBy = Next(); break;
         case "--instruction": instructionPath = Next(); break;
+        case "--in": inPath = Next(); break;
+        case "--threads": threads = int.Parse(Next()); break;
         default:
             Console.Error.WriteLine($"Unknown option '{argv[i]}'.");
             return 2;
@@ -68,10 +72,23 @@ for (int i = 1; i < argv.Count; i++)
     string Next() => ++i < argv.Count ? argv[i] : throw new ArgumentException($"Missing value for {argv[i - 1]}");
 }
 
-if (argv[0] is not ("run" or "fetch" or "thresholds" or "excerpt" or "paraphrase"))
+if (argv[0] is not ("run" or "fetch" or "thresholds" or "excerpt" or "paraphrase" or "raid"))
 {
     Console.Error.WriteLine($"Unknown command '{argv[0]}'. Run --help.");
     return 2;
+}
+
+// ── `raid` ───────────────────────────────────────────────────────────────────
+// Scores texts for an outside benchmark and writes down what the engine said. It evaluates nothing:
+// the benchmark's own code picks the threshold, so the scorer cannot shape the result.
+if (argv[0] == "raid")
+{
+    if (string.IsNullOrWhiteSpace(inPath) || outPath == "Docs/CALIBRATION.md")
+    {
+        Console.Error.WriteLine("raid needs --in <texts.jsonl> and --out <scores.jsonl>.");
+        return 2;
+    }
+    return Raid.Run(inPath, outPath, threads: threads);
 }
 
 // ── `fetch` ──────────────────────────────────────────────────────────────────
@@ -635,6 +652,8 @@ static void Help() => Console.WriteLine(
       dotnet run --project tools/SignsOfAI.Calibration -- excerpt --per-stratum 8 --words 400
       dotnet run --project tools/SignsOfAI.Calibration -- paraphrase --paraphrased-by "<model>"
 
+      dotnet run --project tools/SignsOfAI.Calibration -- raid --in texts.jsonl --out scores.jsonl
+
     OPTIONS
       --manifest <file>   Corpus manifest (default: Docs/Calibration/corpus.json)
       --texts <dir>       Where the texts live (default: <manifest dir>/texts)
@@ -654,6 +673,8 @@ static void Help() => Console.WriteLine(
       --rewritten <dir>   The same passages after a model rewrote them (default: <pairs dir>/rewritten)
       --per-stratum <n>   excerpt only: passages to take from each group (default: 8)
       --words <n>         excerpt only: length to cut each passage to (default: 400)
+      --in <file>         raid only: JSON lines of {id, text} to score (--out is required too)
+      --threads <n>       raid only: cap the parallelism; 1 runs in order (default: all cores)
       --paraphrased-by <name>   paraphrase only: the model that did the rewriting. Required —
                           a study of what a model does to prose that cannot name the model
                           has produced a number nobody can reproduce or date.
@@ -678,4 +699,10 @@ static void Help() => Console.WriteLine(
       language model rewriting a passage do to it. Each unit is one passage measured as its
       author wrote it and again after a model rewrote it, so no collection of machine-written
       text is needed — the baseline is the passage itself. See Docs/Paraphrase/README.md.
+
+      `raid` serves the half the calibration leaves out: how much machine-written text the
+      score separates, measured on RAID (Dugan et al., ACL 2024), a collection nobody here
+      assembled. It reads JSON lines of {id, text}, scores each one with the shipped engine
+      as English, and writes {id, score, ...}. It evaluates nothing: RAID's own code picks
+      the threshold. See tools/raid/README.md and Docs/DETECTION.md.
     """);
