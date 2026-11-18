@@ -129,7 +129,7 @@ public static class Report
                 "boundary from the table above rather than from anybody's judgement. Below it a document " +
                 "gets its score and the reason it gets nothing more: a low score is not evidence that a " +
                 "person wrote something, since a detector that detects nothing also returns a low score, " +
-                "and this project has deliberately never measured how much machine writing it catches. " +
+                "and on the public benchmark in DETECTION.md most machine-written text scores low as well. " +
                 "The boundary moves when this page moves — including upward if a larger corpus turns out " +
                 "to be less flattering.");
             sb.AppendLine();
@@ -186,7 +186,8 @@ public static class Report
         sb.AppendLine();
         sb.AppendLine("- **Nothing about how much AI writing it catches.** That is the other half of the " +
                       "picture and it is not measured here, deliberately. A tool that flags nothing has a " +
-                      "perfect false-positive rate.");
+                      "perfect false-positive rate. That half is measured separately, on a public benchmark " +
+                      "nobody here assembled, in [DETECTION.md](DETECTION.md).");
         sb.AppendLine("- **Nothing about text unlike this corpus.** These are published articles and " +
                       "the essays of adult learners in a university English programme. A first-year " +
                       "essay by a native speaker is a different population again, and the rate on one " +

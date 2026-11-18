@@ -185,7 +185,7 @@ What argues against it is also on this page: the rewrite *introduced* tells as w
 ## What this does not tell you
 
 - **Nothing about detecting a watermark.** The key is Anthropic's and no third party holds it. This measures what happens to *prose*, which is a different question that happens to be answerable without anybody's permission.
-- **Nothing about how much machine writing this tool catches.** That would need a corpus of machine writing, which `Docs/Calibration/README.md` argues at length against assembling, and the argument has not changed.
+- **Nothing about how much machine writing this tool catches.** This study needs no collection of machine writing, because each passage is its own baseline. That half is measured separately, on a public benchmark nobody here assembled, in `Docs/DETECTION.md`.
 - **Nothing about whether rewriting helps or hurts a student.** The study failed to establish a direction. Anyone quoting it in either direction is quoting something that is not here.
 - **One model, one instruction, one day**, and the treatment was only partly delivered. All of that is above.
 - **These are published articles and encyclopedia entries**, not student essays, and the windows are cut from them rather than composed at that length. A four-hundred-word paragraph somebody wrote as a paragraph has a whole distribution of sentence lengths; a truncation does not.

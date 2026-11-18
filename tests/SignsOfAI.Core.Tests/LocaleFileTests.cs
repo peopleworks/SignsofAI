@@ -149,8 +149,8 @@ public class LocaleFileTests
 
         Assert.True(problems.Count == 0,
             "A low score is a fact about this tool, not about who wrote the text: a detector that " +
-            "detects nothing also returns a low score, and this project has deliberately never " +
-            "measured how much machine writing it catches. Say what was measured instead — see " +
+            "detects nothing also returns a low score, and on the public benchmark in " +
+            "Docs/DETECTION.md most machine-written text does too. Say what was measured instead — see " +
             "verdict.none. Found:\n  " + string.Join("\n  ", problems));
     }
 

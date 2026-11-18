@@ -424,8 +424,8 @@ static void PrintReport(string path, AnalysisResult r, int top, bool useColor)
         Console.WriteLine(Col($"  … and {r.Findings.Count - shown.Count} more (use --top {r.Findings.Count}).", 90));
     // Not "reads mostly human", and not a green tick. Both were the same claim in two forms, and it
     // is the one #32 removed from the report and the interface because it was never ours to make: a
-    // detector that detects nothing also finds nothing, and this project has deliberately never
-    // measured how much machine writing it catches. It survived here for months because the test
+    // detector that detects nothing also finds nothing, and on the public benchmark in
+    // Docs/DETECTION.md most machine-written text scores low too. It survived here for months because the test
     // that guards the wording reads AnalysisResult.Verdict, and this line is a literal.
     if (r.Findings.Count == 0)
         Console.WriteLine(Col(

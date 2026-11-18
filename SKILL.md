@@ -35,8 +35,8 @@ a measurement into an accusation.
 1. **A finding is a fact about the tool, not about the writer.** Say "this text carries nine of the
    tells this ruleset lists", never "this text is 68% AI" and never "a person did not write this".
 2. **Finding nothing is not evidence a human wrote it.** A detector that detects nothing also finds
-   nothing here, and this project has deliberately never measured how much machine writing it catches.
-   Report what you found and stop.
+   nothing here, and on a public benchmark most machine-written text scores low with this engine too
+   (`Docs/DETECTION.md`). Report what you found and stop.
 3. **If you quote the engine's score, quote its error rate too.** The boundary is the lowest score
    whose 95% interval stays under the project's 5% target for writing known to be human: at 30/100
    the published build flagged 2 of 296 pre-2022 texts, an observed 0.7% with the interval reaching

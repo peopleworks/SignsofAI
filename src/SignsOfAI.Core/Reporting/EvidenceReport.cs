@@ -70,8 +70,8 @@ public static class EvidenceReport
         // The verdict is withheld below the threshold this build can support, because printing
         // "Reads mostly human" and then, four lines down, "treat the score as saying nothing" is a
         // page arguing with itself — and the reader will keep whichever half suits them. A low score
-        // is not evidence of a human: a detector that detects nothing also returns zero, and this
-        // project deliberately never measured how much machine writing it catches.
+        // is not evidence of a human: a detector that detects nothing also returns zero, and on the
+        // public benchmark in Docs/DETECTION.md most machine-written text scores low too.
         if (VerdictHolds(result))
             AppendBlock(sb, text, ReportMessages.AnalysisScoreWithVerdict,
                 Num(result.OverallScore), Verdict(text, result.OverallScore));

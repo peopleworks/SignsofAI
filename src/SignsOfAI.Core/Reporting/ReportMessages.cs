@@ -46,8 +46,8 @@ public static class ReportMessages
     ///
     /// The report used to say "Reads mostly human" and the interface "Minimal signs of AI writing" —
     /// the same state, two claims, and the first one is not ours to make. A detector that detects
-    /// nothing also returns a low score, and this project has deliberately never measured how much
-    /// machine writing it catches, so a low score is evidence about the boundary and nothing else.
+    /// nothing also returns a low score, and on the public benchmark in Docs/DETECTION.md most
+    /// machine-written text does too, so a low score is evidence about the boundary and nothing else.
     /// </summary>
     public const string VerdictNone = "verdict.none";
     public const string AnalysisScoreWithVerdict = "analysis.score.with-verdict";
@@ -301,7 +301,7 @@ public static class ReportMessages
         [HowReadInterval] = "Read the interval, not the observed rate. {0} out of {1} is not a false-positive rate you can round down.",
         [HowNoisyIntro] = "The rules seen most often on that human writing, worst first — if the evidence above leans on one of these, weigh it accordingly:",
         [HowNoisyRule] = "- `{0}` — {1} of human texts",
-        [HowLimitation] = "What this does **not** tell you: how much machine-written text it catches. That is the other half of the picture and it is deliberately not measured here, because any collection of machine-written text samples whichever models were convenient that month. A tool that flags nothing has a perfect false-positive rate.",
+        [HowLimitation] = "What this does **not** tell you: how much machine-written text it catches. The corpus behind this report is human writing only. That half was measured separately, on a public benchmark of 2023 models (Docs/DETECTION.md in the project's repository), and most machine-written text scored low there too, so a low score is not evidence that a person wrote this. A tool that flags nothing has a perfect false-positive rate.",
     };
 
     /// <summary>
