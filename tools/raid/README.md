@@ -47,13 +47,20 @@ $PY -I tools/raid/sample.py --data temp/raid/data/train_none.csv --out temp/raid
 dotnet run --project tools/SignsOfAI.Calibration -c Release -- \
     raid --in temp/raid/out/sample.jsonl --out temp/raid/out/scores.jsonl
 
-# 4. RAID's evaluation, plus the breakdowns
+# 4. The published calibration re-run with this engine, so the page can say what moved.
+#    `run` rewrites the engine's embedded JSON: copy it out, then restore it.
+dotnet run --project tools/SignsOfAI.Calibration -c Release -- run --out temp/raid/cal-check.md
+cp src/SignsOfAI.Core/Calibration/published-calibration.json Docs/Detection/calibration-rerun.json
+git checkout -- src/SignsOfAI.Core/Calibration/published-calibration.json
+
+# 5. RAID's evaluation, plus the breakdowns
 $PY -I tools/raid/evaluate.py --sample temp/raid/out/sample.csv --scores temp/raid/out/scores.jsonl \
     --texts temp/raid/out/sample.jsonl --manifest temp/raid/out/sample.json \
     --calibration src/SignsOfAI.Core/Calibration/published-calibration.json \
+    --calibration-rerun Docs/Detection/calibration-rerun.json \
     --engine 0.8.1 --out Docs/Detection/results.json
 
-# 5. Attacks: RAID's own attack code, the eight that need no language model
+# 6. Attacks: RAID's own attack code, the eight that need no language model
 $PY -I tools/raid/attack.py make --sample-csv temp/raid/out/sample.csv \
     --sample-jsonl temp/raid/out/sample.jsonl --adversarial temp/raid/src/generation/adversarial \
     --nltk-data temp/raid/nltk_data --out temp/raid/out/attacks
@@ -62,13 +69,14 @@ dotnet run --project tools/SignsOfAI.Calibration -c Release -- \
 $PY -I tools/raid/attack.py evaluate --attacked-csv temp/raid/out/attacks/attacked.csv \
     --attacked-scores temp/raid/out/attacks/scores.jsonl --sample-csv temp/raid/out/sample.csv \
     --scores temp/raid/out/scores.jsonl --results Docs/Detection/results.json \
-    --setup temp/raid/out/attacks/attacked.json --out Docs/Detection/attacks.json
+    --setup temp/raid/out/attacks/attacked.json --attacked-jsonl temp/raid/out/attacks/attacked.jsonl \
+    --adversarial temp/raid/src/generation/adversarial --out Docs/Detection/attacks.json
 
-# 6. For scale: the leaderboard's own numbers, from leaderboard/submissions/<name>/results.json
+# 7. For scale: the leaderboard's own numbers, from leaderboard/submissions/<name>/results.json
 $PY -I tools/raid/leaderboard.py --dir <folder of downloaded results.json> --commit <raid commit> \
     --out Docs/Detection/leaderboard-scale.json
 
-# 7. The page
+# 8. The page
 cp temp/raid/out/sample.json Docs/Detection/sample.json
 $PY -I tools/raid/report.py --commit <engine commit> --run-date <YYYY-MM-DD>
 ```
